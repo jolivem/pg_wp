@@ -1,0 +1,36 @@
+.ays_masonry_grid {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+/* clear fix */
+.ays_masonry_grid:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+/* ---- .grid-item ---- */
+
+
+.ays_masonry_grid-item a {
+    position: relative;
+}
+
+.ays_masonry_grid-item {
+    float: none;
+    overflow: hidden;
+    margin-bottom: 2px;
+}
+
+.ays_masonry_grid-item img {
+  display: block;
+  max-width: 100%;
+}
+@media all and (max-width: 768px){
+	.ays_masonry_grid-sizer,
+	.ays_masonry_grid-item {
+	  width: 100%;
+	}
+}
