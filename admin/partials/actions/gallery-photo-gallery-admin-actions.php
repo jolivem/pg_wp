@@ -1954,7 +1954,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
             <div class="form-group row">
                 <div class="col-sm-3">
                     <label>
-                        <?php echo __("Images distance", $this->plugin_name);?>
+                        <?php echo __("Images DISTANCE", $this->plugin_name);?>
                         <a class="ays_help" data-toggle="tooltip" title="<?php echo __("The distance among images with pixels", $this->plugin_name);?>">
                            <i class="fas fa-info-circle"></i>
                         </a>
