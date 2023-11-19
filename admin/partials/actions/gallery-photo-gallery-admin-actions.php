@@ -70,7 +70,7 @@ $g_l_options = array(
 $gallery = array(
     "id"                => "",
     "title"             => "Demo title",
-    "description"       => "Demo description",
+    // "description"       => "Demo description",
     "images"            => "",
     "images_titles"     => "",
     "images_descs"      => "",
@@ -393,31 +393,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 <input type="text" required name="gallery_title" id="gallery_title" class="ays-text-input" placeholder="<?php echo __("Gallery Title", $this->plugin_name);?>" value="<?php echo stripslashes(htmlentities($gallery["title"])); ?>"/>
             </div>
         </div>
-        <hr/>
-        <div class="ays-field ays-gpg-desc-message-vars-parent">
-            <label for="gallery_description">
-                <?php echo __("Gallery Description", $this->plugin_name);?>
-                <a class="ays_help" data-toggle="tooltip" title="<?php echo __("This section is noted for the description of the gallery. You can use Variables (General Settings) to insert user data here.", $this->plugin_name ); ?>">
-                   <i class="fas fa-info-circle"></i>
-                </a>
-                <p class="ays_gpg_small_hint_text_for_message_variables">
-                    <span><?php echo __( "To see all Message Variables " , $this->plugin_name ); ?></span>
-                    <a href="?page=gallery-photo-gallery-settings&ays_gpg_tab=tab3" target="_blank"><?php echo __( "click here" , $this->plugin_name ); ?></a>
-                </p>
-            </label>
-            <?php
-                echo $gallery_message_vars_html;
-                $content = stripslashes(wpautop($gallery['description']));
-                $editor_id = 'gallery_description';
-                $settings = array(
-                    'editor_height' => $gpg_wp_editor_height, 
-                    'textarea_name' => 'gallery_description', 
-                    'editor_class' => 'ays-textarea', 
-                    'media_buttons' => true
-                );
-                wp_editor($content, $editor_id, $settings);
-            ?>
-        </div>
+         <!-- MJO removed description -->
         <hr/>
         <p class="ays-subtitle"><?php echo  __('Add Images', $this->plugin_name) ?></p>
         <h6><?php echo  __('Upload images for your gallery', $this->plugin_name) ?></h6>

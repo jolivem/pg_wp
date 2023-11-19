@@ -642,12 +642,12 @@ class Galleries_List_Table extends WP_List_Table{
         $columns = array(
             "cb"                => "<input type='checkbox' />",
             "title"             => __( "Title", $this->plugin_name ),
-            "image"             => __( "Image", $this->plugin_name ),
-            "description"       => __( "Description", $this->plugin_name ),
-            "shortcode"         => __( "Shortcode", $this->plugin_name ),
-            'create_date'       => __( 'Created', $this->plugin_name ),
-            "items"             => __( "Items", $this->plugin_name ),
-            "id"                => __( "ID", $this->plugin_name ),
+            // "image"             => __( "Image", $this->plugin_name ),
+            // "description"       => __( "Description", $this->plugin_name ),
+           "shortcode"         => __( "Shortcode", $this->plugin_name ),
+            "items"             => __( "Nb photos", $this->plugin_name ),
+            "create_date"       => __( 'Created', $this->plugin_name ),
+            //"id"                => __( "ID", $this->plugin_name ),
         );
 
         return $columns;

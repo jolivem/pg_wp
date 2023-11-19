@@ -291,23 +291,23 @@ class Gallery_Photo_Gallery_Admin {
             array($this, 'display_plugin_how_to_use_page')
         );
 
-        add_submenu_page(
-            $this->plugin_name,
-            __('Our products', $this->plugin_name),
-            __('Our products', $this->plugin_name),
-            'manage_options',
-            $this->plugin_name . '-featured-plugins',
-            array($this, 'display_plugin_gpg_featured_plugins_page')
-        );
+        // add_submenu_page(
+        //     $this->plugin_name,
+        //     __('Our products', $this->plugin_name),
+        //     __('Our products', $this->plugin_name),
+        //     'manage_options',
+        //     $this->plugin_name . '-featured-plugins',
+        //     array($this, 'display_plugin_gpg_featured_plugins_page')
+        // );
 
-        add_submenu_page(
-            $this->plugin_name,
-            __('PRO Features', $this->plugin_name),
-            __('PRO Features', $this->plugin_name),
-            'manage_options',
-            $this->plugin_name . '-pro-features',
-            array($this, 'display_plugin_gpg_features_page')
-        );
+        // add_submenu_page(
+        //     $this->plugin_name,
+        //     __('PRO Features', $this->plugin_name),
+        //     __('PRO Features', $this->plugin_name),
+        //     'manage_options',
+        //     $this->plugin_name . '-pro-features',
+        //     array($this, 'display_plugin_gpg_features_page')
+        // );
         
 
     }
@@ -385,19 +385,19 @@ class Gallery_Photo_Gallery_Admin {
         include_once('partials/settings/gallery-photo-gallery-settings.php');
     }
 
-    public function display_plugin_gpg_features_page()
-    {
-        include_once('partials/features/gallery-photo-gallery-features-display.php');
-    }
+    // public function display_plugin_gpg_features_page()
+    // {
+    //     include_once('partials/features/gallery-photo-gallery-features-display.php');
+    // }
     public function display_plugin_how_to_use_page()
     {
         include_once('partials/how-to-use/gallery-photo-gallery-how-to-use.php');
     }
     
-    public function display_plugin_gpg_featured_plugins_page()
-    {
-        include_once('partials/features/gallery-photo-gallery-featured-plugins.php');
-    }
+    // public function display_plugin_gpg_featured_plugins_page()
+    // {
+    //     include_once('partials/features/gallery-photo-gallery-featured-plugins.php');
+    // }
 
     public static function set_screen( $status, $option, $value ) {
         return $value;
