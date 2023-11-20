@@ -2816,7 +2816,7 @@ div.ays_ask_question_content_inner {
     position: relative;
 }
 
-a.ays_gpg_question_link {
+/* a.ays_gpg_question_link {
     position: absolute;
     color: white;
     text-decoration: none;
@@ -2831,7 +2831,7 @@ a.ays_gpg_question_link {
     text-align: center;
     transform: rotate(4deg);
     height: 75%;
-}
+} */
 
 @media screen and (max-width: 768px){    
     ul.ays-accordion li.ays-accordion_li {
