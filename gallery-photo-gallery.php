@@ -10,7 +10,7 @@ ob_start();
  *
  * @link              https://ays-pro.com/
  * @since             1.0.0
- * @package           Gallery_Photo_Gallery
+ * @package           GLI_Photo_Gallery
  *
  * @wordpress-plugin
  * Plugin Name:       Gallery - Photo Gallery
