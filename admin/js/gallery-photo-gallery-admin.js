@@ -696,6 +696,7 @@
 
         function openMediaUploader(e,element, where){
             e.preventDefault();
+            console.log("openMediaUploader", where);
             let aysGalleryUploader = wp.media.frames.items = wp.media({
                 title: 'Upload image',
                 button: {
@@ -707,6 +708,7 @@
                 multiple: false,
                 frame: 'select',
             }).on('select', function(e){
+                console.log("openMediaUploader B");
 				if(where == 'ays_image_add_icon'){
                     var state = aysGalleryUploader.state();
                     var selection = selection || state.get('selection');
@@ -714,6 +716,7 @@
                     
                     var attachment = selection.first();
                     var display = state.display(attachment).toJSON();
+                    console.log(display);
                     attachment = attachment.toJSON();
                     
                     var d = new Date()
@@ -823,6 +826,7 @@
 
         function openMediaUploader_forMultiple(e,element){
             e.preventDefault();
+            console.log("openMediaUploader_forMultiple IN")
             let aysUploader = wp.media.frames.aysUploader = wp.media({
                 title: 'Upload images',
                 button: {
@@ -834,14 +838,17 @@
                 },
                 frame:    "select"
             }).on('select', function() {
+                console.log("openMediaUploader_forMultiple on select");
                 var state = aysUploader.state();
                 var selection = selection || state.get('selection');
                 if (! selection) return;
 
                 var attachment = selection.first();
                 var display = state.display(selection).toJSON();
-
+                //console.log("openMediaUploader_forMultiple on select " + JSON.stringify(display));
                 var attachment = selection.toJSON();
+                console.log("openMediaUploader_forMultiple on select, lenght = " + attachment.length);
+                console.log("openMediaUploader_forMultiple on select, attachment = " + JSON.stringify(attachment));
                 var d = new Date()
                 var date = d.getTime();
                 date = Math.floor(date/1000);
@@ -859,12 +866,12 @@
                             accordion = $(document).find('ul.ays-accordion.ays_accordion_active');
                         }
                         let newListImage = '<li class="ays-accordion_li">' +
+                        //'           TOTO IMAGE NOT SAVED' +
                         '           <input type="hidden" name="ays-image-path[]" value="'+attachment[i].url+'">' +
                         '           <div class="ays-image-attributes">' +
-                        '               <div class="ays-move-images_div"><i class="ays-move-images"></i></div>' +
                         '               <div class="ays_image_div">' +                        
                         '                   <div class="ays_image_thumb" style="display: block; position: relative;">' +
-                        '                       <div class="ays_image_edit_div" style="position: absolute;"><i class="ays_image_edit"></i></div>' +
+                        '                       <div class="ays_image_edit_div" style="position: absolute;"><i class="ays-move-images"></i></div>' +
                         '                       <div class="ays_image_thumb_img"><img class="ays_ays_img" alt="" src="'+attachment[i].url+'"></div>' +                    
                         '                   </div>' +
                         '               </div>' + 
@@ -882,22 +889,22 @@
                         '                    <a class="ays_help" data-toggle="tooltip" title="'+ays_alt_tooltip+'">'+
                         '                       <i class="fas fa-info-circle"></i>'+
                         '                    </a></label>' +
-                        '                   <input class="ays_img_alt" type="text" name="ays-image-alt[]" value="'+(attachment[i].title)+'" placeholder="Image alt"/>' +
+                        '                   <input class="ays_img_alt" type="text" name="ays-image-alt[]" value="'+(attachment[i].alt)+'" placeholder="Image alt"/>' +
                         '               </div>' +
                         '               <div class="ays_image_attr_item">' +
                         '                   <label>Description'+
                         '                    <a class="ays_help" data-toggle="tooltip" title="'+ays_desc_tooltip+'">'+
                         '                       <i class="fas fa-info-circle"></i>'+
                         '                    </a></label>' +
-                        '                   <input class="ays_img_desc" type="text" name="ays-image-description[]" placeholder="Image description"/>' +
+                        '                   <input class="ays_img_desc" type="text" name="ays-image-description[]" value="'+(attachment[i].description)+'" placeholder="Image description"/>' +
                         '               </div>' +
-                        '               <div class="ays_image_attr_item">' +
-                        '                   <label>URL'+
-                        '                    <a class="ays_help" data-toggle="tooltip" title="'+ays_url_tooltip+'">'+
-                        '                       <i class="fas fa-info-circle"></i>'+
-                        '                    </a></label>' +
-                        '                   <input class="ays_img_url" type="url" name="ays-image-url[]" placeholder="URL"/>' +
-                        '                   </div>' +
+                        // '               <div class="ays_image_attr_item">' +
+                        // '                   <label>URL'+
+                        // '                    <a class="ays_help" data-toggle="tooltip" title="'+ays_url_tooltip+'">'+
+                        // '                       <i class="fas fa-info-circle"></i>'+
+                        // '                    </a></label>' +
+                        // '                   <input class="ays_img_url" type="url" name="ays-image-url[]" placeholder="URL"/>' +
+                        // '               </div>' +
                         '               </div>' +
                         '               <div class="ays_image_cat">' +
                         '                   <label>Image Category'+
@@ -1940,6 +1947,7 @@ function ays_distMetric(x,y,x2,y2) {
 }
 
 function openMediaUploaderForImage(e, element) {
+    console.log("COUCOU");
     e.preventDefault();
     var aysUploader = wp.media({
         title: 'Upload',
@@ -1952,6 +1960,7 @@ function openMediaUploaderForImage(e, element) {
         multiple: false
     }).on('select', function () {
         var attachment = aysUploader.state().get('selection').first().toJSON();
+        
         var wrap = element.parents('.ays-image-wrap');
         wrap.find('.ays-gpg-image-container img').attr('src', attachment.url);
         wrap.find('input.ays-image-path').val(attachment.url);

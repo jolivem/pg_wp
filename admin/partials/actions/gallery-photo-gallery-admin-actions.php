@@ -371,9 +371,9 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 <a href="#tab4" data-tab="tab4" class="nav-tab <?php echo ($ays_gpg_tab == 'tab4') ? 'nav-tab-active' : ''; ?>">
                     <?php echo __("Lightbox settings", $this->plugin_name);?>
                 </a>
-                <a href="#tab5" data-tab="tab5" class="nav-tab <?php echo ($ays_gpg_tab == 'tab5') ? 'nav-tab-active' : ''; ?>">
+                <!-- <a href="#tab5" data-tab="tab5" class="nav-tab <?php echo ($ays_gpg_tab == 'tab5') ? 'nav-tab-active' : ''; ?>">
                     <?php echo __("Lightbox effects", $this->plugin_name);?>
-                </a>
+                </a> -->
             </div>  
         </div>              
         <div class="ays_gpg_menu_right" data-scroll="-1"><i class="ays_fa ays_fa_angle_right"></i></div>
@@ -439,59 +439,29 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
         <?php
             if($id == null) :
         ?>
+        
         <ul class="ays-accordion">
-            <li class="ays-accordion_li">
+            <!--  id = NULL GALLERY NOT SAVED -->
+            <!-- <li class="ays-accordion_li">
                 <input type="hidden" name="ays-image-path[]">
                 <div class="ays-image-attributes">
-                    <div class='ays-move-images_div'><i class="ays-move-images"></i></div>
-                    <div class='ays_image_div'>
-                        <div class="ays_image_add_div">
-                            <span class="ays_ays_img"></span>
-                            <div class="ays_image_add_icon"><i class="ays-upload-btn"></i></div>
-                        </div>
-                        <div class="ays_image_thumb">
-                            <div class="ays_image_edit_div"><i class="ays_image_edit"></i></div>
+                    <div class='ays_image_div'>                      
+                        <div class="ays_image_thumb" style="display: block; position: relative;">
+                            <div class="ays_image_edit_div" style="position: absolute;"><i class="ays-move-images"></i></div>
                             <div class='ays_image_thumb_img'><img></div>
                         </div>
                     </div>
                     <div class="ays_image_attr_item_cat">
                         <div class="ays_image_attr_item_parent">
-                            <div class="ays_image_attr_item">
-                                <label>
-                                    <?php echo __("Title", $this->plugin_name);?>
-                                    <a class="ays_help" data-toggle="tooltip" title="<?php echo __("It shows the name of the inserted picture", $this->plugin_name ); ?>">
-                                       <i class="fas fa-info-circle"></i>
-                                    </a>
-                                </label>
-                                <input class="ays_img_title" type="text" name="ays-image-title[]" placeholder="<?php echo __("Image title", $this->plugin_name);?>"/>
+                            <div>
+                                <?php echo __("Title: ", $this->plugin_name);?>
+                                <b><?php echo stripslashes(esc_attr($images_titles[$key])); ?></b>
                             </div>
-                            <div class="ays_image_attr_item">
-                                <label>
-                                    <?php echo __("Alt", $this->plugin_name);?>
-                                    <a class="ays_help" data-toggle="tooltip" title="<?php echo __("This field shows the alternate text when the picture is not loaded or not found", $this->plugin_name ); ?>">
-                                       <i class="fas fa-info-circle"></i>
-                                    </a>
-                                </label>
-                                <input class="ays_img_alt" type="text" name="ays-image-alt[]" placeholder="<?php echo __("Image alt", $this->plugin_name);?>"/>
+                            <div>
+                                <?php echo __("Description: ", $this->plugin_name);?>
+                                <b><?php echo stripslashes(esc_attr($images_descriptions[$key])); ?></b>
                             </div>
-                            <div class="ays_image_attr_item">
-                                <label>
-                                    <?php echo __("Description", $this->plugin_name);?>
-                                    <a class="ays_help" data-toggle="tooltip" title="<?php echo __("This field shows the description of the chosen image", $this->plugin_name ); ?>">
-                                       <i class="fas fa-info-circle"></i>
-                                    </a>
-                                </label>
-                                <input class="ays_img_desc" type="text" name="ays-image-description[]" placeholder="<?php echo __("Image description", $this->plugin_name);?>"/>
-                            </div>
-                            <div class="ays_image_attr_item">
-                                <label>
-                                    <?php echo __("URL", $this->plugin_name);?>
-                                    <a class="ays_help" data-toggle="tooltip" title="<?php echo __("This section is for the URL address", $this->plugin_name ); ?>">
-                                       <i class="fas fa-info-circle"></i>
-                                    </a>
-                                </label>
-                                <input class="ays_img_url" type="url" name="ays-image-url[]" placeholder="<?php echo __("URL", $this->plugin_name);?>"/>
-                            </div>
+
                         </div>
                         <div class="ays_image_cat">
                             <label>
@@ -514,9 +484,9 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                     <div class="ays_del_li_div"><input type="checkbox" class="ays_del_li"/></div>
                     <div class='ays-delete-image_div'><i class="ays-delete-image"></i></div>
                 </div>
-            </li>
+            </li> -->
         </ul>
-            <?php
+        <?php
                 else:
                     $images = explode( "***", $gallery["images"] );
                     $images_titles = explode( "***", $gallery["images_titles"] );
@@ -540,7 +510,9 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                         for($i = 0; $i < $pages; $i++){
                             $accordion_active = (isset($_COOKIE['ays_gpg_page_tab_free']) && $_COOKIE['ays_gpg_page_tab_free'] == "tab_".($i)) ? 'ays_accordion_active' : '';
                 ?>
+                
                 <ul class="ays-accordion ays_accordion <?php echo $accordion_active; ?>" id="page_<?php echo $i; ?>">
+                <!-- TOTO id NOT NULL -->
                 <?php
                     for ($key = $qanak, $j = 0; $key < count($images); $key++, $j++ ) {
                         if($j >= $admin_pagination){
@@ -566,54 +538,27 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                         }
                         $img_thmb_html = !empty($img_thmb_size) ? '<img class="ays_ays_img" style="background-image:none;" src="'.$img_thmb_size.'">' : '<img class="ays_ays_img">';
                         ?>
+                        <!-- TOTO id NOT NULL GALLERY -->
                         <li class="ays-accordion_li">
                             <input type="hidden" name="ays-image-path[]" value="<?php echo $images[$key]; ?>">
                             <div class="ays-image-attributes">
-                                <div class='ays-move-images_div'><i class="ays-move-images"></i></div>
-                                <div class='ays_image_div'>
+                                <div class='ays_image_div'>                      
                                     <div class="ays_image_thumb" style="display: block; position: relative;">
-                                        <div class="ays_image_edit_div" style="position: absolute;"><i class="ays_image_edit"></i></div>
+                                        <div class="ays_image_edit_div" style="position: absolute;"><i class="ays-move-images"></i></div>
                                         <div class='ays_image_thumb_img'><?php echo $img_thmb_html; ?></div>
                                     </div>
                                 </div>
                                 <div class="ays_image_attr_item_cat">
                                     <div class="ays_image_attr_item_parent">
-                                        <div class="ays_image_attr_item">
-                                            <label>
-                                                <?php echo __("Title", $this->plugin_name);?>
-                                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __("It shows the name of the inserted picture", $this->plugin_name ); ?>">
-                                                   <i class="fas fa-info-circle"></i>
-                                                </a>
-                                            </label>
-                                            <input class="ays_img_title" type="text" name="ays-image-title[]" placeholder="<?php echo __("Image title", $this->plugin_name);?>" value="<?php echo stripslashes(esc_attr($images_titles[$key])); ?>"/>
+                                        <div>
+                                            <?php echo __("Title: ", $this->plugin_name);?>
+                                            <b><?php echo stripslashes(esc_attr($images_titles[$key])); ?></b>
                                         </div>
-                                        <div class="ays_image_attr_item">
-                                            <label>
-                                                <?php echo __("Alt", $this->plugin_name);?>
-                                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __("This field shows the alternate text when the picture is not loaded or not found", $this->plugin_name ); ?>">
-                                                   <i class="fas fa-info-circle"></i>
-                                                </a>
-                                            </label>
-                                            <input class="ays_img_alt" type="text" name="ays-image-alt[]" placeholder="<?php echo __("Image alt", $this->plugin_name);?>" value="<?php echo stripslashes(esc_attr($images_alts[$key])); ?>"/>
+                                        <div>
+                                            <?php echo __("Description: ", $this->plugin_name);?>
+                                            <b><?php echo stripslashes(esc_attr($images_descriptions[$key])); ?></b>
                                         </div>
-                                        <div class="ays_image_attr_item">
-                                            <label>
-                                                <?php echo __("Description", $this->plugin_name);?>
-                                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __("This field shows the description of the chosen image", $this->plugin_name ); ?>">
-                                                   <i class="fas fa-info-circle"></i>
-                                                </a>
-                                            </label>
-                                            <input class="ays_img_desc" type="text" name="ays-image-description[]" placeholder="<?php echo __("Image description", $this->plugin_name);?>" value="<?php echo stripslashes(esc_attr($images_descriptions[$key])); ?>"/>
-                                        </div>
-                                        <div class="ays_image_attr_item">
-                                            <label>
-                                                <?php echo __("URL", $this->plugin_name);?>
-                                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __("This section is for the URL address", $this->plugin_name ); ?>">
-                                                   <i class="fas fa-info-circle"></i>
-                                                </a>
-                                            </label>
-                                            <input class="ays_img_url" type="url" name="ays-image-url[]" placeholder="<?php echo __("URL", $this->plugin_name);?>" value="<?php echo esc_attr($images_urls[$key]); ?>"/>
-                                        </div>
+
                                     </div>
                                     <div class="ays_image_cat">
                                         <label>
@@ -669,56 +614,27 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
 
                         $img_thmb_html = !empty($img_thmb_size) ? '<img class="ays_ays_img" style="background-image:none;" src="'.$img_thmb_size.'">' : '<img class="ays_ays_img">';
                         ?>
+                        <!-- TOTO FOR EACH SAVED IMAGE -->
                         <li class="ays-accordion_li">
                             <input type="hidden" name="ays-image-path[]" value="<?php echo $image; ?>">
                             <div class="ays-image-attributes">
-                                <div class='ays-move-images_div'><i class="ays-move-images"></i></div>
-                                <div class='ays_image_div'>                                
+                                <div class='ays_image_div'>                      
                                     <div class="ays_image_thumb" style="display: block; position: relative;">
-                                        <div class="ays_image_edit_div" style="position: absolute;"><i class="ays_image_edit"></i></div>
-                                        <div class='ays_image_thumb_img'>
-                                            <?php echo $img_thmb_html; ?>
-                                        </div>
+                                        <div class="ays_image_edit_div" style="position: absolute;"><i class="ays-move-images"></i></div>
+                                        <div class='ays_image_thumb_img'><?php echo $img_thmb_html; ?></div>
                                     </div>
                                 </div>
                                 <div class="ays_image_attr_item_cat">
                                     <div class="ays_image_attr_item_parent">
-                                        <div class="ays_image_attr_item">
-                                            <label>
-                                                <?php echo __("Title", $this->plugin_name);?>
-                                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __("It shows the name of the inserted picture", $this->plugin_name ); ?>">
-                                                   <i class="fas fa-info-circle"></i>
-                                                </a>
-                                            </label>
-                                            <input class="ays_img_title" type="text" name="ays-image-title[]" placeholder="<?php echo __("Image title", $this->plugin_name);?>" value="<?php echo stripslashes(esc_attr($images_titles[$key])); ?>"/>
+                                        <div>
+                                            <?php echo __("Title: ", $this->plugin_name);?>
+                                            <b><?php echo stripslashes(esc_attr($images_titles[$key])); ?></b>
                                         </div>
-                                        <div class="ays_image_attr_item">
-                                            <label>
-                                                <?php echo __("Alt", $this->plugin_name);?>
-                                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __("This field shows the alternate text when the picture is not loaded or not found", $this->plugin_name ); ?>">
-                                                   <i class="fas fa-info-circle"></i>
-                                                </a>
-                                            </label>
-                                            <input class="ays_img_alt" type="text" name="ays-image-alt[]" placeholder="<?php echo __("Image alt", $this->plugin_name);?>" value="<?php echo stripslashes(esc_attr($images_alts[$key])); ?>"/>
+                                        <div>
+                                            <?php echo __("Description: ", $this->plugin_name);?>
+                                            <b><?php echo stripslashes(esc_attr($images_descriptions[$key])); ?></b>
                                         </div>
-                                        <div class="ays_image_attr_item">
-                                            <label>
-                                                <?php echo __("Description", $this->plugin_name);?>
-                                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __("This field shows the description of the chosen image", $this->plugin_name ); ?>">
-                                                   <i class="fas fa-info-circle"></i>
-                                                </a>                                    
-                                            </label>
-                                            <input class="ays_img_desc" type="text" name="ays-image-description[]" placeholder="<?php echo __("Image description", $this->plugin_name);?>" value="<?php echo stripslashes(esc_attr($images_descriptions[$key])); ?>"/>
-                                        </div>
-                                        <div class="ays_image_attr_item">
-                                            <label>
-                                                <?php echo __("URL", $this->plugin_name);?>
-                                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __("This section is for the URL address", $this->plugin_name ); ?>">
-                                                   <i class="fas fa-info-circle"></i>
-                                                </a>
-                                            </label>
-                                            <input class="ays_img_url" type="url" name="ays-image-url[]" placeholder="<?php echo __("URL", $this->plugin_name);?>" value="<?php echo esc_attr($images_urls[$key]); ?>"/>
-                                        </div>
+
                                     </div>
                                     <div class="ays_image_cat">
                                         <label>
@@ -1273,90 +1189,6 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                     </select>
                 </div>
             </div> <!-- Change the author of the current gallery -->
-            <hr/>   
-            <div class="ays_gpg_pagination_types">
-                <div class="col-sm-12 only_pro">
-                    <div class="pro_features">
-                        <div>                            
-                            <a href="https://ays-pro.com/wordpress/photo-gallery/" target="_blank" class="ays-gpg-new-upgrade-button-link">
-                                <div class="ays-gpg-new-upgrade-button-box">
-                                    <div>
-                                        <img src="<?php echo AYS_GPG_ADMIN_URL.'/images/icons/gpg_locked_24x24.svg'?>">
-                                        <img src="<?php echo AYS_GPG_ADMIN_URL.'/images/icons/gpg_unlocked_24x24.svg'?>" class="ays-gpg-new-upgrade-button-hover">
-                                    </div>
-                                    <div class="ays-gpg-new-upgrade-button"><?php echo __("Upgrade", $this->plugin_name); ?></div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>                
-                    <div class="form-group row" style="padding-top:15px;">
-                        <div class="col-sm-3">
-                            <label for="gallery_pagination">
-                                <?php echo __("Pagination", $this->plugin_name);?>
-                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __("You will be able to choose the way of the pagination. By default it is none, so all the images will loaded in the Front-end.", $this->plugin_name);?>">
-                                <i class="fas fa-info-circle"></i>
-                                </a>
-                            </label>
-                        </div>
-                        <div class="col-sm-9">
-                            <div>
-                                <label class="ays_gpg_image_hover_icon" id="gpg_pagination_none"><?php echo __("None", $this->plugin_name);?>
-                                    <input type="radio" id="gpg_pagination_none" name="ays_gpg_pagination" value="none"/>
-                                </label>
-                                <label class="ays_gpg_image_hover_icon" id="gpg_pagination_simple"><?php echo __("Simple", $this->plugin_name);?> 
-                                    <input type="radio" id="gpg_pagination_simple" name="ays_gpg_pagination" value="simple"/>
-                                </label>
-                                <label class="ays_gpg_image_hover_icon" id="gpg_pagination_load_more"><?php echo __("Load More ", $this->plugin_name);?> 
-                                    <input type="radio" id="gpg_pagination_load_more" name="ays_gpg_pagination" checked value="load_more"/>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <hr />
-                    <div class="form-group row show_load_effect_simple">
-                        <div class="col-sm-3">
-                            <label for="gallery_img_per_page_simple">
-                                <?php echo __("Images per page", $this->plugin_name);?>
-                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __("Set the exact number of images you want to be displayed on each page", $this->plugin_name);?>">
-                                <i class="fas fa-info-circle"></i>
-                                </a>
-                            </label>
-                        </div>
-                        <div class="col-sm-9">
-                            <input type="number" class="ays-text-input ays-text-input-short" name="gallery_img_per_page_simple" id="gallery_img_per_page_simple" min=1 value="">
-                        </div>
-                    </div>
-                    <div class="show_load_effect_load_more" style="padding-bottom: 15px;">
-                        <div class="form-group row">
-                            <div class="col-sm-3">
-                                <label for="gallery_img_per_page_load_more">
-                                    <?php echo __("Images per page", $this->plugin_name);?>
-                                    <a class="ays_help" data-toggle="tooltip" title="<?php echo __("Choose the number of images you want to be displayed at the beginning", $this->plugin_name);?>">
-                                        <i class="fas fa-info-circle"></i>
-                                    </a>
-                                </label>
-                            </div>
-                            <div class="col-sm-9">
-                                <input type="number" class="ays-text-input ays-text-input-short" name="gallery_img_per_page_load_more" id="gallery_img_per_page_load_more" min=1 value="">
-                            </div>
-                        </div>
-                        <hr/>
-                        <div class="form-group row">
-                            <div class="col-sm-3">
-                                <label for="gallery_img_per_load">
-                                    <?php echo __("Images per load", $this->plugin_name);?>
-                                    <a class="ays_help" data-toggle="tooltip" title="<?php echo __("Choose how many images will be loaded after clicking on the ''Load More'' button", $this->plugin_name);?>">
-                                    <i class="fas fa-info-circle"></i>
-                                    </a>
-                                </label>
-                            </div>
-                            <div class="col-sm-9">
-                                <input type="number" class="ays-text-input ays-text-input-short" name="gallery_img_per_load" id="gallery_img_per_load" min=1 value="">
-                            </div>
-                        </div>
-                    </div> 
-                </div>
-            </div><!-- Gallery pagination -->
 		</div>
         <?php
             $view_type_names = array(
@@ -2253,7 +2085,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 </div>
             </div>
         </div>
-        <div id="tab5" class="only_pro ays-gallery-tab-content <?php echo ($ays_gpg_tab == 'tab5') ? 'ays-gallery-tab-content-active' : ''; ?>" style="padding-top: 15px;">
+        <!-- <div id="tab5" class="only_pro ays-gallery-tab-content <?php echo ($ays_gpg_tab == 'tab5') ? 'ays-gallery-tab-content-active' : ''; ?>" style="padding-top: 15px;">
             <div class="pro_features">
                 <div>                    
                     <a href="https://ays-pro.com/wordpress/photo-gallery/" target="_blank" class="ays-gpg-new-upgrade-button-link">
@@ -2279,7 +2111,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 </div>
             </div>
             <img class="pro_img_style" src="<?php echo AYS_GPG_ADMIN_URL; ?>images/features/lighbox_effect.png">
-        </div>        
+        </div>         -->
         <hr/>
         <div class="form-group row ays-galleries-button-box">
             <div class="ays-question-button-first-row" style="padding: 0;">
