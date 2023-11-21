@@ -170,7 +170,7 @@ class Galleries_List_Table extends WP_List_Table{
                 $gallery_img_position = (isset($data['gallery_img_position']) && $data['gallery_img_position'] != '') ? wp_unslash(sanitize_text_field( $data['gallery_img_position'] )) : 'center-center';
             
                 $ays_show_gal_title     = (isset($data['ays_gpg_title_show']) && $data['ays_gpg_title_show'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_title_show'] )) : '';
-                $ays_show_gal_desc      = (isset($data['ays_gpg_desc_show']) && $data['ays_gpg_desc_show'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_desc_show'] )) : '';
+                //$ays_show_gal_desc      = (isset($data['ays_gpg_desc_show']) && $data['ays_gpg_desc_show'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_desc_show'] )) : '';
                 $images_hover_effect    = (isset($data['ays_images_hover_effect']) && $data['ays_images_hover_effect'] != '') ? sanitize_text_field( $data['ays_images_hover_effect'] ) : '';
                 $hover_dir_aware        = (isset($data['ays_hover_dir_aware']) && $data['ays_hover_dir_aware'] != '') ? sanitize_text_field( $data['ays_hover_dir_aware'] ) : '';
 
@@ -234,7 +234,7 @@ class Galleries_List_Table extends WP_List_Table{
                     'hover_scale_animation_speed'=> $hover_scale_animation_speed,
                     'hover_scale'               => $ays_gpg_hover_scale,
                     'show_gal_title'            => $ays_show_gal_title,
-                    'show_gal_desc'             => $ays_show_gal_desc,
+                    //'show_gal_desc'             => $ays_show_gal_desc,
                     "images_hover_effect"       => $images_hover_effect,
                     "hover_dir_aware"           => $hover_dir_aware,
                     "images_border"             => $ays_images_border,

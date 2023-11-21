@@ -136,7 +136,7 @@ class Gallery_Photo_Gallery_Activator {
                     'admin_pagination'          => !isset($op['admin_pagination']) ? "all" : $op['admin_pagination'],
                     'hover_zoom'                => !isset($op['hover_zoom']) ? "no" : $op['hover_zoom'],
                     'show_gal_title'            => !isset($op['show_gal_title']) ? "on" : $op['show_gal_title'],
-                    'show_gal_desc'             => !isset($op['show_gal_desc']) ? "on" : $op['show_gal_desc'],
+                    //'show_gal_desc'             => !isset($op['show_gal_desc']) ? "off" : $op['show_gal_desc'],
                     "images_hover_effect"       => !isset($op['images_hover_effect']) ? "simple" : $op['images_hover_effect'],
                     "hover_dir_aware"           => !isset($op['hover_dir_aware']) ? "slide" : $op['hover_dir_aware'],
                     "images_border"             => !isset($op['images_border']) ? "" : $op['images_border'],

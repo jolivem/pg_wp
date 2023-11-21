@@ -1293,7 +1293,7 @@ class Gallery_Photo_Gallery_Public {
         $show_filter_cat = (!isset($gallery_options['ays_filter_cat'])) ? 'off' : $gallery_options['ays_filter_cat'];
 
         $show_gal_title = (!isset($gallery_options['show_gal_title'])) ? 'on' : $gallery_options['show_gal_title'];
-        $show_gal_desc = (!isset($gallery_options['show_gal_desc'])) ? 'on' : $gallery_options['show_gal_desc'];
+        //$show_gal_desc = (!isset($gallery_options['show_gal_desc'])) ? 'off' : $gallery_options['show_gal_desc'];
 
         $lightbox_color_rgba = $this->hex2rgba($lightbox_color, 0.5);
         
@@ -1572,17 +1572,17 @@ class Gallery_Photo_Gallery_Public {
         }else{
             $show_gallery_title = "";
         }
-        if($show_gal_desc == "on"){
-            $show_gallery_desc = "<h4 class='ays_gallery_description'>" . stripslashes($description) . "</h4>";
-        }else{
-            $show_gallery_desc = "";
-        }
-        if($show_gal_title != "on" && $show_gal_desc != "on"){
+        // if($show_gal_desc == "on"){
+        //     $show_gallery_desc = "<h4 class='ays_gallery_description'>" . stripslashes($description) . "</h4>";
+        // }else{
+        //     $show_gallery_desc = "";
+        // }
+        if($show_gal_title != "on"){// && $show_gal_desc != "on"){
             $show_gallery_head = "";
         }else{
             $show_gallery_head = "<div class='ays_gallery_header'>
                                     $show_gallery_title
-                                    $show_gallery_desc
+                                    //$show_gallery_desc
                                 </div>";
         }
         if($ays_images_border === "on"){

@@ -26,7 +26,7 @@ $g_options = array(
     "admin_pagination"      => "all",
     "hover_zoom"            => "no",
     "show_gal_title"        => "on",
-    "show_gal_desc"         => "on",
+    //"show_gal_desc"         => "off",
     "images_hover_effect"   => "simple",
     "hover_dir_aware"       => "slide",
     "images_border"         => "",
@@ -132,7 +132,7 @@ $gal_options            = json_decode($gallery['options'], true);
 $gal_lightbox_options   = json_decode($gallery['lightbox_options'], true);
 
 $show_gal_title = (!isset($gal_options['show_gal_title'])) ? 'on' : $gal_options['show_gal_title'];
-$show_gal_desc = (!isset($gal_options['show_gal_desc'])) ? 'on' : $gal_options['show_gal_desc'];
+//$show_gal_desc = (!isset($gal_options['show_gal_desc'])) ? 'on' : $gal_options['show_gal_desc'];
 
 $admin_pagination = (!isset($gal_options['admin_pagination']) ||
                      $gal_options['admin_pagination'] == null ||
@@ -302,8 +302,25 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
         <input type="submit" name="ays-apply-top" class="ays-submit action-button button ays-gpg-save-comp" id="ays-button-top-apply" title="Ctrl + s" data-toggle="tooltip" data-delay='{"show":"1000"}' value="<?php echo __("Save", $this->plugin_name);?>" gpg_submit_name="ays-apply"/>
         <?php echo $loader_iamge; ?>
     </h1>
-    <div>        
-        <div class="ays-gallery-subtitle-main-box">
+    <hr>
+    <h3><?php echo esc_attr( stripslashes( $gallery["title"] ) ); ?></h3>
+    <div class="form-group row">
+            <div class="col-sm-3">
+                <label for="gallery_title">
+                    <?php echo __("Gallery Title", $this->plugin_name);?>
+                    <a class="ays_help" data-toggle="tooltip" title="<?php echo __("In this field is noted the name of the gallery", $this->plugin_name ); ?>">
+                       <i class="fas fa-info-circle"></i>
+                    </a>
+                </label>
+            </div>
+            <div class="col-sm-9">
+                <input type="text" required name="gallery_title" id="gallery_title" class="ays-text-input" placeholder="<?php echo __("Gallery Title", $this->plugin_name);?>" value="<?php echo stripslashes(htmlentities($gallery["title"])); ?>"/>
+            </div>
+        </div>
+
+    <div>     
+        
+        <!-- <div class="ays-gallery-subtitle-main-box">
             <p class="ays-subtitle">                
                 <?php if(isset($id) && count($get_all_galleries) > 1):?>
                     <span class="ays-subtitle-inner-galleries-page ays-gallery-open-gpgs-list">
@@ -326,7 +343,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                     <?php endforeach ?>
                 </div>                        
             <?php endif; ?>
-        </div>
+        </div> -->
         <?php if($id !== null): ?>
         <div class="row">
             <div class="col-sm-3">
@@ -380,21 +397,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
     </div>
     <div id="tab1" class="ays-gallery-tab-content <?php echo ($ays_gpg_tab == 'tab1') ? 'ays-gallery-tab-content-active' : ''; ?>">
         <br>
-        <div class="form-group row">
-            <div class="col-sm-3">
-                <label for="gallery_title">
-                    <?php echo __("Gallery Title", $this->plugin_name);?>
-                    <a class="ays_help" data-toggle="tooltip" title="<?php echo __("In this field is noted the name of the gallery", $this->plugin_name ); ?>">
-                       <i class="fas fa-info-circle"></i>
-                    </a>
-                </label>
-            </div>
-            <div class="col-sm-9">
-                <input type="text" required name="gallery_title" id="gallery_title" class="ays-text-input" placeholder="<?php echo __("Gallery Title", $this->plugin_name);?>" value="<?php echo stripslashes(htmlentities($gallery["title"])); ?>"/>
-            </div>
-        </div>
          <!-- MJO removed description -->
-        <hr/>
         <p class="ays-subtitle"><?php echo  __('Add Images', $this->plugin_name) ?></p>
         <h6><?php echo  __('Upload images for your gallery', $this->plugin_name) ?></h6>
         <!-- <button type="button" class="ays-add-images button"><?php //echo __("Add image +", $this->plugin_name); ?></button> -->
@@ -756,27 +759,14 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
             <div class="form-group row">
                 <div class="col-sm-3">
                     <label>
-                        <?php echo __("Show gallery head", $this->plugin_name);?>
+                        <?php echo __("Show gallery title", $this->plugin_name);?>
                         <a class="ays_help" data-toggle="tooltip" title="<?php echo __("You can decide whether to show the title and description of the gallery or not", $this->plugin_name);?>">
                            <i class="fas fa-info-circle"></i>
                         </a>
                     </label>
                 </div>
                 <div class="col-sm-9">
-                    <label class="ays_gpg_image_hover_icon"><?php echo __("Show gallery title ", $this->plugin_name);?>
-                        <input type="checkbox" class="" name="ays_gpg_title_show" <?php
-                           echo ($show_gal_title == "on") ? "checked" : ""; ?>/>
-                        <a class="ays_help poqr_tooltip" data-toggle="tooltip" title="<?php echo __("If it is marked it will show the title", $this->plugin_name);?>">
-                           <i class="fas fa-info-circle"></i>
-                        </a>
-                    </label>
-                    <label class="ays_gpg_image_hover_icon"><?php echo __("Show gallery description ", $this->plugin_name);?>
-                        <input type="checkbox" class="" name="ays_gpg_desc_show" <?php
-                           echo ($show_gal_desc == "on") ? "checked" : ""; ?>/>
-                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __("If it is marked it will show the description", $this->plugin_name);?>">
-                           <i class="fas fa-info-circle"></i>
-                        </a>
-                    </label>
+                    <input type="checkbox" class="" name="ays_gpg_title_show" <?php echo (isset($gal_options['show_gal_title']) && $gal_options['show_gal_title'] == "on") ? "checked" : ""; ?> />
                 </div>
             </div>
             <hr/>
@@ -2055,7 +2045,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                     </div>                    
                 </div>
             </div>
-            <div class="form-group row">
+            <!-- <div class="form-group row">
                 <div class="col-sm-12 only_pro">
                     <div class="pro_features">
                         <div>                            
@@ -2083,7 +2073,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                     </div>
                     <img class="pro_img_style" src="<?php echo AYS_GPG_ADMIN_URL; ?>images/features/lighbox_settings.png">
                 </div>
-            </div>
+            </div> -->
         </div>
         <!-- <div id="tab5" class="only_pro ays-gallery-tab-content <?php echo ($ays_gpg_tab == 'tab5') ? 'ays-gallery-tab-content-active' : ''; ?>" style="padding-top: 15px;">
             <div class="pro_features">

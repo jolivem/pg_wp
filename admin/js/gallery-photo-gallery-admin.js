@@ -1645,17 +1645,17 @@
             parent.find('a.ays-add-image').show();
         });
 
-        $(document).find('.ays-gallery-open-gpgs-list').on('click', function(e){
-            $(this).parents(".ays-gallery-subtitle-main-box").find(".ays-gallery-gpgs-data").toggle('fast');
-        });
+        // $(document).find('.ays-gallery-open-gpgs-list').on('click', function(e){
+        //     $(this).parents(".ays-gallery-subtitle-main-box").find(".ays-gallery-gpgs-data").toggle('fast');
+        // });
 
-        $(document).on( "click" , function(e){
-            if($(e.target).closest('.ays-gallery-subtitle-main-box').length != 0){
+        // $(document).on( "click" , function(e){
+        //     if($(e.target).closest('.ays-gallery-subtitle-main-box').length != 0){
                 
-            }else{
-                $(document).find(".ays-gallery-subtitle-main-box .ays-gallery-gpgs-data").hide('fast');
-            }            
-        });
+        //     }else{
+        //         $(document).find(".ays-gallery-subtitle-main-box .ays-gallery-gpgs-data").hide('fast');
+        //     }            
+        // });
 
         $(document).find(".ays-gallery-go-to-gpgs").on("click" , function(e){
             e.preventDefault();

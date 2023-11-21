@@ -194,7 +194,7 @@ ul.ays-accordion li {
     margin-bottom: 30px;
     flex-basis: 100%;
     border: 1px solid #ccc;
-    border-radius: 10px;
+    border-radius: 5px;
     height: 150px;
     overflow: hidden;
 }
@@ -370,7 +370,7 @@ svg.ays-move-images{
     /* position: absolute; */
     /* z-index: 99999999; */
     /* left: 0; */
-    width: 120px;
+    width: 100%;
     /* height: 160px; */
     line-height: 150px;
     cursor: pointer;
@@ -2448,6 +2448,7 @@ i.ays_fa_ellipsis_h:before {
 
 .ays_image_attr_item_parent {
     display: flex;
+    flex-direction: column;
     padding: 5px 6px 5px;
 }
 
