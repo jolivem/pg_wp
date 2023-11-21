@@ -1077,8 +1077,8 @@
                 $images_title = $(document).find('input[name="ays-image-title[]"]'),
                 $images_desc = $(document).find('input[name="ays-image-description[]"]'),
                 $images_alt = $(document).find('input[name="ays-image-alt[]"]'),
-                $images_url = $(document).find('input[name="ays-image-url[]"]'),
-                $hover_effect = $(document).find('#gallery_img_hover_simple').val(),
+                //$images_url = "",$(document).find('input[name="ays-image-url[]"]'),
+                $hover_effect = 'pulse_gpg',//$(document).find('#gallery_img_hover_simple').val(),
                 $hover_out_effect, $image_dates = $(document).find('.ays_img_date'),
                 $images_distance = $(document).find('input[name="ays-gpg-images-distance"]').val(),
                 $hover_zoom = $(document).find('input[name="ays_gpg_hover_zoom"]:checked').first().val(),
@@ -1193,11 +1193,12 @@
                 }else{
                     $ays_show_title = '';
                 }
-                if($images_url[i].value == ""){
-                    var $images_url_i = "";
-                }else{
-                    var $images_url_i = "<button type='button' class='ays_image_url'><i class='fas fa-link'></i></button>";
-                }
+                var $images_url_i = "";
+                // if($images_url[i].value == ""){
+                //     var $images_url_i = "";
+                // }else{
+                //     var $images_url_i = "<button type='button' class='ays_image_url'><i class='fas fa-link'></i></button>";
+                // }
                 
                 
                 if($show_title_on == 'gallery_image'){
@@ -1215,7 +1216,8 @@
                     var grid_column_width = "";
                     var masonry_column_margin = "";
                 }
-                let newColumn = "<div class='"+type_mosaic_class+" "+type_masonry_class+" "+type_column_class+"' style='border-radius:"+$images_border_radius+"px; "+grid_column_width+"; "+masonry_column_margin+"'><a href='javascript:void(0);'><div class='ays_image_loading_div'><img src='"+ays_admin_url+"images/flower.svg'></div><img src='"+$images_path[i].value+"' alt='"+$images_alt[i].value+"' title='"+$images_title[i].value+"'/>"+$show_title_in_hover+"</a></div>";
+                //TODO add alt and title values
+                let newColumn = "<div class='"+type_mosaic_class+" "+type_masonry_class+" "+type_column_class+"' style='border-radius:"+$images_border_radius+"px; "+grid_column_width+"; "+masonry_column_margin+"'><a href='javascript:void(0);'><div class='ays_image_loading_div'><img src='"+ays_admin_url+"images/flower.svg'></div><img src='"+$images_path[i].value+"' alt='+$images_alt[i].value+' title='+$images_title[i].value+'/>"+$show_title_in_hover+"</a></div>";
                 ays_popup_view += newColumn;
             }
             ays_popup_view += "</div>";

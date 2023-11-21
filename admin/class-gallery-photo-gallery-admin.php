@@ -236,8 +236,8 @@ class Gallery_Photo_Gallery_Admin {
     public function add_plugin_admin_menu() {
         
         $hook_gallery = add_menu_page( 
-            __('Photo Gallery', $this->plugin_name), 
-            __('Photo Gallery', $this->plugin_name), 
+            __('GPGM Gallery', $this->plugin_name), 
+            __('GPGM Gallery', $this->plugin_name), 
             'manage_options', 
             $this->plugin_name, 
             array($this, 'display_plugin_setup_page'), AYS_GPG_ADMIN_URL . 'images/icons/icon-gpg-128x128.svg', 6);
