@@ -186,4 +186,71 @@ function general_gpg_admin_notice(){
     }
 }
 
+function get_vignette_options() {
+    return array(
+        'option1' => 'Option 1',
+        'option2' => 'Option 2',
+        'option3' => 'Option 3',
+    );
+}
+
+// Add custom field to media edit screen
+function add_custom_fields_to_media_edit_screen($form_fields, $post) {
+    $latitude_value = get_post_meta($post->ID, '_latitude', true);
+    $longitude_value = get_post_meta($post->ID, '_longitude', true);
+    $vignette_value = get_post_meta($post->ID, '_vignette', true);
+
+
+    $form_fields['latitude'] = array(
+        'label' => 'Latitude',
+        'input' => 'text',
+        'value' => $latitude_value,
+        'show_in_edit' => true,
+    );
+
+    $form_fields['longitude'] = array(
+        'label' => 'Longitude',
+        'input' => 'text',
+        'value' => $longitude_value,
+        'show_in_edit' => true,
+    );
+
+    $vignette_options = get_vignette_options();
+
+    $vignette_dropdown = '<select name="attachments[' . $post->ID . '][vignette]">';
+    foreach ($vignette_options as $key => $label) {
+        $vignette_dropdown .= '<option value="' . esc_attr($key) . '" ' . selected($vignette_value, $key, false) . '>' . esc_html($label) . '</option>';
+    }
+    $vignette_dropdown .= '</select>';
+
+
+    $form_fields['vignette'] = array(
+        'label' => 'Vignette',
+        'input' => 'text',
+        'input' => 'html',
+        'html' => $vignette_dropdown,
+        'show_in_edit' => true,
+    );
+
+    return $form_fields;
+}
+add_filter('attachment_fields_to_edit', 'add_custom_fields_to_media_edit_screen', 10, 2);
+
+// Save custom field value
+function save_custom_fields_value($post, $attachment) {
+    if (isset($attachment['latitude'])) {
+        update_post_meta($post['ID'], '_latitude', $attachment['latitude']);
+    }
+    if (isset($attachment['longitude'])) {
+        update_post_meta($post['ID'], '_longitude', $attachment['longitude']);
+    }
+
+    if (isset($attachment['vignette'])) {
+        update_post_meta($post['ID'], '_vignette', $attachment['vignette']);
+    }
+
+    return $post;
+}
+add_filter('attachment_fields_to_save', 'save_custom_fields_value', 10, 2);
+
 run_gallery_photo_gallery();

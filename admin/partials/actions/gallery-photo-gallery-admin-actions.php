@@ -1271,12 +1271,12 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                             <?php endif; ?>
                             <?php if($key == "grid" || $key == "mosaic" || $key == "masonry"): ?>
                             <img src="<?php echo AYS_GPG_ADMIN_URL . "images/" . $name; ?>">
-                            <?php else: ?>
+                            <!-- REMOVE PRO features <?php else: ?>
                             <a href="https://ays-demo.com/<?php echo $view_type_urls[$key]; ?>/" target="_blank" style="display: block;" class="ays_disabled" title="<?php echo __("This feature available only in PRO version!!!", $this->plugin_name); ?>">
                                 <div>Pro</div>
                                 <img src="<?php echo AYS_GPG_ADMIN_URL . "images/" . $name; ?>">
                                 <span class="ays_gpg_view_type_pro_demo">Demo</span>
-                            </a>
+                            </a> -->
                             <?php endif; ?>
                         </label>
                         <?php
