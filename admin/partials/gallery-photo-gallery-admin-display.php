@@ -66,8 +66,8 @@
         </div>
         <br class="clear">
     </div>
-
-    <?php if($gallery_max_id <= 3): ?>
+ 
+    <!-- <?php if($gallery_max_id <= 3): ?>
         <div class="ays-gpg-create-gallery-video-box" style="margin: 80px auto 30px;">
             <div class="ays-gpg-create-gallery-youtube-video-button-box">
                 <?php echo sprintf( '<a href="?page=%s&action=%s" class="ays-gpg-add-new-button-video ays-gpg-add-new-button-new-design"> %s ' . __('Add New', $this->plugin_name) . '</a>', esc_attr( $_REQUEST['page'] ), 'add', $plus_icon_svg); ?>
@@ -91,5 +91,5 @@
                 <a href="https://www.youtube.com/watch?v=bRrrBEQVZk8" target="_blank" title="YouTube video player" >How to create a Gallery in Under One Minute</a>
             </div>
         </div>
-    <?php endif ?>
+    <?php endif ?> -->
 </div>

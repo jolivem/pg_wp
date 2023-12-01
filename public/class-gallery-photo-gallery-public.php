@@ -358,60 +358,61 @@ class Gallery_Photo_Gallery_Public {
                                  break;
                             }
                         });";
-            }elseif($ays_images_hover_dir_aware == "rotate3d"){
-                $ays_hover_dir_aware_js .= "
-                            $(document).find('$gallery_item_class').hover(function(e){
-                                var ays_x = e.pageX - this.offsetLeft;
-                                var ays_y = e.pageY - this.offsetTop;
-                                var ays_edge = ays_closestEdge(ays_x,ays_y,this.clientWidth, this.clientHeight);
-                                var ays_overlay = $(this).find('div.ays_hover_mask');
-                                var ays_hover_dir = ays_getDirectionKey(e, e.currentTarget);
-                                        switch(ays_edge) {
-                                     case 'top':
-                                        ays_overlay.css('display', 'flex');
-                                        ays_overlay.attr('class', 'ays_hover_mask animated in-top');$hover_zoom_In
-                                     break;
-                                     case 'right':
-                                        ays_overlay.css('display', 'flex');
-                                        ays_overlay.attr('class', 'ays_hover_mask animated in-right');$hover_zoom_In
-                                     break;
-                                     case 'bottom':
-                                        ays_overlay.css('display', 'flex');
-                                        ays_overlay.attr('class', 'ays_hover_mask animated in-bottom');$hover_zoom_In
-                                     break;
-                                     case 'left':
-                                        ays_overlay.css('display', 'flex');
-                                        ays_overlay.attr('class', 'ays_hover_mask animated in-left');$hover_zoom_In
-                                     break;
-                                }
-
-                            },
-                           function(e){
-                                var ays_x = e.pageX - this.offsetLeft;
-                                var ays_y = e.pageY - this.offsetTop;
-                                var ays_edge = ays_closestEdge(ays_x,ays_y,this.clientWidth, this.clientHeight);
-                                var ays_overlay = $(this).find('div.ays_hover_mask');
-                                var ays_hover_dir = ays_getDirectionKey(e, e.currentTarget);
-                                    switch(ays_edge) {
-                                 case 'top':
-                                    ays_overlay.attr('class', 'ays_hover_mask animated out-top');$hover_zoom_Out
-                                    setTimeout( function(){ ays_overlay.css('opacity', '0');}, 350);
-                                 break;
-                                 case 'right':
-                                    ays_overlay.attr('class', 'ays_hover_mask animated out-right');$hover_zoom_Out
-                                    setTimeout( function(){ ays_overlay.css('opacity', '0');}, 350);
-                                 break;
-                                 case 'bottom':
-                                    ays_overlay.attr('class', 'ays_hover_mask animated out-bottom');$hover_zoom_Out
-                                    setTimeout( function(){ ays_overlay.css('opacity', '0');}, 350);
-                                 break;
-                                 case 'left':
-                                    ays_overlay.attr('class', 'ays_hover_mask animated out-left');$hover_zoom_Out
-                                    setTimeout( function(){ ays_overlay.css('opacity', '0'); }, 570);
-                                 break;
-                            }
-                        });";
             }
+            // elseif($ays_images_hover_dir_aware == "rotate3d"){
+            //     $ays_hover_dir_aware_js .= "
+            //                 $(document).find('$gallery_item_class').hover(function(e){
+            //                     var ays_x = e.pageX - this.offsetLeft;
+            //                     var ays_y = e.pageY - this.offsetTop;
+            //                     var ays_edge = ays_closestEdge(ays_x,ays_y,this.clientWidth, this.clientHeight);
+            //                     var ays_overlay = $(this).find('div.ays_hover_mask');
+            //                     var ays_hover_dir = ays_getDirectionKey(e, e.currentTarget);
+            //                             switch(ays_edge) {
+            //                          case 'top':
+            //                             ays_overlay.css('display', 'flex');
+            //                             ays_overlay.attr('class', 'ays_hover_mask animated in-top');$hover_zoom_In
+            //                          break;
+            //                          case 'right':
+            //                             ays_overlay.css('display', 'flex');
+            //                             ays_overlay.attr('class', 'ays_hover_mask animated in-right');$hover_zoom_In
+            //                          break;
+            //                          case 'bottom':
+            //                             ays_overlay.css('display', 'flex');
+            //                             ays_overlay.attr('class', 'ays_hover_mask animated in-bottom');$hover_zoom_In
+            //                          break;
+            //                          case 'left':
+            //                             ays_overlay.css('display', 'flex');
+            //                             ays_overlay.attr('class', 'ays_hover_mask animated in-left');$hover_zoom_In
+            //                          break;
+            //                     }
+
+            //                 },
+            //                function(e){
+            //                     var ays_x = e.pageX - this.offsetLeft;
+            //                     var ays_y = e.pageY - this.offsetTop;
+            //                     var ays_edge = ays_closestEdge(ays_x,ays_y,this.clientWidth, this.clientHeight);
+            //                     var ays_overlay = $(this).find('div.ays_hover_mask');
+            //                     var ays_hover_dir = ays_getDirectionKey(e, e.currentTarget);
+            //                         switch(ays_edge) {
+            //                      case 'top':
+            //                         ays_overlay.attr('class', 'ays_hover_mask animated out-top');$hover_zoom_Out
+            //                         setTimeout( function(){ ays_overlay.css('opacity', '0');}, 350);
+            //                      break;
+            //                      case 'right':
+            //                         ays_overlay.attr('class', 'ays_hover_mask animated out-right');$hover_zoom_Out
+            //                         setTimeout( function(){ ays_overlay.css('opacity', '0');}, 350);
+            //                      break;
+            //                      case 'bottom':
+            //                         ays_overlay.attr('class', 'ays_hover_mask animated out-bottom');$hover_zoom_Out
+            //                         setTimeout( function(){ ays_overlay.css('opacity', '0');}, 350);
+            //                      break;
+            //                      case 'left':
+            //                         ays_overlay.attr('class', 'ays_hover_mask animated out-left');$hover_zoom_Out
+            //                         setTimeout( function(){ ays_overlay.css('opacity', '0'); }, 570);
+            //                      break;
+            //                 }
+            //             });";
+            // }
         }
 
         $ays_images_all_loaded = '';
@@ -587,6 +588,7 @@ class Gallery_Photo_Gallery_Public {
                                              .ays_mosaic_column_item_".$id." a div.ays_hover_mask {
                                                 display: none;
                                              }";
+        // end if($images_loading == 'current_loaded'){
         }else{        
             $ays_gpg_lazy_load = '';
             $ays_gpg_container_display_none_js = "$(document).find('.ays_gallery_container_".$id."').css({'display': 'none'});";
