@@ -1,0 +1,4 @@
+[ZoneTransfer]
+ZoneId=3
+ReferrerUrl=https://public.opendatasoft.com/explore/dataset/world-administrative-boundaries/export/
+HostUrl=https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/world-administrative-boundaries/exports/geojson?lang=fr&timezone=Europe%2FBerlin

@@ -187,12 +187,30 @@ function general_gpg_admin_notice(){
 }
 
 function get_vignette_options() {
-    return array(
-        'option1' => 'Option 1',
-        'option2' => 'Option 2',
-        'option3' => 'Option 3',
-    );
-}
+
+    $directory_courant = ABSPATH;
+
+    // Afficher le chemin
+    // echo $directory_courant;
+    // echo AYS_GPG_DIR;
+   
+    $dict = array();
+    $directory = AYS_GPG_DIR . 'assets/geojson';
+
+    // Utiliser glob pour obtenir la liste des fichiers dans le dossier
+    $files = glob($directory . '/*');
+
+    // Afficher la liste des fichiers
+    foreach ($files as $file) {
+        if (is_file($file)) {
+            $option = str_replace('_', ' ', $file);
+            $option = str_replace('.geojson', '', $option);
+            $option = str_replace($directory . '/', '', $option);
+            $dict[$file] = $option;
+        }
+    }
+    return $dict;
+ }
 
 // Add custom field to media edit screen
 function add_custom_fields_to_media_edit_screen($form_fields, $post) {
@@ -200,6 +218,7 @@ function add_custom_fields_to_media_edit_screen($form_fields, $post) {
     $longitude_value = get_post_meta($post->ID, '_longitude', true);
     $vignette_value = get_post_meta($post->ID, '_vignette', true);
 
+    //echo $vignette_value;
 
     $form_fields['latitude'] = array(
         'label' => 'Latitude',
@@ -223,12 +242,59 @@ function add_custom_fields_to_media_edit_screen($form_fields, $post) {
     }
     $vignette_dropdown .= '</select>';
 
+    $geojson_url = plugin_dir_url(__FILE__) . 'assets/geojson/france.geojson';
+    echo $geojson_url;
+    // echo "xxx";
+    // echo $geojson_url;
+    // echo "xxx";
+    //$marker_url = plugin_dir_url(__FILE__) . 'marqueur.png';
+    //echo $marker_url;
+    
+    // Replace the <img> tag with a Leaflet map
+    $leaflet_map = '<div id="leaflet-map" style="height: 100px; width: 100px;"></div>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+
+                            /*var myIconClass = L.Icon.extend({
+                                options: {
+                                    iconSize:     [4, 4],
+                                    iconAnchor:   [2, 2]
+                                }
+                            });
+                            var marker = new myIconClass ({iconUrl: "' . esc_url($marker_url) . '"});
+                            */
+                            console.log("###################### getJSON");
+                            var props = {
+                                attributionControl: false,
+                                zoomControl: false
+                            };
+                            var geostyle = {
+                                fillColor: "yellow",
+                                fillOpacity: 2,
+                                weight: 1
+                            }
+                            var map = L.map("leaflet-map", props).setView([46.603354, 1.888334], 2);
+
+                            $.getJSON("' . esc_url($geojson_url) . '",function(data){
+                            
+                                L.geoJson(data, {
+                                    clickable: false,
+                                    style: geostyle
+                                }).addTo(map);
+                                //var pointCoord = [48.8566, 2.3522]; // Exemple de coordonnées pour Paris
+                                //var marker = L.marker(pointCoord, {icon: icon}).addTo(map);
+                            //L.geoJSON(franceGeoJSON).addTo(map);
+                            })
+                            
+                        });
+                    </script>';
+
 
     $form_fields['vignette'] = array(
         'label' => 'Vignette',
         'input' => 'text',
         'input' => 'html',
-        'html' => $vignette_dropdown,
+        'html' => $vignette_dropdown . $leaflet_map,
         'show_in_edit' => true,
     );
 

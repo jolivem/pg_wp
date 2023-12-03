@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Leaflet GeoJSON Example</title>
+        <!-- Inclure les bibliothèques Leaflet -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+      </head>
+      <body>
+      
+      <!-- Créer une div pour contenir la carte -->
+      
+      <script>
+        // Initialiser la carte
+        var props = {
+            attributionControl: false,
+            zoomControl: false,
+            dragging: false
+        };
+        var geostyle = {
+            fillColor: 'yellow',
+            //color: 'yellow',
+            fillOpacity: 2,
+            weight: 1
+        }
+        var myIconClass = L.Icon.extend({
+            options: {
+                iconSize:     [4, 4],
+                iconAnchor:   [2, 2]
+            }
+        });
+        var mark = new myIconClass ({iconUrl: './marqueur.png'});
+
+        fetch("world.json")            
+            .then(response => response.json())
+            .then(data => {
+                //console.log("data:", data);
+                let num = 1;
+                data.forEach(function (boundary) {
+
+                    let mapId = "lmap" + num;
+                    
+                    //console.log("geojsonfile:", geojsonfile);
+                    //console.log("file:", geojsonfile.file);
+                    
+                    //let zoom = geojsonfile[file].zoom60;
+                    //console.log("geojsonfile:", geojsonfile[file]);
+                    add_map(document.body, mapId, boundary);
+                    num = num + 1;
+               
+                });
+
+            });
+    
+        
+        // add_map(document.body, "lmap2", 'geojson/France.geojson');
+        // add_map(document.body, "lmap3", 'geojson/Pakistan.geojson');
+        // add_map(document.body, "lmap4", 'geojson/Oman.geojson');
+
+        function add_map(parent, mapId, boundary) {
+            let zoom = boundary.zoom;
+            let file = "geojson/" + boundary.file;
+            var p = document.createElement('p');
+            p.innerHTML = boundary.file;
+            parent.appendChild(p);
+            var elemDiv = document.createElement('div');
+            elemDiv.id = mapId;
+            let css = 'height: ' + boundary.height + '; width: ' + boundary.width;
+            console.log("css:", css);
+            elemDiv.style.cssText = css;
+            parent.appendChild(elemDiv);
+            var lmap = L.map(mapId, props);
+            // Charger le fichier GeoJSON et l'ajouter à la carte
+            fetch(file)  // Remplacez 'votre_fichier.geojson' par le chemin de votre fichier GeoJSON
+                .then(response => response.json())
+                .then(data => {
+                    L.geoJSON(data, {
+                        clickable: false,
+                        style: geostyle
+                    }).addTo(lmap);
+                    let lon = data.features[0].properties.geo_point_2d.lon;
+                    let lat = data.features[0].properties.geo_point_2d.lat;
+                    let coord = [lat, lon];
+                    //console.log("coord:", coord);
+                    lmap.setView(coord, zoom);
+                    //console.log("data:", data);
+                    //var geoBBox = calculateGeoBoundingBox(data);
+                    //console.log("geo BBox:", geoBBox);
+                    //var pixelBBox = calculatePixelBoundingBox(lmap, data);
+                    //console.log("pixel BBox:", pixelBBox);
+                    //var pointCoord = [48.8566, 2.3522]; // Exemple de coordonnées pour Paris
+                    var marker = L.marker(coord, {icon: mark}).addTo(lmap);
+                });
+
+        }
+        
+        function calculatePixelBoundingBox(lmap,polygon) {
+            // Initialize min and max values
+            let minX = Infinity;
+            let minY = Infinity;
+            let maxX = -Infinity;
+            let maxY = -Infinity;
+            //console.log("minX:", minX);
+            // Iterate through each coordinate in the polygon
+            polygon.features[0].geometry.coordinates.forEach(function (tcoordinates) {
+                //console.log("pixtcoordinates:", tcoordinates);
+                tcoordinates[0].forEach(function (coordinate) {
+                    //console.log("coordinate:", coordinate);
+                    let point = lmap.latLngToContainerPoint(coordinate);
+                    //console.log("geo:", coordinate);
+                    //console.log("pix:", point);
+    
+                    // Update min and max values
+                    minX = Math.min(minX, point.x);
+                    minY = Math.min(minY, point.y);
+                    maxX = Math.max(maxX, point.x);
+                    maxY = Math.max(maxY, point.y);
+                });
+                //console.log("pixbb:", [minX, minY, maxX, maxY]);
+                
+            });
+            
+            // Return the bounding box [minX, minY, maxX, maxY]
+            return [minX, minY, maxX, maxY];
+        }
+
+        function calculateGeoBoundingBox(polygon) {
+            // Initialize min and max values
+            let minX = Infinity;
+            let minY = Infinity;
+            let maxX = -Infinity;
+            let maxY = -Infinity;
+            //console.log("minX:", minX);
+            // Iterate through each coordinate in the polygon
+            polygon.features[0].geometry.coordinates.forEach(function (tcoordinates) {
+                //console.log("geotcoordinates:", tcoordinates);
+                tcoordinates[0].forEach(function (coordinate) {
+                    //console.log("coordinate:", coordinate);
+                    let x = coordinate[0];
+                    let y = coordinate[1];
+
+                    // Update min and max values
+                    minX = Math.min(minX, x);
+                    minY = Math.min(minY, y);
+                    maxX = Math.max(maxX, x);
+                    maxY = Math.max(maxY, y);
+                });
+                //console.log("geobb:", [minX, minY, maxX, maxY]);
+                
+            });
+            
+            // Return the bounding box [minX, minY, maxX, maxY]
+            return [minX, minY, maxX, maxY];
+        }
+      </script>
+      
+      </body>
+</html>
