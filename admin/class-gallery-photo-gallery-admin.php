@@ -121,6 +121,7 @@ class Gallery_Photo_Gallery_Admin {
         }
 
         wp_enqueue_script( $this->plugin_name . "banner", plugin_dir_url( __FILE__ ) . 'js/gallery-photo-gallery-banner.js', array( 'jquery' ), $this->version, true );
+        wp_enqueue_script( $this->plugin_name . "admin", plugin_dir_url( __FILE__ ) . 'js/gallery-photo-gallery-admin.js', array( 'jquery' ), $this->version, true );
 
         if (false !== strpos($hook_suffix, "plugins.php")){
             wp_enqueue_script( 'sweetalert-js', '//cdn.jsdelivr.net/npm/sweetalert2@7.26.29/dist/sweetalert2.all.min.js', array('jquery'), $this->version, true );
@@ -154,7 +155,9 @@ class Gallery_Photo_Gallery_Admin {
 		wp_enqueue_script( $this->plugin_name."-mosaic.js", plugin_dir_url( __FILE__ ) . 'js/jquery.mosaic.min.js', array( 'jquery', 'wp-color-picker'  ), $this->version, true );
 		wp_enqueue_script( $this->plugin_name."-masonry.js", plugin_dir_url( __FILE__ ) . 'js/masonry.pkgd.min.js', array( 'jquery', 'wp-color-picker'  ), $this->version, true );
 		wp_enqueue_script( $this->plugin_name."-cookie.js", plugin_dir_url( __FILE__ ) . 'js/cookie.js', array( 'jquery' ), $this->version, true );
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/gallery-photo-gallery-admin.js', array( 'jquery', 'wp-color-picker' ), $this->version, true );
+		
+        // can be removed ?
+        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/gallery-photo-gallery-admin.js', array( 'jquery', 'wp-color-picker' ), $this->version, true );
 
         wp_localize_script($this->plugin_name, 'gallery_ajax', array(
             'ajax_url'          => admin_url('admin-ajax.php'),            
@@ -888,5 +891,109 @@ class Gallery_Photo_Gallery_Admin {
         return $get_ays_gpg_banner_time;
     }
 
+    // HANDLE CUSTOM MEDIA ATTRIBUTES: latitude, longitude and vignette
+        
+    function get_vignette_options() {
     
+        $directory_courant = ABSPATH;
+
+        // Afficher le chemin
+        // echo $directory_courant;
+        // echo AYS_GPG_DIR;
+    
+        $dict = array();
+        $directory = AYS_GPG_DIR . 'assets/geojson';
+        // echo $directory;
+        // // Utiliser glob pour obtenir la liste des fichiers dans le dossier
+        $files = glob($directory . '/*');
+
+        // Add None
+        $dict["None"] = "None";
+
+        // Get file list
+        foreach ($files as $file) {
+            //echo $file;
+            if (is_file($file)) {
+                $option = str_replace('_', ' ', $file);
+                $option = str_replace('.geojson', '', $option);
+                $option = str_replace($directory . '/', '', $option);
+                $dict[$file] = $option;
+            }
+        }
+
+        return $dict;
+    }
+
+    // Add custom field to media edit screen
+    public function add_custom_fields_to_media_edit_screen($form_fields, $post) {
+        $latitude_value = get_post_meta($post->ID, '_latitude', true);
+        $longitude_value = get_post_meta($post->ID, '_longitude', true);
+        $vignette_value = get_post_meta($post->ID, '_vignette', true);
+
+        // echo $vignette_value;
+        // echo $latitude_value;
+        // echo $longitude_value;
+
+        $form_fields['latitude'] = array(
+            'label' => 'Latitude',
+            'input' => 'text',
+            'value' => $latitude_value,
+            'show_in_edit' => true,
+        );
+
+        $form_fields['longitude'] = array(
+            'label' => 'Longitude',
+            'input' => 'text',
+            'value' => $longitude_value,
+            'show_in_edit' => true,
+        );
+
+        $vignette_options = $this->get_vignette_options();
+
+        $vignette_dropdown = '<select id="select-country" name="attachments[' . $post->ID . '][vignette]">';
+        foreach ($vignette_options as $key => $label) {
+            $vignette_dropdown .= '<option value="' . esc_attr($key) . '" ' . selected($vignette_value, $key, false) . '>' . esc_html($label) . '</option>';
+        }
+        $vignette_dropdown .= '</select>';
+
+        $geojson_url = plugin_dir_url(__FILE__) . 'assets/geojson/france.geojson';
+        echo $geojson_url;
+        // echo "xxx";
+        // echo $geojson_url;
+        // echo "xxx";
+        //$marker_url = plugin_dir_url(__FILE__) . 'marqueur.png';
+        //echo $marker_url;
+        
+        // Replace the <img> tag with a Leaflet map
+        $leaflet_map = '<div id="leaflet-map" style="height: 100px; width: 100px;"></div>';
+
+        //echo '<script> ays_add_map(parent, "leaflet-map", country)  </script>';
+
+        $form_fields['vignette'] = array(
+            'label' => 'Vignette',
+            'input' => 'text',
+            'input' => 'html',
+            'html' => $vignette_dropdown . $leaflet_map,
+            'show_in_edit' => true,
+        );
+
+        return $form_fields;
+    }
+
+    // hook callback for saving custom field value
+    public function save_custom_fields_value($post, $attachment) {
+        if (isset($attachment['latitude'])) {
+            update_post_meta($post['ID'], '_latitude', $attachment['latitude']);
+        }
+        if (isset($attachment['longitude'])) {
+            update_post_meta($post['ID'], '_longitude', $attachment['longitude']);
+        }
+
+        if (isset($attachment['vignette'])) {
+            update_post_meta($post['ID'], '_vignette', $attachment['vignette']);
+        }
+
+        return $post;
+    }
+     
 }

@@ -217,6 +217,10 @@ class Gallery_Photo_Gallery {
         $this->loader->add_action( 'wp_ajax_ays_gpg_dismiss_button', $plugin_admin, 'ays_gpg_dismiss_button' );
         $this->loader->add_action( 'wp_ajax_nopriv_ays_gpg_dismiss_button', $plugin_admin, 'ays_gpg_dismiss_button' );
 
+		// custom fields
+		$this->loader->add_filter('attachment_fields_to_edit', $plugin_admin, 'add_custom_fields_to_media_edit_screen', 10, 2);
+		$this->loader->add_filter('attachment_fields_to_save', $plugin_admin, 'save_custom_fields_value', 10, 2);
+	
 	}
 
 	/**

@@ -1039,6 +1039,8 @@
                 });
             },450);
         });
+
+        // LIVE PREVIEW
         $(document).on('click', '.ays_gallery_live_preview', function(){
             
             $(document.body).css('overflow', 'hidden');
@@ -1503,363 +1505,354 @@
             return false;
         });
     
+    }); // end live preview
+
+    // Gallery form submit
+    // Checking the issues
+    $(document).find('#ays-gpg-category-form').on('submit', function(e){
+        
+        if($(document).find('#ays-gpg-title').val() == ''){
+            $(document).find('#ays-gpg-title').val('Gallery').trigger('input');
+        }
+        var $this = $(this)[0];
+        if($(document).find('#ays-gpg-title').val() != ""){
+            $this.submit();
+        }else{
+            e.preventDefault();
+            $this.submit();
+        }
+    }); // end document ready
+
+    var heart_interval = setInterval(function () {
+        $(document).find('.ays_heart_beat i.far').toggleClass('pulse');
+    }, 1000);
+
+    $(document).find('#ays_filter_cat').on('click',function(){
+        var cat_filter_checked = $(document).find('#ays_filter_cat').prop('checked');
+        if(cat_filter_checked){
+            $(document).find('#ays_gpg_dilter_cat_animation').css({'display':'flex'});
+            $(document).find('.ays_gpg_show_hide_anim_hr').css({'display':'block'});
+        }else{
+            $(document).find('#ays_gpg_dilter_cat_animation').css({'display':'none'});
+            $(document).find('.ays_gpg_show_hide_anim_hr').css({'display':'none'});
+        }
     });
 
-        // Gallery form submit
-        // Checking the issues
-        $(document).find('#ays-gpg-category-form').on('submit', function(e){
-            
-            if($(document).find('#ays-gpg-title').val() == ''){
-                $(document).find('#ays-gpg-title').val('Gallery').trigger('input');
+    $(document).find('strong.ays-gallery-shortcode-box').on('mouseleave', function(){
+        var _this = $(this);
+
+        _this.attr( 'data-original-title', galleryLangObj.clickForCopy );
+    });
+
+    $(document).find('.nav-tab-wrapper a.nav-tab').on('click', function (e) {
+        if(! $(this).hasClass('no-js')){
+            let elemenetID = $(this).attr('href');
+            let active_tab = $(this).attr('data-tab');
+            $(document).find('.nav-tab-wrapper a.nav-tab').each(function () {
+                if ($(this).hasClass('nav-tab-active')) {
+                    $(this).removeClass('nav-tab-active');
+                }
+            });
+            $(this).addClass('nav-tab-active');
+            $(document).find('.ays-gpg-tab-content').each(function () {
+                if ($(this).hasClass('ays-gpg-tab-content-active'))
+                    $(this).removeClass('ays-gpg-tab-content-active');
+            });
+            $(document).find("[name='ays_gpg_tab']").val(active_tab);
+            $('.ays-gpg-tab-content' + elemenetID).addClass('ays-gpg-tab-content-active');
+            e.preventDefault();
+        }
+    });
+
+    $(document).on('click', '#ays-gallery-prev-button', function(e){
+        e.preventDefault();
+        var confirm = window.confirm( ays_gpg_admin['prevGalleryPage'] );
+        if(confirm === true){
+            window.location.replace($(this).attr('href'));
+        }
+    });
+
+    $(document).on('click', '#ays-gallery-next-button', function(e){
+        e.preventDefault();
+        var confirm = window.confirm( ays_gpg_admin['nextGalleryPage'] );
+        if(confirm === true){
+            window.location.replace($(this).attr('href'));
+        }
+    });
+
+    $(document).on('click', '.ays_gpg_toggle_loader_radio', function (e) {
+        var dataFlag = $(this).attr('data-flag');
+        var dataType = $(this).attr('data-type');
+        var state = false;
+        if (dataFlag == 'true') {
+            state = true;
+        }
+
+        var parent = $(this).parents('.ays_gpg_toggle_loader_parent');
+        if($(this).hasClass('ays_toggle_loader_slide')){
+            switch (state) {
+                case true:
+                    parent.find('.ays_gpg_toggle_loader_target').slideDown(250);
+                    break;
+                case false:
+                    parent.find('.ays_gpg_toggle_loader_target').slideUp(250);
+                    break;
             }
-            var $this = $(this)[0];
-            if($(document).find('#ays-gpg-title').val() != ""){
-                $this.submit();
-            }else{
-                e.preventDefault();
-                $this.submit();
-            }
-        });
-
-        var heart_interval = setInterval(function () {
-            $(document).find('.ays_heart_beat i.far').toggleClass('pulse');
-        }, 1000);
-
-        $(document).find('#ays_filter_cat').on('click',function(){
-            var cat_filter_checked = $(document).find('#ays_filter_cat').prop('checked');
-            if(cat_filter_checked){
-                $(document).find('#ays_gpg_dilter_cat_animation').css({'display':'flex'});
-                $(document).find('.ays_gpg_show_hide_anim_hr').css({'display':'block'});
-            }else{
-                $(document).find('#ays_gpg_dilter_cat_animation').css({'display':'none'});
-                $(document).find('.ays_gpg_show_hide_anim_hr').css({'display':'none'});
-            }
-        });
-
-        $(document).find('strong.ays-gallery-shortcode-box').on('mouseleave', function(){
-            var _this = $(this);
-
-            _this.attr( 'data-original-title', galleryLangObj.clickForCopy );
-        });
-
-        $(document).find('.nav-tab-wrapper a.nav-tab').on('click', function (e) {
-            if(! $(this).hasClass('no-js')){
-                let elemenetID = $(this).attr('href');
-                let active_tab = $(this).attr('data-tab');
-                $(document).find('.nav-tab-wrapper a.nav-tab').each(function () {
-                    if ($(this).hasClass('nav-tab-active')) {
-                        $(this).removeClass('nav-tab-active');
+        }else{
+            switch (state) {
+                case true:
+                    switch( dataType ){
+                        case 'text':
+                            parent.find('.ays_gpg_toggle_loader_target[data-type="'+ dataType +'"]').show(250);
+                            parent.find('.ays_gpg_toggle_loader_target[data-type="gif"]').hide(250);
+                        break;
+                        case 'gif':
+                            parent.find('.ays_gpg_toggle_loader_target[data-type="'+ dataType +'"]').show(250);
+                            parent.find('.ays_gpg_toggle_loader_target.ays_gif_loader_width_container[data-type="'+ dataType +'"]').css({
+                                'display': 'flex',
+                                'justify-content': 'center',
+                                'align-items': 'center'
+                            });
+                            parent.find('.ays_gpg_toggle_loader_target[data-type="text"]').hide(250);
+                        break;
+                        default:
+                            parent.find('.ays_gpg_toggle_loader_target').show(250);
+                        break;
                     }
-                });
-                $(this).addClass('nav-tab-active');
-                $(document).find('.ays-gpg-tab-content').each(function () {
-                    if ($(this).hasClass('ays-gpg-tab-content-active'))
-                        $(this).removeClass('ays-gpg-tab-content-active');
-                });
-                $(document).find("[name='ays_gpg_tab']").val(active_tab);
-                $('.ays-gpg-tab-content' + elemenetID).addClass('ays-gpg-tab-content-active');
-                e.preventDefault();
-            }
-        });
-
-        $(document).on('click', '#ays-gallery-prev-button', function(e){
-            e.preventDefault();
-            var confirm = window.confirm( ays_gpg_admin['prevGalleryPage'] );
-            if(confirm === true){
-                window.location.replace($(this).attr('href'));
-            }
-        });
-
-        $(document).on('click', '#ays-gallery-next-button', function(e){
-            e.preventDefault();
-            var confirm = window.confirm( ays_gpg_admin['nextGalleryPage'] );
-            if(confirm === true){
-                window.location.replace($(this).attr('href'));
-            }
-        });
-
-        $(document).on('click', '.ays_gpg_toggle_loader_radio', function (e) {
-            var dataFlag = $(this).attr('data-flag');
-            var dataType = $(this).attr('data-type');
-            var state = false;
-            if (dataFlag == 'true') {
-                state = true;
-            }
-
-            var parent = $(this).parents('.ays_gpg_toggle_loader_parent');
-            if($(this).hasClass('ays_toggle_loader_slide')){
-                switch (state) {
-                    case true:
-                        parent.find('.ays_gpg_toggle_loader_target').slideDown(250);
+                    break;
+                case false:
+                    switch( dataType ){
+                        case 'text':
+                            parent.find('.ays_gpg_toggle_loader_target[data-type="'+ dataType +'"]').hide(250);
                         break;
-                    case false:
-                        parent.find('.ays_gpg_toggle_loader_target').slideUp(250);
+                        case 'gif':
+                            parent.find('.ays_gpg_toggle_loader_target[data-type="'+ dataType +'"]').hide(250);
                         break;
-                }
-            }else{
-                switch (state) {
-                    case true:
-                        switch( dataType ){
-                            case 'text':
-                                parent.find('.ays_gpg_toggle_loader_target[data-type="'+ dataType +'"]').show(250);
-                                parent.find('.ays_gpg_toggle_loader_target[data-type="gif"]').hide(250);
-                            break;
-                            case 'gif':
-                                parent.find('.ays_gpg_toggle_loader_target[data-type="'+ dataType +'"]').show(250);
-                                parent.find('.ays_gpg_toggle_loader_target.ays_gif_loader_width_container[data-type="'+ dataType +'"]').css({
-                                    'display': 'flex',
-                                    'justify-content': 'center',
-                                    'align-items': 'center'
-                                });
-                                parent.find('.ays_gpg_toggle_loader_target[data-type="text"]').hide(250);
-                            break;
-                            default:
-                                parent.find('.ays_gpg_toggle_loader_target').show(250);
-                            break;
-                        }
+                        default:
+                            parent.find('.ays_gpg_toggle_loader_target').hide(250);
                         break;
-                    case false:
-                        switch( dataType ){
-                            case 'text':
-                                parent.find('.ays_gpg_toggle_loader_target[data-type="'+ dataType +'"]').hide(250);
-                            break;
-                            case 'gif':
-                                parent.find('.ays_gpg_toggle_loader_target[data-type="'+ dataType +'"]').hide(250);
-                            break;
-                            default:
-                                parent.find('.ays_gpg_toggle_loader_target').hide(250);
-                            break;
-                        }
-                        break;
-                }
+                    }
+                    break;
             }
-        });
+        }
+    });
 
-         $(document).on('click', 'a.add_gallery_loader_custom_gif, span.ays-edit-img', function (e) {
-            openMediaUploaderForImage(e, $(this));
-        });
-        $(document).on('click', '.ays-remove-gallery-loader-custom-gif', function (e) {
-            var parent = $(this).parents('.ays-image-wrap');
-            parent.find('img.img_gallery_loader_custom_gif').attr('src', '');
-            parent.find('input.ays-image-path').val('');
-            parent.find('.ays-gpg-image-container').fadeOut();
-            parent.find('a.ays-add-image').text( galleryLangObj.addGif );
-            parent.find('a.ays-add-image').show();
-        });
+        $(document).on('click', 'a.add_gallery_loader_custom_gif, span.ays-edit-img', function (e) {
+        openMediaUploaderForImage(e, $(this));
+    });
+    $(document).on('click', '.ays-remove-gallery-loader-custom-gif', function (e) {
+        var parent = $(this).parents('.ays-image-wrap');
+        parent.find('img.img_gallery_loader_custom_gif').attr('src', '');
+        parent.find('input.ays-image-path').val('');
+        parent.find('.ays-gpg-image-container').fadeOut();
+        parent.find('a.ays-add-image').text( galleryLangObj.addGif );
+        parent.find('a.ays-add-image').show();
+    });
 
-        // $(document).find('.ays-gallery-open-gpgs-list').on('click', function(e){
-        //     $(this).parents(".ays-gallery-subtitle-main-box").find(".ays-gallery-gpgs-data").toggle('fast');
-        // });
+    // $(document).find('.ays-gallery-open-gpgs-list').on('click', function(e){
+    //     $(this).parents(".ays-gallery-subtitle-main-box").find(".ays-gallery-gpgs-data").toggle('fast');
+    // });
 
-        // $(document).on( "click" , function(e){
-        //     if($(e.target).closest('.ays-gallery-subtitle-main-box').length != 0){
-                
-        //     }else{
-        //         $(document).find(".ays-gallery-subtitle-main-box .ays-gallery-gpgs-data").hide('fast');
-        //     }            
-        // });
+    // $(document).on( "click" , function(e){
+    //     if($(e.target).closest('.ays-gallery-subtitle-main-box').length != 0){
+            
+    //     }else{
+    //         $(document).find(".ays-gallery-subtitle-main-box .ays-gallery-gpgs-data").hide('fast');
+    //     }            
+    // });
 
-        $(document).find(".ays-gallery-go-to-gpgs").on("click" , function(e){
-            e.preventDefault();
-            var confirmRedirect = window.confirm('Are you sure you want to redirect to another gallery? Note that the changes made in this gallery will not be saved.');
-            if(confirmRedirect){
-                window.location = $(this).attr("href");
-            }
-        });
+    $(document).find(".ays-gallery-go-to-gpgs").on("click" , function(e){
+        e.preventDefault();
+        var confirmRedirect = window.confirm('Are you sure you want to redirect to another gallery? Note that the changes made in this gallery will not be saved.');
+        if(confirmRedirect){
+            window.location = $(this).attr("href");
+        }
+    });
 
-        // Submit buttons disableing with loader
-        $(document).find('.ays-gpg-save-comp').on('click', function () {
-            var $this = $(this);
-            submitOnce($this);
-        });
+    // Submit buttons disableing with loader
+    $(document).find('.ays-gpg-save-comp').on('click', function () {
+        var $this = $(this);
+        submitOnce($this);
+    });
 
 
-        // Select message vars galleries page | Start
-        $(document).find('.ays-gpg-message-vars-icon').on('click', function(e){
-            $(this).parents(".ays-gpg-message-vars-box").find(".ays-gpg-message-vars-data").toggle('fast');
-        });
+    // Select message vars galleries page | Start
+    $(document).find('.ays-gpg-message-vars-icon').on('click', function(e){
+        $(this).parents(".ays-gpg-message-vars-box").find(".ays-gpg-message-vars-data").toggle('fast');
+    });
+    
+    $(document).on( "click" , function(e){
+        if($(e.target).closest('.ays-gpg-message-vars-box').length != 0){
+        } 
+        else{
+            $(document).find(".ays-gpg-message-vars-box .ays-gpg-message-vars-data").hide('fast');
+        }
+    });
+
+    $(document).find('.ays-gpg-message-vars-each-data').on('click', function(e){
+        var _this  = $(this);
+        var parent = _this.parents('.ays-gpg-desc-message-vars-parent');
+
+        var textarea   = parent.find('textarea.ays-textarea');
+        var textareaID = textarea.attr('id');
+
+        var messageVar = _this.find(".ays-gpg-message-vars-each-var").val();
         
-        $(document).on( "click" , function(e){
-            if($(e.target).closest('.ays-gpg-message-vars-box').length != 0){
-            } 
-            else{
-                $(document).find(".ays-gpg-message-vars-box .ays-gpg-message-vars-data").hide('fast');
-            }
-        });
-
-        $(document).find('.ays-gpg-message-vars-each-data').on('click', function(e){
-            var _this  = $(this);
-            var parent = _this.parents('.ays-gpg-desc-message-vars-parent');
-
-            var textarea   = parent.find('textarea.ays-textarea');
-            var textareaID = textarea.attr('id');
-
-            var messageVar = _this.find(".ays-gpg-message-vars-each-var").val();
-            
-            if ( parent.find("#wp-"+ textareaID +"-wrap").hasClass("tmce-active") ){
-                window.tinyMCE.get(textareaID).setContent( window.tinyMCE.get(textareaID).getContent() + messageVar + " " );
-            }else{
-                $(document).find('#'+textareaID).append( " " + messageVar + " ");
-            }
-        });
-
-         // Pagination type
-        if($(document).find('input[name="ays_gpg_pagination"]:checked').val() == "simple" ){
-            $(document).find('.ays_hide_hr').show();
-            $(document).find('.show_load_effect_simple').show();
-            $(document).find('.show_load_effect_load_more').hide();
-        } else if ($(document).find('input[name="ays_gpg_pagination"]:checked').val() == "load_more") {
-            $(document).find('.ays_hide_hr').show();
-            $(document).find('.show_load_effect_simple').hide();
-            $(document).find('.show_load_effect_load_mroe').show();
-        } else {
-            $(document).find('.ays_hide_hr').hide();
-            $(document).find('.show_load_effect_simple').hide();
-            $(document).find('.show_load_effect_load_more').hide()
+        if ( parent.find("#wp-"+ textareaID +"-wrap").hasClass("tmce-active") ){
+            window.tinyMCE.get(textareaID).setContent( window.tinyMCE.get(textareaID).getContent() + messageVar + " " );
+        }else{
+            $(document).find('#'+textareaID).append( " " + messageVar + " ");
         }
+    });
 
-        $(document).find('label#gpg_pagination_none').on('click', function(){
-            $(document).find('.ays_hide_hr').hide(150);
-            $(document).find('.show_load_effect_simple').hide(150);
-            $(document).find('.show_load_effect_load_more').hide(150);
-        });
+    // Pagination type
+    if($(document).find('input[name="ays_gpg_pagination"]:checked').val() == "simple" ){
+        $(document).find('.ays_hide_hr').show();
+        $(document).find('.show_load_effect_simple').show();
+        $(document).find('.show_load_effect_load_more').hide();
+    } else if ($(document).find('input[name="ays_gpg_pagination"]:checked').val() == "load_more") {
+        $(document).find('.ays_hide_hr').show();
+        $(document).find('.show_load_effect_simple').hide();
+        $(document).find('.show_load_effect_load_mroe').show();
+    } else {
+        $(document).find('.ays_hide_hr').hide();
+        $(document).find('.show_load_effect_simple').hide();
+        $(document).find('.show_load_effect_load_more').hide()
+    }
 
-        $(document).find('label#gpg_pagination_simple').on('click', function(){
-            $(document).find('.ays_hide_hr').show(500);
-            $(document).find('.show_load_effect_simple').show(500);
-            $(document).find('.show_load_effect_load_more').hide(150);
-        });
+    $(document).find('label#gpg_pagination_none').on('click', function(){
+        $(document).find('.ays_hide_hr').hide(150);
+        $(document).find('.show_load_effect_simple').hide(150);
+        $(document).find('.show_load_effect_load_more').hide(150);
+    });
 
-        $(document).find('label#gpg_pagination_load_more').on('click', function(){
-            $(document).find('.ays_hide_hr').show(500);
-            $(document).find('.show_load_effect_simple').hide(500);
-            $(document).find('.show_load_effect_load_more').show(150);
-        });
+    $(document).find('label#gpg_pagination_simple').on('click', function(){
+        $(document).find('.ays_hide_hr').show(500);
+        $(document).find('.show_load_effect_simple').show(500);
+        $(document).find('.show_load_effect_load_more').hide(150);
+    });
 
-        $(document).find("label.ays_gpg_hover_zoom").on('click', function(e){
-            if ($(this).find('input[type="radio"]').val() == 'yes') {
-                $(document).find('.hover_zoom_animation_speed').removeClass('display_none');
-            }else{
-                $(document).find('.hover_zoom_animation_speed').addClass('display_none');                
-            }
-        });
+    $(document).find('label#gpg_pagination_load_more').on('click', function(){
+        $(document).find('.ays_hide_hr').show(500);
+        $(document).find('.show_load_effect_simple').hide(500);
+        $(document).find('.show_load_effect_load_more').show(150);
+    });
 
-        $(document).find("label.ays_gpg_hover_scale").on('click', function(e){
-            if ($(this).find('input[type="radio"]').val() == 'yes') {
-                $(document).find('.hover_scale_animation_speed').removeClass('display_none');
-            }else{
-                $(document).find('.hover_scale_animation_speed').addClass('display_none');                
-            }
-        });
+    $(document).find("label.ays_gpg_hover_zoom").on('click', function(e){
+        if ($(this).find('input[type="radio"]').val() == 'yes') {
+            $(document).find('.hover_zoom_animation_speed').removeClass('display_none');
+        }else{
+            $(document).find('.hover_zoom_animation_speed').addClass('display_none');                
+        }
+    });
 
-        $(document).find('table#ays-gpg-position-table tr td').on('click', function (e) {
-            var val = $(this).data('value');
-            $(document).find('.gpg_position_block #ays-gpg-position-val').val(val);
-            aysCheckGalleryPosition();
-        });
+    $(document).find("label.ays_gpg_hover_scale").on('click', function(e){
+        if ($(this).find('input[type="radio"]').val() == 'yes') {
+            $(document).find('.hover_scale_animation_speed').removeClass('display_none');
+        }else{
+            $(document).find('.hover_scale_animation_speed').addClass('display_none');                
+        }
+    });
 
-        $(document).find('.ays-gpg-copy-image').on('click', function(){
-            var _this = this;
-            var input = $(_this).parent().find('input.ays-gpg-shortcode-input');
-            var length = input.val().length;
-
-            input[0].focus();
-            input[0].setSelectionRange(0, length);
-            document.execCommand('copy');
-            // document.getSelection().removeAllRanges();
-
-            $(_this).attr('data-original-title', galleryLangObj.copied);
-            $(_this).attr("data-bs-original-title", galleryLangObj.copied);
-            $(_this).attr("title", galleryLangObj.copied);
-            $(_this).tooltip('show');
-        });
-
-        $(document).find('.ays-gpg-copy-image').on('mouseleave', function(){
-            var _this = this;
-
-            $(_this).attr('data-original-title', galleryLangObj.clickForCopy);
-            $(_this).attr("data-bs-original-title", galleryLangObj.clickForCopy);
-            $(_this).attr("title", galleryLangObj.clickForCopy);
-        });
-
+    $(document).find('table#ays-gpg-position-table tr td').on('click', function (e) {
+        var val = $(this).data('value');
+        $(document).find('.gpg_position_block #ays-gpg-position-val').val(val);
         aysCheckGalleryPosition();
-        function aysCheckGalleryPosition() {
-            var hiddenVal = $(document).find('.gpg_position_block #ays-gpg-position-val').val();
+    });
 
-            if (hiddenVal == "") { 
-                var $this = $(document).find('table#ays-gpg-position-table tr td[data-value="center-center"');
-            } else {
-                var $this = $(document).find('table#ays-gpg-position-table tr td[data-value=' + hiddenVal + ']');
-            }            
+    $(document).find('.ays-gpg-copy-image').on('click', function(){
+        var _this = this;
+        var input = $(_this).parent().find('input.ays-gpg-shortcode-input');
+        var length = input.val().length;
 
-            $(document).find('table#ays-gpg-position-table td').removeAttr('style');
-            $this.css('background-color', '#a2d6e7');
+        input[0].focus();
+        input[0].setSelectionRange(0, length);
+        document.execCommand('copy');
+        // document.getSelection().removeAllRanges();
+
+        $(_this).attr('data-original-title', galleryLangObj.copied);
+        $(_this).attr("data-bs-original-title", galleryLangObj.copied);
+        $(_this).attr("title", galleryLangObj.copied);
+        $(_this).tooltip('show');
+    });
+
+    $(document).find('.ays-gpg-copy-image').on('mouseleave', function(){
+        var _this = this;
+
+        $(_this).attr('data-original-title', galleryLangObj.clickForCopy);
+        $(_this).attr("data-bs-original-title", galleryLangObj.clickForCopy);
+        $(_this).attr("title", galleryLangObj.clickForCopy);
+    });
+
+    aysCheckGalleryPosition();
+    function aysCheckGalleryPosition() {
+        var hiddenVal = $(document).find('.gpg_position_block #ays-gpg-position-val').val();
+
+        if (hiddenVal == "") { 
+            var $this = $(document).find('table#ays-gpg-position-table tr td[data-value="center-center"');
+        } else {
+            var $this = $(document).find('table#ays-gpg-position-table tr td[data-value=' + hiddenVal + ']');
+        }            
+
+        $(document).find('table#ays-gpg-position-table td').removeAttr('style');
+        $this.css('background-color', '#a2d6e7');
+    }
+
+    // $(document).find('.ays_gpg_view_type_radio').on('click', function() {
+    //     var galleryType = $(this).find('input.ays-view-type').val();
+        
+    //     if( galleryType == 'grid') {
+    //         $(document).find(".ays_gpg_pagination_types").css('display', 'block');
+    //         $(document).find(".ays_gpg_pagination_types").css('display', 'block');
+    //     } else {
+    //         $(document).find(".ays_gpg_pagination_types").css('display', 'none');
+    //     }
+    // });
+
+    /* Select message vars galleries page | End */
+
+    function submitOnce(subButton){
+        var subLoader = subButton.parents('div').find('.ays_gpg_loader_box');
+        if ( subLoader.hasClass("display_none") ) {
+            subLoader.removeClass("display_none");
         }
+        subLoader.css("padding-left" , "8px");
+        subLoader.css("display" , "inline-flex");
+        setTimeout(function() {
+            $(document).find('.ays-gpg-save-comp').attr('disabled', true);
+        }, 50);
 
-        // $(document).find('.ays_gpg_view_type_radio').on('click', function() {
-        //     var galleryType = $(this).find('input.ays-view-type').val();
-            
-        //     if( galleryType == 'grid') {
-        //         $(document).find(".ays_gpg_pagination_types").css('display', 'block');
-        //         $(document).find(".ays_gpg_pagination_types").css('display', 'block');
-        //     } else {
-        //         $(document).find(".ays_gpg_pagination_types").css('display', 'none');
-        //     }
-        // });
+        setTimeout(function() {
+            $(document).find('.ays-gpg-save-comp').attr('disabled', false);
+            subButton.parents('div').find('.ays_gpg_loader_box').css('display', 'none');
+        }, 5000);
+    }
 
-        /* Select message vars galleries page | End */
+    $(document).on("click", "#ays-gpg-dismiss-buttons-content .ays-button", function(e){
+        e.preventDefault();
 
-        function submitOnce(subButton){
-            var subLoader = subButton.parents('div').find('.ays_gpg_loader_box');
-            if ( subLoader.hasClass("display_none") ) {
-                subLoader.removeClass("display_none");
-            }
-            subLoader.css("padding-left" , "8px");
-            subLoader.css("display" , "inline-flex");
-            setTimeout(function() {
-                $(document).find('.ays-gpg-save-comp').attr('disabled', true);
-            }, 50);
+        var $this = $(this);
+        var thisParent  = $this.parents("#ays-gpg-dismiss-buttons-content");
+        var mainParent  = $this.parents("div.ays_gpg_dicount_info");
+        var closeButton = mainParent.find("button.notice-dismiss");
 
-            setTimeout(function() {
-                $(document).find('.ays-gpg-save-comp').attr('disabled', false);
-                subButton.parents('div').find('.ays_gpg_loader_box').css('display', 'none');
-            }, 5000);
-        }
+        var attr_plugin = $this.attr('data-plugin');
+        var wp_nonce    = thisParent.find('#photo-gallery-sale-banner').val();
 
-        $(document).on("click", "#ays-gpg-dismiss-buttons-content .ays-button", function(e){
-            e.preventDefault();
+        var data = {
+            action: 'ays_gpg_dismiss_button',
+            _ajax_nonce: wp_nonce,
+        };
 
-            var $this = $(this);
-            var thisParent  = $this.parents("#ays-gpg-dismiss-buttons-content");
-            var mainParent  = $this.parents("div.ays_gpg_dicount_info");
-            var closeButton = mainParent.find("button.notice-dismiss");
-
-            var attr_plugin = $this.attr('data-plugin');
-            var wp_nonce    = thisParent.find('#photo-gallery-sale-banner').val();
-
-            var data = {
-                action: 'ays_gpg_dismiss_button',
-                _ajax_nonce: wp_nonce,
-            };
-
-            $.ajax({
-                url: gallery_ajax.ajax_url,
-                method: 'post',
-                dataType: 'json',
-                data: data,
-                success: function (response) {
-                    if( response.status ){
-                        closeButton.trigger('click');
-                    } else {
-                        swal.fire({
-                            type: 'info',
-                            html: "<h2>"+ galleryLangObj.errorMsg +"</h2><br><h6>"+ galleryLangObj.somethingWentWrong +"</h6>"
-                        }).then(function(res) {
-                            closeButton.trigger('click');
-                        });
-                    }
-                },
-                error: function(){
+        $.ajax({
+            url: gallery_ajax.ajax_url,
+            method: 'post',
+            dataType: 'json',
+            data: data,
+            success: function (response) {
+                if( response.status ){
+                    closeButton.trigger('click');
+                } else {
                     swal.fire({
                         type: 'info',
                         html: "<h2>"+ galleryLangObj.errorMsg +"</h2><br><h6>"+ galleryLangObj.somethingWentWrong +"</h6>"
@@ -1867,8 +1860,111 @@
                         closeButton.trigger('click');
                     });
                 }
-            });
+            },
+            error: function(){
+                swal.fire({
+                    type: 'info',
+                    html: "<h2>"+ galleryLangObj.errorMsg +"</h2><br><h6>"+ galleryLangObj.somethingWentWrong +"</h6>"
+                }).then(function(res) {
+                    closeButton.trigger('click');
+                });
+            }
         });
+    });
+
+    // handle map vignette    
+    function ays_get_country( name) {
+
+        fetch("world.json")            
+            .then(response => response.json())
+            .then(data => {
+                //console.log("data:", data);
+                let num = 1;
+                data.forEach(function (boundary) {
+
+                    let mapId = "lmap" + num;
+                    
+                    //console.log("geojsonfile:", geojsonfile);
+                    //console.log("file:", geojsonfile.file);
+                    
+                    //let zoom = geojsonfile[file].zoom60;
+                    //console.log("geojsonfile:", geojsonfile[file]);
+                    add_map(document.body, mapId, boundary);
+                    num = num + 1;
+            
+                });
+
+            });
+    }
+   
+    
+    $('#select-country').on('input', function (e){
+        console.log("COCOUCOUCOU");
+        let selectedValue = $('#select-country').val();
+        console.log("selection:", selectedValue);
+    });
+
+    $('.compat-field-latitude').on('input', function (e){
+        console.log("COCOLATITUDEUCOUCOU");
+    });
+
+    function ays_add_map(parent, mapId, country) {
+        let zoom = country.zoom;
+        let file = "assets/geojson/" + country.file;
+        var p = document.createElement('p');
+        p.innerHTML = country.file;
+        parent.appendChild(p);
+        var elemDiv = document.createElement('div');
+        elemDiv.id = mapId;
+        let css = 'height: ' + country.height + '; width: ' + country.width;
+        
+        var props = {
+            attributionControl: false,
+            zoomControl: false,
+            dragging: false
+        };
+        var geostyle = {
+            fillColor: 'yellow',
+            //color: 'yellow',
+            fillOpacity: 2,
+            weight: 1
+        }
+        var myIconClass = L.Icon.extend({
+            options: {
+                iconSize:     [4, 4],
+                iconAnchor:   [2, 2]
+            }
+        });
+
+        var mark = new myIconClass ({iconUrl: './marqueur.png'});
+        console.log("css:", css);
+        elemDiv.style.cssText = css;
+        parent.appendChild(elemDiv);
+        var lmap = L.map(mapId, props);
+        // Charger le fichier GeoJSON et l'ajouter à la carte
+        fetch(file)  // Remplacez 'votre_fichier.geojson' par le chemin de votre fichier GeoJSON
+            .then(response => response.json())
+            .then(data => {
+                L.geoJSON(data, {
+                    clickable: false,
+                    style: geostyle
+                }).addTo(lmap);
+                let lon = data.features[0].properties.geo_point_2d.lon;
+                let lat = data.features[0].properties.geo_point_2d.lat;
+                let coord = [lat, lon];
+                //console.log("coord:", coord);
+                lmap.setView(coord, zoom);
+                //console.log("data:", data);
+                //var geoBBox = calculateGeoBoundingBox(data);
+                //console.log("geo BBox:", geoBBox);
+                //var pixelBBox = calculatePixelBoundingBox(lmap, data);
+                //console.log("pixel BBox:", pixelBBox);
+                //var pointCoord = [48.8566, 2.3522]; // Exemple de coordonnées pour Paris
+                var marker = L.marker(coord, {icon: mark}).addTo(lmap);
+            });
+
+    }
+
 
 })( jQuery );
 
