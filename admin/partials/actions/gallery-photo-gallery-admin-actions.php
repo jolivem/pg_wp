@@ -1184,65 +1184,9 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
             $view_type_names = array(
                 "grid"      => "grid.PNG",
                 "mosaic"    => "mosaic.png",
-                "masonry"   => "masonry.png",
-                "view_1"    => "view_1.png",
-                "view_2"    => "view_2.png",
-                "view_3"    => "view_3.png",
-                "view_4"    => "view_4.png",
-                "view_5"    => "view_5.png",
-                "view_6"    => "view_6.png",
-                "view_7"    => "view_7.png",
-                "view_8"    => "view_8.png",
-                "view_9"    => "view_9.png",
-                "view_10"   => "view_10.png",
-                "view_11"   => "view_11.png",
-                "view_12"   => "view_12.png",
-                "view_13"   => "view_13.png",
-                "view_14"   => "view_14.png",
-                "view_15"   => "view_15.png",
-                "view_16"   => "view_16.png",
-                "view_17"   => "view_17.png",
-                "view_18"   => "view_18.png",
-                "view_19"   => "view_19.png",
-                "view_20"   => "view_20.png",
-                "view_21"   => "view_21.png",
-                "view_22"   => "view_22.png",
-                "view_23"   => "view_23.png",
-                "view_24"   => "view_24.png",
-                "fb_view_1"   => "fb_view_1.PNG",
-                "fb_view_2"   => "fb_view_2.PNG",
-                "fb_view_3"   => "fb_view_3.PNG"
+                "masonry"   => "masonry.png"
             );
 
-            $view_type_urls = array(
-                "view_1"    => "photo-gallery-view-1",
-                "view_2"    => "photo-gallery-view-2",
-                "view_3"    => "photo-gallery-view-3",
-                "view_4"    => "photo-gallery-view-4",
-                "view_5"    => "photo-gallery-view-5",
-                "view_6"    => "photo-gallery-view-6",
-                "view_7"    => "photo-gallery-view-7",
-                "view_8"    => "photo-gallery-view-8",
-                "view_9"    => "photo-gallery-view-9",
-                "view_10"   => "photo-gallery-view-10",
-                "view_11"   => "photo-gallery-view-11",
-                "view_12"   => "photo-gallery-view-12",
-                "view_13"   => "photo-gallery-view-13",
-                "view_14"   => "photo-gallery-view-14",
-                "view_15"   => "photo-gallery-view-15",
-                "view_16"   => "photo-gallery-view-16",
-                "view_17"   => "photo-gallery-view-17",
-                "view_18"   => "photo-gallery-view-18",
-                "view_19"   => "photo-gallery-view-19",
-                "view_20"   => "photo-gallery-view-20",
-                "view_21"   => "photo-gallery-view-21",
-                "view_22"   => "photo-gallery-view-22",
-                "view_23"   => "photo-gallery-view-23",
-                "view_24"   => "photo-gallery-view-24",
-                "fb_view_1"   => "photo-gallery-view-25",
-                "fb_view_2"   => "photo-gallery-view-26",
-                "fb_view_3"   => "photo-gallery-view-27"
-            );
         ?>
         <div id="tab3" class="ays-gallery-tab-content <?php echo ($ays_gpg_tab == 'tab3') ? 'ays-gallery-tab-content-active' : ''; ?>">
             <h6 class="ays-subtitle"><?php echo  __('Style options', $this->plugin_name) ?></h6>            
@@ -1267,16 +1211,10 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                                    <?php echo ("grid" == $key || "mosaic" == $key || "masonry" == $key) ? "" : "disabled"; ?>
                                    value="<?php echo $key; ?>"/>
                             <?php if($key == "grid" || $key == "mosaic" || $key == "masonry"): ?>
-                            <span><?php echo __( ucfirst($key)." ", $this->plugin_name);?></span>
+                                <span><?php echo __( ucfirst($key)." ", $this->plugin_name);?></span>
                             <?php endif; ?>
                             <?php if($key == "grid" || $key == "mosaic" || $key == "masonry"): ?>
-                            <img src="<?php echo AYS_GPG_ADMIN_URL . "images/" . $name; ?>">
-                            <!-- REMOVE PRO features <?php else: ?>
-                            <a href="https://ays-demo.com/<?php echo $view_type_urls[$key]; ?>/" target="_blank" style="display: block;" class="ays_disabled" title="<?php echo __("This feature available only in PRO version!!!", $this->plugin_name); ?>">
-                                <div>Pro</div>
                                 <img src="<?php echo AYS_GPG_ADMIN_URL . "images/" . $name; ?>">
-                                <span class="ays_gpg_view_type_pro_demo">Demo</span>
-                            </a> -->
                             <?php endif; ?>
                         </label>
                         <?php

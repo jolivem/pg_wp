@@ -122,6 +122,7 @@ class Gallery_Photo_Gallery_Admin {
 
         wp_enqueue_script( $this->plugin_name . "banner", plugin_dir_url( __FILE__ ) . 'js/gallery-photo-gallery-banner.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name . "admin", plugin_dir_url( __FILE__ ) . 'js/gallery-photo-gallery-admin.js', array( 'jquery' ), $this->version, true );
+        wp_localize_script($this->plugin_name . "admin",  'ays_vars', array('base_url' => AYS_GPG_BASE_URL));
 
         if (false !== strpos($hook_suffix, "plugins.php")){
             wp_enqueue_script( 'sweetalert-js', '//cdn.jsdelivr.net/npm/sweetalert2@7.26.29/dist/sweetalert2.all.min.js', array('jquery'), $this->version, true );
@@ -894,6 +895,44 @@ class Gallery_Photo_Gallery_Admin {
     // HANDLE CUSTOM MEDIA ATTRIBUTES: latitude, longitude and vignette
         
     function get_vignette_options() {
+        $directory_courant = ABSPATH;
+
+        // Afficher le chemin
+        // echo $directory_courant;
+        // echo AYS_GPG_DIR;
+    
+        $dict = array();
+        // Add None
+        $dict["None"] = "None";
+
+        $worldfile = AYS_GPG_DIR . 'assets/world.json';
+        //echo $worldfile;
+        // // Utiliser glob pour obtenir la liste des fichiers dans le dossier
+        //$files = glob($directory . '/*');
+        $json = file_get_contents($worldfile); 
+        if ($json === false) {
+            // deal with error...
+        }
+        
+        $json_a = json_decode($json, true);
+        if ($json_a === null) {
+            // deal with error...
+        }
+        
+        foreach ($json_a as $country) {
+            $file = $country['file'];
+            //$str = json_encode($country);
+            //echo $str
+            $option = str_replace('_', ' ', $file);
+            $option = str_replace('.geojson', '', $option);
+            $dict[$file] = $option;
+        }
+
+        return $dict;
+
+    }
+
+    function other_way_to_get_countries() {
     
         $directory_courant = ABSPATH;
 
@@ -965,7 +1004,7 @@ class Gallery_Photo_Gallery_Admin {
         //echo $marker_url;
         
         // Replace the <img> tag with a Leaflet map
-        $leaflet_map = '<div id="leaflet-map" style="height: 100px; width: 100px;"></div>';
+        //$leaflet_map = '<div id="leaflet-map" style="height: 100px; width: 100px;"></div>';
 
         //echo '<script> ays_add_map(parent, "leaflet-map", country)  </script>';
 
@@ -973,7 +1012,7 @@ class Gallery_Photo_Gallery_Admin {
             'label' => 'Vignette',
             'input' => 'text',
             'input' => 'html',
-            'html' => $vignette_dropdown . $leaflet_map,
+            'html' => $vignette_dropdown,// . $leaflet_map,
             'show_in_edit' => true,
         );
 
