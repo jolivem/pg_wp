@@ -1912,21 +1912,31 @@
         console.log("LATITUDE", e.target.value);
     });
 
-    $('.compat-field-longitude').on('focus', function (e){
+    $('.compat-field-longitude').on('input', function (e){
         console.log("LONGITUDE", e.target.value);
     });
 
     $('.compat-field-latitude').on('focusout', function (e){
         //let t = document.getElementById("wien_t").value;
         console.log("FOCUSOUT", e.target.value);
+        let postId = document.getElementById("post_ID").value;
+        let lat = document.getElementById("attachments-" + postId + "-latitude")?.value;
+        let lon = document.getElementById("attachments-" + postId + "-longitude")?.value;
+
+        if (lat && lon) {
+            ays_add_marker_point(lat, lon);
+        }
+
     });
 
     $('.compat-field-longitude').on('focusout', function (e){
         console.log("FOCUSOUT", e.target.value);
+
     });
 
     function ays_add_marker_point( latitude, longitude) {
-        console.log("country", country);
+        console.log("lat", latitude);
+        console.log("lon", longitude);
         var myIconClass = L.Icon.extend({
             options: {
                 iconSize:     [4, 4],
@@ -1935,9 +1945,7 @@
         });
         
         let coord = [latitude, longitude];
-        
         var mark = new myIconClass ({iconUrl: ays_vars.base_url + 'assets/markpoint.png'});
-
         L.marker(coord, {icon: mark}).addTo(lmap);
 
     }
