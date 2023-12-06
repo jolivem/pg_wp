@@ -999,21 +999,6 @@ class Gallery_Photo_Gallery_Admin {
         }
         $vignette_dropdown .= '</select>';
         
-        //ays_handle_country( selectedValue);
-
-        //$geojson_url = plugin_dir_url(__FILE__) . 'assets/geojson/france.geojson';
-        //echo $geojson_url;
-        // echo "xxx";
-        // echo $geojson_url;
-        // echo "xxx";
-        //$marker_url = plugin_dir_url(__FILE__) . 'marqueur.png';
-        //echo $marker_url;
-        
-        // Replace the <img> tag with a Leaflet map
-        //$leaflet_map = '<div id="leaflet-map" style="height: 100px; width: 100px;"></div>';
-
-        //echo '<script> ays_add_vignette(parent, "leaflet-map", country)  </script>';
-
         $form_fields['vignette'] = array(
             'label' => 'Vignette',
             'input' => 'text',

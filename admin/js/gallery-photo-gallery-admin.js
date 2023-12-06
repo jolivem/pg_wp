@@ -695,7 +695,7 @@
 
         function openMediaUploader(e,element, where){
             e.preventDefault();
-            console.log("openMediaUploader", where);
+            //console.log("openMediaUploader", where);
             let aysGalleryUploader = wp.media.frames.items = wp.media({
                 title: 'Upload image',
                 button: {
@@ -707,7 +707,7 @@
                 multiple: false,
                 frame: 'select',
             }).on('select', function(e){
-                console.log("openMediaUploader B");
+                //console.log("openMediaUploader B");
 				if(where == 'ays_image_add_icon'){
                     var state = aysGalleryUploader.state();
                     var selection = selection || state.get('selection');
@@ -715,7 +715,7 @@
                     
                     var attachment = selection.first();
                     var display = state.display(attachment).toJSON();
-                    console.log(display);
+                    //console.log(display);
                     attachment = attachment.toJSON();
                     
                     var d = new Date()
@@ -825,7 +825,7 @@
 
         function openMediaUploader_forMultiple(e,element){
             e.preventDefault();
-            console.log("openMediaUploader_forMultiple IN")
+            //console.log("openMediaUploader_forMultiple IN")
             let aysUploader = wp.media.frames.aysUploader = wp.media({
                 title: 'Upload images',
                 button: {
@@ -837,7 +837,7 @@
                 },
                 frame:    "select"
             }).on('select', function() {
-                console.log("openMediaUploader_forMultiple on select");
+                //console.log("openMediaUploader_forMultiple on select");
                 var state = aysUploader.state();
                 var selection = selection || state.get('selection');
                 if (! selection) return;
@@ -846,8 +846,8 @@
                 var display = state.display(selection).toJSON();
                 //console.log("openMediaUploader_forMultiple on select " + JSON.stringify(display));
                 var attachment = selection.toJSON();
-                console.log("openMediaUploader_forMultiple on select, lenght = " + attachment.length);
-                console.log("openMediaUploader_forMultiple on select, attachment = " + JSON.stringify(attachment));
+                //console.log("openMediaUploader_forMultiple on select, lenght = " + attachment.length);
+                //console.log("openMediaUploader_forMultiple on select, attachment = " + JSON.stringify(attachment));
                 var d = new Date()
                 var date = d.getTime();
                 date = Math.floor(date/1000);
@@ -1874,13 +1874,18 @@
 
  
     $('#select-country').on('input', function (e){
-        console.log("selection", $('#select-country'));
+        //console.log("selection", $('#select-country'));
         // get the selected file name
         let selectedValue = $('#select-country').val();
+        console.log("selection", selectedValue);
 
-        ays_handle_country( selectedValue);
-        
-        //ays_add_vignette("mymap", selectedValue);
+        if (selectedValue == "None") {
+            let mapId = "leaflet-map";
+            ays_remove_vignette( mapId);
+        }
+        else {
+            ays_handle_country( selectedValue);
+        }
 
     });
 
@@ -1919,7 +1924,7 @@
 
     function ays_delete_markers() {
         //console.log("lmap", lmap);
-        lmap.eachLayer(function (layer) { 
+        lmap?.eachLayer(function (layer) { 
             //console.log("layer", layer);
             // find the layer with latlng
             if (layer._leaflet_id != undefined && layer._latlng != undefined) {
@@ -1957,24 +1962,23 @@
     }
 
 
-    function ays_add_vignette( mapId, country) {
-        console.log("country", country);
-        let zoom = country.zoom;
-        let file = ays_vars.base_url + "assets/geojson/" + country.file;
-        // var p = document.createElement('p');
-        // p.innerHTML = country.file;
-        // console.log("p", p);
-        
-        //console.log("BABAauRHUM");
+    function ays_remove_vignette( mapId) {
         let previous_map = document.getElementById(mapId);
         previous_map?.remove();
         if (lmap && lmap.remove) {
             lmap.off();
             lmap.remove();
+            lmap = null;
         }        
+    }
 
+    function ays_add_vignette( mapId, country) {
+        //console.log("country", country);
+        let zoom = country.zoom;
+        let file = ays_vars.base_url + "assets/geojson/" + country.file;
+ 
         let select = document.getElementsByClassName("compat-field-vignette")[0];
-        console.log("select", select);
+        //console.log("select", select);
         //console.log("BABAauRHUM", parent);
         // select.appendChild(p);
         var elemDiv = document.createElement('td');
@@ -2039,20 +2043,21 @@
 
     // handle map vignette    
     function ays_handle_country( filename) {
-        console.log("base_url", ays_vars.base_url);
+        //console.log("base_url", ays_vars.base_url);
         //console.log("ays_gpg_admin_ajax", ays_gpg_admin_ajax);
         //console.log("gallery_ajax", gallery_ajax.ajax_url);
+        let mapId = "leaflet-map";
+        ays_remove_vignette( mapId)
+
         let ays_admin_url = $(document).find('#ays_gpg_admin_url').val();
-        console.log("ays_admin_url", ays_admin_url);
         let file = ays_vars.base_url +'/assets/world.json';
-        console.log("file:", file);
         fetch(file)            
             .then(response => response.json())
             .then(data => {
                 //console.log("data:", data);
                 data.forEach(function (boundary) {
 
-                    let mapId = "leaflet-map";
+                    
                     if (boundary.file == filename) {
                         ays_add_vignette(mapId, boundary);
                         ays_refresh_marker();
@@ -2145,7 +2150,6 @@ function ays_distMetric(x,y,x2,y2) {
 }
 
 function openMediaUploaderForImage(e, element) {
-    console.log("COUCOU");
     e.preventDefault();
     var aysUploader = wp.media({
         title: 'Upload',
