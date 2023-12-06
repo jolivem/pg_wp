@@ -1,7 +1,6 @@
 (function( $ ) {
 	'use strict';	
 	$(document).ready(function(){        
-
         $(document).on('click', '.notice-dismiss', function(e){
             let linkModified = location.href.split('?')[1].split('&');
             for(let i = 0; i < linkModified.length; i++){
@@ -1472,7 +1471,8 @@
             $(document).find('.ays_gallery_container .mosaic').Mosaic({
                 innerGap: parseInt($images_distance)
             });
-        });
+        
+        }); // end preview
 
         var toggle_ddmenu = $(document).find('.toggle_ddmenu');
         toggle_ddmenu.on('click', function () {
@@ -1505,7 +1505,7 @@
             return false;
         });
     
-    }); // end live preview
+    }); // end document ready
 
     // Gallery form submit
     // Checking the issues
@@ -1872,87 +1872,92 @@
         });
     });
 
-    // handle map vignette    
-    function ays_get_country( filename) {
-        console.log("base_url", ays_vars.base_url);
-        //console.log("ays_gpg_admin_ajax", ays_gpg_admin_ajax);
-        //console.log("gallery_ajax", gallery_ajax.ajax_url);
-        let ays_admin_url = $(document).find('#ays_gpg_admin_url').val();
-        console.log("ays_admin_url", ays_admin_url);
-        let file = ays_vars.base_url +'/assets/world.json';
-        console.log("file:", file);
-        fetch(file)            
-            .then(response => response.json())
-            .then(data => {
-                //console.log("data:", data);
-                data.forEach(function (boundary) {
-
-                    let mapId = "leaflet-map";
-                    if (boundary.file == filename) {
-                        ays_add_map(mapId, boundary)
-                    }
-                });
-            });
-    }
-   
-    
+ 
     $('#select-country').on('input', function (e){
         console.log("selection", $('#select-country'));
         // get the selected file name
         let selectedValue = $('#select-country').val();
 
-        ays_get_country( selectedValue);
+        ays_handle_country( selectedValue);
         
-        //ays_add_map("mymap", selectedValue);
+        //ays_add_vignette("mymap", selectedValue);
 
     });
 
     $('.compat-field-latitude').on('input', function (e){
         //let t = document.getElementById("wien_t").value;
-        console.log("LATITUDE", e.target.value);
+        //console.log("LATITUDE", e.target.value);
+        let postId = document.getElementById("post_ID").value;
+        let lat = e.target.value;
+        let lon = document.getElementById("attachments-" + postId + "-longitude")?.value;
+
+        ays_update_marker_point(lat, lon);
     });
 
     $('.compat-field-longitude').on('input', function (e){
-        console.log("LONGITUDE", e.target.value);
+        //console.log("LONGITUDE", e.target.value);
+        let postId = document.getElementById("post_ID").value;
+        let lat = document.getElementById("attachments-" + postId + "-latitude")?.value;
+        let lon = e.target.value;
+        ays_update_marker_point(lat, lon);
     });
 
-    $('.compat-field-latitude').on('focusout', function (e){
-        //let t = document.getElementById("wien_t").value;
-        console.log("FOCUSOUT", e.target.value);
+    $('.compat-field-latitude').on('focusout', ays_refresh_marker);
+
+    $('.compat-field-longitude').on('focusout', ays_refresh_marker);
+  
+    // leaflet map instance
+    var lmap; 
+
+    function ays_refresh_marker() {
         let postId = document.getElementById("post_ID").value;
         let lat = document.getElementById("attachments-" + postId + "-latitude")?.value;
         let lon = document.getElementById("attachments-" + postId + "-longitude")?.value;
 
-        if (lat && lon) {
-            ays_add_marker_point(lat, lon);
-        }
+        ays_update_marker_point(lat, lon);
+    }
 
-    });
-
-    $('.compat-field-longitude').on('focusout', function (e){
-        console.log("FOCUSOUT", e.target.value);
-
-    });
+    function ays_delete_markers() {
+        //console.log("lmap", lmap);
+        lmap.eachLayer(function (layer) { 
+            //console.log("layer", layer);
+            // find the layer with latlng
+            if (layer._leaflet_id != undefined && layer._latlng != undefined) {
+                //console.log("FOUND IT !!!!");
+                //layer.setLatLng([newLat,newLon])
+                lmap.removeLayer(layer);
+            } 
+        });
+    }
 
     function ays_add_marker_point( latitude, longitude) {
-        console.log("lat", latitude);
-        console.log("lon", longitude);
-        var myIconClass = L.Icon.extend({
-            options: {
-                iconSize:     [4, 4],
-                iconAnchor:   [2, 2]
-            }
-        });
-        
-        let coord = [latitude, longitude];
-        var mark = new myIconClass ({iconUrl: ays_vars.base_url + 'assets/markpoint.png'});
-        L.marker(coord, {icon: mark}).addTo(lmap);
+        let flat = parseFloat(latitude);
+        let flon = parseFloat(longitude)
+        if (!isNaN(parseFloat(latitude)) && !isNaN(parseFloat(longitude))) {
+            var myIconClass = L.Icon.extend({
+                options: {
+                    iconSize:     [3, 3],
+                    iconAnchor:   [5, 5]
+                }
+            });
+            
+            let coord = [flat.toString(), flon.toString()];
+            var mark = new myIconClass ({iconUrl: ays_vars.base_url + 'assets/markpoint.png'});
+            L.marker(coord, {icon: mark}).addTo(lmap);
+        }
 
     }
-    // leaflet map instance
-    var lmap; 
 
-    function ays_add_map( mapId, country) {
+    function ays_update_marker_point( latitude, longitude) {
+        ays_delete_markers();
+        if (latitude && longitude) {
+
+            ays_add_marker_point(latitude, longitude);
+        }
+    }
+
+
+    function ays_add_vignette( mapId, country) {
         console.log("country", country);
         let zoom = country.zoom;
         let file = ays_vars.base_url + "assets/geojson/" + country.file;
@@ -1994,20 +1999,23 @@
             fillOpacity: 2,
             weight: 1
         }
-        var myIconClass = L.Icon.extend({
-            options: {
-                iconSize:     [4, 4],
-                iconAnchor:   [2, 2]
-            }
-        });
+        // var myIconClass = L.Icon.extend({
+        //     options: {
+        //         iconSize:     [4, 4],
+        //         iconAnchor:   [2, 2]
+        //     }
+        // });
         
         // console.log("css:", css);
         elemDiv.style.height = country.height;
         elemDiv.style.width = country.width;
         elemDiv.style.backgroundColor = 'white';
+        elemDiv.style.borderStyle = 'solid';
+        elemDiv.style.borderWidth = 'thin';
+        elemDiv.style.borderColor = 'lightgray';
         select.appendChild(elemDiv);
         
-        var mark = new myIconClass ({iconUrl: ays_vars.base_url + 'assets/markpoint.png'});
+        //var mark = new myIconClass ({iconUrl: ays_vars.base_url + 'assets/markpoint.png'});
         lmap = L.map(mapId, props);
         // Charger le fichier GeoJSON et l'ajouter à la carte
         fetch(file)  // Remplacez 'votre_fichier.geojson' par le chemin de votre fichier GeoJSON
@@ -2022,19 +2030,43 @@
                 let coord = [lat, lon];
                 //console.log("coord:", coord);
                 lmap.setView(coord, zoom);
-                //console.log("data:", data);
-                //var geoBBox = calculateGeoBoundingBox(data);
-                //console.log("geo BBox:", geoBBox);
-                //var pixelBBox = calculatePixelBoundingBox(lmap, data);
-                //console.log("pixel BBox:", pixelBBox);
-                //var pointCoord = [48.8566, 2.3522]; // Exemple de coordonnées pour Paris
-                var marker = L.marker(coord, {icon: mark}).addTo(lmap);
+
+                //var marker = L.marker(coord, {icon: mark}).addTo(lmap);
             });
 
     }
 
 
+    // handle map vignette    
+    function ays_handle_country( filename) {
+        console.log("base_url", ays_vars.base_url);
+        //console.log("ays_gpg_admin_ajax", ays_gpg_admin_ajax);
+        //console.log("gallery_ajax", gallery_ajax.ajax_url);
+        let ays_admin_url = $(document).find('#ays_gpg_admin_url').val();
+        console.log("ays_admin_url", ays_admin_url);
+        let file = ays_vars.base_url +'/assets/world.json';
+        console.log("file:", file);
+        fetch(file)            
+            .then(response => response.json())
+            .then(data => {
+                //console.log("data:", data);
+                data.forEach(function (boundary) {
+
+                    let mapId = "leaflet-map";
+                    if (boundary.file == filename) {
+                        ays_add_vignette(mapId, boundary);
+                        ays_refresh_marker();
+                    }
+                });
+            });
+    }
+
+    let selectedValue = $('#select-country').val();
+    ays_handle_country(selectedValue);
+
+
 })( jQuery );
+
 
 function ays_getDirectionKey(ev, obj) {
     let ays_w = obj.offsetWidth,

@@ -77,6 +77,8 @@ class Gallery_Photo_Gallery_Admin {
         
         wp_enqueue_style( $this->plugin_name . "-banner", plugin_dir_url( __FILE__ ) . 'css/gallery-photo-gallery-banner.css', array(), $this->version, 'all' );
 
+        wp_enqueue_style('leaflet.css', 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css');
+        
         if(false === strpos($hook_suffix, $this->plugin_name))
             return;
 
@@ -121,8 +123,6 @@ class Gallery_Photo_Gallery_Admin {
         }
 
         wp_enqueue_script( $this->plugin_name . "banner", plugin_dir_url( __FILE__ ) . 'js/gallery-photo-gallery-banner.js', array( 'jquery' ), $this->version, true );
-        wp_enqueue_script( $this->plugin_name . "admin", plugin_dir_url( __FILE__ ) . 'js/gallery-photo-gallery-admin.js', array( 'jquery' ), $this->version, true );
-        wp_localize_script($this->plugin_name . "admin",  'ays_vars', array('base_url' => AYS_GPG_BASE_URL));
 
         if (false !== strpos($hook_suffix, "plugins.php")){
             wp_enqueue_script( 'sweetalert-js', '//cdn.jsdelivr.net/npm/sweetalert2@7.26.29/dist/sweetalert2.all.min.js', array('jquery'), $this->version, true );
@@ -131,8 +131,11 @@ class Gallery_Photo_Gallery_Admin {
         }
         wp_enqueue_script('leaflet', 'https://unpkg.com/leaflet/dist/leaflet.js', array('jquery'), '1.7.1', true);
 
-        if(false === strpos($hook_suffix, $this->plugin_name))
-            return;
+        // if(false === strpos($hook_suffix, $this->plugin_name)){
+        //     echo "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR ".$hook_suffix;
+        //     echo "  ".$this->plugin_name;
+        //     return;
+        // }
 		/**
 		 * This function is provided for demonstration purposes only.
 		 *
@@ -156,11 +159,12 @@ class Gallery_Photo_Gallery_Admin {
 		wp_enqueue_script( $this->plugin_name."-mosaic.js", plugin_dir_url( __FILE__ ) . 'js/jquery.mosaic.min.js', array( 'jquery', 'wp-color-picker'  ), $this->version, true );
 		wp_enqueue_script( $this->plugin_name."-masonry.js", plugin_dir_url( __FILE__ ) . 'js/masonry.pkgd.min.js', array( 'jquery', 'wp-color-picker'  ), $this->version, true );
 		wp_enqueue_script( $this->plugin_name."-cookie.js", plugin_dir_url( __FILE__ ) . 'js/cookie.js', array( 'jquery' ), $this->version, true );
-		
-        // can be removed ?
-        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/gallery-photo-gallery-admin.js', array( 'jquery', 'wp-color-picker' ), $this->version, true );
 
-        wp_localize_script($this->plugin_name, 'gallery_ajax', array(
+        // can be removed ?
+        wp_enqueue_script( $this->plugin_name . "admin", plugin_dir_url( __FILE__ ) . 'js/gallery-photo-gallery-admin.js', array( 'jquery', 'wp-color-picker'), $this->version, true );
+        wp_localize_script($this->plugin_name . "admin",  'ays_vars', array('base_url' => AYS_GPG_BASE_URL));
+
+        wp_localize_script($this->plugin_name . "admin", 'gallery_ajax', array(
             'ajax_url'          => admin_url('admin-ajax.php'),            
             'selectUser'        => __( 'Select user', $this->plugin_name),
             'pleaseEnterMore'   => __( "Please enter 1 or more characters", $this->plugin_name ),
@@ -994,9 +998,11 @@ class Gallery_Photo_Gallery_Admin {
             $vignette_dropdown .= '<option value="' . esc_attr($key) . '" ' . selected($vignette_value, $key, false) . '>' . esc_html($label) . '</option>';
         }
         $vignette_dropdown .= '</select>';
+        
+        //ays_handle_country( selectedValue);
 
-        $geojson_url = plugin_dir_url(__FILE__) . 'assets/geojson/france.geojson';
-        echo $geojson_url;
+        //$geojson_url = plugin_dir_url(__FILE__) . 'assets/geojson/france.geojson';
+        //echo $geojson_url;
         // echo "xxx";
         // echo $geojson_url;
         // echo "xxx";
@@ -1006,7 +1012,7 @@ class Gallery_Photo_Gallery_Admin {
         // Replace the <img> tag with a Leaflet map
         //$leaflet_map = '<div id="leaflet-map" style="height: 100px; width: 100px;"></div>';
 
-        //echo '<script> ays_add_map(parent, "leaflet-map", country)  </script>';
+        //echo '<script> ays_add_vignette(parent, "leaflet-map", country)  </script>';
 
         $form_fields['vignette'] = array(
             'label' => 'Vignette',
