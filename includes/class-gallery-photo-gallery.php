@@ -239,13 +239,6 @@ class Gallery_Photo_Gallery {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles_early' );
 
 		$this->loader->add_filter( 'wp_img_tag_add_decoding_attr', $plugin_public, 'ays_gallery_wp_get_attachment_image_attributes' );
-
-		// Calculate Gallery Views
-		// $this->loader->add_action('wp_ajax_ays_calculate_gallery_views', $plugin_public, 'ays_calculate_gallery_views');
-        // $this->loader->add_action('wp_ajax_nopriv_ays_calculate_gallery_views', $plugin_public, 'ays_calculate_gallery_views');
-
-		// $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-
 	}
 
 	/**

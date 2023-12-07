@@ -89,6 +89,7 @@ class Galleries_List_Table extends WP_List_Table{
 
                 $path_key = array_search("",$data["ays-image-path"]);                
                 if ($path_key !== false) {
+                    unset($data["ays-image-id"][$path_key]);
                     unset($data["ays-image-description"][$path_key]);
                     unset($data["ays-image-url"][$path_key]);
                     unset($data["ays-image-title"][$path_key]);
@@ -104,6 +105,7 @@ class Galleries_List_Table extends WP_List_Table{
                 $width                  = (isset($data['gallery_width']) && $data['gallery_width'] != '') ? wp_unslash(sanitize_text_field( $data['gallery_width'] )) : '';
                 $height                 = 0;
                 $image_paths            = (isset($data["ays-image-path"]) && $data["ays-image-path"] != '') ? sanitize_text_field( implode( "***", array_filter($data["ays-image-path"] )) ) : '';
+                $image_ids              = (isset($data["ays-image-id"]) && $data["ays-image-id"] != '') ? sanitize_text_field( implode( "***", array_filter($data["ays-image-id"] )) ) : '';
                 $image_titles           = (isset($data["ays-image-title"]) && $data["ays-image-title"] != '') ? stripslashes(sanitize_text_field( implode( "***", $data["ays-image-title"] ) ) ) : '';
                 $image_alts             = (isset($data["ays-image-alt"]) && $data["ays-image-alt"] != '') ? stripslashes (sanitize_text_field( implode( "***", $data["ays-image-alt"] ) ) ) : '';
                 $image_descriptions     = (isset($data["ays-image-description"]) && $data["ays-image-description"] != '') ? stripslashes(sanitize_text_field( implode( "***", $data["ays-image-description"] ) ) ) : '';
@@ -311,9 +313,10 @@ class Galleries_List_Table extends WP_List_Table{
                             "options"           => json_encode($options),
                             "lightbox_options"  => json_encode($lightbox_options),
                             "custom_css"        => $custom_css,
-                            "images_dates"      => $images_dates
+                            "images_dates"      => $images_dates,
+                            "images_ids"        => $images_ids
                         ),
-                        array( "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%d", "%d", "%s", "%s", "%s", "%s" )
+                        array( "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%d", "%d", "%s", "%s", "%s", "%s", "%s" )
                     );
                     $message = "created";
                 }else{
@@ -333,10 +336,11 @@ class Galleries_List_Table extends WP_List_Table{
                             "options"           => json_encode($options),
                             "lightbox_options"  => json_encode($lightbox_options),
                             "custom_css"        => $custom_css,
-                            "images_dates"      => $images_dates
+                            "images_dates"      => $images_dates,
+                            "images_ids"        => $images_ids
                         ),
                         array( "id" => $id ),
-                        array( "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%d", "%d", "%s", "%s", "%s", "%s" ),
+                        array( "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%d", "%d", "%s", "%s", "%s", "%s", "%s" ),
                         array( "%d" )
                     );
                     $message = "updated";

@@ -1732,6 +1732,30 @@ div.ays_grid_row div.ays_grid_column .ays_image_title
     z-index: 121221;
 }
 
+.ays_vignette_div {
+    display: flex;
+    background-color: black;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    visibility: visible;
+    opacity: 1;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
+    z-index: 121221;
+    /* background-color: black;
+    visibility: visible;
+    z-index: 121221;
+    position: absolute;
+    bottom: 0;
+    left: 0; */
+    /*position: absolute;
+    bottom: 0;
+    left: 0;
+    opacity: 0.8; /* Ajustez l'opacité selon vos préférences */
+}
+
 .ays_mosaic_row {
     display: flex;
 }

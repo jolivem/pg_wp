@@ -172,7 +172,7 @@ class Gallery_Photo_Gallery_Admin {
         ));
 
         $gpg_banner_date = $this->ays_gpg_update_banner_time();
-        wp_localize_script( $this->plugin_name, 'galleryLangObj', array(
+        wp_localize_script( $this->plugin_name . "admin", 'galleryLangObj', array(
             'gpgBannerDate'      => $gpg_banner_date,
             'copied'             => __( 'Copied!', $this->plugin_name),
             'clickForCopy'       => __( 'Click for copy.', $this->plugin_name),
@@ -182,7 +182,7 @@ class Gallery_Photo_Gallery_Admin {
         ) );
         
         $cats = $this->ays_get_gallery_categories();
-        wp_localize_script($this->plugin_name,  'ays_gpg_admin', array(
+        wp_localize_script($this->plugin_name . "admin",  'ays_gpg_admin', array(
             'categories' => $cats,
             'nextGalleryPage' => __( 'Are you sure you want to go to the next gallery page?', $this->plugin_name),
             'prevGalleryPage' => __( 'Are you sure you want to go to the previous gallery page?', $this->plugin_name),

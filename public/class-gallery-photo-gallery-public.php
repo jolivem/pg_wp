@@ -73,6 +73,7 @@ class Gallery_Photo_Gallery_Public {
          * between the defined hooks and the functions defined in this
          * class.
          */
+        wp_enqueue_style( 'leaflet.css', 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css', array(), $this->version, 'all');
         wp_enqueue_style( 'gpg-fontawesome', 'https://use.fontawesome.com/releases/v5.4.1/css/all.css', array(), $this->version, 'all');
         wp_enqueue_style( $this->plugin_name . "-lightgallery", plugin_dir_url( __FILE__ ) . 'css/lightgallery.min.css', array(), $this->version, 'all' );
         wp_enqueue_style( $this->plugin_name . "-lg-transitions", plugin_dir_url( __FILE__ ) . 'css/lg-transitions.min.css', array(), $this->version, 'all' );
@@ -108,6 +109,7 @@ class Gallery_Photo_Gallery_Public {
         wp_enqueue_script( $this->plugin_name.'-jquery.mousewheel.min.js', plugin_dir_url( __FILE__ ) . 'js/jquery.mousewheel.min.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-jquery.mosaic.min.js', plugin_dir_url( __FILE__ ) . 'js/jquery.mosaic.min.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-masonry.pkgd.min.js', plugin_dir_url( __FILE__ ) . 'js/masonry.pkgd.min.js', array( 'jquery' ), $this->version, true );
+        wp_enqueue_script( $this->plugin_name.'-leaflet.js', 'https://unpkg.com/leaflet/dist/leaflet.js', array('jquery'),  $this->version, true);
         wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/gallery-photo-gallery-public.js', array( 'jquery' ), $this->version, true );
         // wp_localize_script($this->plugin_name, 'gal_ajax_public', array('ajax_url' => admin_url('admin-ajax.php')));
 
@@ -160,7 +162,9 @@ class Gallery_Photo_Gallery_Public {
         if(!$gallery){
             return "[gallery_p_gallery id='".$id."']";
         }
-        
+        //echo "options galery = ".$gallery['options'];
+        //echo "urls galery = ".$gallery['images_urls'];
+        echo "ids galery = ".$gallery['images_ids'];
         /*
          * Gallery global settings
          */
@@ -245,6 +249,7 @@ class Gallery_Photo_Gallery_Public {
         $image_descs        = explode( "***", $gallery["images_descs"]  );
         $image_alts         = explode( "***", $gallery["images_alts"]   );
         $image_urls         = explode( "***", $gallery["images_urls"]   );
+        $image_ids          = explode( "***", $gallery["images_ids"]   );
         // $images_categories  = explode( "***", $gallery["categories_id"] );
         if($columns == null || $columns == 0){
             $columns = 3;
@@ -1306,13 +1311,15 @@ class Gallery_Photo_Gallery_Public {
         $image_descs        = explode( "***", $gallery["images_descs"]  );
         $image_alts         = explode( "***", $gallery["images_alts"]   );
         $image_urls         = explode( "***", $gallery["images_urls"]   );
+        $image_ids          = explode( "***", $gallery["images_ids"]    );
+        echo "coucou ids = ".$image_ids[0];
         $images_categories  = isset($gallery["categories_id"]) && $show_filter_cat == 'on' ? explode( "***", $gallery["categories_id"] ) : array();        
         
         $gallery_options['enable_light_box'] = isset($gallery_options['enable_light_box']) ? $gallery_options['enable_light_box'] : "off";
 
         $disable_lightbox = (isset($gallery_options['enable_light_box']) && $gallery_options['enable_light_box'] == "off" || $gallery_options['enable_light_box'] == "") ? true : false;
 
-      $link_on_whole_img = (isset($gallery_options['link_on_whole_img']) && $gallery_options['link_on_whole_img'] == "on") ? true : false;
+        $link_on_whole_img = (isset($gallery_options['link_on_whole_img']) && $gallery_options['link_on_whole_img'] == "on") ? true : false;
 
         $gallery_options['enable_search_img'] = isset($gallery_options['enable_search_img']) ? $gallery_options['enable_search_img'] : "off";
 
@@ -1438,6 +1445,7 @@ class Gallery_Photo_Gallery_Public {
             unset($image_titles[$dates_key]);
             unset($image_alts[$dates_key]);
             unset($image_urls[$dates_key]);
+            unset($image_ids[$dates_key]);
         }   
 
         $images_categories = array_pad($images_categories, count($image_titles), "");
@@ -1463,7 +1471,6 @@ class Gallery_Photo_Gallery_Public {
                 }
                 break;
         }
-
 
         $images_new     = array();
         $img_cat_id     = array();
@@ -1697,6 +1704,7 @@ class Gallery_Photo_Gallery_Public {
                     }
                     $gallery_view .= "<div class='item withImage ays_mosaic_column_item_".$id." ays_count_views' ".$wh_attr." data-src='" . $images[$key] . "' data-desc='" . $image_titles[$key] ." ". $image_alts[$key] ." ". $image_descs[$key] ."' ".$ays_data_sub_html.">";
                          $gallery_view .= "<img src='" . $current_image . "' alt='" . wp_unslash($image_alts[$key]) . "' />
+                            <div id='lmap-".$id."' class='overlay-image' style='width: 50px; height: 50px;'></div>
                             $ays_caption
                             <div class='ays_image_loading_div'>$ays_images_loader</div>
                              $show_title_in_hover
@@ -1806,6 +1814,7 @@ class Gallery_Photo_Gallery_Public {
                     }
                     $gallery_view .="<div class='ays_grid_column_".$id." ays_count_views' style='width: calc(".($column_width)."% - ".($images_distance)."px);' ".$images_cat_data_id." data-src='" . $images[$key] . "' data-desc='" . $image_titles[$key] ." ". $image_alts[$key] ." ". $image_descs[$key] ."' ".$ays_data_sub_html.">
                                     <img class='ays_gallery_image' src='" . $current_image . "' alt='" . wp_unslash($image_alts[$key]) . "'/>
+                                    <div id='lmap-".$id."' class='overlay-image' style='width: 50px; height: 50px;'></div>
                                     $ays_caption
                                     <div class='ays_image_loading_div'>$ays_images_loader</div>
                                     $show_title_in_hover
@@ -1900,8 +1909,10 @@ class Gallery_Photo_Gallery_Public {
                                 </div>";
                         $ays_data_sub_html = " data-sub-html='.ays_caption_wrap' ";
                     }
+                    //MJO
                     $gallery_view .= "<div class='ays_masonry_grid-item ays_masonry_item_".$id." ays_count_views' data-src='" . $images[$key] . "' data-desc='" . $image_titles[$key] ." ". $image_alts[$key] ." ". $image_descs[$key] ."' ".$ays_data_sub_html.">
-                                <img src='". $current_image ."' alt='".$image_alts[$key]."' box-shadow: none;'>
+                                <img src='". $current_image ."' alt='".$image_alts[$key]."' style='box-shadow: none;' onload='console.log(\"ID=".$image_ids[$key]."\")'>
+                                <div id='lmap-".$id."' class='ays_vignette_div' style='width: 50px; height: 50px;'></div>
                                 $ays_caption
                                 <div class='ays_image_loading_div'>$ays_images_loader</div>
                                 $show_title_in_hover

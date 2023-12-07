@@ -59,6 +59,7 @@ class Gallery_Photo_Gallery_Activator {
                   `lightbox_options` TEXT NOT NULL,
                   `custom_css` TEXT NOT NULL,
                   `images_dates` TEXT NOT NULL,
+                  `images_ids` TEXT NOT NULL,
                   PRIMARY KEY (`id`)
                 )$charset_collate;";
             dbDelta( $sql );
@@ -168,10 +169,11 @@ class Gallery_Photo_Gallery_Activator {
                         "options"           => json_encode($options),
                         "lightbox_options"  => json_encode($lightbox_options),
                         "custom_css"        => $gal_info['custom_css'],
-                        "images_dates"      => $gal_info['images_dates']
+                        "images_dates"      => $gal_info['images_dates'],
+                        "images_ids"        => $gal_info['images_ids']
                     ),
                     array( "id" => $gal_info['id'] ),
-                    array( "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%d", "%d", "%s", "%s", "%s", "%s" ),
+                    array( "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%d", "%d", "%s", "%s", "%s", "%s", "%s" ),
                     array( "%d" )
                 );
             }

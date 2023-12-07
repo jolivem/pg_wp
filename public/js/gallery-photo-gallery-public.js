@@ -54,16 +54,6 @@
             e.preventDefault();
         })
 
-        // $(document).on("click" , ".ays_count_views",function(){
-        //     var data = {
-        //         action: "ays_calculate_gallery_views"
-        //     }
-        //     $.ajax({
-        //         url: gal_ajax_public.ajax_url,
-        //         type: "POST",
-        //         data : data,
-        //     });
-        // });
     })
 })(jQuery)
 
@@ -85,6 +75,76 @@ function ays_closestEdge(x,y,w,h) {
             return 'bottom';
     }
 }
+function ays_add_vignette_to_gallery( mapId) {
+
+    // get country
+    //console.log("country", country);
+    let zoom = country.zoom;
+    let file = ays_vars.base_url + "assets/geojson/" + country.file;
+
+    let select = document.getElementsByClassName("compat-field-vignette")[0];
+    //console.log("select", select);
+    //console.log("BABAauRHUM", parent);
+    // select.appendChild(p);
+    var elemDiv = document.createElement('td');
+    elemDiv.id = mapId;
+    
+    var props = {
+        attributionControl: false,
+        zoomControl: false,
+        doubleClickZoom: false, 
+        closePopupOnClick: false, 
+        dragging: false, 
+        zoomSnap: false, 
+        zoomDelta: false, 
+        trackResize: false,
+        touchZoom: false,
+        scrollWheelZoom: false
+    };
+
+    var geostyle = {
+        fillColor: 'yellow',
+        //color: 'yellow',
+        fillOpacity: 2,
+        weight: 1
+    }
+    // var myIconClass = L.Icon.extend({
+    //     options: {
+    //         iconSize:     [4, 4],
+    //         iconAnchor:   [2, 2]
+    //     }
+    // });
+    
+    // console.log("css:", css);
+    elemDiv.style.height = country.height;
+    elemDiv.style.width = country.width;
+    elemDiv.style.backgroundColor = 'white';
+    elemDiv.style.borderStyle = 'solid';
+    elemDiv.style.borderWidth = 'thin';
+    elemDiv.style.borderColor = 'lightgray';
+    select.appendChild(elemDiv);
+    
+    //var mark = new myIconClass ({iconUrl: ays_vars.base_url + 'assets/markpoint.png'});
+    lmap = L.map(mapId, props);
+    // Charger le fichier GeoJSON et l'ajouter à la carte
+    fetch(file)  // Remplacez 'votre_fichier.geojson' par le chemin de votre fichier GeoJSON
+        .then(response => response.json())
+        .then(data => {
+            L.geoJSON(data, {
+                clickable: false,
+                style: geostyle
+            }).addTo(lmap);
+            let lon = data.features[0].properties.geo_point_2d.lon;
+            let lat = data.features[0].properties.geo_point_2d.lat;
+            let coord = [lat, lon];
+            //console.log("coord:", coord);
+            lmap.setView(coord, zoom);
+
+            //var marker = L.marker(coord, {icon: mark}).addTo(lmap);
+        });
+
+}
+
 
 //Distance Formula
 function ays_distMetric(x,y,x2,y2) {

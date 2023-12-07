@@ -586,78 +586,6 @@
             $(document).find('.ays_bulk_del_images').attr('disabled','disabled');
 		});
 		
-
-		/*$(document).find('.ays-add-images').on('click', function(e){
-
-            e.preventDefault();
-			let accordion = $(document).find('ul.ays-accordion'),
-				accordion_el = $(document).find('ul.ays-accordion li'),
-				accordion_el_length = accordion_el.length,
-                ays_title_tooltip = $(document).find("#ays_image_lang_title").val(),
-                ays_alt_tooltip = $(document).find("#ays_image_lang_alt").val(),
-                ays_desc_tooltip = $(document).find("#ays_image_lang_desc").val(),
-                ays_url_tooltip = $(document).find("#ays_image_lang_url").val(),
-                noimage_path = $(document).find('#noimage_path').val();
-                if(accordion.length > 1){
-                    accordion = $(document).find('ul.ays-accordion.ays_accordion_active');
-                }
-				let newLi = '<li>' +
-                    '           <input type="hidden" name="ays-image-path[]">' +
-					'			<div class="ays-image-attributes">' +
-                    '               <div class="ays-move-images_div"><i class="ays-move-images"></i></div>' +
-                    '               <div class="ays_image_div">' +
-                    '                   <div class="ays_image_add_div">' +
-                    '                       <span class="ays_ays_img"></span>' +
-                    '                       <div class="ays_image_add_icon"><i class="ays-upload-btn"></i></div>' +
-                    '                   </div>' +
-                    '                   <div class="ays_image_thumb" style="display: none;">' +
-                    '                       <div class="ays_image_edit_div"><i class="ays_image_edit"></i></div>' +
-                    '                       <div class="ays_image_thumb_img"><img></div>' +                    
-                    '                   </div>' +
-                    '               </div>' + 
-                    '               <div class="ays_image_attr_item_cat">' +
-                    '                    <div class="ays_image_attr_item_parent">' +
-                    '                       <div class="ays_image_attr_item">' +
-                    '                   <label>Image title'+
-                    '                    <a class="ays_help" data-toggle="tooltip" title="'+ays_title_tooltip+'">'+
-                    '                       <i class="fas fa-info-circle"></i>'+
-                    '                    </a></label>' +
-					'	                <input class="ays_img_title" type="text" name="ays-image-title[]" placeholder="Image title"/>' +
-                    '                   </div>' +
-                    '                   <div class="ays_image_attr_item">' +
-                    '                   <label>Image alt'+
-                    '                    <a class="ays_help" data-toggle="tooltip" title="'+ays_alt_tooltip+'">'+
-                    '                       <i class="fas fa-info-circle"></i>'+
-                    '                    </a></label>' +
-                    '                   <input class="ays_img_alt" type="text" name="ays-image-alt[]" placeholder="Image alt"/>' +
-                    '                   </div>' +
-                    '                   <div class="ays_image_attr_item">' +
-                    '                   <label>Image description'+
-                    '                    <a class="ays_help" data-toggle="tooltip" title="'+ays_desc_tooltip+'">'+
-                    '                       <i class="fas fa-info-circle"></i>'+
-                    '                    </a></label>' +
-                    '                   <input class="ays_img_desc" type="text" name="ays-image-description[]" placeholder="Image description"/>' +
-                    '                   </div>' +
-                    '                   <div class="ays_image_attr_item">' +
-                    '                   <label>URL'+
-                    '                    <a class="ays_help" data-toggle="tooltip" title="'+ays_url_tooltip+'">'+
-                    '                       <i class="fas fa-info-circle"></i>'+
-                    '                    </a></label>' +
-                    '                   <input class="ays_img_url" type="url" name="ays-image-url[]" placeholder="URL"/>' +
-                    '                   </div>' +
-                    '               </div>' +
-
-                    '               <input type="hidden" name="ays-image-date[]" class="ays_img_date"/>' +
-                    '               <div class="ays_del_li_div"><input type="checkbox" class="ays_del_li"/></div>'+
-                    '               <div class="ays-delete-image_div"><i class="ays-delete-image"></i></div>' +
-					'           </div>' +                    
-					'         </li>';
-
-				accordion.prepend(newLi);
-                $('[data-toggle="tooltip"]').tooltip();
-		});*/
-
-
         $('.open-lightbox').on('click', function (e) {
             e.preventDefault();
             var image = $(this).attr('href');
@@ -714,8 +642,8 @@
                     if (! selection) return;
                     
                     var attachment = selection.first();
-                    var display = state.display(attachment).toJSON();
-                    //console.log(display);
+                    let display = state.display(attachment).toJSON();
+                    console.log("display=",display);
                     attachment = attachment.toJSON();
                     
                     var d = new Date()
@@ -746,8 +674,9 @@
                         if (! selection) return;
 
                         var attachment = selection.first();
-                        var display = state.display(attachment).toJSON();
-
+                        // let display = state.display(attachment).toJSON();
+                        // console.log("display=",display);
+    
                         attachment = attachment.toJSON();
                         
                         var d = new Date()
@@ -867,6 +796,7 @@
                         let newListImage = '<li class="ays-accordion_li">' +
                         //'           TOTO IMAGE NOT SAVED' +
                         '           <input type="hidden" name="ays-image-path[]" value="'+attachment[i].url+'">' +
+                        '           <input type="hidden" name="ays-image-id[]" value="9999">' +
                         '           <div class="ays-image-attributes">' +
                         '               <div class="ays_image_div">' +                        
                         '                   <div class="ays_image_thumb" style="display: block; position: relative;">' +
@@ -1075,6 +1005,7 @@
                 $ays_hover_icon = $(document).find('input[name="ays-gpg-image-hover-icon"]:checked').first().val(),
                 $images_loading = $(document).find('input[name="ays_images_loading"]:checked').first().val(),
                 $images_path = $(document).find('input[name="ays-image-path[]"]'),
+                $images_id = $(document).find('input[name="ays-image-id[]"]'),
                 $images_title = $(document).find('input[name="ays-image-title[]"]'),
                 $images_desc = $(document).find('input[name="ays-image-description[]"]'),
                 $images_alt = $(document).find('input[name="ays-image-alt[]"]'),
@@ -1877,7 +1808,7 @@
         //console.log("selection", $('#select-country'));
         // get the selected file name
         let selectedValue = $('#select-country').val();
-        console.log("selection", selectedValue);
+        //console.log("selection", selectedValue);
 
         if (selectedValue == "None") {
             let mapId = "leaflet-map";
@@ -1938,7 +1869,7 @@
     function ays_add_marker_point( latitude, longitude) {
         let flat = parseFloat(latitude);
         let flon = parseFloat(longitude)
-        if (!isNaN(parseFloat(latitude)) && !isNaN(parseFloat(longitude))) {
+        if (lmap != null && !isNaN(parseFloat(latitude)) && !isNaN(parseFloat(longitude))) {
             var myIconClass = L.Icon.extend({
                 options: {
                     iconSize:     [3, 3],

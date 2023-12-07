@@ -491,6 +491,9 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
         </ul>
         <?php
                 else:
+                    // echo "title=".$gallery["images_titles"]; empty
+                    // echo "url=".$gallery["images_urls"]; empty
+                    // echo "dates=".$gallery["images_dates"]; with date
                     $images = explode( "***", $gallery["images"] );
                     $images_titles = explode( "***", $gallery["images_titles"] );
                     $images_descriptions = explode( "***", $gallery["images_descs"] );
@@ -544,6 +547,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                         <!-- TOTO id NOT NULL GALLERY -->
                         <li class="ays-accordion_li">
                             <input type="hidden" name="ays-image-path[]" value="<?php echo $images[$key]; ?>">
+                            <input type="hidden" name="ays-image-id[]" value="<?php echo $result_img[0]['ID']; ?>">
                             <div class="ays-image-attributes">
                                 <div class='ays_image_div'>                      
                                     <div class="ays_image_thumb" style="display: block; position: relative;">
@@ -556,10 +560,12 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                                         <div>
                                             <?php echo __("Title: ", $this->plugin_name);?>
                                             <b><?php echo stripslashes(esc_attr($images_titles[$key])); ?></b>
+                                            <input type="hidden" name="ays-image-title[]" value="<?php echo stripslashes(esc_attr($images_titles[$key])); ?>"/>
                                         </div>
                                         <div>
                                             <?php echo __("Description: ", $this->plugin_name);?>
-                                            <b><?php echo stripslashes(esc_attr($images_descriptions[$key])); ?></b>
+                                            <b><?php echo stripslashes(esc_attr($images_descriptions[$key])); echo stripslashes(esc_attr($images_ids[$key]));?></b>
+                                            <input type="hidden" name="ays-image-description[]" value="<?php echo stripslashes(esc_attr($images_descriptions[$key])); ?>"/>
                                         </div>
 
                                     </div>
@@ -597,11 +603,17 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 ?>
                 <ul class="ays-accordion">
                 <?php                    
+                    //echo "images=".$images[0];
                     foreach ( $images as $key => $image ) {
+                        //echo "key=".$key;
+                        //echo "image=".$image;
+                        //echo "wpdb->prefix=".$wpdb->prefix;
                         if(strpos(trim($images[$key], "https:"), $this_site_path) !== false){
                             $query = "SELECT * FROM `".$wpdb->prefix."posts` WHERE `post_type` = 'attachment' AND `guid` = '".$images[$key]."'";
                             $result_img =  $wpdb->get_results( $query, "ARRAY_A" );
                             if(!empty($result_img)){
+                                //echo "result_img=".$result_img[0]['ID']; // this is the image ID
+                                $img_id = $result_img[0]['ID'];
                                 $img_thmb_size = wp_get_attachment_image_src($result_img[0]['ID'],  'thumbnail');
                                 if($img_thmb_size === false){
                                    $img_thmb_size = $images[$key];
@@ -620,6 +632,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                         <!-- TOTO FOR EACH SAVED IMAGE -->
                         <li class="ays-accordion_li">
                             <input type="hidden" name="ays-image-path[]" value="<?php echo $image; ?>">
+                            <input type="hidden" name="ays-image-id[]" value="<?php echo $result_img[0]['ID']; ?>">
                             <div class="ays-image-attributes">
                                 <div class='ays_image_div'>                      
                                     <div class="ays_image_thumb" style="display: block; position: relative;">
@@ -632,10 +645,12 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                                         <div>
                                             <?php echo __("Title: ", $this->plugin_name);?>
                                             <b><?php echo stripslashes(esc_attr($images_titles[$key])); ?></b>
+                                            <input type="hidden" name="ays-image-title[]" value="<?php echo stripslashes(esc_attr($images_titles[$key])); ?>"/>
                                         </div>
                                         <div>
                                             <?php echo __("Description: ", $this->plugin_name);?>
-                                            <b><?php echo stripslashes(esc_attr($images_descriptions[$key])); ?></b>
+                                            <b><?php echo stripslashes(esc_attr($images_descriptions[$key])); echo stripslashes(esc_attr($images_ids[$key]))?></b>
+                                            <input type="hidden" name="ays-image-description[]" value="<?php echo stripslashes(esc_attr($images_descriptions[$key])); ?>"/>
                                         </div>
 
                                     </div>
