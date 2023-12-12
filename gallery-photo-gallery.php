@@ -16,7 +16,7 @@ ob_start();
  * Plugin Name:       Gallery - Photo Gallery
  * Plugin URI:        https://ays-pro.com/wordpress/photo-gallery
  * Description:       If you want to be different and represent your photos in a cool way, then our Photo Gallery plugin is perfect for you.
- * Version:           1.0.1
+ * Version:           5.4.1
  * Author:            Photo Gallery Team
  * Author URI:        https://ays-pro.com/
  * License:           GPL-2.0+

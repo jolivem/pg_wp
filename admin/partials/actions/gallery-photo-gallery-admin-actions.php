@@ -83,6 +83,7 @@ $gallery = array(
     "lightbox_options"  => json_encode($g_l_options,true),
     "custom_css"        => "",
     "images_dates"      => "",
+    "images_ids"        => "",
 );
 switch( $action ) {
     case 'add':

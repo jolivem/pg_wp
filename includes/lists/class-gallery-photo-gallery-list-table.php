@@ -314,7 +314,7 @@ class Galleries_List_Table extends WP_List_Table{
                             "lightbox_options"  => json_encode($lightbox_options),
                             "custom_css"        => $custom_css,
                             "images_dates"      => $images_dates,
-                            "images_ids"        => $images_ids
+                            "images_ids"        => $image_ids
                         ),
                         array( "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%d", "%d", "%s", "%s", "%s", "%s", "%s" )
                     );

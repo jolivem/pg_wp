@@ -790,13 +790,14 @@
                     ays_url_tooltip = $(document).find("#ays_image_lang_url").val(),
                     ays_img_cat_tooltip = $(document).find("#ays_image_cat").val(),
                     accordion_el_length = accordion_el.length;
-                        if(accordion.length > 1){
-                            accordion = $(document).find('ul.ays-accordion.ays_accordion_active');
-                        }
-                        let newListImage = '<li class="ays-accordion_li">' +
+                    if(accordion.length > 1){
+                        accordion = $(document).find('ul.ays-accordion.ays_accordion_active');
+                    }
+                    console.log("attachment[i] = ", attachment[i]);
+                    let newListImage = '<li class="ays-accordion_li">' +
                         //'           TOTO IMAGE NOT SAVED' +
                         '           <input type="hidden" name="ays-image-path[]" value="'+attachment[i].url+'">' +
-                        '           <input type="hidden" name="ays-image-id[]" value="9999">' +
+                        '           <input type="hidden" name="ays-image-id[]" value="'+attachment[i].id+'">' +
                         '           <div class="ays-image-attributes">' +
                         '               <div class="ays_image_div">' +                        
                         '                   <div class="ays_image_thumb" style="display: block; position: relative;">' +
@@ -1872,12 +1873,13 @@
         if (lmap != null && !isNaN(parseFloat(latitude)) && !isNaN(parseFloat(longitude))) {
             var myIconClass = L.Icon.extend({
                 options: {
-                    iconSize:     [3, 3],
-                    iconAnchor:   [5, 5]
+                    iconSize:     [4, 4],
+                    iconAnchor:   [2, 2]
                 }
             });
             
             let coord = [flat.toString(), flon.toString()];
+            //console.log("ays_add_marker_point coord:", coord);
             var mark = new myIconClass ({iconUrl: ays_vars.base_url + 'assets/markpoint.png'});
             L.marker(coord, {icon: mark}).addTo(lmap);
         }
@@ -1963,7 +1965,7 @@
                 let lon = data.features[0].properties.geo_point_2d.lon;
                 let lat = data.features[0].properties.geo_point_2d.lat;
                 let coord = [lat, lon];
-                //console.log("coord:", coord);
+                console.log("coord:", coord);
                 lmap.setView(coord, zoom);
 
                 //var marker = L.marker(coord, {icon: mark}).addTo(lmap);

@@ -75,10 +75,11 @@ function ays_closestEdge(x,y,w,h) {
             return 'bottom';
     }
 }
-function ays_add_vignette_to_gallery( mapId) {
+
+/*function ays_add_vignette_to_gallery( mapId) {
 
     // get country
-    //console.log("country", country);
+    console.log("country", country);
     let zoom = country.zoom;
     let file = ays_vars.base_url + "assets/geojson/" + country.file;
 
@@ -108,12 +109,12 @@ function ays_add_vignette_to_gallery( mapId) {
         fillOpacity: 2,
         weight: 1
     }
-    // var myIconClass = L.Icon.extend({
-    //     options: {
-    //         iconSize:     [4, 4],
-    //         iconAnchor:   [2, 2]
-    //     }
-    // });
+    var myIconClass = L.Icon.extend({
+        options: {
+            iconSize:     [4, 4],
+            iconAnchor:   [2, 2]
+        }
+    });
     
     // console.log("css:", css);
     elemDiv.style.height = country.height;
@@ -124,7 +125,7 @@ function ays_add_vignette_to_gallery( mapId) {
     elemDiv.style.borderColor = 'lightgray';
     select.appendChild(elemDiv);
     
-    //var mark = new myIconClass ({iconUrl: ays_vars.base_url + 'assets/markpoint.png'});
+    var mark = new myIconClass ({iconUrl: ays_vars.base_url + 'assets/markpoint.png'});
     lmap = L.map(mapId, props);
     // Charger le fichier GeoJSON et l'ajouter à la carte
     fetch(file)  // Remplacez 'votre_fichier.geojson' par le chemin de votre fichier GeoJSON
@@ -140,10 +141,10 @@ function ays_add_vignette_to_gallery( mapId) {
             //console.log("coord:", coord);
             lmap.setView(coord, zoom);
 
-            //var marker = L.marker(coord, {icon: mark}).addTo(lmap);
+            var marker = L.marker(coord, {icon: mark}).addTo(lmap);
         });
 
-}
+}*/
 
 
 //Distance Formula
