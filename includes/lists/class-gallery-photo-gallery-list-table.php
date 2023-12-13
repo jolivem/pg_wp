@@ -98,6 +98,7 @@ class Galleries_List_Table extends WP_List_Table{
                 $image_titles           = (isset($data["ays-image-title"]) && $data["ays-image-title"] != '') ? stripslashes(sanitize_text_field( implode( "***", $data["ays-image-title"] ) ) ) : '';
                 $image_alts             = (isset($data["ays-image-alt"]) && $data["ays-image-alt"] != '') ? stripslashes (sanitize_text_field( implode( "***", $data["ays-image-alt"] ) ) ) : '';
                 $image_descriptions     = (isset($data["ays-image-description"]) && $data["ays-image-description"] != '') ? stripslashes(sanitize_text_field( implode( "***", $data["ays-image-description"] ) ) ) : '';
+                // TODO: image_external_urls can be removed
                 $image_external_urls    = (isset($data["ays-image-url"]) && $data["ays-image-url"] != '') ? sanitize_text_field( implode( "***", $data["ays-image-url"] ) ) : '';
                 $images_dates           = (isset($data['ays-image-date']) &&  $data['ays-image-date'] != '') ? sanitize_text_field( implode( "***", $data['ays-image-date'] ) ) : '';
                 $image_categories       = (isset($data['ays_gallery_category']) && $data['ays_gallery_category'] != '') ? sanitize_text_field( implode('***', $data['ays_gallery_category']) ) : '';
@@ -109,7 +110,7 @@ class Galleries_List_Table extends WP_List_Table{
                 $image_titles           = '';
                 $image_alts             = '';
                 $image_descriptions     = '';
-                $image_external_urls    = '';
+                $image_external_urls    = ''; //TODO remove
                 $images_dates           = '';
                 $image_categories       = '';
             }
@@ -316,7 +317,7 @@ class Galleries_List_Table extends WP_List_Table{
                         "images_titles"     => $image_titles,
                         "images_descs"      => $image_descriptions,
                         "images_alts"       => $image_alts,
-                        "images_urls"       => $image_external_urls,
+                        "images_urls"       => $image_external_urls, //TODO remove
                         "categories_id"     => $image_categories,
                         "width"             => $width,
                         "height"            => $height,
@@ -339,7 +340,7 @@ class Galleries_List_Table extends WP_List_Table{
                         "images_titles"     => $image_titles,
                         "images_descs"      => $image_descriptions,
                         "images_alts"       => $image_alts,
-                        "images_urls"       => $image_external_urls,
+                        "images_urls"       => $image_external_urls, //TODO remove
                         "categories_id"     => $image_categories,
                         "width"             => $width,
                         "height"            => $height,

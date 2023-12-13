@@ -244,13 +244,7 @@ class Gallery_Photo_Gallery_Public {
          */
         $columns            = (!isset($gallery_options['columns_count'])) ? 3 : $gallery_options['columns_count'];
         $view               = $gallery_options['view_type'];
-        // $images             = explode( "***", $gallery["images"]        );
-        // $image_titles       = explode( "***", $gallery["images_titles"] );
-        // $image_descs        = explode( "***", $gallery["images_descs"]  );
-        // $image_alts         = explode( "***", $gallery["images_alts"]   );
-        // $image_urls         = explode( "***", $gallery["images_urls"]   );
-        // $image_ids          = explode( "***", $gallery["images_ids"]   );
-        // $images_categories  = explode( "***", $gallery["categories_id"] );
+
         if($columns == null || $columns == 0){
             $columns = 3;
         }
@@ -1251,12 +1245,63 @@ class Gallery_Photo_Gallery_Public {
         
         $columns            = (!isset($gallery_options['columns_count'])) ? 3 : $gallery_options['columns_count'];
         $view               = $gallery_options['view_type'];
-        $images             = explode( "***", $gallery["images"]        );
-        $image_titles       = explode( "***", $gallery["images_titles"] );
-        $image_descs        = explode( "***", $gallery["images_descs"]  );
-        $image_alts         = explode( "***", $gallery["images_alts"]   );
-        $image_urls         = explode( "***", $gallery["images_urls"]   );
+        // $images             = explode( "***", $gallery["images"]        );
+        // $image_titles       = explode( "***", $gallery["images_titles"] );
+        // $image_descs        = explode( "***", $gallery["images_descs"]  );
+        // $image_alts         = explode( "***", $gallery["images_alts"]   );
+        //$image_urls         = explode( "***", $gallery["images_urls"]   );
         $image_ids          = explode( "***", $gallery["images_ids"]    );
+        // error_log("images: ".print_r($images, true));
+        // error_log("image_titles: ".print_r($image_titles, true));
+        // error_log("image_descs: ".print_r($image_descs, true));
+        // error_log("image_alts: ".print_r($image_alts, true));
+        
+        $images = array();
+        $image_titles = array();
+        $image_descs = array();
+        $image_alts = array();
+        //$image_urls2 = array();
+
+        // $img_title = $result_img[0]['post_title'];
+        // $img_description = $result_img[0]['post_content'];
+        // $img_caption = $result_img[0]['post_excerpt'];
+        // $img_url = $result_img[0]['guid'];
+        // $img_date = $result_img[0]['post_date'];
+
+        for( $iid = 0; $iid < count($image_ids); $iid++ ){
+            error_log("image_ids[iid]: ".$image_ids[$iid]);
+            $query = "SELECT post_title,post_content,post_excerpt,guid,post_date FROM `".$wpdb->prefix."posts` WHERE `id` = '".$image_ids[$iid]."'";
+            //error_log("query: ".$query);
+            $result =  $wpdb->get_results( $query, "ARRAY_A" );
+            
+            if (count($result) > 0) {
+                //error_log("result : ".print_r($result , true));
+                array_push($image_titles, $result[0]['post_title']);
+                array_push($image_descs, $result[0]['post_content']);
+                //array_push($image_urls2, $result[0]['guid']);
+                array_push($images, $result[0]['guid']);
+
+                $query = "SELECT meta_value FROM `".$wpdb->prefix."postmeta` WHERE `meta_key` = '_wp_attachment_image_alt' AND `post_id` = '".$image_ids[$iid]."'";
+                //error_log("query: ".$query);
+                $result =  $wpdb->get_results( $query, "ARRAY_A" );
+                
+                if (count($result) > 0) {
+                    //error_log("result : ".print_r($result , true));
+                    array_push($image_alts, $result[0]['meta_value']);
+                }
+                else {
+                    array_push($image_alts, '');
+                }
+            }
+        }
+
+        error_log("images: ".print_r($images, true));
+        error_log("image_titles: ".print_r($image_titles, true));
+        error_log("image_descs: ".print_r($image_descs, true));
+        error_log("image_alts: ".print_r($image_alts, true));
+
+        //TODO tests when there is not title or no description,...
+
         //echo "coucou ids = ".$image_ids[0];
         $images_categories  = isset($gallery["categories_id"]) && $show_filter_cat == 'on' ? explode( "***", $gallery["categories_id"] ) : array();        
         
@@ -1389,7 +1434,7 @@ class Gallery_Photo_Gallery_Public {
             unset($image_descs[$dates_key]);
             unset($image_titles[$dates_key]);
             unset($image_alts[$dates_key]);
-            unset($image_urls[$dates_key]);
+            //unset($image_urls[$dates_key]);
             unset($image_ids[$dates_key]);
         }   
 
@@ -1400,15 +1445,15 @@ class Gallery_Photo_Gallery_Public {
         }
         switch($images_orderby){
             case 'title':
-                array_multisort($image_titles, $ordering_asc_desc, SORT_STRING, $images, $image_descs, $image_alts, $image_urls, $image_dates, $images_categories);
+                array_multisort($image_titles, $ordering_asc_desc, SORT_STRING, $images, $image_descs, $image_alts, $image_dates, $images_categories);
                 break;
             case 'date':
-                array_multisort($image_dates, $ordering_asc_desc, SORT_NUMERIC, $images, $image_titles, $image_descs, $image_alts, $image_urls, $images_categories);
+                array_multisort($image_dates, $ordering_asc_desc, SORT_NUMERIC, $images, $image_titles, $image_descs, $image_alts, $images_categories);
                 break;
             case 'random':
                 $images_indexes = range(0, count($images)-1);
                 shuffle($images_indexes);
-                array_multisort($images_indexes, $images, $image_titles, $image_descs, $image_alts, $image_urls, $image_dates, $images_categories);
+                array_multisort($images_indexes, $images, $image_titles, $image_descs, $image_alts, $image_dates, $images_categories);
                 break;
             default:
                 if ($ays_ordering_asc_desc == 'descending') {
@@ -1537,7 +1582,6 @@ class Gallery_Photo_Gallery_Public {
         }else{
             $show_gallery_head = "<div class='ays_gallery_header'>
                                     $show_gallery_title
-                                    //$show_gallery_desc
                                 </div>";
         }
         if($ays_images_border === "on"){
@@ -1568,56 +1612,56 @@ class Gallery_Photo_Gallery_Public {
                     }else{
                         $ays_show_title = '';
                     }
-
-                    if($image_urls[$key] == ""){
-                        $image_url = "";
-                    }else{
-                        $image_url = "<button type='button' data-url='".$image_urls[$key]."' class='ays_image_url'><i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_link'></i></button>";
-                    }
+                    $image_url = "";
+                    // if($image_urls[$key] == ""){
+                        
+                    // }else{
+                    //     $image_url = "<button type='button' data-url='".$image_urls[$key]."' class='ays_image_url'><i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_link'></i></button>";
+                    // }
                     
                    if($show_title_on == 'gallery_image'){
                         $hiconpos = ($show_title=='on')?" style='margin-bottom:40px;' ":"";
                         if($disable_lightbox){
-
-                        $show_title_in_hover = "<div class='ays_hover_mask animated'><div $hiconpos>".$hover_icon."".$image_url."</div></div> $ays_show_title ";
-                        }elseif($image_url == ''){
-                            $show_title_in_hover = "<div class=''><div $hiconpos>".$image_url."</div></div> $ays_show_title ";
+                            $show_title_in_hover = "<div class='ays_hover_mask animated'><div $hiconpos>".$hover_icon."</div></div> $ays_show_title ";
                         }else{
-                            $dataurl = '';
-                            $class_link_whole_image_url = '';
-                            if($link_on_whole_img){
-                                $dataurl = $image_urls[$key];
-                                $class_link_whole_image_url = 'ays_link_whole_image_url';
-                            }
-                            
-                            $show_title_in_hover = "<div class='ays_hover_mask animated $class_link_whole_image_url' data-url='" .$dataurl. "'><div $hiconpos>".$image_url."</div></div> $ays_show_title ";
-                           
+                            $show_title_in_hover = "<div class=''><div $hiconpos></div></div> $ays_show_title ";
                         }
+                        // }else{
+                        //     $dataurl = '';
+                        //     $class_link_whole_image_url = '';
+                        //     if($link_on_whole_img){
+                        //         $dataurl = $image_urls[$key];
+                        //         $class_link_whole_image_url = 'ays_link_whole_image_url';
+                        //     }
+                            
+                        //     $show_title_in_hover = "<div class='ays_hover_mask animated $class_link_whole_image_url' data-url='" .$dataurl. "'><div $hiconpos>".$image_url."</div></div> $ays_show_title ";
+                           
+                        // }
                     }elseif($show_title_on == 'image_hover'){
                         if($disable_lightbox){
 
-                        $show_title_in_hover = "<div class='ays_hover_mask animated'>
-                            <div>".$hover_icon."".$image_url."</div>
-                            $ays_show_title 
-                        </div>";
-                        }elseif($image_url == ''){
+                            $show_title_in_hover = "<div class='ays_hover_mask animated'>
+                                <div>".$hover_icon."</div>
+                                $ays_show_title 
+                                </div>";
+                        }else{
                             $show_title_in_hover = "<div class=''>
-                                 <div>".$image_url."</div>
+                                 <div></div>
                                  $ays_show_title 
                             </div>";
                         }
-                        else{
-                            $dataurl = '';
-                            $class_link_whole_image_url = '';
-                            if($link_on_whole_img){
-                                $dataurl = $image_urls[$key];
-                                $class_link_whole_image_url = 'ays_link_whole_image_url';
-                            }
-                            $show_title_in_hover = "<div class='ays_hover_mask animated $class_link_whole_image_url' data-url='" .$dataurl. "'>
-                                 <div>".$image_url."</div>
-                                 $ays_show_title 
-                            </div>";
-                        }
+                        // else{
+                        //     $dataurl = '';
+                        //     $class_link_whole_image_url = '';
+                        //     if($link_on_whole_img){
+                        //         $dataurl = $image_urls[$key];
+                        //         $class_link_whole_image_url = 'ays_link_whole_image_url';
+                        //     }
+                        //     $show_title_in_hover = "<div class='ays_hover_mask animated $class_link_whole_image_url' data-url='" .$dataurl. "'>
+                        //          <div>".$image_url."</div>
+                        //          $ays_show_title 
+                        //     </div>";
+                        // }
                        
                     }
 
@@ -1689,53 +1733,54 @@ class Gallery_Photo_Gallery_Public {
                         $images_cat_data_id = "";
                     }
                     
-                    if($image_urls[$key] == ""){
-                        $image_url = "";
-                    }else{
-                        $image_url = "<button type='button' data-url='".$image_urls[$key]."' class='ays_image_url'><i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_link'></i></button>";
-                    }
+                    $image_url = "";
+                    // if($image_urls[$key] == ""){
+                    //     $image_url = "";
+                    // }else{
+                    //     $image_url = "<button type='button' data-url='".$image_urls[$key]."' class='ays_image_url'><i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_link'></i></button>";
+                    // }
                     if($show_title_on == 'gallery_image'){
                         $hiconpos = ($show_title=='on')?" style='margin-bottom:40px;' ":"";
                         if($disable_lightbox){
 
-                        $show_title_in_hover = "<div class='ays_hover_mask animated'><div $hiconpos>".$hover_icon."".$image_url."</div></div> $ays_show_title ";
-                        }elseif($image_url == ''){
-                            $show_title_in_hover = "<div class=''><div $hiconpos>".$image_url."</div></div> $ays_show_title ";
+                        $show_title_in_hover = "<div class='ays_hover_mask animated'><div $hiconpos>".$hover_icon."</div></div> $ays_show_title ";
                         }else{
-                            $dataurl = '';
-                            $class_link_whole_image_url = '';
-                            if($link_on_whole_img){
-                                $dataurl = $image_urls[$key];
-                                $class_link_whole_image_url = 'ays_link_whole_image_url';
-                            }
-                            
-                            $show_title_in_hover = "<div class='ays_hover_mask animated $class_link_whole_image_url' data-url='" .$dataurl. "'><div $hiconpos>".$image_url."</div></div> $ays_show_title ";
+                            $show_title_in_hover = "<div class=''><div $hiconpos></div></div> $ays_show_title ";
                         }
+                        // else{
+                        //     $dataurl = '';
+                        //     $class_link_whole_image_url = '';
+                        //     if($link_on_whole_img){
+                        //         $dataurl = $image_urls[$key];
+                        //         $class_link_whole_image_url = 'ays_link_whole_image_url';
+                        //     }
+                            
+                        //     $show_title_in_hover = "<div class='ays_hover_mask animated $class_link_whole_image_url' data-url='" .$dataurl. "'><div $hiconpos>".$image_url."</div></div> $ays_show_title ";
+                        // }
                     }elseif($show_title_on == 'image_hover'){
                         if($disable_lightbox){
 
                         $show_title_in_hover = "<div class='ays_hover_mask animated'>
-                            <div>".$hover_icon."".$image_url."</div>
+                            <div>".$hover_icon."</div>
                             $ays_show_title 
                         </div>";
-                        }elseif($image_url == ''){
+                        }else{
                             $show_title_in_hover = "<div class=''>
-                                 <div>".$image_url."</div>
                                  $ays_show_title 
                             </div>";
                         }
-                        else{
-                            $dataurl = '';
-                            $class_link_whole_image_url = '';
-                            if($link_on_whole_img){
-                                $dataurl = $image_urls[$key];
-                                $class_link_whole_image_url = 'ays_link_whole_image_url';
-                            }
-                            $show_title_in_hover = "<div class='ays_hover_mask animated $class_link_whole_image_url' data-url='" .$dataurl. "'>
-                                 <div>".$image_url."</div>
-                                 $ays_show_title 
-                            </div>";
-                        }
+                        // else{
+                        //     $dataurl = '';
+                        //     $class_link_whole_image_url = '';
+                        //     if($link_on_whole_img){
+                        //         $dataurl = $image_urls[$key];
+                        //         $class_link_whole_image_url = 'ays_link_whole_image_url';
+                        //     }
+                        //     $show_title_in_hover = "<div class='ays_hover_mask animated $class_link_whole_image_url' data-url='" .$dataurl. "'>
+                        //          <div>".$image_url."</div>
+                        //          $ays_show_title 
+                        //     </div>";
+                        // }
                        
                     }
 
@@ -1785,54 +1830,54 @@ class Gallery_Photo_Gallery_Public {
                     }else{
                         $ays_show_title = '';
                     }
-
-                    if($image_urls[$key] == ""){
-                        $image_url = "";
-                    }else{
-                        $image_url = "<button type='button' data-url='".$image_urls[$key]."' class='ays_image_url'><i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_link'></i></button>";
-                    }
+                    $image_url = "";
+                    // if($image_urls[$key] == ""){
+                    //     $image_url = "";
+                    // }else{
+                    //     $image_url = "<button type='button' data-url='".$image_urls[$key]."' class='ays_image_url'><i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_link'></i></button>";
+                    // }
                    if($show_title_on == 'gallery_image'){
                         $hiconpos = ($show_title=='on')?" style='margin-bottom:40px;' ":"";
                         if($disable_lightbox){
 
-                            $show_title_in_hover = "<div class='ays_hover_mask animated'><div $hiconpos>".$hover_icon."".$image_url."</div></div> $ays_show_title ";
-                        }elseif($image_url == ''){
-                            $show_title_in_hover = "<div class=''><div $hiconpos>".$image_url."</div></div> $ays_show_title ";
+                            $show_title_in_hover = "<div class='ays_hover_mask animated'><div $hiconpos>".$hover_icon."</div></div> $ays_show_title ";
                         }else{
-                            $dataurl = '';
-                            $class_link_whole_image_url = '';
-                            if($link_on_whole_img){
-                                $dataurl = $image_urls[$key];
-                                $class_link_whole_image_url = 'ays_link_whole_image_url';
-                            }
-                            
-                            $show_title_in_hover = "<div class='ays_hover_mask animated $class_link_whole_image_url' data-url='" .$dataurl. "'><div $hiconpos>".$image_url."</div></div> $ays_show_title ";
+                            $show_title_in_hover = "<div class=''><div $hiconpos></div></div> $ays_show_title ";
                         }
+                        // else{
+                        //     $dataurl = '';
+                        //     $class_link_whole_image_url = '';
+                        //     if($link_on_whole_img){
+                        //         $dataurl = $image_urls[$key];
+                        //         $class_link_whole_image_url = 'ays_link_whole_image_url';
+                        //     }
+                            
+                        //     $show_title_in_hover = "<div class='ays_hover_mask animated $class_link_whole_image_url' data-url='" .$dataurl. "'><div $hiconpos>".$image_url."</div></div> $ays_show_title ";
+                        // }
                     }elseif($show_title_on == 'image_hover'){
                         if($disable_lightbox){
 
                         $show_title_in_hover = "<div class='ays_hover_mask animated'>
-                            <div>".$hover_icon."".$image_url."</div>
+                            <div>".$hover_icon."</div>
                             $ays_show_title 
                         </div>";
-                        }elseif($image_url == ''){
+                        }else{
                             $show_title_in_hover = "<div class=''>
-                                 <div>".$image_url."</div>
                                  $ays_show_title 
                             </div>";
                         }
-                        else{
-                           $dataurl = '';
-                            $class_link_whole_image_url = '';
-                            if($link_on_whole_img){
-                                $dataurl = $image_urls[$key];
-                                $class_link_whole_image_url = 'ays_link_whole_image_url';
-                            }
-                            $show_title_in_hover = "<div class='ays_hover_mask animated $class_link_whole_image_url' data-url='" .$dataurl. "'>
-                                 <div>".$image_url."</div>
-                                 $ays_show_title 
-                            </div>";
-                        }
+                        // else{
+                        //    $dataurl = '';
+                        //     $class_link_whole_image_url = '';
+                        //     if($link_on_whole_img){
+                        //         $dataurl = $image_urls[$key];
+                        //         $class_link_whole_image_url = 'ays_link_whole_image_url';
+                        //     }
+                        //     $show_title_in_hover = "<div class='ays_hover_mask animated $class_link_whole_image_url' data-url='" .$dataurl. "'>
+                        //          <div>".$image_url."</div>
+                        //          $ays_show_title 
+                        //     </div>";
+                        // }
                        
                     }
 
@@ -1883,29 +1928,30 @@ class Gallery_Photo_Gallery_Public {
                     }else{
                         $ays_show_title = '';
                     }
-
-                    if($image_urls[$key] == ""){
-                        $image_url = "";
-                    }else{
-                        $image_url = "<button type='button' data-url='".$image_urls[$key]."' class='ays_image_url'><i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_link'></i></button>";
-                    }
+                    $image_url = "";
+                    // if($image_urls[$key] == ""){
+                    //     $image_url = "";
+                    // }else{
+                    //     $image_url = "<button type='button' data-url='".$image_urls[$key]."' class='ays_image_url'><i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_link'></i></button>";
+                    // }
                     if($show_title_on == 'gallery_image'){
                         $hiconpos = ($show_title=='on')?" style='margin-bottom:40px;' ":"";
                         if($disable_lightbox){
 
-                        $show_title_in_hover = "<div class='ays_hover_mask animated'><div $hiconpos>".$hover_icon."".$image_url."</div></div> $ays_show_title ";
-                        }elseif($image_url == ''){
-                            $show_title_in_hover = "<div class=''><div $hiconpos>".$image_url."</div></div> $ays_show_title ";
-                        }else{
-                           $dataurl = '';
-                            $class_link_whole_image_url = '';
-                            if($link_on_whole_img){
-                                $dataurl = $image_urls[$key];
-                                $class_link_whole_image_url = 'ays_link_whole_image_url';
-                            }
-                            
-                            $show_title_in_hover = "<div class='ays_hover_mask animated $class_link_whole_image_url' data-url='" .$dataurl. "'><div $hiconpos>".$image_url."</div></div> $ays_show_title ";
+                        $show_title_in_hover = "<div class='ays_hover_mask animated'><div $hiconpos>".$hover_icon."</div></div> $ays_show_title ";
+                        }else{ //if($image_url == ''){
+                            $show_title_in_hover = "<div class=''><div $hiconpos></div></div> $ays_show_title ";
                         }
+                        // }else{
+                        //    $dataurl = '';
+                        //     $class_link_whole_image_url = '';
+                        //     if($link_on_whole_img){
+                        //         $dataurl = $image_urls[$key];
+                        //         $class_link_whole_image_url = 'ays_link_whole_image_url';
+                        //     }
+                            
+                        //     $show_title_in_hover = "<div class='ays_hover_mask animated $class_link_whole_image_url' data-url='" .$dataurl. "'><div $hiconpos>".$image_url."</div></div> $ays_show_title ";
+                        // }
                     }elseif($show_title_on == 'image_hover'){
                         if($disable_lightbox){
 
@@ -1913,24 +1959,24 @@ class Gallery_Photo_Gallery_Public {
                             <div>".$hover_icon."".$image_url."</div>
                             $ays_show_title 
                         </div>";
-                        }elseif($image_url == ''){
+                        }else {
                             $show_title_in_hover = "<div class=''>
                                  <div>".$image_url."</div>
                                  $ays_show_title 
                             </div>";
                         }
-                        else{
-                            $dataurl = '';
-                            $class_link_whole_image_url = '';
-                            if($link_on_whole_img){
-                                $dataurl = $image_urls[$key];
-                                $class_link_whole_image_url = 'ays_link_whole_image_url';
-                            }
-                            $show_title_in_hover = "<div class='ays_hover_mask animated $class_link_whole_image_url' data-url='" .$dataurl. "'>
-                                 <div>".$image_url."</div>
-                                 $ays_show_title 
-                            </div>";
-                        }
+                        // else{
+                        //     $dataurl = '';
+                        //     $class_link_whole_image_url = '';
+                        //     if($link_on_whole_img){
+                        //         $dataurl = $image_urls[$key];
+                        //         $class_link_whole_image_url = 'ays_link_whole_image_url';
+                        //     }
+                        //     $show_title_in_hover = "<div class='ays_hover_mask animated $class_link_whole_image_url' data-url='" .$dataurl. "'>
+                        //          <div>".$image_url."</div>
+                        //          $ays_show_title 
+                        //     </div>";
+                        // }
                        
                     }
                     

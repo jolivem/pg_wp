@@ -988,7 +988,7 @@
                 $images_title = $(document).find('input[name="ays-image-title[]"]'),
                 $images_desc = $(document).find('input[name="ays-image-description[]"]'),
                 $images_alt = $(document).find('input[name="ays-image-alt[]"]'),
-                //$images_url = "",$(document).find('input[name="ays-image-url[]"]'),
+                //$images_url = "",$(document).find('input[name="ays-image-url[]"]'), TODO remove
                 $hover_effect = 'pulse_gpg',//$(document).find('#gallery_img_hover_simple').val(),
                 $hover_out_effect, $image_dates = $(document).find('.ays_img_date'),
                 $images_distance = $(document).find('input[name="ays-gpg-images-distance"]').val(),

@@ -348,13 +348,11 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
         <?php if($id !== null): ?>
         <div class="row">
             <div class="col-sm-3">
-                <label> <?php echo __( "Shortcode text for editor", $this->plugin_name ); ?> </label>
+                <label> <?php echo __( "Shortcode", $this->plugin_name ); ?> </label>
             </div>
             <div class="col-sm-9">
                 <p style="font-size:14px; font-style:italic;">
-                    <?php echo __("To insert the Gallery into a page, post or text widget, copy shortcode", $this->plugin_name); ?>
                     <strong class="ays-gallery-shortcode-box" onClick="selectElementContents(this)" data-toggle="tooltip" title="<?php echo __('Click for copy.', $this->plugin_name);?>" style="font-size:16px; font-style:normal;"><?php echo "[gallery_p_gallery id=".$id."]"; ?></strong>
-                    <?php echo " " . __( "and paste it at the desired place in the editor.", $this->plugin_name); ?>
                 </p>
             </div>
         </div>
