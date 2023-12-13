@@ -84,289 +84,299 @@ class Galleries_List_Table extends WP_List_Table{
     public function add_or_edit_gallery($data){
         global $wpdb;
         $gallery_table = $wpdb->prefix . "ays_gallery";
-        
+        error_log("add_or_edit_gallery() IN data: ".print_r($data, true));//TODO
         if( isset($data["ays_gallery_action"]) && wp_verify_nonce( $data["ays_gallery_action"],"ays_gallery_action" ) ) {
-
-                $path_key = array_search("",$data["ays-image-path"]);                
-                if ($path_key !== false) {
-                    unset($data["ays-image-id"][$path_key]);
-                    unset($data["ays-image-description"][$path_key]);
-                    unset($data["ays-image-url"][$path_key]);
-                    unset($data["ays-image-title"][$path_key]);
-                    unset($data["ays-image-alt"][$path_key]);
-                    unset($data["ays-image-date"][$path_key]);
-                    unset($data["ays_gallery_category"][$path_key]);
-                }                
-                
-                $id                     = ( $data["id"] != NULL ) ? absint( intval( $data["id"] ) ) : null;
-                $title                  = (isset($data["gallery_title"]) && $data["gallery_title"] != '') ? stripslashes(sanitize_text_field( $data["gallery_title"] )) : '';
-                $description            = !isset($data['gallery_description']) ? '' : wp_kses_post( $data['gallery_description'] );
-                
-                $width                  = (isset($data['gallery_width']) && $data['gallery_width'] != '') ? wp_unslash(sanitize_text_field( $data['gallery_width'] )) : '';
-                $height                 = 0;
+            
+            error_log("add_or_edit_gallery() IN data: ".print_r($data, true));//TODO    
+            
+            // List of images
+            if ($data["ays-image-path"] != NULL) {
+                error_log("add_or_edit_gallery() images selected ! ");
                 $image_paths            = (isset($data["ays-image-path"]) && $data["ays-image-path"] != '') ? sanitize_text_field( implode( "***", array_filter($data["ays-image-path"] )) ) : '';
                 $image_ids              = (isset($data["ays-image-id"]) && $data["ays-image-id"] != '') ? sanitize_text_field( implode( "***", array_filter($data["ays-image-id"] )) ) : '';
+                //error_log("TODO image id:".$image_ids);
                 $image_titles           = (isset($data["ays-image-title"]) && $data["ays-image-title"] != '') ? stripslashes(sanitize_text_field( implode( "***", $data["ays-image-title"] ) ) ) : '';
                 $image_alts             = (isset($data["ays-image-alt"]) && $data["ays-image-alt"] != '') ? stripslashes (sanitize_text_field( implode( "***", $data["ays-image-alt"] ) ) ) : '';
                 $image_descriptions     = (isset($data["ays-image-description"]) && $data["ays-image-description"] != '') ? stripslashes(sanitize_text_field( implode( "***", $data["ays-image-description"] ) ) ) : '';
                 $image_external_urls    = (isset($data["ays-image-url"]) && $data["ays-image-url"] != '') ? sanitize_text_field( implode( "***", $data["ays-image-url"] ) ) : '';
-                $images_dates           = (isset( $data['ays-image-date']) &&  $data['ays-image-date'] != '') ? sanitize_text_field( implode( "***", $data['ays-image-date'] ) ) : '';
+                $images_dates           = (isset($data['ays-image-date']) &&  $data['ays-image-date'] != '') ? sanitize_text_field( implode( "***", $data['ays-image-date'] ) ) : '';
                 $image_categories       = (isset($data['ays_gallery_category']) && $data['ays_gallery_category'] != '') ? sanitize_text_field( implode('***', $data['ays_gallery_category']) ) : '';
-                $view_type              = isset($data['ays-view-type']) && $data['ays-view-type'] != '' ? sanitize_text_field( $data['ays-view-type'] ) : '';
-                $columns_count          = (isset($data['ays-columns-count']) && $data['ays-columns-count'] != '') ? absint( intval( $data['ays-columns-count'] ) ) : '';
-                $images_distance        = (isset($data['ays-gpg-images-distance']) && $data['ays-gpg-images-distance'] != '') ? absint( intval( $data['ays-gpg-images-distance'] ) ) : '5';
-                $hover_effect           = (isset($data['ays_hover_simple']) && $data['ays_hover_simple'] != '') ? sanitize_text_field( $data['ays_hover_simple'] ) : '';
-                $img_load_effect        = (isset($data['ays_img_load_effect']) && $data['ays_img_load_effect'] != '') ? sanitize_text_field( $data['ays_img_load_effect'] ) : '';
-                $hover_opacity          = (isset($data['ays-gpg-image-hover-opacity']) && $data['ays-gpg-image-hover-opacity'] != '') ? sanitize_text_field( $data['ays-gpg-image-hover-opacity'] ) : '';
-                $hover_color            = (isset($data['ays-gpg-hover-color']) && $data['ays-gpg-hover-color'] != '') ? sanitize_text_field( $data['ays-gpg-hover-color'] ) : '';
-                $hover_icon             = (isset($data['ays-gpg-image-hover-icon']) && $data['ays-gpg-image-hover-icon'] != '') ? sanitize_text_field( $data['ays-gpg-image-hover-icon'] ) : '';
-                $image_sizes            = (isset($data['ays_image_sizes']) && $data['ays_image_sizes'] != '') ? sanitize_text_field( $data['ays_image_sizes'] ) : '';
-                $custom_css             = isset($data['gallery_custom_css']) && $data['gallery_custom_css'] != '' ? stripslashes( esc_attr($data['gallery_custom_css'])) : '';
-                $lightbox_color         = (isset($data['ays-gpg-lightbox-color']) && $data['ays-gpg-lightbox-color'] != '') ? wp_unslash(sanitize_text_field( $data['ays-gpg-lightbox-color'] )) : '';
-                $images_orderby         = (isset($data['ays_images_ordering']) && $data['ays_images_ordering'] != '') ? wp_unslash(sanitize_text_field( $data['ays_images_ordering'] )) : '';
-                $show_title             =  wp_unslash(sanitize_text_field( isset($data['ays_gpg_show_title']) ? $data['ays_gpg_show_title'] : '' ));
-                $show_title_on          = (isset($data['ays_gpg_show_title_on']) && $data['ays_gpg_show_title_on'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_show_title_on'] )) : '';
-                $title_position         = (isset($data['image_title_position']) && $data['image_title_position'] != '')? wp_unslash(sanitize_text_field( $data['image_title_position'] )) : '';
-                $show_with_date         = wp_unslash(sanitize_text_field( isset($data['ays_gpg_show_with_date']) ? $data['ays_gpg_show_with_date'] : '' ));
-                $ays_images_loading     = (isset($data['ays_images_loading']) && $data['ays_images_loading'] != '') ? sanitize_text_field( $data['ays_images_loading'] ) : 'all_loaded';
-                $gpg_redirect_url_tab   = (isset($data['gpg_redirect_url_tab']) && $data['gpg_redirect_url_tab'] != '') ? sanitize_text_field( $data['gpg_redirect_url_tab'] ) : '_blank';
-                $ays_admin_pagination   = (isset($data['ays_admin_pagination']) && $data['ays_admin_pagination'] != '') ? wp_unslash(sanitize_text_field( $data['ays_admin_pagination'] )) : '';
-                $ays_gpg_hover_zoom     = (isset($data['ays_gpg_hover_zoom']) && $data['ays_gpg_hover_zoom'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_hover_zoom'] )) : '';
-                //Hover zoom animation speed
-                $hover_zoom_animation_speed = (isset($data['gpg_hover_zoom_animation_speed']) && $data['gpg_hover_zoom_animation_speed'] !== '') ? abs($data['gpg_hover_zoom_animation_speed']) : 0.5;
-                //Hover animation speed
-                $hover_animation_speed = (isset($data['ays_gpg_hover_animation_speed']) && $data['ays_gpg_hover_animation_speed'] !== '') ? abs($data['ays_gpg_hover_animation_speed']) : 0.5;
-                //Hover scale animation speed
-                $hover_scale_animation_speed = (isset($data['gpg_hover_scale_animation_speed']) && $data['gpg_hover_scale_animation_speed'] !== '') ? abs($data['gpg_hover_scale_animation_speed']) : 1;
-                $ays_gpg_hover_scale    = wp_unslash(sanitize_text_field( isset($data['ays_gpg_hover_scale']) ? $data['ays_gpg_hover_scale'] : 'no' ));
-                $ays_images_b_radius    = (isset($data['ays-gpg-images-border-radius']) && $data['ays-gpg-images-border-radius'] != '') ? wp_unslash(sanitize_text_field( $data['ays-gpg-images-border-radius'] )) : '';
-                $ays_hover_icon_size    = (isset($data['ays-gpg-hover-icon-size']) && $data['ays-gpg-hover-icon-size'] != '') ? wp_unslash(sanitize_text_field( $data['ays-gpg-hover-icon-size'] )) : '';
-                $ays_gpg_thumbnail_title_size = (isset($data['ays_gpg_thumbnail_title_size']) && $data['ays_gpg_thumbnail_title_size'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_thumbnail_title_size'] )) : '';
-                $ays_gpg_loader         = (isset($data['ays_gpg_loader']) && $data['ays_gpg_loader'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_loader'] )) : '';
+            }
+            else {
+                error_log("add_or_edit_gallery() NO images ! ");
+                $image_paths            = '';
+                $image_ids              = '';
+                $image_titles           = '';
+                $image_alts             = '';
+                $image_descriptions     = '';
+                $image_external_urls    = '';
+                $images_dates           = '';
+                $image_categories       = '';
+            }
 
-                // Gallery loader text value
-                $gallery_loader_text_value = (isset($data['ays_gpg_loader_text_value']) && $data['ays_gpg_loader_text_value'] != '') ? sanitize_text_field( $data['ays_gpg_loader_text_value'] ) : '';
-
-                // Gallery loader custom gif
-                $gallery_loader_custom_gif = (isset($data['ays_gallery_loader_custom_gif']) && $data['ays_gallery_loader_custom_gif'] != '') ? sanitize_text_field( $data['ays_gallery_loader_custom_gif'] ) : '';
-
-                if ($gallery_loader_custom_gif != '' && exif_imagetype( $gallery_loader_custom_gif ) != IMAGETYPE_GIF) {
-                    $gallery_loader_custom_gif = '';
-                }
-
-                // Gallery loader custom gif width
-                $gallery_loader_custom_gif_width = (isset($data['ays_gallery_loader_custom_gif_width']) && sanitize_text_field( $data['ays_gallery_loader_custom_gif_width'] ) != '') ? absint( intval( $data['ays_gallery_loader_custom_gif_width'] ) ) : 100;
-                
-                $ays_images_border      = wp_unslash(sanitize_text_field( isset($data['ays_gpg_images_border']) ? $data['ays_gpg_images_border'] : '' ));
-                $ays_images_b_width     = (isset($data['ays_gpg_images_border_width']) && $data['ays_gpg_images_border_width'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_images_border_width'] )) : '';
-                $ays_images_b_style     = (isset($data['ays_gpg_images_border_style']) && $data['ays_gpg_images_border_style'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_images_border_style'] )) : '';
-                $ays_images_b_color     = (isset($data['ays_gpg_border_color']) && $data['ays_gpg_border_color'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_border_color'] )) : '';
-                $thumb_height_mobile    = wp_unslash(sanitize_text_field( isset($data['ays-thumb-height-mobile']) ? $data['ays-thumb-height-mobile'] : '' ));
-                $thumb_height_desktop   = wp_unslash(sanitize_text_field( isset($data['ays-thumb-height-desktop']) ? $data['ays-thumb-height-desktop'] : '' ));
+            $id                     = ( $data["id"] != NULL ) ? absint( intval( $data["id"] ) ) : null;
             
-                $ays_lightbox_counter   = (isset($data['ays_gpg_lightbox_counter']) && $data['ays_gpg_lightbox_counter'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_lightbox_counter'] )) : '';
-                $ays_lightbox_autoplay  = (isset($data['ays_gpg_lightbox_autoplay']) && $data['ays_gpg_lightbox_autoplay'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_lightbox_autoplay'] )) : '';
-                $ays_lg_pause           = (isset($data['ays_gpg_lightbox_pause']) && $data['ays_gpg_lightbox_pause'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_lightbox_pause'] )) : '';
-                $ays_lg_show_caption    = (isset($data['ays_gpg_show_caption']) && $data['ays_gpg_show_caption'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_show_caption'] )) : '';
-                
-                $gallery_img_position = (isset($data['gallery_img_position']) && $data['gallery_img_position'] != '') ? wp_unslash(sanitize_text_field( $data['gallery_img_position'] )) : 'center-center';
+            // Gallery settings
+            error_log("TODO gallery id:".$id);
+            $title                  = (isset($data["gallery_title"]) && $data["gallery_title"] != '') ? stripslashes(sanitize_text_field( $data["gallery_title"] )) : '';
+            $description            = !isset($data['gallery_description']) ? '' : wp_kses_post( $data['gallery_description'] );
+            $width                  = (isset($data['gallery_width']) && $data['gallery_width'] != '') ? wp_unslash(sanitize_text_field( $data['gallery_width'] )) : '';
+            $height                 = 0;
+            $view_type              = isset($data['ays-view-type']) && $data['ays-view-type'] != '' ? sanitize_text_field( $data['ays-view-type'] ) : '';
+            $columns_count          = (isset($data['ays-columns-count']) && $data['ays-columns-count'] != '') ? absint( intval( $data['ays-columns-count'] ) ) : '';
+            $images_distance        = (isset($data['ays-gpg-images-distance']) && $data['ays-gpg-images-distance'] != '') ? absint( intval( $data['ays-gpg-images-distance'] ) ) : '5';
+            $hover_effect           = (isset($data['ays_hover_simple']) && $data['ays_hover_simple'] != '') ? sanitize_text_field( $data['ays_hover_simple'] ) : '';
+            $img_load_effect        = (isset($data['ays_img_load_effect']) && $data['ays_img_load_effect'] != '') ? sanitize_text_field( $data['ays_img_load_effect'] ) : '';
+            $hover_opacity          = (isset($data['ays-gpg-image-hover-opacity']) && $data['ays-gpg-image-hover-opacity'] != '') ? sanitize_text_field( $data['ays-gpg-image-hover-opacity'] ) : '';
+            $hover_color            = (isset($data['ays-gpg-hover-color']) && $data['ays-gpg-hover-color'] != '') ? sanitize_text_field( $data['ays-gpg-hover-color'] ) : '';
+            $hover_icon             = (isset($data['ays-gpg-image-hover-icon']) && $data['ays-gpg-image-hover-icon'] != '') ? sanitize_text_field( $data['ays-gpg-image-hover-icon'] ) : '';
+            $image_sizes            = (isset($data['ays_image_sizes']) && $data['ays_image_sizes'] != '') ? sanitize_text_field( $data['ays_image_sizes'] ) : '';
+            $custom_css             = isset($data['gallery_custom_css']) && $data['gallery_custom_css'] != '' ? stripslashes( esc_attr($data['gallery_custom_css'])) : '';
+            $lightbox_color         = (isset($data['ays-gpg-lightbox-color']) && $data['ays-gpg-lightbox-color'] != '') ? wp_unslash(sanitize_text_field( $data['ays-gpg-lightbox-color'] )) : '';
+            $images_orderby         = (isset($data['ays_images_ordering']) && $data['ays_images_ordering'] != '') ? wp_unslash(sanitize_text_field( $data['ays_images_ordering'] )) : '';
+            $show_title             =  wp_unslash(sanitize_text_field( isset($data['ays_gpg_show_title']) ? $data['ays_gpg_show_title'] : '' ));
+            $show_title_on          = (isset($data['ays_gpg_show_title_on']) && $data['ays_gpg_show_title_on'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_show_title_on'] )) : '';
+            $title_position         = (isset($data['image_title_position']) && $data['image_title_position'] != '')? wp_unslash(sanitize_text_field( $data['image_title_position'] )) : '';
+            $show_with_date         = wp_unslash(sanitize_text_field( isset($data['ays_gpg_show_with_date']) ? $data['ays_gpg_show_with_date'] : '' ));
+            $ays_images_loading     = (isset($data['ays_images_loading']) && $data['ays_images_loading'] != '') ? sanitize_text_field( $data['ays_images_loading'] ) : 'all_loaded';
+            $gpg_redirect_url_tab   = (isset($data['gpg_redirect_url_tab']) && $data['gpg_redirect_url_tab'] != '') ? sanitize_text_field( $data['gpg_redirect_url_tab'] ) : '_blank';
+            $ays_admin_pagination   = (isset($data['ays_admin_pagination']) && $data['ays_admin_pagination'] != '') ? wp_unslash(sanitize_text_field( $data['ays_admin_pagination'] )) : '';
+            $ays_gpg_hover_zoom     = (isset($data['ays_gpg_hover_zoom']) && $data['ays_gpg_hover_zoom'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_hover_zoom'] )) : '';
+            //Hover zoom animation speed
+            $hover_zoom_animation_speed = (isset($data['gpg_hover_zoom_animation_speed']) && $data['gpg_hover_zoom_animation_speed'] !== '') ? abs($data['gpg_hover_zoom_animation_speed']) : 0.5;
+            //Hover animation speed
+            $hover_animation_speed = (isset($data['ays_gpg_hover_animation_speed']) && $data['ays_gpg_hover_animation_speed'] !== '') ? abs($data['ays_gpg_hover_animation_speed']) : 0.5;
+            //Hover scale animation speed
+            $hover_scale_animation_speed = (isset($data['gpg_hover_scale_animation_speed']) && $data['gpg_hover_scale_animation_speed'] !== '') ? abs($data['gpg_hover_scale_animation_speed']) : 1;
+            $ays_gpg_hover_scale    = wp_unslash(sanitize_text_field( isset($data['ays_gpg_hover_scale']) ? $data['ays_gpg_hover_scale'] : 'no' ));
+            $ays_images_b_radius    = (isset($data['ays-gpg-images-border-radius']) && $data['ays-gpg-images-border-radius'] != '') ? wp_unslash(sanitize_text_field( $data['ays-gpg-images-border-radius'] )) : '';
+            $ays_hover_icon_size    = (isset($data['ays-gpg-hover-icon-size']) && $data['ays-gpg-hover-icon-size'] != '') ? wp_unslash(sanitize_text_field( $data['ays-gpg-hover-icon-size'] )) : '';
+            $ays_gpg_thumbnail_title_size = (isset($data['ays_gpg_thumbnail_title_size']) && $data['ays_gpg_thumbnail_title_size'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_thumbnail_title_size'] )) : '';
+            $ays_gpg_loader         = (isset($data['ays_gpg_loader']) && $data['ays_gpg_loader'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_loader'] )) : '';
+
+            // Gallery loader text value
+            $gallery_loader_text_value = (isset($data['ays_gpg_loader_text_value']) && $data['ays_gpg_loader_text_value'] != '') ? sanitize_text_field( $data['ays_gpg_loader_text_value'] ) : '';
+
+            // Gallery loader custom gif
+            $gallery_loader_custom_gif = (isset($data['ays_gallery_loader_custom_gif']) && $data['ays_gallery_loader_custom_gif'] != '') ? sanitize_text_field( $data['ays_gallery_loader_custom_gif'] ) : '';
+
+            if ($gallery_loader_custom_gif != '' && exif_imagetype( $gallery_loader_custom_gif ) != IMAGETYPE_GIF) {
+                $gallery_loader_custom_gif = '';
+            }
+
+            // Gallery loader custom gif width
+            $gallery_loader_custom_gif_width = (isset($data['ays_gallery_loader_custom_gif_width']) && sanitize_text_field( $data['ays_gallery_loader_custom_gif_width'] ) != '') ? absint( intval( $data['ays_gallery_loader_custom_gif_width'] ) ) : 100;
             
-                $ays_show_gal_title     = (isset($data['ays_gpg_title_show']) && $data['ays_gpg_title_show'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_title_show'] )) : '';
-                //$ays_show_gal_desc      = (isset($data['ays_gpg_desc_show']) && $data['ays_gpg_desc_show'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_desc_show'] )) : '';
-                $images_hover_effect    = (isset($data['ays_images_hover_effect']) && $data['ays_images_hover_effect'] != '') ? sanitize_text_field( $data['ays_images_hover_effect'] ) : '';
-                $hover_dir_aware        = (isset($data['ays_hover_dir_aware']) && $data['ays_hover_dir_aware'] != '') ? sanitize_text_field( $data['ays_hover_dir_aware'] ) : '';
-
-                $enable_light_box       = isset($data['av_light_box']) && $data['av_light_box'] == "on" ? "on" :"off";
-                $enable_search_img      = isset($data['gpg_search_img']) && $data['gpg_search_img'] == "on" ? "on" :"off";
-                $ays_filter_cat         = isset($data['ays_filter_cat']) && $data['ays_filter_cat'] == "on" ? "on" :"off";
-                $ays_gpg_filter_thubnail_opt = isset($data['ays_gpg_filter_thubnail_opt']) ? $data['ays_gpg_filter_thubnail_opt'] : "";
-                $ays_gpg_filter_lightbox_opt = isset($data['ays_gpg_filter_lightbox_opt']) ? $data['ays_gpg_filter_lightbox_opt'] : "";
-                $custom_class = (isset($data['ays_custom_class']) && $data['ays_custom_class'] != "") ? $data['ays_custom_class'] : '';
-
-                $ays_gpg_ordering_asc_desc = (isset($data['ays_gpg_ordering_asc_desc']) && $data['ays_gpg_ordering_asc_desc'] != '') ? $data['ays_gpg_ordering_asc_desc'] : "ascending";
+            $ays_images_border      = wp_unslash(sanitize_text_field( isset($data['ays_gpg_images_border']) ? $data['ays_gpg_images_border'] : '' ));
+            $ays_images_b_width     = (isset($data['ays_gpg_images_border_width']) && $data['ays_gpg_images_border_width'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_images_border_width'] )) : '';
+            $ays_images_b_style     = (isset($data['ays_gpg_images_border_style']) && $data['ays_gpg_images_border_style'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_images_border_style'] )) : '';
+            $ays_images_b_color     = (isset($data['ays_gpg_border_color']) && $data['ays_gpg_border_color'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_border_color'] )) : '';
+            $thumb_height_mobile    = wp_unslash(sanitize_text_field( isset($data['ays-thumb-height-mobile']) ? $data['ays-thumb-height-mobile'] : '' ));
+            $thumb_height_desktop   = wp_unslash(sanitize_text_field( isset($data['ays-thumb-height-desktop']) ? $data['ays-thumb-height-desktop'] : '' ));
+        
+            $ays_lightbox_counter   = (isset($data['ays_gpg_lightbox_counter']) && $data['ays_gpg_lightbox_counter'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_lightbox_counter'] )) : '';
+            $ays_lightbox_autoplay  = (isset($data['ays_gpg_lightbox_autoplay']) && $data['ays_gpg_lightbox_autoplay'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_lightbox_autoplay'] )) : '';
+            $ays_lg_pause           = (isset($data['ays_gpg_lightbox_pause']) && $data['ays_gpg_lightbox_pause'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_lightbox_pause'] )) : '';
+            $ays_lg_show_caption    = (isset($data['ays_gpg_show_caption']) && $data['ays_gpg_show_caption'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_show_caption'] )) : '';
             
-                $gpg_resp_width            = isset($data['gpg_resp_width']) && $data['gpg_resp_width'] == "on" ? "on" :"off";
-                $gpg_height_width_ratios   = isset($data['gpg_height_width_ratio']) && !empty($data['gpg_height_width_ratio']) ? wp_unslash(sanitize_text_field($data['gpg_height_width_ratio'])) : 1;
-                $gpg_height_width_ratio = floatval($gpg_height_width_ratios) < 0.1 ? 1 : $gpg_height_width_ratios;
-                $gpg_enable_rtl            = (isset($data['ays_galery_enable_rtl_direction']) && $data['ays_galery_enable_rtl_direction'] == "on") ? "on" :"off";
+            $gallery_img_position = (isset($data['gallery_img_position']) && $data['gallery_img_position'] != '') ? wp_unslash(sanitize_text_field( $data['gallery_img_position'] )) : 'center-center';
+        
+            $ays_show_gal_title     = (isset($data['ays_gpg_title_show']) && $data['ays_gpg_title_show'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_title_show'] )) : '';
+            //$ays_show_gal_desc      = (isset($data['ays_gpg_desc_show']) && $data['ays_gpg_desc_show'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_desc_show'] )) : '';
+            $images_hover_effect    = (isset($data['ays_images_hover_effect']) && $data['ays_images_hover_effect'] != '') ? sanitize_text_field( $data['ays_images_hover_effect'] ) : '';
+            $hover_dir_aware        = (isset($data['ays_hover_dir_aware']) && $data['ays_hover_dir_aware'] != '') ? sanitize_text_field( $data['ays_hover_dir_aware'] ) : '';
 
-                //Gallery title color 
-                $ays_gallery_title_color = (isset($data['ays_gallery_title_color']) && $data['ays_gallery_title_color'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gallery_title_color'] )) : '#000';
+            $enable_light_box       = isset($data['av_light_box']) && $data['av_light_box'] == "on" ? "on" :"off";
+            $enable_search_img      = isset($data['gpg_search_img']) && $data['gpg_search_img'] == "on" ? "on" :"off";
+            $ays_filter_cat         = isset($data['ays_filter_cat']) && $data['ays_filter_cat'] == "on" ? "on" :"off";
+            $ays_gpg_filter_thubnail_opt = isset($data['ays_gpg_filter_thubnail_opt']) ? $data['ays_gpg_filter_thubnail_opt'] : "";
+            $ays_gpg_filter_lightbox_opt = isset($data['ays_gpg_filter_lightbox_opt']) ? $data['ays_gpg_filter_lightbox_opt'] : "";
+            $custom_class = (isset($data['ays_custom_class']) && $data['ays_custom_class'] != "") ? $data['ays_custom_class'] : '';
 
-                //Gallery description color 
-                $ays_gallery_desc_color = (isset($data['ays_gallery_desc_color']) && $data['ays_gallery_desc_color'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gallery_desc_color'] )) : '#000';
+            $ays_gpg_ordering_asc_desc = (isset($data['ays_gpg_ordering_asc_desc']) && $data['ays_gpg_ordering_asc_desc'] != '') ? $data['ays_gpg_ordering_asc_desc'] : "ascending";
+        
+            $gpg_resp_width            = isset($data['gpg_resp_width']) && $data['gpg_resp_width'] == "on" ? "on" :"off";
+            $gpg_height_width_ratios   = isset($data['gpg_height_width_ratio']) && !empty($data['gpg_height_width_ratio']) ? wp_unslash(sanitize_text_field($data['gpg_height_width_ratio'])) : 1;
+            $gpg_height_width_ratio = floatval($gpg_height_width_ratios) < 0.1 ? 1 : $gpg_height_width_ratios;
+            $gpg_enable_rtl            = (isset($data['ays_galery_enable_rtl_direction']) && $data['ays_galery_enable_rtl_direction'] == "on") ? "on" :"off";
 
-                //Thubnail title color 
-                $ays_gpg_title_color = (isset($data['ays_gpg_thumbnail_title_color']) && $data['ays_gpg_thumbnail_title_color'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_thumbnail_title_color'] )) : '#ffffff';
-               
-                $ays_gpg_filter_cat_anim = (isset($data['ays_filter_cat_animation']) && $data['ays_filter_cat_animation'] != '') ? sanitize_text_field( $data['ays_filter_cat_animation'] ) : 'fadeIn';
-                $ays_gpg_lg_keypress    = (isset($data['ays_gpg_lg_keypress']) && $data['ays_gpg_lg_keypress'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_lg_keypress'] )) : '';
-                $ays_gpg_lg_esckey    = (isset($data['ays_gpg_lg_esckey']) && $data['ays_gpg_lg_esckey'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_lg_esckey'] )) : '';
+            //Gallery title color 
+            $ays_gallery_title_color = (isset($data['ays_gallery_title_color']) && $data['ays_gallery_title_color'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gallery_title_color'] )) : '#000';
 
-                $link_on_whole_img       = isset($data['link_on_whole_img']) && $data['link_on_whole_img'] == "on" ? "on" :"off";
+            //Gallery description color 
+            $ays_gallery_desc_color = (isset($data['ays_gallery_desc_color']) && $data['ays_gallery_desc_color'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gallery_desc_color'] )) : '#000';
 
-                $gpg_create_date = !isset($data['ays_gpg_create_date']) ? '0000-00-00 00:00:00' : sanitize_text_field( $data['ays_gpg_create_date'] );
+            //Thubnail title color 
+            $ays_gpg_title_color = (isset($data['ays_gpg_thumbnail_title_color']) && $data['ays_gpg_thumbnail_title_color'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_thumbnail_title_color'] )) : '#ffffff';
+            
+            $ays_gpg_filter_cat_anim = (isset($data['ays_filter_cat_animation']) && $data['ays_filter_cat_animation'] != '') ? sanitize_text_field( $data['ays_filter_cat_animation'] ) : 'fadeIn';
+            $ays_gpg_lg_keypress    = (isset($data['ays_gpg_lg_keypress']) && $data['ays_gpg_lg_keypress'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_lg_keypress'] )) : '';
+            $ays_gpg_lg_esckey    = (isset($data['ays_gpg_lg_esckey']) && $data['ays_gpg_lg_esckey'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_lg_esckey'] )) : '';
 
-                $author = ( isset($data['ays_gpg_author']) && $data['ays_gpg_author'] != "" ) ? stripcslashes( sanitize_text_field( $data['ays_gpg_author'] ) ) : '';
+            $link_on_whole_img       = isset($data['link_on_whole_img']) && $data['link_on_whole_img'] == "on" ? "on" :"off";
 
-                // Change the author of the current gallery
-                $gpg_create_author = ( isset($data['ays_gallery_create_author']) && $data['ays_gallery_create_author'] != "" ) ? absint( sanitize_text_field( $data['ays_gallery_create_author'] ) ) : '';
-                if ( $gpg_create_author != "" && $gpg_create_author > 0 ) {
-                    $user = get_userdata($gpg_create_author);
-                    if ( ! is_null( $user ) && $user ) {
-                        $gpg_author = array(
-                            'id' => $user->ID."",
-                            'name' => $user->data->display_name
-                        );
+            $gpg_create_date = !isset($data['ays_gpg_create_date']) ? '0000-00-00 00:00:00' : sanitize_text_field( $data['ays_gpg_create_date'] );
 
-                        $author = json_encode($gpg_author, JSON_UNESCAPED_SLASHES);
-                    } else {
-                        $author_data = json_decode($author, true);
-                        $gpg_create_author = (isset( $author_data['id'] ) && $author_data['id'] != "") ? absint( sanitize_text_field( $author_data['id'] ) ) : get_current_user_id();
-                    }
-                }
-                $options = array(
-                    'columns_count'             => $columns_count,
-                    'view_type'                 => $view_type,
-                    'border_radius'             => $ays_images_b_radius,
-                    'admin_pagination'          => $ays_admin_pagination,
-                    'hover_zoom'                => $ays_gpg_hover_zoom,
-                    'hover_zoom_animation_speed'=> $hover_zoom_animation_speed,
-                    'hover_animation_speed'     => $hover_animation_speed,
-                    'hover_scale_animation_speed'=> $hover_scale_animation_speed,
-                    'hover_scale'               => $ays_gpg_hover_scale,
-                    'show_gal_title'            => $ays_show_gal_title,
-                    //'show_gal_desc'             => $ays_show_gal_desc,
-                    "images_hover_effect"       => $images_hover_effect,
-                    "hover_dir_aware"           => $hover_dir_aware,
-                    "images_border"             => $ays_images_border,
-                    "images_border_width"       => $ays_images_b_width,
-                    "images_border_style"       => $ays_images_b_style,
-                    "images_border_color"       => $ays_images_b_color,
-                    "hover_effect"              => $hover_effect,
-                    "img_load_effect"           => $img_load_effect,
-                    "gallery_img_position"      => $gallery_img_position,
-                    "hover_opacity"             => $hover_opacity,
-                    "hover_color"               => $hover_color,
-                    "image_sizes"               => $image_sizes,
-                    "lightbox_color"            => $lightbox_color,
-                    "images_orderby"            => $images_orderby,
-                    "hover_icon"                => $hover_icon,
-                    "show_title"                => $show_title,
-                    "show_title_on"             => $show_title_on,
-                    "title_position"            => $title_position,
-                    "show_with_date"            => $show_with_date,
-                    "images_distance"           => $images_distance,
-                    "images_loading"            => $ays_images_loading,
-                    "redirect_url_tab"          => $gpg_redirect_url_tab,
-                    "gallery_loader"            => $ays_gpg_loader,
-                    "gallery_loader_text_value" => $gallery_loader_text_value,
-                    "hover_icon_size"           => $ays_hover_icon_size,
-                    "thumbnail_title_size"      => $ays_gpg_thumbnail_title_size,
-                    "thumb_height_mobile"       => $thumb_height_mobile,
-                    "thumb_height_desktop"      => $thumb_height_desktop,
-                    "enable_light_box"          => $enable_light_box,
-                    "enable_search_img"         => $enable_search_img,
-                    "ays_filter_cat"            => $ays_filter_cat,
-                    "filter_thubnail_opt"       => $ays_gpg_filter_thubnail_opt,
-                    "ordering_asc_desc"         => $ays_gpg_ordering_asc_desc,
-                    "custom_class"              => $custom_class,
-                    "resp_width"                => $gpg_resp_width,
-                    "height_width_ratio"        => $gpg_height_width_ratio,
-                    "enable_rtl_direction"      => $gpg_enable_rtl,
-                    "ays_gallery_title_color"   => $ays_gallery_title_color,
-                    "ays_gallery_desc_color"    => $ays_gallery_desc_color,
-                    "ays_gpg_title_color"       => $ays_gpg_title_color,
-                    "ays_gpg_filter_cat_anim"   => $ays_gpg_filter_cat_anim,
-                    "link_on_whole_img"         => $link_on_whole_img,
-                    "create_date"               => $gpg_create_date,
-                    "author"                    => $author,
-                    'gpg_create_author'         => $gpg_create_author,
-                    "gallery_loader_custom_gif" => $gallery_loader_custom_gif,
-                    "gallery_loader_custom_gif_width" => $gallery_loader_custom_gif_width,
-                );
-                $lightbox_options = array(
-                    "lightbox_counter"          => $ays_lightbox_counter,
-                    "lightbox_autoplay"         => $ays_lightbox_autoplay,
-                    "lb_pause"                  => $ays_lg_pause,
-                    "lb_show_caption"           => $ays_lg_show_caption,
-                    "filter_lightbox_opt"       => $ays_gpg_filter_lightbox_opt,
-                    "lb_keypress"               => $ays_gpg_lg_keypress,
-                    "lb_esckey"                 => $ays_gpg_lg_esckey,
-                    
-                );
-                $submit_type = (isset($data['submit_type'])) ?  $data['submit_type'] : '';
-                if( $id == null ){
-                    $gallery_result = $wpdb->insert(
-                        $gallery_table,
-                        array(
-                            "title"             => $title,
-                            "description"       => $description,
-                            "images"            => $image_paths,
-                            "images_titles"     => $image_titles,
-                            "images_descs"      => $image_descriptions,
-                            "images_alts"       => $image_alts,
-                            "images_urls"       => $image_external_urls,
-                            "categories_id"     => $image_categories,
-                            "width"             => $width,
-                            "height"            => $height,
-                            "options"           => json_encode($options),
-                            "lightbox_options"  => json_encode($lightbox_options),
-                            "custom_css"        => $custom_css,
-                            "images_dates"      => $images_dates,
-                            "images_ids"        => $image_ids
-                        ),
-                        array( "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%d", "%d", "%s", "%s", "%s", "%s", "%s" )
+            $author = ( isset($data['ays_gpg_author']) && $data['ays_gpg_author'] != "" ) ? stripcslashes( sanitize_text_field( $data['ays_gpg_author'] ) ) : '';
+
+            // Change the author of the current gallery
+            $gpg_create_author = ( isset($data['ays_gallery_create_author']) && $data['ays_gallery_create_author'] != "" ) ? absint( sanitize_text_field( $data['ays_gallery_create_author'] ) ) : '';
+            if ( $gpg_create_author != "" && $gpg_create_author > 0 ) {
+                $user = get_userdata($gpg_create_author);
+                if ( ! is_null( $user ) && $user ) {
+                    $gpg_author = array(
+                        'id' => $user->ID."",
+                        'name' => $user->data->display_name
                     );
-                    $message = "created";
+
+                    $author = json_encode($gpg_author, JSON_UNESCAPED_SLASHES);
+                } else {
+                    $author_data = json_decode($author, true);
+                    $gpg_create_author = (isset( $author_data['id'] ) && $author_data['id'] != "") ? absint( sanitize_text_field( $author_data['id'] ) ) : get_current_user_id();
+                }
+            }
+            $options = array(
+                'columns_count'             => $columns_count,
+                'view_type'                 => $view_type,
+                'border_radius'             => $ays_images_b_radius,
+                'admin_pagination'          => $ays_admin_pagination,
+                'hover_zoom'                => $ays_gpg_hover_zoom,
+                'hover_zoom_animation_speed'=> $hover_zoom_animation_speed,
+                'hover_animation_speed'     => $hover_animation_speed,
+                'hover_scale_animation_speed'=> $hover_scale_animation_speed,
+                'hover_scale'               => $ays_gpg_hover_scale,
+                'show_gal_title'            => $ays_show_gal_title,
+                //'show_gal_desc'             => $ays_show_gal_desc,
+                "images_hover_effect"       => $images_hover_effect,
+                "hover_dir_aware"           => $hover_dir_aware,
+                "images_border"             => $ays_images_border,
+                "images_border_width"       => $ays_images_b_width,
+                "images_border_style"       => $ays_images_b_style,
+                "images_border_color"       => $ays_images_b_color,
+                "hover_effect"              => $hover_effect,
+                "img_load_effect"           => $img_load_effect,
+                "gallery_img_position"      => $gallery_img_position,
+                "hover_opacity"             => $hover_opacity,
+                "hover_color"               => $hover_color,
+                "image_sizes"               => $image_sizes,
+                "lightbox_color"            => $lightbox_color,
+                "images_orderby"            => $images_orderby,
+                "hover_icon"                => $hover_icon,
+                "show_title"                => $show_title,
+                "show_title_on"             => $show_title_on,
+                "title_position"            => $title_position,
+                "show_with_date"            => $show_with_date,
+                "images_distance"           => $images_distance,
+                "images_loading"            => $ays_images_loading,
+                "redirect_url_tab"          => $gpg_redirect_url_tab,
+                "gallery_loader"            => $ays_gpg_loader,
+                "gallery_loader_text_value" => $gallery_loader_text_value,
+                "hover_icon_size"           => $ays_hover_icon_size,
+                "thumbnail_title_size"      => $ays_gpg_thumbnail_title_size,
+                "thumb_height_mobile"       => $thumb_height_mobile,
+                "thumb_height_desktop"      => $thumb_height_desktop,
+                "enable_light_box"          => $enable_light_box,
+                "enable_search_img"         => $enable_search_img,
+                "ays_filter_cat"            => $ays_filter_cat,
+                "filter_thubnail_opt"       => $ays_gpg_filter_thubnail_opt,
+                "ordering_asc_desc"         => $ays_gpg_ordering_asc_desc,
+                "custom_class"              => $custom_class,
+                "resp_width"                => $gpg_resp_width,
+                "height_width_ratio"        => $gpg_height_width_ratio,
+                "enable_rtl_direction"      => $gpg_enable_rtl,
+                "ays_gallery_title_color"   => $ays_gallery_title_color,
+                "ays_gallery_desc_color"    => $ays_gallery_desc_color,
+                "ays_gpg_title_color"       => $ays_gpg_title_color,
+                "ays_gpg_filter_cat_anim"   => $ays_gpg_filter_cat_anim,
+                "link_on_whole_img"         => $link_on_whole_img,
+                "create_date"               => $gpg_create_date,
+                "author"                    => $author,
+                'gpg_create_author'         => $gpg_create_author,
+                "gallery_loader_custom_gif" => $gallery_loader_custom_gif,
+                "gallery_loader_custom_gif_width" => $gallery_loader_custom_gif_width,
+            );
+            $lightbox_options = array(
+                "lightbox_counter"          => $ays_lightbox_counter,
+                "lightbox_autoplay"         => $ays_lightbox_autoplay,
+                "lb_pause"                  => $ays_lg_pause,
+                "lb_show_caption"           => $ays_lg_show_caption,
+                "filter_lightbox_opt"       => $ays_gpg_filter_lightbox_opt,
+                "lb_keypress"               => $ays_gpg_lg_keypress,
+                "lb_esckey"                 => $ays_gpg_lg_esckey,
+                
+            );
+            $submit_type = (isset($data['submit_type'])) ?  $data['submit_type'] : '';
+            if( $id == null ){
+                $gallery_result = $wpdb->insert(
+                    $gallery_table,
+                    array(
+                        "title"             => $title,
+                        "description"       => $description,
+                        "images"            => $image_paths,
+                        "images_titles"     => $image_titles,
+                        "images_descs"      => $image_descriptions,
+                        "images_alts"       => $image_alts,
+                        "images_urls"       => $image_external_urls,
+                        "categories_id"     => $image_categories,
+                        "width"             => $width,
+                        "height"            => $height,
+                        "options"           => json_encode($options),
+                        "lightbox_options"  => json_encode($lightbox_options),
+                        "custom_css"        => $custom_css,
+                        "images_dates"      => $images_dates,
+                        "images_ids"        => $image_ids
+                    ),
+                    array( "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%d", "%d", "%s", "%s", "%s", "%s", "%s" )
+                );
+                $message = "created";
+            }else{
+                $gallery_result = $wpdb->update(
+                    $gallery_table,
+                    array(
+                        "title"             => $title,
+                        "description"       => $description,
+                        "images"            => $image_paths,
+                        "images_titles"     => $image_titles,
+                        "images_descs"      => $image_descriptions,
+                        "images_alts"       => $image_alts,
+                        "images_urls"       => $image_external_urls,
+                        "categories_id"     => $image_categories,
+                        "width"             => $width,
+                        "height"            => $height,
+                        "options"           => json_encode($options),
+                        "lightbox_options"  => json_encode($lightbox_options),
+                        "custom_css"        => $custom_css,
+                        "images_dates"      => $images_dates,
+                        "images_ids"        => $image_ids
+                    ),
+                    array( "id" => $id ),
+                    array( "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%d", "%d", "%s", "%s", "%s", "%s", "%s" ),
+                    array( "%d" )
+                );
+                $message = "updated";
+            }
+            $ays_gpg_tab = isset($data['ays_gpg_settings_tab']) ? $data['ays_gpg_settings_tab'] : 'tab1';
+            if( $gallery_result >= 0 ){
+                if($submit_type == ''){
+                    $url = esc_url_raw( remove_query_arg(["action", "gallery"]  ) ) . "&status=" . $message . "&type=success";
+                    wp_redirect( $url );
+                    exit();
                 }else{
-                    $gallery_result = $wpdb->update(
-                        $gallery_table,
-                        array(
-                            "title"             => $title,
-                            "description"       => $description,
-                            "images"            => $image_paths,
-                            "images_titles"     => $image_titles,
-                            "images_descs"      => $image_descriptions,
-                            "images_alts"       => $image_alts,
-                            "images_urls"       => $image_external_urls,
-                            "categories_id"     => $image_categories,
-                            "width"             => $width,
-                            "height"            => $height,
-                            "options"           => json_encode($options),
-                            "lightbox_options"  => json_encode($lightbox_options),
-                            "custom_css"        => $custom_css,
-                            "images_dates"      => $images_dates,
-                            "images_ids"        => $images_ids
-                        ),
-                        array( "id" => $id ),
-                        array( "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%d", "%d", "%s", "%s", "%s", "%s", "%s" ),
-                        array( "%d" )
-                    );
-                    $message = "updated";
-                }
-                $ays_gpg_tab = isset($data['ays_gpg_settings_tab']) ? $data['ays_gpg_settings_tab'] : 'tab1';
-                if( $gallery_result >= 0 ){
-                    if($submit_type == ''){
-                        $url = esc_url_raw( remove_query_arg(["action", "gallery"]  ) ) . "&status=" . $message . "&type=success";
-                        wp_redirect( $url );
-                        exit();
+                    if($id == null){
+                        $url = esc_url_raw( add_query_arg( array(
+                            "action"                => "edit",
+                            "gallery"               => $wpdb->insert_id,
+                            "ays_gpg_settings_tab"  => $ays_gpg_tab,
+                            "status"                => $message
+                        ) ) );
                     }else{
-                        if($id == null){
-                           $url = esc_url_raw( add_query_arg( array(
-                               "action"                => "edit",
-                               "gallery"               => $wpdb->insert_id,
-                               "ays_gpg_settings_tab"  => $ays_gpg_tab,
-                               "status"                => $message
-                           ) ) );
-                        }else{
-                           $url = esc_url_raw( remove_query_arg(false) ) . '&ays_gpg_settings_tab='.$ays_gpg_tab.'&status=' . $message;
-                        }
-
-                        wp_redirect( $url );
-                        exit();
+                        $url = esc_url_raw( remove_query_arg(false) ) . '&ays_gpg_settings_tab='.$ays_gpg_tab.'&status=' . $message;
                     }
+
+                    wp_redirect( $url );
+                    exit();
                 }
+            }
         }
     }
 
@@ -539,6 +549,7 @@ class Galleries_List_Table extends WP_List_Table{
      * @return string
      */
     function column_image( $item ) {
+        error_log("column_image IN");
         global $wpdb;
         $gallery_images = isset($item['images']) && $item['images'] != "" ? explode('***', $item['images']) : array();
         $gallery_image  = "";
@@ -579,6 +590,7 @@ class Galleries_List_Table extends WP_List_Table{
     }    
 
     function column_title( $item ) {
+        error_log("column_title IN");
         $delete_nonce = wp_create_nonce( $this->plugin_name . "-delete-gallery" );
         $duplicate_nonce = wp_create_nonce( $this->plugin_name . "-duplicate-gallery" );
         $gallery_title = esc_attr(stripcslashes($item['title']));
@@ -600,6 +612,7 @@ class Galleries_List_Table extends WP_List_Table{
     }
 
     function column_shortcode( $item ) {
+        error_log("column_shortcode IN");
         return sprintf('<div class="ays-gpg-shortcode-container">
                     <div class="ays-gpg-copy-image" data-bs-toggle="tooltip" title="'. esc_html(__('Click to copy',$this->plugin_name)).'">
                             <img src="'. esc_url(AYS_GPG_ADMIN_URL) . '/images/icons/copy-image.svg">

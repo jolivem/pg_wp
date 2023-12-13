@@ -806,35 +806,13 @@
                         '                   </div>' +
                         '               </div>' + 
                         '               <div class="ays_image_attr_item_cat">' +
-                            '               <div class="ays_image_attr_item_parent">' +
-                            '                   <div class="ays_image_attr_item">' +
-                        '                   <label>Title'+
-                        '                    <a class="ays_help" data-toggle="tooltip" title="'+ays_title_tooltip+'">'+
-                        '                       <i class="fas fa-info-circle"></i>'+
-                        '                    </a></label>' +
-                        '                   <input class="ays_img_title" type="text" name="ays-image-title[]" value="'+(attachment[i].title)+'" placeholder="Image title"/>' +
-                        '               </div>' +
-                        '               <div class="ays_image_attr_item">' +
-                        '                   <label>Alt'+
-                        '                    <a class="ays_help" data-toggle="tooltip" title="'+ays_alt_tooltip+'">'+
-                        '                       <i class="fas fa-info-circle"></i>'+
-                        '                    </a></label>' +
-                        '                   <input class="ays_img_alt" type="text" name="ays-image-alt[]" value="'+(attachment[i].alt)+'" placeholder="Image alt"/>' +
-                        '               </div>' +
-                        '               <div class="ays_image_attr_item">' +
-                        '                   <label>Description'+
-                        '                    <a class="ays_help" data-toggle="tooltip" title="'+ays_desc_tooltip+'">'+
-                        '                       <i class="fas fa-info-circle"></i>'+
-                        '                    </a></label>' +
-                        '                   <input class="ays_img_desc" type="text" name="ays-image-description[]" value="'+(attachment[i].description)+'" placeholder="Image description"/>' +
-                        '               </div>' +
-                        // '               <div class="ays_image_attr_item">' +
-                        // '                   <label>URL'+
-                        // '                    <a class="ays_help" data-toggle="tooltip" title="'+ays_url_tooltip+'">'+
-                        // '                       <i class="fas fa-info-circle"></i>'+
-                        // '                    </a></label>' +
-                        // '                   <input class="ays_img_url" type="url" name="ays-image-url[]" placeholder="URL"/>' +
-                        // '               </div>' +
+                        '               <div class="ays_image_attr_item_parent">' +
+                        '                   <div>Title: <b>'+(attachment[i].title)+'</b>' +
+                        '                       <input type="hidden" class="ays_img_title" type="text" name="ays-image-title[]" value="'+(attachment[i].title)+'" placeholder="Image title"/>' +
+                        '                   </div>' +
+                        '                   <div>Description: <b>'+(attachment[i].description)+'</b>' +
+                        '                       <input type="hidden" class="ays_img_desc" type="text" name="ays-image-description[]" value="'+(attachment[i].description)+'" placeholder="Image description"/>' +
+                        '                   </div>' +
                         '               </div>' +
                         '               <div class="ays_image_cat">' +
                         '                   <label>Image Category'+

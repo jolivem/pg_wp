@@ -164,7 +164,7 @@ class Gallery_Photo_Gallery_Public {
         }
         //echo "options galery = ".$gallery['options'];
         //echo "urls galery = ".$gallery['images_urls'];
-        echo "ids galery = ".$gallery['images_ids'];
+        //echo "ids galery = ".$gallery['images_ids'];
         /*
          * Gallery global settings
          */
@@ -244,12 +244,12 @@ class Gallery_Photo_Gallery_Public {
          */
         $columns            = (!isset($gallery_options['columns_count'])) ? 3 : $gallery_options['columns_count'];
         $view               = $gallery_options['view_type'];
-        $images             = explode( "***", $gallery["images"]        );
-        $image_titles       = explode( "***", $gallery["images_titles"] );
-        $image_descs        = explode( "***", $gallery["images_descs"]  );
-        $image_alts         = explode( "***", $gallery["images_alts"]   );
-        $image_urls         = explode( "***", $gallery["images_urls"]   );
-        $image_ids          = explode( "***", $gallery["images_ids"]   );
+        // $images             = explode( "***", $gallery["images"]        );
+        // $image_titles       = explode( "***", $gallery["images_titles"] );
+        // $image_descs        = explode( "***", $gallery["images_descs"]  );
+        // $image_alts         = explode( "***", $gallery["images_alts"]   );
+        // $image_urls         = explode( "***", $gallery["images_urls"]   );
+        // $image_ids          = explode( "***", $gallery["images_ids"]   );
         // $images_categories  = explode( "***", $gallery["categories_id"] );
         if($columns == null || $columns == 0){
             $columns = 3;
@@ -313,111 +313,57 @@ class Gallery_Photo_Gallery_Public {
             
             if($ays_images_hover_dir_aware == "slide"){
                 $ays_hover_dir_aware_js .= "
-                $(document).find('$gallery_item_class').hover(function(e){
-                                var ays_x = e.pageX - this.offsetLeft;
-                                var ays_y = e.pageY - this.offsetTop;
-                                var ays_edge = ays_closestEdge(ays_x,ays_y,this.clientWidth, this.clientHeight);
-                                var ays_overlay = $(this).find('.ays_hover_mask');
-                                var ays_hover_dir = ays_getDirectionKey(e, e.currentTarget);
-                                switch(ays_edge) {
-                                     case 'top':
-                                        ays_overlay.css('display', 'flex');
-                                        ays_overlay.css('animation', 'slideInDown .3s');$hover_zoom_In
-                                     break;
-                                     case 'right':
-                                        ays_overlay.css('display', 'flex');
-                                        ays_overlay.css('animation', 'slideInRight .3s');$hover_zoom_In
-                                     break;
-                                     case 'bottom':
-                                        ays_overlay.css('display', 'flex');
-                                        ays_overlay.css('animation', 'slideInUp .3s');$hover_zoom_In
-                                     break;
-                                     case 'left':
-                                        ays_overlay.css('display', 'flex');
-                                        ays_overlay.css('animation', 'slideInLeft .3s');$hover_zoom_In
-                                     break;
-                                }
-                            },
-                           function(e){
-                                var ays_x = e.pageX - this.offsetLeft;
-                                var ays_y = e.pageY - this.offsetTop;
-                                var ays_edge = ays_closestEdge(ays_x,ays_y,this.clientWidth, this.clientHeight);
-                                var ays_overlay = $(this).find('.ays_hover_mask');
-                                var ays_hover_dir = ays_getDirectionKey(e, e.currentTarget);
-                                    switch(ays_edge) {
-                                 case 'top':
-                                    ays_overlay.css('animation', 'slideOutUp .3s');$hover_zoom_Out
-                                    setTimeout( function(){ ays_overlay.css('display', 'none');}, 250);
-                                 break;
-                                 case 'right':
-                                    ays_overlay.css('animation', 'slideOutRight .3s');$hover_zoom_Out
-                                    setTimeout( function(){ ays_overlay.css('display', 'none');}, 250);
-                                 break;
-                                 case 'bottom':
-                                    ays_overlay.css('animation', 'slideOutDown .3s');$hover_zoom_Out
-                                    setTimeout( function(){ ays_overlay.css('display', 'none');}, 250);
-                                 break;
-                                 case 'left':
-                                    ays_overlay.css('animation', 'slideOutLeft .3s');$hover_zoom_Out
-                                    setTimeout( function(){ ays_overlay.css('display', 'none'); }, 250);
-                                 break;
-                            }
-                        });";
+                    $(document).find('$gallery_item_class').hover(function(e){
+                        var ays_x = e.pageX - this.offsetLeft;
+                        var ays_y = e.pageY - this.offsetTop;
+                        var ays_edge = ays_closestEdge(ays_x,ays_y,this.clientWidth, this.clientHeight);
+                        var ays_overlay = $(this).find('.ays_hover_mask');
+                        var ays_hover_dir = ays_getDirectionKey(e, e.currentTarget);
+                        switch(ays_edge) {
+                            case 'top':
+                                ays_overlay.css('display', 'flex');
+                                ays_overlay.css('animation', 'slideInDown .3s');$hover_zoom_In
+                                break;
+                            case 'right':
+                                ays_overlay.css('display', 'flex');
+                                ays_overlay.css('animation', 'slideInRight .3s');$hover_zoom_In
+                                break;
+                            case 'bottom':
+                                ays_overlay.css('display', 'flex');
+                                ays_overlay.css('animation', 'slideInUp .3s');$hover_zoom_In
+                                break;
+                            case 'left':
+                                ays_overlay.css('display', 'flex');
+                                ays_overlay.css('animation', 'slideInLeft .3s');$hover_zoom_In
+                                break;
+                        }
+                    },
+                    function(e){
+                        var ays_x = e.pageX - this.offsetLeft;
+                        var ays_y = e.pageY - this.offsetTop;
+                        var ays_edge = ays_closestEdge(ays_x,ays_y,this.clientWidth, this.clientHeight);
+                        var ays_overlay = $(this).find('.ays_hover_mask');
+                        var ays_hover_dir = ays_getDirectionKey(e, e.currentTarget);
+                        switch(ays_edge) {
+                            case 'top':
+                            ays_overlay.css('animation', 'slideOutUp .3s');$hover_zoom_Out
+                            setTimeout( function(){ ays_overlay.css('display', 'none');}, 250);
+                            break;
+                            case 'right':
+                            ays_overlay.css('animation', 'slideOutRight .3s');$hover_zoom_Out
+                            setTimeout( function(){ ays_overlay.css('display', 'none');}, 250);
+                            break;
+                            case 'bottom':
+                            ays_overlay.css('animation', 'slideOutDown .3s');$hover_zoom_Out
+                            setTimeout( function(){ ays_overlay.css('display', 'none');}, 250);
+                            break;
+                            case 'left':
+                            ays_overlay.css('animation', 'slideOutLeft .3s');$hover_zoom_Out
+                            setTimeout( function(){ ays_overlay.css('display', 'none'); }, 250);
+                            break;
+                        }
+                    });";
             }
-            // elseif($ays_images_hover_dir_aware == "rotate3d"){
-            //     $ays_hover_dir_aware_js .= "
-            //                 $(document).find('$gallery_item_class').hover(function(e){
-            //                     var ays_x = e.pageX - this.offsetLeft;
-            //                     var ays_y = e.pageY - this.offsetTop;
-            //                     var ays_edge = ays_closestEdge(ays_x,ays_y,this.clientWidth, this.clientHeight);
-            //                     var ays_overlay = $(this).find('div.ays_hover_mask');
-            //                     var ays_hover_dir = ays_getDirectionKey(e, e.currentTarget);
-            //                             switch(ays_edge) {
-            //                          case 'top':
-            //                             ays_overlay.css('display', 'flex');
-            //                             ays_overlay.attr('class', 'ays_hover_mask animated in-top');$hover_zoom_In
-            //                          break;
-            //                          case 'right':
-            //                             ays_overlay.css('display', 'flex');
-            //                             ays_overlay.attr('class', 'ays_hover_mask animated in-right');$hover_zoom_In
-            //                          break;
-            //                          case 'bottom':
-            //                             ays_overlay.css('display', 'flex');
-            //                             ays_overlay.attr('class', 'ays_hover_mask animated in-bottom');$hover_zoom_In
-            //                          break;
-            //                          case 'left':
-            //                             ays_overlay.css('display', 'flex');
-            //                             ays_overlay.attr('class', 'ays_hover_mask animated in-left');$hover_zoom_In
-            //                          break;
-            //                     }
-
-            //                 },
-            //                function(e){
-            //                     var ays_x = e.pageX - this.offsetLeft;
-            //                     var ays_y = e.pageY - this.offsetTop;
-            //                     var ays_edge = ays_closestEdge(ays_x,ays_y,this.clientWidth, this.clientHeight);
-            //                     var ays_overlay = $(this).find('div.ays_hover_mask');
-            //                     var ays_hover_dir = ays_getDirectionKey(e, e.currentTarget);
-            //                         switch(ays_edge) {
-            //                      case 'top':
-            //                         ays_overlay.attr('class', 'ays_hover_mask animated out-top');$hover_zoom_Out
-            //                         setTimeout( function(){ ays_overlay.css('opacity', '0');}, 350);
-            //                      break;
-            //                      case 'right':
-            //                         ays_overlay.attr('class', 'ays_hover_mask animated out-right');$hover_zoom_Out
-            //                         setTimeout( function(){ ays_overlay.css('opacity', '0');}, 350);
-            //                      break;
-            //                      case 'bottom':
-            //                         ays_overlay.attr('class', 'ays_hover_mask animated out-bottom');$hover_zoom_Out
-            //                         setTimeout( function(){ ays_overlay.css('opacity', '0');}, 350);
-            //                      break;
-            //                      case 'left':
-            //                         ays_overlay.attr('class', 'ays_hover_mask animated out-left');$hover_zoom_Out
-            //                         setTimeout( function(){ ays_overlay.css('opacity', '0'); }, 570);
-            //                      break;
-            //                 }
-            //             });";
-            // }
         }
 
         $ays_images_all_loaded = '';
@@ -686,7 +632,6 @@ class Gallery_Photo_Gallery_Public {
                 })(jQuery);
         </script>
         <style>
-            
             $ays_images_lazy_loader_css
             
             .ays_gallery_container_".$id." {
@@ -707,8 +652,8 @@ class Gallery_Photo_Gallery_Public {
             .gpg_loader_".$id." {
                 $ays_gal_loader_display;
             }
-            
         </style>";
+
         if($ays_images_border === "on"){
             $show_images_with_border = "border: ".$ays_images_border_width."px ".$ays_images_border_style." ".$ays_images_border_color.";";
             $show_mosaic_border_js = "setTimeout(function(){
@@ -1127,7 +1072,7 @@ class Gallery_Photo_Gallery_Public {
             })(jQuery);
         </script>";
         return $gallery_view;
-    }
+    } // end ays_show_galery()
 
     public function ays_gallery_replace_message_variables($content, $data){
         foreach($data as $variable => $value){
@@ -1312,7 +1257,7 @@ class Gallery_Photo_Gallery_Public {
         $image_alts         = explode( "***", $gallery["images_alts"]   );
         $image_urls         = explode( "***", $gallery["images_urls"]   );
         $image_ids          = explode( "***", $gallery["images_ids"]    );
-        echo "coucou ids = ".$image_ids[0];
+        //echo "coucou ids = ".$image_ids[0];
         $images_categories  = isset($gallery["categories_id"]) && $show_filter_cat == 'on' ? explode( "***", $gallery["categories_id"] ) : array();        
         
         $gallery_options['enable_light_box'] = isset($gallery_options['enable_light_box']) ? $gallery_options['enable_light_box'] : "off";
@@ -1482,6 +1427,7 @@ class Gallery_Photo_Gallery_Public {
                 $imgs_cat_id = array_merge($img_cat_id, $imgs_cat_id);
             }
             if(strpos(trim($img, "https:"), $this_site_path) !== false){ 
+                error_log("COUCOU IN");
                 $query = "SELECT * FROM `".$wpdb->prefix."posts` WHERE `post_type` = 'attachment' AND `guid` = '".$img."'";
                 $result_img =  $wpdb->get_results( $query, "ARRAY_A" );
                 if(!empty($result_img)){
@@ -1909,7 +1855,7 @@ class Gallery_Photo_Gallery_Public {
                                 </div>";
                         $ays_data_sub_html = " data-sub-html='.ays_caption_wrap' ";
                     }
-                    //MJO
+                    //MJO TODO remove console.log
                     $gallery_view .= "<div class='ays_masonry_grid-item ays_masonry_item_".$id." ays_count_views' data-src='" . $images[$key] . "' data-desc='" . $image_titles[$key] ." ". $image_alts[$key] ." ". $image_descs[$key] ."' ".$ays_data_sub_html.">
                                 <img src='". $current_image ."' alt='".$image_alts[$key]."' style='box-shadow: none;' onload='console.log(\"ID=".$image_ids[$key]."\")'>
                                 <div id='lmap-".$id."' class='ays_vignette_div' style='width: 50px; height: 50px;'></div>
@@ -2376,7 +2322,8 @@ class Gallery_Photo_Gallery_Public {
         $gallery_view = trim(str_replace(array("\n", "\r"), '', $gallery_view));
         $gallery_view = trim(preg_replace('/\s+/', ' ', $gallery_view));
         return $gallery_view;
-    }
+    
+    } // end ays_get_gallery_content()
 
     private function array_split($array, $pieces) {
         if ($pieces < 2)
