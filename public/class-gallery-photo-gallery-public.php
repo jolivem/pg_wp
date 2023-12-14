@@ -1246,13 +1246,11 @@ class Gallery_Photo_Gallery_Public {
         $columns            = (!isset($gallery_options['columns_count'])) ? 3 : $gallery_options['columns_count'];
         $view               = $gallery_options['view_type'];
         // $images             = explode( "***", $gallery["images"]        );
-        // $image_titles       = explode( "***", $gallery["images_titles"] );
         // $image_descs        = explode( "***", $gallery["images_descs"]  );
         // $image_alts         = explode( "***", $gallery["images_alts"]   );
         //$image_urls         = explode( "***", $gallery["images_urls"]   );
         $image_ids          = explode( "***", $gallery["images_ids"]    );
         // error_log("images: ".print_r($images, true));
-        // error_log("image_titles: ".print_r($image_titles, true));
         // error_log("image_descs: ".print_r($image_descs, true));
         // error_log("image_alts: ".print_r($image_alts, true));
         
@@ -1260,6 +1258,7 @@ class Gallery_Photo_Gallery_Public {
         $image_titles = array();
         $image_descs = array();
         $image_alts = array();
+        $image_dates = array();
         //$image_urls2 = array();
 
         // $img_title = $result_img[0]['post_title'];
@@ -1268,6 +1267,7 @@ class Gallery_Photo_Gallery_Public {
         // $img_url = $result_img[0]['guid'];
         // $img_date = $result_img[0]['post_date'];
 
+        // Prepare $image_titles, $image_descs, $images and $image_dates
         for( $iid = 0; $iid < count($image_ids); $iid++ ){
             error_log("image_ids[iid]: ".$image_ids[$iid]);
             $query = "SELECT post_title,post_content,post_excerpt,guid,post_date FROM `".$wpdb->prefix."posts` WHERE `id` = '".$image_ids[$iid]."'";
@@ -1280,6 +1280,7 @@ class Gallery_Photo_Gallery_Public {
                 array_push($image_descs, $result[0]['post_content']);
                 //array_push($image_urls2, $result[0]['guid']);
                 array_push($images, $result[0]['guid']);
+                array_push($image_dates, $result[0]['post_date']);
 
                 $query = "SELECT meta_value FROM `".$wpdb->prefix."postmeta` WHERE `meta_key` = '_wp_attachment_image_alt' AND `post_id` = '".$image_ids[$iid]."'";
                 //error_log("query: ".$query);
@@ -1299,10 +1300,10 @@ class Gallery_Photo_Gallery_Public {
         error_log("image_titles: ".print_r($image_titles, true));
         error_log("image_descs: ".print_r($image_descs, true));
         error_log("image_alts: ".print_r($image_alts, true));
+        error_log("image_dates: ".print_r($image_dates, true));
 
         //TODO tests when there is not title or no description,...
 
-        //echo "coucou ids = ".$image_ids[0];
         $images_categories  = isset($gallery["categories_id"]) && $show_filter_cat == 'on' ? explode( "***", $gallery["categories_id"] ) : array();        
         
         $gallery_options['enable_light_box'] = isset($gallery_options['enable_light_box']) ? $gallery_options['enable_light_box'] : "off";
@@ -1345,21 +1346,22 @@ class Gallery_Photo_Gallery_Public {
                 $column_width = 100 / $columns;
                 break;
         }
-        if($gallery["images_dates"] == '' || $gallery["images_dates"] == null){
-            $image_dates = array();
-            for($i=0; $i < count($images); $i++){
-                $image_dates[] = time();
-            }
-        }else{
-            $image_dates = explode( "***", $gallery["images_dates"]  );
-        }
+
+        // if($gallery["images_dates"] == '' || $gallery["images_dates"] == null){
+        //     $image_dates = array();
+        //     for($i=0; $i < count($images); $i++){
+        //         $image_dates[] = time();
+        //     }
+        // }else{
+        //     $image_dates = explode( "***", $gallery["images_dates"]  );
+        // }
         
-        if($image_dates == ''){
-            $image_dates = array();
-            for($i=0; $i < count($images); $i++){
-                $image_dates[] = time();
-            }
-        }
+        // if($image_dates == ''){
+        //     $image_dates = array();
+        //     for($i=0; $i < count($images); $i++){
+        //         $image_dates[] = time();
+        //     }
+        // }
         
         switch($ays_hover_icon){
             case 'none':

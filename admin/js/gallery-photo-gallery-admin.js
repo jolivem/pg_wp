@@ -752,6 +752,7 @@
             $(document).find("#ays-gpg-form")[0].submit();
         }
 
+        // Select and add new images to the gallery
         function openMediaUploader_forMultiple(e,element){
             e.preventDefault();
             //console.log("openMediaUploader_forMultiple IN")
@@ -784,10 +785,6 @@
                 for(let i=0; i<attachment.length; i++){
                     let accordion = $(document).find('ul.ays-accordion'),
                     accordion_el = $(document).find('ul.ays-accordion li'),
-                    ays_title_tooltip = $(document).find("#ays_image_lang_title").val(),
-                    ays_alt_tooltip = $(document).find("#ays_image_lang_alt").val(),
-                    ays_desc_tooltip = $(document).find("#ays_image_lang_desc").val(),
-                    ays_url_tooltip = $(document).find("#ays_image_lang_url").val(),
                     ays_img_cat_tooltip = $(document).find("#ays_image_cat").val(),
                     accordion_el_length = accordion_el.length;
                     if(accordion.length > 1){
@@ -948,7 +945,10 @@
             },450);
         });
 
+        /////////////////////
         // LIVE PREVIEW
+        /////////////////////
+
         $(document).on('click', '.ays_gallery_live_preview', function(){
             
             $(document.body).css('overflow', 'hidden');
@@ -986,8 +986,8 @@
                 $images_path = $(document).find('input[name="ays-image-path[]"]'),
                 $images_id = $(document).find('input[name="ays-image-id[]"]'),
                 $images_title = $(document).find('input[name="ays-image-title[]"]'),
-                $images_desc = $(document).find('input[name="ays-image-description[]"]'),
-                $images_alt = $(document).find('input[name="ays-image-alt[]"]'),
+                //$images_desc = $(document).find('input[name="ays-image-description[]"]'),
+                //$images_alt = $(document).find('input[name="ays-image-alt[]"]'),
                 //$images_url = "",$(document).find('input[name="ays-image-url[]"]'), TODO remove
                 $hover_effect = 'pulse_gpg',//$(document).find('#gallery_img_hover_simple').val(),
                 $hover_out_effect, $image_dates = $(document).find('.ays_img_date'),

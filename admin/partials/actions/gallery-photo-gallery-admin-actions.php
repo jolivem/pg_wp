@@ -449,22 +449,20 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
             else:
                 // Gallery id NOT NULL
                 error_log("^^^^^^^^^^^^^^ id is not null: ".$id);
-                // echo "title=".$gallery["images_titles"]; empty
                 // echo "url=".$gallery["images_urls"]; empty
                 // echo "dates=".$gallery["images_dates"]; with date
-                $images = explode( "***", $gallery["images"] );
-                //$images_titles = explode( "***", $gallery["images_titles"] );
+                //$images = explode( "***", $gallery["images"] );
                 // $images_descriptions = explode( "***", $gallery["images_descs"] );
                 // $images_alts = explode( "***", $gallery["images_alts"] );
                 // $images_urls = explode( "***", $gallery["images_urls"] );
                 // $images_dates = explode( "***", $gallery["images_dates"] );
                  $images_ids = explode( "***", $gallery["images_ids"] );
                 error_log("images_ids: ".print_r($images_ids, true));//TODO
-                error_log("#-# images: ".print_r($images, true));//TODO
+                //error_log("#-# images: ".print_r($images, true));//TODO
 
                 $gal_cat_ids = isset($gallery['categories_id']) && $gallery['categories_id'] != '' ? explode( "***", $gallery["categories_id"] ) : array();
                 if($admin_pagination != "all"){
-                    $pages = intval(ceil(count($images)/$admin_pagination));
+                    $pages = intval(ceil(count($images_ids)/$admin_pagination));
                     $qanak = 0;
                     if(isset($_COOKIE['ays_gpg_page_tab_free'])){
                         $ays_page_cookie = explode("_", $_COOKIE['ays_gpg_page_tab_free']);
@@ -484,7 +482,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
             
             <?php
                 //error_log("admin_pagination=".$admin_pagination);//TODO
-                for ($key = $qanak, $j = 0; $key < count($images); $key++, $j++ ) {
+                for ($key = $qanak, $j = 0; $key < count($images_ids); $key++, $j++ ) {
                     if($j >= $admin_pagination){
                         $qanak = $key;
                         break;
@@ -494,14 +492,16 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                     $result_img =  $wpdb->get_results( $query, "ARRAY_A" );
                     if (!empty($result_img)) {
 
+                        $img_id = $result_img[0]['ID'];
+                        $image = $result_img[0]['guid'];
 
-                        $img_thmb_src = wp_get_attachment_image_src($result_img[0]['ID'],  'thumbnail');
+                        $img_thmb_src = wp_get_attachment_image_src($img_id,  'thumbnail');
                         if($img_thmb_src === false){
-                            $img_thmb_src = $images[$key];
+                            $img_thmb_src = $image;
                         }else{
                             $img_thmb_src = !empty($img_thmb_src) ? $img_thmb_src[0] : $image_no_photo;
                         }
-                        $img_id = $result_img[0]['ID'];
+                        
                         $img_title = $result_img[0]['post_title'];
                         $img_description = $result_img[0]['post_content'];
                         $img_caption = $result_img[0]['post_excerpt'];
@@ -511,9 +511,9 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
 
                         $img_thmb_html = !empty($img_thmb_src) ? '<img class="ays_ays_img" style="background-image:none;" src="'.$img_thmb_src.'">' : '<img class="ays_ays_img">';
                         ?>
-                        <!-- TOTO id NOT NULL GALLERY -->
+                        <!-- id NOT NULL GALLERY -->
                         <li class="ays-accordion_li">
-                            <input type="hidden" name="ays-image-path[]" value="<?php echo $images[$key]; ?>">
+                            <input type="hidden" name="ays-image-path[]" value="<?php echo $image; ?>">
                             <input type="hidden" name="ays-image-id[]" value="<?php echo $img_id; ?>">
                             <div class="ays-image-attributes">
                                 <div class='ays_image_div'>                      
@@ -572,11 +572,12 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
             <ul class="ays-accordion">
             <?php                    
                 //echo "images=".$images[0];
-                foreach ( $images as $key => $image ) {
+                foreach ( $images_ids as $key => $id ) {
                     error_log( "key=".$key);
-                    error_log( "image=".$image);
-                    error_log( "wpdb->prefix=".$wpdb->prefix);
-                    $query = "SELECT * FROM `".$wpdb->prefix."posts` WHERE `id` = '".$images_ids[$key]."'";
+                    error_log( "id=".$id);
+                    //error_log( "wpdb->prefix=".$wpdb->prefix);
+                    $query = "SELECT * FROM `".$wpdb->prefix."posts` WHERE `id` = '".$id."'";
+                    error_log( "query=".$query);
                     $result_img =  $wpdb->get_results( $query, "ARRAY_A" );
                     //error_log("#########images: ".print_r($result_img, true));
                     //error_log("#########images: ".print_r($result_img, true));
@@ -585,15 +586,18 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                     // error_log("#########this_site_path: ".$this_site_path);
                     if (!empty($result_img)) {
 
+                        $image = $result_img[0]['guid'];
+                        $img_id = $result_img[0]['ID'];
 
-                        $img_thmb_src = wp_get_attachment_image_src($result_img[0]['ID'],  'thumbnail');
+                        $img_thmb_src = wp_get_attachment_image_src($img_id,  'thumbnail');
                         if($img_thmb_src === false){
-                            $img_thmb_src = $images[$key];
+                            //$img_thmb_src = $images[$key]; TODO test several thumnails, what about img_thmb_src[0]
+                            $img_thmb_src = $image;
                         }else{
                             $img_thmb_src = !empty($img_thmb_src) ? $img_thmb_src[0] : $image_no_photo;
                         }
                         //TODO test: remove the photo from the media gallery and check the galleries
-                        $img_id = $result_img[0]['ID'];
+                        
                         $img_title = $result_img[0]['post_title'];
                         $img_description = $result_img[0]['post_content'];
                         $img_caption = $result_img[0]['post_excerpt'];

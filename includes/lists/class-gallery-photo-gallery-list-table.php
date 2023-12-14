@@ -95,22 +95,22 @@ class Galleries_List_Table extends WP_List_Table{
                 $image_paths            = (isset($data["ays-image-path"]) && $data["ays-image-path"] != '') ? sanitize_text_field( implode( "***", array_filter($data["ays-image-path"] )) ) : '';
                 $image_ids              = (isset($data["ays-image-id"]) && $data["ays-image-id"] != '') ? sanitize_text_field( implode( "***", array_filter($data["ays-image-id"] )) ) : '';
                 //error_log("TODO image id:".$image_ids);
-                $image_titles           = (isset($data["ays-image-title"]) && $data["ays-image-title"] != '') ? stripslashes(sanitize_text_field( implode( "***", $data["ays-image-title"] ) ) ) : '';
-                $image_alts             = (isset($data["ays-image-alt"]) && $data["ays-image-alt"] != '') ? stripslashes (sanitize_text_field( implode( "***", $data["ays-image-alt"] ) ) ) : '';
-                $image_descriptions     = (isset($data["ays-image-description"]) && $data["ays-image-description"] != '') ? stripslashes(sanitize_text_field( implode( "***", $data["ays-image-description"] ) ) ) : '';
+                // $image_titles           = (isset($data["ays-image-title"]) && $data["ays-image-title"] != '') ? stripslashes(sanitize_text_field( implode( "***", $data["ays-image-title"] ) ) ) : '';
+                //$image_alts             = (isset($data["ays-image-alt"]) && $data["ays-image-alt"] != '') ? stripslashes (sanitize_text_field( implode( "***", $data["ays-image-alt"] ) ) ) : '';
+                //$image_descriptions     = (isset($data["ays-image-description"]) && $data["ays-image-description"] != '') ? stripslashes(sanitize_text_field( implode( "***", $data["ays-image-description"] ) ) ) : '';
                 // TODO: image_external_urls can be removed
-                $image_external_urls    = (isset($data["ays-image-url"]) && $data["ays-image-url"] != '') ? sanitize_text_field( implode( "***", $data["ays-image-url"] ) ) : '';
-                $images_dates           = (isset($data['ays-image-date']) &&  $data['ays-image-date'] != '') ? sanitize_text_field( implode( "***", $data['ays-image-date'] ) ) : '';
+                //$image_external_urls    = (isset($data["ays-image-url"]) && $data["ays-image-url"] != '') ? sanitize_text_field( implode( "***", $data["ays-image-url"] ) ) : '';
+                //$images_dates           = (isset($data['ays-image-date']) &&  $data['ays-image-date'] != '') ? sanitize_text_field( implode( "***", $data['ays-image-date'] ) ) : '';
                 $image_categories       = (isset($data['ays_gallery_category']) && $data['ays_gallery_category'] != '') ? sanitize_text_field( implode('***', $data['ays_gallery_category']) ) : '';
             }
             else {
                 error_log("add_or_edit_gallery() NO images ! ");
                 $image_paths            = '';
                 $image_ids              = '';
-                $image_titles           = '';
-                $image_alts             = '';
-                $image_descriptions     = '';
-                $image_external_urls    = ''; //TODO remove
+                //$image_titles           = '';
+                //$image_alts             = '';
+                //$image_descriptions     = '';
+                //$image_external_urls    = ''; //TODO remove
                 $images_dates           = '';
                 $image_categories       = '';
             }
@@ -313,18 +313,18 @@ class Galleries_List_Table extends WP_List_Table{
                     array(
                         "title"             => $title,
                         "description"       => $description,
-                        "images"            => $image_paths,
-                        "images_titles"     => $image_titles,
-                        "images_descs"      => $image_descriptions,
-                        "images_alts"       => $image_alts,
-                        "images_urls"       => $image_external_urls, //TODO remove
+                        "images"            => '',
+                        "images_titles"     => '',
+                        "images_descs"      => '',
+                        "images_alts"       => '', //TODO remove
+                        "images_urls"       => '', //TODO remove
                         "categories_id"     => $image_categories,
                         "width"             => $width,
                         "height"            => $height,
                         "options"           => json_encode($options),
                         "lightbox_options"  => json_encode($lightbox_options),
                         "custom_css"        => $custom_css,
-                        "images_dates"      => $images_dates,
+                        "images_dates"      => '',
                         "images_ids"        => $image_ids
                     ),
                     array( "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%d", "%d", "%s", "%s", "%s", "%s", "%s" )
@@ -337,17 +337,17 @@ class Galleries_List_Table extends WP_List_Table{
                         "title"             => $title,
                         "description"       => $description,
                         "images"            => $image_paths,
-                        "images_titles"     => $image_titles,
-                        "images_descs"      => $image_descriptions,
-                        "images_alts"       => $image_alts,
-                        "images_urls"       => $image_external_urls, //TODO remove
+                        "images_titles"     => '',
+                        "images_descs"      => '',
+                        "images_alts"       => '', //TODO remove
+                        "images_urls"       => '', //TODO remove
                         "categories_id"     => $image_categories,
                         "width"             => $width,
                         "height"            => $height,
                         "options"           => json_encode($options),
                         "lightbox_options"  => json_encode($lightbox_options),
                         "custom_css"        => $custom_css,
-                        "images_dates"      => $images_dates,
+                        "images_dates"      => '',
                         "images_ids"        => $image_ids
                     ),
                     array( "id" => $id ),
@@ -426,7 +426,7 @@ class Galleries_List_Table extends WP_List_Table{
     public function no_items() {
         echo __( "There are no galleries yet.", $this->plugin_name );
     }
-
+    //TODO test duplicate
     public function duplicate_galleries( $id ){
         global $wpdb;
         $galleries_table = $wpdb->prefix."ays_gallery";
@@ -453,12 +453,12 @@ class Galleries_List_Table extends WP_List_Table{
             array(
                 'title'             => "Copy - ".sanitize_text_field($gallery['title']),
                 'description'       => sanitize_text_field($gallery['description']),
-                'images'            => sanitize_text_field($gallery['images']),
-                'images_titles'     => sanitize_text_field($gallery['images_titles']),
-                'images_descs'      => sanitize_text_field($gallery['images_descs']),
-                'images_alts'       => sanitize_text_field($gallery['images_alts']),
-                'images_urls'       => sanitize_text_field($gallery['images_urls']),
-                'images_dates'      => sanitize_text_field($gallery['images_dates']),
+                'images'            => '',
+                'images_titles'     => '',
+                'images_descs'      => '',
+                'images_alts'       => '',
+                'images_urls'       => '',
+                'images_dates'      => '',
                 'width'             => sanitize_text_field($gallery['width']),
                 'height'            => sanitize_text_field($gallery['height']),
                 'options'           => json_encode($options),
