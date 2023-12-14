@@ -76,19 +76,28 @@ function ays_closestEdge(x,y,w,h) {
     }
 }
 
-/*function ays_add_vignette_to_gallery( mapId) {
+function ays_on_img_loaded(lmapId,file,lat,lon,zoom) {
+    console.log("ays_on_img_loaded IN", {lmapId,file,lat,lon,zoom});
+    //console.log("ays_on_img_loaded IN");
+    ays_add_vignette_to_gallery( lmapId,file,lat,lon,zoom);
+}
+
+var geojson={};
+function ays_add_vignette_to_gallery( lmapId,jfile,lat,lon,zoom) {
 
     // get country
-    console.log("country", country);
-    let zoom = country.zoom;
-    let file = ays_vars.base_url + "assets/geojson/" + country.file;
+    //console.log("country", country);
+    //let zoom = country.zoom;
+    let file = ays_vars.base_url + "assets/geojson/" + jfile;
 
-    let select = document.getElementsByClassName("compat-field-vignette")[0];
+    //let select = document.getElementsByClassName("compat-field-vignette")[0];
     //console.log("select", select);
     //console.log("BABAauRHUM", parent);
     // select.appendChild(p);
-    var elemDiv = document.createElement('td');
-    elemDiv.id = mapId;
+    // var elemDiv = document.createElement('td');
+    // elemDiv.id = lmapId;
+    var elemDiv = document.getElementById(lmapId);
+    console.log("BABAauRHUM", elemDiv);
     
     var props = {
         attributionControl: false,
@@ -117,16 +126,17 @@ function ays_closestEdge(x,y,w,h) {
     });
     
     // console.log("css:", css);
-    elemDiv.style.height = country.height;
-    elemDiv.style.width = country.width;
+    //elemDiv.style.height = country.height;
+    //elemDiv.style.width = country.width;
     elemDiv.style.backgroundColor = 'white';
     elemDiv.style.borderStyle = 'solid';
     elemDiv.style.borderWidth = 'thin';
     elemDiv.style.borderColor = 'lightgray';
-    select.appendChild(elemDiv);
+    //select.appendChild(elemDiv);
     
     var mark = new myIconClass ({iconUrl: ays_vars.base_url + 'assets/markpoint.png'});
-    lmap = L.map(mapId, props);
+    lmap = L.map(lmapId, props);
+    //console.log("css:", css);
     // Charger le fichier GeoJSON et l'ajouter à la carte
     fetch(file)  // Remplacez 'votre_fichier.geojson' par le chemin de votre fichier GeoJSON
         .then(response => response.json())
@@ -135,16 +145,17 @@ function ays_closestEdge(x,y,w,h) {
                 clickable: false,
                 style: geostyle
             }).addTo(lmap);
-            let lon = data.features[0].properties.geo_point_2d.lon;
-            let lat = data.features[0].properties.geo_point_2d.lat;
+            //let lon = data.features[0].properties.geo_point_2d.lon;
+            //let lat = data.features[0].properties.geo_point_2d.lat;
             let coord = [lat, lon];
-            //console.log("coord:", coord);
+            console.log("coord:", coord);
+            console.log("lmap:", lmap);
             lmap.setView(coord, zoom);
 
             var marker = L.marker(coord, {icon: mark}).addTo(lmap);
         });
 
-}*/
+}
 
 
 //Distance Formula

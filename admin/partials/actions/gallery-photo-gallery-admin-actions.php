@@ -1,4 +1,5 @@
 <?php
+//TODO fix nb of images per page, ex selected 25 -> count 5
 global $wpdb;
 if (!isset($_COOKIE['ays_gpg_page_tab_free'])) {
     setcookie('ays_gpg_page_tab_free', 'tab_0', time() + 3600);
