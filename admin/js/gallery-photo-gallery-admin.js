@@ -1821,8 +1821,8 @@
 
     $('.compat-field-longitude').on('focusout', ays_refresh_marker);
   
-    // leaflet map instance
-    var lmap; 
+    // leaflet map instance for admin page
+    var g_lmap; 
 
     function ays_refresh_marker() {
         let postId = document.getElementById("post_ID").value;
@@ -1833,14 +1833,14 @@
     }
 
     function ays_delete_markers() {
-        //console.log("lmap", lmap);
-        lmap?.eachLayer(function (layer) { 
+        //console.log("g_lmap", g_lmap);
+        g_lmap?.eachLayer(function (layer) { 
             //console.log("layer", layer);
             // find the layer with latlng
             if (layer._leaflet_id != undefined && layer._latlng != undefined) {
                 //console.log("FOUND IT !!!!");
                 //layer.setLatLng([newLat,newLon])
-                lmap.removeLayer(layer);
+                g_lmap.removeLayer(layer);
             } 
         });
     }
@@ -1848,7 +1848,7 @@
     function ays_add_marker_point( latitude, longitude) {
         let flat = parseFloat(latitude);
         let flon = parseFloat(longitude)
-        if (lmap != null && !isNaN(parseFloat(latitude)) && !isNaN(parseFloat(longitude))) {
+        if (g_lmap != null && !isNaN(parseFloat(latitude)) && !isNaN(parseFloat(longitude))) {
             var myIconClass = L.Icon.extend({
                 options: {
                     iconSize:     [4, 4],
@@ -1859,7 +1859,7 @@
             let coord = [flat.toString(), flon.toString()];
             //console.log("ays_add_marker_point coord:", coord);
             var mark = new myIconClass ({iconUrl: ays_vars.base_url + 'assets/markpoint.png'});
-            L.marker(coord, {icon: mark}).addTo(lmap);
+            L.marker(coord, {icon: mark}).addTo(g_lmap);
         }
 
     }
@@ -1876,10 +1876,10 @@
     function ays_remove_vignette( mapId) {
         let previous_map = document.getElementById(mapId);
         previous_map?.remove();
-        if (lmap && lmap.remove) {
-            lmap.off();
-            lmap.remove();
-            lmap = null;
+        if (g_lmap && g_lmap.remove) {
+            g_lmap.off();
+            g_lmap.remove();
+            g_lmap = null;
         }        
     }
 
@@ -1931,7 +1931,7 @@
         select.appendChild(elemDiv);
         
         //var mark = new myIconClass ({iconUrl: ays_vars.base_url + 'assets/markpoint.png'});
-        lmap = L.map(mapId, props);
+        g_lmap = L.map(mapId, props);
         // Charger le fichier GeoJSON et l'ajouter à la carte
         fetch(file)  // Remplacez 'votre_fichier.geojson' par le chemin de votre fichier GeoJSON
             .then(response => response.json())
@@ -1939,14 +1939,14 @@
                 L.geoJSON(data, {
                     clickable: false,
                     style: geostyle
-                }).addTo(lmap);
+                }).addTo(g_lmap);
                 let lon = data.features[0].properties.geo_point_2d.lon;
                 let lat = data.features[0].properties.geo_point_2d.lat;
                 let coord = [lat, lon];
                 console.log("coord:", coord);
-                lmap.setView(coord, zoom);
+                g_lmap.setView(coord, zoom);
 
-                //var marker = L.marker(coord, {icon: mark}).addTo(lmap);
+                //var marker = L.marker(coord, {icon: mark}).addTo(g_lmap);
             });
 
     }

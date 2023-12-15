@@ -76,15 +76,14 @@ function ays_closestEdge(x,y,w,h) {
     }
 }
 
-function ays_on_img_loaded(lmapId,file,lat,lon,zoom) {
-    console.log("ays_on_img_loaded IN", {lmapId,file,lat,lon,zoom});
-    //console.log("ays_on_img_loaded IN");
-    ays_add_vignette_to_gallery( lmapId,file,lat,lon,zoom);
-}
+
 
 var geojson={};
-function ays_add_vignette_to_gallery( lmapId,jfile,lat,lon,zoom) {
+//TODO do not load geojson if already loaded
 
+async function ays_add_vignette_to_image( lmapId,jfile,lat,lon,zoom) {
+
+    console.log("ays_add_vignette_to_image IN lmapId=", lmapId);
     // get country
     //console.log("country", country);
     //let zoom = country.zoom;
@@ -97,7 +96,7 @@ function ays_add_vignette_to_gallery( lmapId,jfile,lat,lon,zoom) {
     // var elemDiv = document.createElement('td');
     // elemDiv.id = lmapId;
     var elemDiv = document.getElementById(lmapId);
-    console.log("BABAauRHUM", elemDiv);
+    //console.log("ays_add_vignette_to_image", elemDiv);
     
     var props = {
         attributionControl: false,
@@ -113,7 +112,7 @@ function ays_add_vignette_to_gallery( lmapId,jfile,lat,lon,zoom) {
     };
 
     var geostyle = {
-        fillColor: 'yellow',
+        fillColor: 'lightgoldenrodyellow',
         //color: 'yellow',
         fillOpacity: 2,
         weight: 1
@@ -128,34 +127,38 @@ function ays_add_vignette_to_gallery( lmapId,jfile,lat,lon,zoom) {
     // console.log("css:", css);
     //elemDiv.style.height = country.height;
     //elemDiv.style.width = country.width;
-    elemDiv.style.backgroundColor = 'white';
-    elemDiv.style.borderStyle = 'solid';
-    elemDiv.style.borderWidth = 'thin';
-    elemDiv.style.borderColor = 'lightgray';
+    //elemDiv.style.backgroundColor = 'white';
+    elemDiv.style.background = 'transparent';
+    // elemDiv.style.borderStyle = 'solid';
+    // elemDiv.style.borderWidth = 'thin';
+    // elemDiv.style.borderColor = 'lightgray';
     //select.appendChild(elemDiv);
     
     var mark = new myIconClass ({iconUrl: ays_vars.base_url + 'assets/markpoint.png'});
-    lmap = L.map(lmapId, props);
+    
+    let lmap = L.map(lmapId, props);
+    //console.log("ays_add_vignette_to_image AA created lmap", {lmapId, lmap});
     //console.log("css:", css);
     // Charger le fichier GeoJSON et l'ajouter à la carte
-    fetch(file)  // Remplacez 'votre_fichier.geojson' par le chemin de votre fichier GeoJSON
-        .then(response => response.json())
-        .then(data => {
-            L.geoJSON(data, {
-                clickable: false,
-                style: geostyle
-            }).addTo(lmap);
-            //let lon = data.features[0].properties.geo_point_2d.lon;
-            //let lat = data.features[0].properties.geo_point_2d.lat;
-            let coord = [lat, lon];
-            console.log("coord:", coord);
-            console.log("lmap:", lmap);
-            lmap.setView(coord, zoom);
+    const response = await fetch(file);  // Use the 'await' keyword with 'fetch'
 
-            var marker = L.marker(coord, {icon: mark}).addTo(lmap);
-        });
+    //console.log("ays_add_vignette_to_image BB lmapId=", lmapId);
+    const data = await response.json();
 
-}
+    L.geoJSON(data, {
+        clickable: false,
+        style: geostyle
+    }).addTo(lmap);
+    let clon = data.features[0].properties.geo_point_2d.lon;
+    let clat = data.features[0].properties.geo_point_2d.lat;
+    let center = [clat, clon];
+    //console.log("coord:", coord);
+    //console.log("lmap:", lmap);
+    //console.log("ays_add_vignette_to_image DD setView", {lmapId, lmap});
+    lmap.setView(center, zoom);
+    let marker = [lat, lon];
+    L.marker(marker, {icon: mark}).addTo(lmap);
+ }
 
 
 //Distance Formula

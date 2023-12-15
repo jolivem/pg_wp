@@ -461,7 +461,7 @@ class Gallery_Photo_Gallery_Public {
                     }
                 }else{                        
                     img.onload = function(e){
-                        console.log('image loaded', e);
+                        console.log('YYYYY image loaded', e);
                         this_image.parent().find('.ays_image_loading_div').css({
                             'opacity': '1',
                             'animation-name': 'fadeOutDown',
@@ -1890,9 +1890,17 @@ class Gallery_Photo_Gallery_Public {
                         $geo_width = $image_countries[$key]['width'];
                         $zoom = $image_countries[$key]['zoom'];
                         $lmapId = "lmap-".$image_ids[$key]."";
-                        $gallery_view .="<img class='ays_gallery_image' src='". $current_image ."' alt='" . wp_unslash($image_alts[$key]) 
-                                      ."'  onload='ays_on_img_loaded(\"".esc_attr("$lmapId")."\",\"".esc_attr($file)."\",".$lat.",".$lon.",".$zoom.")'>";
-                        
+                        //$imgId = "img-".$image_ids[$key]."";
+                        // $gallery_view .="<img id='".$imgId."' class='ays_gallery_image' src='". $current_image ."' alt='" . wp_unslash($image_alts[$key]) 
+                        //               ."' data-lmapid='".$lmapId."' data-file='".$file."' data-lat='".$lat."' data-lon='".$lon."' data-zoom='".$zoom."'>";
+                         $gallery_view .="<img class='ays_gallery_image' src='". $current_image ."' alt='" . wp_unslash($image_alts[$key]) 
+                                       ."' onload='ays_add_vignette_to_image(\"".esc_attr("$lmapId")."\",\"".esc_attr($file)."\",".$lat.",".$lon.",".$zoom.")'>";
+                      
+                        // $gallery_view .= "<img class='ays_gallery_image' src='" . $current_image . "' alt='" . wp_unslash($image_alts[$key]) . 
+                        //                 "' onload='ays_add_vignette_to_image(\"".esc_attr("$lmapId")."\",\"".esc_attr($file)."\",".$lat.",".$lon. "," . $zoom . ")'>";
+                                      
+
+
                         $gallery_view .="<div id='".$lmapId."' class='overlay-image' style='width: ".$geo_width."; height: ".$geo_height.";'></div>";
                     }
 
