@@ -226,6 +226,7 @@ class Gallery_Photo_Gallery_Public {
         $images_hover_zoom = (!isset($gallery_options['hover_zoom']) ||
                               $gallery_options['hover_zoom'] == '' ||
                               $gallery_options['hover_zoom'] == false) ? 'no' : $gallery_options['hover_zoom'];
+
         //Hover zoom animation Speed
         $hover_zoom_animation_speed = (isset($gallery_options['hover_zoom_animation_speed']) && $gallery_options['hover_zoom_animation_speed'] !== '') ? abs($gallery_options['hover_zoom_animation_speed']) : 0.5;
         $images_loading = ($gallery_options['images_loading'] == '' || $gallery_options['images_loading'] == false) ? 'all_loaded' : $gallery_options['images_loading'];
@@ -1290,6 +1291,13 @@ class Gallery_Photo_Gallery_Public {
         $ays_gpg_lightbox_pause  = (!isset($gal_lightbox_options['lb_pause']) ||
                                     $gal_lightbox_options['lb_pause'] == '') ? "5000" : $gal_lightbox_options['lb_pause'];
 
+
+        $vignette_display = (!isset($gallery_options['vignette_display']) ||
+            $gallery_options['vignette_display'] == '' ||
+            $gallery_options['vignette_display'] == false) ? 'permanent' : $gallery_options['vignette_display'];
+        error_log("XX vignette_display=".$vignette_display);
+      
+      
         //Gallery image position
         $gallery_img_positions = (!isset($gallery_options['gallery_img_position']) ||
                                     $gallery_options['gallery_img_position'] === null ) ? "center-center" : $gallery_options['gallery_img_position'];
@@ -1341,13 +1349,6 @@ class Gallery_Photo_Gallery_Public {
         $image_descs = array();
         $image_alts = array();
         $image_dates = array();
-        //$image_urls2 = array();
-
-        // $img_title = $result_img[0]['post_title'];
-        // $img_description = $result_img[0]['post_content'];
-        // $img_caption = $result_img[0]['post_excerpt'];
-        // $img_url = $result_img[0]['guid'];
-        // $img_date = $result_img[0]['post_date'];
 
         // Prepare $image_titles, $image_descs, $images and $image_dates
         for( $iid = 0; $iid < count($image_ids); $iid++ ){
@@ -1445,7 +1446,7 @@ class Gallery_Photo_Gallery_Public {
                 $gallery_item_class = ".ays_gallery_container_".$id." div.ays_grid_column_".$id;
                 $gallery_view_selector = "#ays_grid_row_".$id;
                 $gallery_lightbox_selector = "ays_grid_column_".$id;
-                $column_width = (100 / $columns);
+                $column_width = (100 / $columns); // TODO take into account border size !!
                 break;
             case 'mosaic':
                 $gallery_item_class = ".ays_gallery_container_".$id." .ays_mosaic_column_item_".$id;
@@ -1719,7 +1720,7 @@ class Gallery_Photo_Gallery_Public {
                 $gallery_image_sizes = '';
                 $gallery_view .= "<div class='mosaic_".$id."' id='ays_mosaic_".$id."' style='clear:both;'>";
 
-                foreach ($images_new as $key => $mosaic_column){
+                foreach ($images_new as $key => $image){
                     if($show_title == 'on' && $image_titles[$key] != ''){
                         if($show_with_date == 'on'){
                             $ays_show_with_date = "<span>".date( "F d, Y", intval($image_dates[$key]))."</span>";
@@ -1768,7 +1769,7 @@ class Gallery_Photo_Gallery_Public {
                     if($images_loading == 'current_loaded'){
                         $current_image = '';
                     }else{
-                        $current_image = $mosaic_column;
+                        $current_image = $image;
                     }
 
                     $ays_caption = "";
@@ -1783,10 +1784,10 @@ class Gallery_Photo_Gallery_Public {
                         $ays_data_sub_html = " data-sub-html='.ays_caption_wrap' ";
                     }
 
-                    if (empty($mosaic_column)) {
+                    if (empty($image)) {
                         $wh_attr = '';
                     }else{
-                        $img_attr = getimagesize($mosaic_column);
+                        $img_attr = getimagesize($image);
                         $wh_attr = " width='".$img_attr[0]."' height='".$img_attr[1]."' ";
                     }
                     $gallery_view .= "<div class='item withImage ays_mosaic_column_item_".$id." ays_count_views' ".$wh_attr." data-src='" . $images[$key] . "' data-desc='" . $image_titles[$key] ." ". $image_alts[$key] ." ". $image_descs[$key] ."' ".$ays_data_sub_html.">";
@@ -1829,6 +1830,32 @@ class Gallery_Photo_Gallery_Public {
                     }else{
                         $images_cat_data_id = "";
                     }
+
+                    if($images_loading == 'current_loaded'){
+                        $current_image = '';
+                    }else{
+                        $current_image = $image;
+                    }
+
+                    $img_tag = "";
+                    $vignette_div = "";
+                    if ($image_countries[$key] == null) {
+                        $img_tag ="<img class='ays_gallery_image' src='". $current_image ."' alt='" . wp_unslash($image_alts[$key]) . "'>";
+                    }
+                    else {
+                        $lat = $image_latitudes[$key];
+                        $lon = $image_longitudes[$key];
+                        $file = $image_countries[$key]['file'];
+                        $geo_height = $image_countries[$key]['height'];
+                        $geo_width = $image_countries[$key]['width'];
+                        $zoom = $image_countries[$key]['zoom'];
+                        $lmapId = "lmap-".$image_ids[$key]."";
+                        //$imgId = "img-".$image_ids[$key]."";
+                        $img_tag ="<img class='ays_gallery_image' src='". $current_image ."' alt='" . wp_unslash($image_alts[$key]) 
+                                  ."' onload='ays_add_vignette_to_image(\"".esc_attr("$lmapId")."\",\"".esc_attr($file)."\",".$lat.",".$lon.",".$zoom.")'>";
+                                      
+                        $vignette_div ="<div id='".$lmapId."' class='overlay-image' style='width: ".$geo_width."; height: ".$geo_height.";'></div>";
+                    }
                     
                     $image_url = "";
                     // if($image_urls[$key] == ""){
@@ -1839,32 +1866,20 @@ class Gallery_Photo_Gallery_Public {
                     if($show_title_on == 'gallery_image'){
                         $hiconpos = ($show_title=='on')?" style='margin-bottom:40px;' ":"";
                         if($disable_lightbox){
-
-                        $show_title_in_hover = "<div class='ays_hover_mask animated'><div $hiconpos>".$hover_icon."</div></div> $ays_show_title ";
+                            $show_title_in_hover = "<div class='ays_hover_mask animated'>".$vignette_div."<div $hiconpos>".$hover_icon."</div></div> $ays_show_title ";
                         }else{
                             $show_title_in_hover = "<div class=''><div $hiconpos></div></div> $ays_show_title ";
                         }
                      }elseif($show_title_on == 'image_hover'){
                         if($disable_lightbox){
-
-                        $show_title_in_hover = "<div class='ays_hover_mask animated'>
-                            <div>".$hover_icon."</div>
-                            $ays_show_title 
-                        </div>";
+                            $show_title_in_hover = "<div class='ays_hover_mask animated'>".$vignette_div."
+                                <div>".$hover_icon."</div>$ays_show_title</div>";
                         }else{
-                            $show_title_in_hover = "<div class=''>
-                                 $ays_show_title 
-                            </div>";
+                            $show_title_in_hover = "<div class=''>$ays_show_title</div>";
                         }
                     }
 
                     // $show_title_in_hover = $disable_lightbox ? $show_title_in_hover : '';
-
-                    if($images_loading == 'current_loaded'){
-                        $current_image = '';
-                    }else{
-                        $current_image = $image;
-                    }
 
                     $ays_caption = "";
                     $ays_data_sub_html = "";
@@ -1879,29 +1894,10 @@ class Gallery_Photo_Gallery_Public {
                     }
                     $gallery_view .="<div class='ays_grid_column_".$id." ays_count_views' style='width: calc(".($column_width)."% - ".($images_distance)."px);' ".$images_cat_data_id." data-src='" . $images[$key] . "' data-desc='" . $image_titles[$key] ." ". $image_alts[$key] ." ". $image_descs[$key] ."' ".$ays_data_sub_html.">";
                         
-                    if ($image_countries[$key] == null) {
-                        $gallery_view .="<img class='ays_gallery_image' src='". $current_image ."' alt='" . wp_unslash($image_alts[$key]) . "'>";
-                    }
-                    else {
-                        $lat = $image_latitudes[$key];
-                        $lon = $image_longitudes[$key];
-                        $file = $image_countries[$key]['file'];
-                        $geo_height = $image_countries[$key]['height'];
-                        $geo_width = $image_countries[$key]['width'];
-                        $zoom = $image_countries[$key]['zoom'];
-                        $lmapId = "lmap-".$image_ids[$key]."";
-                        //$imgId = "img-".$image_ids[$key]."";
-                        // $gallery_view .="<img id='".$imgId."' class='ays_gallery_image' src='". $current_image ."' alt='" . wp_unslash($image_alts[$key]) 
-                        //               ."' data-lmapid='".$lmapId."' data-file='".$file."' data-lat='".$lat."' data-lon='".$lon."' data-zoom='".$zoom."'>";
-                         $gallery_view .="<img class='ays_gallery_image' src='". $current_image ."' alt='" . wp_unslash($image_alts[$key]) 
-                                       ."' onload='ays_add_vignette_to_image(\"".esc_attr("$lmapId")."\",\"".esc_attr($file)."\",".$lat.",".$lon.",".$zoom.")'>";
-                      
-                        // $gallery_view .= "<img class='ays_gallery_image' src='" . $current_image . "' alt='" . wp_unslash($image_alts[$key]) . 
-                        //                 "' onload='ays_add_vignette_to_image(\"".esc_attr("$lmapId")."\",\"".esc_attr($file)."\",".$lat.",".$lon. "," . $zoom . ")'>";
-                                      
-
-
-                        $gallery_view .="<div id='".$lmapId."' class='overlay-image' style='width: ".$geo_width."; height: ".$geo_height.";'></div>";
+                    $gallery_view .=$img_tag;
+                    if ($image_countries[$key] != null && $vignette_display == 'permanent' ) {
+                        // add the vignette div beside the image
+                        $gallery_view .=$vignette_div;
                     }
 
                     $gallery_view .="$ays_caption
@@ -1934,7 +1930,7 @@ class Gallery_Photo_Gallery_Public {
                     // }else{
                     //     $image_url = "<button type='button' data-url='".$image_urls[$key]."' class='ays_image_url'><i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_link'></i></button>";
                     // }
-                   if($show_title_on == 'gallery_image'){
+                    if($show_title_on == 'gallery_image'){
                         $hiconpos = ($show_title=='on')?" style='margin-bottom:40px;' ":"";
                         if($disable_lightbox){
 
@@ -1942,20 +1938,20 @@ class Gallery_Photo_Gallery_Public {
                         }else{
                             $show_title_in_hover = "<div class=''><div $hiconpos></div></div> $ays_show_title ";
                         }
-                     }elseif($show_title_on == 'image_hover'){
+                    }elseif($show_title_on == 'image_hover'){
                         if($disable_lightbox){
 
-                        $show_title_in_hover = "<div class='ays_hover_mask animated'>
-                            <div>".$hover_icon."</div>
-                            $ays_show_title 
-                        </div>";
+                            $show_title_in_hover = "<div class='ays_hover_mask animated'>
+                                <div>".$hover_icon."</div>
+                                $ays_show_title 
+                            </div>";
                         }else{
                             $show_title_in_hover = "<div class=''>
                                  $ays_show_title 
                             </div>";
                         }
                     }
-
+                    // TODO check that if lightbox is disabled, there is no hover
                     // $show_title_in_hover = $disable_lightbox ? $show_title_in_hover : '';
 
                     if($images_loading == 'current_loaded'){

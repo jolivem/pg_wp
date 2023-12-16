@@ -993,6 +993,7 @@
                 $hover_out_effect, $image_dates = $(document).find('.ays_img_date'),
                 $images_distance = $(document).find('input[name="ays-gpg-images-distance"]').val(),
                 $hover_zoom = $(document).find('input[name="ays_gpg_hover_zoom"]:checked').first().val(),
+                $vignette_display = $(document).find('input[name="ays_gpg_vignette_display"]:checked').first().val(),
                 $hover_opacity = $(document).find('.gpg_opacity_demo_val').val(),
                 $images_border_radius = $(document).find('input[name="ays-gpg-images-border-radius"]').val(),
                 $ays_images_hover_dir_aware = $(document).find('#gallery_img_hover_dir_aware').val(),

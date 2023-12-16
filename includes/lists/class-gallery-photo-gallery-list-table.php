@@ -143,6 +143,7 @@ class Galleries_List_Table extends WP_List_Table{
             $gpg_redirect_url_tab   = (isset($data['gpg_redirect_url_tab']) && $data['gpg_redirect_url_tab'] != '') ? sanitize_text_field( $data['gpg_redirect_url_tab'] ) : '_blank';
             $ays_admin_pagination   = (isset($data['ays_admin_pagination']) && $data['ays_admin_pagination'] != '') ? wp_unslash(sanitize_text_field( $data['ays_admin_pagination'] )) : '';
             $ays_gpg_hover_zoom     = (isset($data['ays_gpg_hover_zoom']) && $data['ays_gpg_hover_zoom'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_hover_zoom'] )) : '';
+            $vignette_display       = (isset($data['ays_gpg_vignette_display']) && $data['ays_gpg_vignette_display'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_vignette_display'] )) : '';
             //Hover zoom animation speed
             $hover_zoom_animation_speed = (isset($data['gpg_hover_zoom_animation_speed']) && $data['gpg_hover_zoom_animation_speed'] !== '') ? abs($data['gpg_hover_zoom_animation_speed']) : 0.5;
             //Hover animation speed
@@ -242,6 +243,7 @@ class Galleries_List_Table extends WP_List_Table{
                 'border_radius'             => $ays_images_b_radius,
                 'admin_pagination'          => $ays_admin_pagination,
                 'hover_zoom'                => $ays_gpg_hover_zoom,
+                'vignette_display'          => $vignette_display,
                 'hover_zoom_animation_speed'=> $hover_zoom_animation_speed,
                 'hover_animation_speed'     => $hover_animation_speed,
                 'hover_scale_animation_speed'=> $hover_scale_animation_speed,

@@ -26,6 +26,7 @@ $g_options = array(
     "border_radius"         => "0",
     "admin_pagination"      => "all",
     "hover_zoom"            => "no",
+    "vignette_display"      => "permanent",
     "show_gal_title"        => "on",
     //"show_gal_desc"         => "off",
     "images_hover_effect"   => "simple",
@@ -142,6 +143,10 @@ $admin_pagination = (!isset($gal_options['admin_pagination']) ||
 $ays_hover_zoom = (!isset($gal_options['hover_zoom']) ||
                    $gal_options['hover_zoom'] == null ||
                    $gal_options['hover_zoom'] == '') ? "no" : $gal_options['hover_zoom'];
+
+$ays_vignette_display = (!isset($gal_options['vignette_display']) ||
+                   $gal_options['vignette_display'] == null ||
+                   $gal_options['vignette_display'] == '') ? "permanent" : $gal_options['vignette_display'];
 
 //Hover zoom animation Speed
 $hover_zoom_animation_speed = (isset($gal_options['hover_zoom_animation_speed']) && $gal_options['hover_zoom_animation_speed'] !== '') ? abs($gal_options['hover_zoom_animation_speed']) : 0.5;
@@ -1219,6 +1224,24 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 </div>
             </div>
             <hr/>
+            <div class="form-group row">
+                <div class="col-sm-3">
+                    <label>
+                        <?php echo __("Vignette display", $this->plugin_name);?>
+                    </label>
+                </div>
+                <div class="col-sm-9">
+                    <div>
+                        <label class="ays_gpg_image_hover_icon ays_gpg_vignette_display"><?php echo __("Permanent ", $this->plugin_name); ?>
+                            <input name="ays_gpg_vignette_display" type="radio" value="permanent" <?php echo ($ays_vignette_display == "permanent") ? "checked" : ''; ?>>
+                        </label>
+                        <label class="ays_gpg_image_hover_icon ays_gpg_vignette_display"><?php echo __("When hover ", $this->plugin_name); ?>
+                            <input name="ays_gpg_vignette_display" type="radio" value="hover" <?php echo ($ays_vignette_display == "hover") ? "checked" : ''; ?>>
+                        </label>
+                    </div>                
+                </div>
+            </div>
+            <hr/>            
             <div class="form-group row">
                 <div class="col-sm-3">
                     <label>
