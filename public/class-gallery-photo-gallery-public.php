@@ -1205,6 +1205,165 @@ class Gallery_Photo_Gallery_Public {
         //return null; // Return null if the key is not found
     }
    
+    // $type = "masonry" or "grid" or mosaic
+    private function ays_add_images($view, $images_new, $show_title, $image_titles, $image_dates, 
+        $show_with_date, $image_descs, $image_alts, $image_ids, $id, $images_loading, $disable_lightbox, 
+        $show_title_on, $hover_icon, $ays_show_caption, $ays_images_loader, $images,
+        $image_countries, $image_latitudes, $image_longitudes, $images_categories, $images_distance,
+        $column_width, $vignette_display) {
+
+        $gallery_view = "";
+        if ($view == "masonry") {
+            $gallery_view .= "<div class='ays_masonry_grid' id='ays_masonry_grid_".$id."'><div class='ays_masonry_grid-sizer'></div>";
+        }
+        elseif ($view == "mosaic") {
+            $gallery_image_sizes = '';
+            $gallery_view .= "<div class='mosaic_".$id."' id='ays_mosaic_".$id."' style='clear:both;'>";
+        }
+        elseif ($view == "grid") {
+            $gallery_view .= "<div class='ays_grid_row' id='ays_grid_row_".$id."'>";
+        }
+
+        foreach($images_new as $key=>$image){
+            if($show_title == 'on' && $image_titles[$key] != ''){
+                if($show_with_date == 'on'){
+                    $ays_show_with_date = "<span>".date( "F d, Y", intval($image_dates[$key]))."</span>";
+                }else{
+                    $ays_show_with_date = "";
+                }
+                $ays_show_title = "<div class='ays_image_title'>
+                                        <span>".wp_unslash($image_titles[$key])."</span>
+                                        $ays_show_with_date
+                                        </div>";
+            }else{
+                $ays_show_title = '';
+            }
+
+            if (isset($images_categories[$key])) {
+                if($images_categories[$key] == ""){
+                    $images_cat_data_id = "";
+                }else{
+                    $img_cat_id = explode(',', $images_categories[$key]);                        
+                    $img_cat_ids = implode(" ", $img_cat_id);
+                    $images_cat_data_id = " data-cat='".wp_unslash($img_cat_ids)."' ";
+                }                        
+            }else{
+                $images_cat_data_id = "";
+            }
+
+            if($images_loading == 'current_loaded'){
+                $current_image = '';
+            }else{
+                $current_image = $image;
+            }
+
+            $img_tag = "";
+            $vignette_div = "";
+            if ($image_countries[$key] == null) {
+                $img_tag ="<img class='ays_gallery_image' src='". $current_image ."' alt='" . wp_unslash($image_alts[$key]) . "'>";
+            }
+            else {
+                $lat = $image_latitudes[$key];
+                $lon = $image_longitudes[$key];
+                $file = $image_countries[$key]['file'];
+                $geo_height = $image_countries[$key]['height'];
+                $geo_width = $image_countries[$key]['width'];
+                $zoom = $image_countries[$key]['zoom'];
+                $lmapId = "lmap-".$image_ids[$key]."";
+                //$imgId = "img-".$image_ids[$key]."";
+                $img_tag ="<img class='ays_gallery_image' src='". $current_image ."' alt='" . wp_unslash($image_alts[$key]) 
+                          ."' onload='ays_add_vignette_to_image(\"".esc_attr("$lmapId")."\",\"".esc_attr($file)."\",".$lat.",".$lon.",".$zoom.")'>";
+                              
+                $vignette_div ="<div id='".$lmapId."' class='overlay-image' style='width: ".$geo_width."; height: ".$geo_height.";'></div>";
+            }
+            
+            $image_url = "";
+            // if($image_urls[$key] == ""){
+            //     $image_url = "";
+            // }else{
+            //     $image_url = "<button type='button' data-url='".$image_urls[$key]."' class='ays_image_url'><i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_link'></i></button>";
+            // }
+            if($show_title_on == 'gallery_image'){
+                $hiconpos = ($show_title=='on')?" style='margin-bottom:40px;' ":"";
+                if($disable_lightbox){
+
+                    $show_title_in_hover = "<div class='ays_hover_mask animated'>".$vignette_div."<div $hiconpos>".$hover_icon."</div></div> $ays_show_title ";
+                }else{
+                    $show_title_in_hover = "<div class=''><div $hiconpos></div></div> $ays_show_title ";
+                }
+            }elseif($show_title_on == 'image_hover'){
+                if($disable_lightbox){
+
+                    $show_title_in_hover = "<div class='ays_hover_mask animated'>".$vignette_div."<div>".$hover_icon."</div>$ays_show_title</div>";
+                }else{
+                    if ($view == "mosaic") {                    
+                        $show_title_in_hover = "<div class=''><div></div>$ays_show_title </div>";
+                    }
+                    if ($view == "masonry" || $view == "grid") {                    
+                        $show_title_in_hover = "<div class=''>$ays_show_title </div>";
+                    }
+                }
+            }
+            // TODO check that if lightbox is disabled, there is no hover
+            // $show_title_in_hover = $disable_lightbox ? $show_title_in_hover : '';
+
+            $ays_caption = "";
+            $ays_data_sub_html = "";
+            if($ays_show_caption){
+                $ays_caption = "<div class='ays_caption_wrap'>
+                            <div class='ays_caption'>
+                                <h4>".$image_titles[$key]."</h4>
+                                <p>" . wp_unslash($image_descs[$key]) . "</p>
+                            </div>
+                        </div>";
+                $ays_data_sub_html = " data-sub-html='.ays_caption_wrap' ";
+            }
+     
+            $wh_attr = '';
+            if (!empty($image) && $view == "mosaic") {
+                $img_attr = getimagesize($image);
+                $wh_attr = " width='".$img_attr[0]."' height='".$img_attr[1]."' ";
+            }
+         
+            //MJO TODO remove console.log
+            if ($view == "mosaic") {
+                $gallery_view .= "<div class='item withImage ays_mosaic_column_item_".$id." ays_count_views' ".$wh_attr." data-src='" . $images[$key] . "' data-desc='" . $image_titles[$key] ." ". $image_alts[$key] ." ". $image_descs[$key] ."' ".$ays_data_sub_html.">";
+                $gallery_view .= "<img src='" . $current_image . "' alt='" . wp_unslash($image_alts[$key]) . "' />";
+            }
+            elseif ($view == "masonry") {
+                $gallery_view .= "<div class='ays_masonry_grid-item ays_masonry_item_".$id." ays_count_views' data-src='" . $images[$key] . "' data-desc='" . $image_titles[$key] ." ". $image_alts[$key] ." ". $image_descs[$key] ."' ".$ays_data_sub_html.">";
+                $gallery_view .= "<img src='". $current_image ."' alt='".$image_alts[$key]."' style='box-shadow: none;' onload='console.log(\"ID=".$image_ids[$key]."\")'>";
+            }
+            elseif ($view == "grid") {
+
+                $gallery_view .="<div class='ays_grid_column_".$id." ays_count_views' style='width: calc(".($column_width)."% - ".($images_distance)."px);' ".$images_cat_data_id." data-src='" . $images[$key] . "' data-desc='" . $image_titles[$key] ." ". $image_alts[$key] ." ". $image_descs[$key] ."' ".$ays_data_sub_html.">";
+                $gallery_view .=$img_tag;
+            }
+
+                        
+            //$gallery_view .=$img_tag;
+            if ($image_countries[$key] != null && $vignette_display == 'permanent' ) {
+                // add the vignette div beside the image
+                $gallery_view .=$vignette_div;
+            }
+
+            $gallery_view .= "<div id='lmap-".$id."' class='ays_vignette_div' style='width: 50px; height: 50px;'></div>
+                        $ays_caption
+                        <div class='ays_image_loading_div'>$ays_images_loader</div>
+                        $show_title_in_hover
+                        <a href='javascript:void(0);'></a>
+                    </div>";
+        }
+        if ($view == "mosaic") {
+            $gallery_view .= "</div><div style='clear:both;'></div>";
+        }
+        elseif ($view == "masonry" || $view == "grid") {
+            $gallery_view .= "</div>";
+        }
+
+        return $gallery_view;
+    }
+    
     protected function ays_get_gallery_content($gallery, $gallery_options, $gal_lightbox_options, $id){
         global $wpdb;
         error_log("ays_get_gallery_content IN");
@@ -1713,351 +1872,23 @@ class Gallery_Photo_Gallery_Public {
         }
         $gallery_view = "<div class='ays_gallery_container_".$id."' style='width: ".$ays_width."'>".$show_gallery_head.
             $show_gallery_filter_cat.$show_search_img;
+  
         
-        switch( $view ){
-            case "mosaic":
-                
-                $gallery_image_sizes = '';
-                $gallery_view .= "<div class='mosaic_".$id."' id='ays_mosaic_".$id."' style='clear:both;'>";
+        //BUILD HTML for all images
+        ///////////////////////////////
+        $gallery_view .= $this->ays_add_images($view, $images_new, $show_title, $image_titles, $image_dates, 
+            $show_with_date, $image_descs, $image_alts, $image_ids, $id, $images_loading, $disable_lightbox, 
+            $show_title_on, $hover_icon, $ays_show_caption, $ays_images_loader, $images,
+            $image_countries, $image_latitudes, $image_longitudes, $images_categories, $images_distance,
+            $column_width, $vignette_display);
+        error_log("gallery_view=".$gallery_view);
+        
+        ///////////////////////////////
 
-                foreach ($images_new as $key => $image){
-                    if($show_title == 'on' && $image_titles[$key] != ''){
-                        if($show_with_date == 'on'){
-                            $ays_show_with_date = "<span>".date( "F d, Y", intval($image_dates[$key]))."</span>";
-                        }else{
-                            $ays_show_with_date = "";
-                        }
-                        $ays_show_title = "<div class='ays_image_title'>
-                                                <span>".wp_unslash($image_titles[$key])."</span>
-                                                $ays_show_with_date
-                                             </div>";
-                    }else{
-                        $ays_show_title = '';
-                    }
-                    $image_url = "";
-                    // if($image_urls[$key] == ""){
-                        
-                    // }else{
-                    //     $image_url = "<button type='button' data-url='".$image_urls[$key]."' class='ays_image_url'><i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_link'></i></button>";
-                    // }
-                    
-                   if($show_title_on == 'gallery_image'){
-                        $hiconpos = ($show_title=='on')?" style='margin-bottom:40px;' ":"";
-                        if($disable_lightbox){
-                            $show_title_in_hover = "<div class='ays_hover_mask animated'><div $hiconpos>".$hover_icon."</div></div> $ays_show_title ";
-                        }else{
-                            $show_title_in_hover = "<div class=''><div $hiconpos></div></div> $ays_show_title ";
-                        }
-                    }elseif($show_title_on == 'image_hover'){
-                        if($disable_lightbox){
 
-                            $show_title_in_hover = "<div class='ays_hover_mask animated'>
-                                <div>".$hover_icon."</div>
-                                $ays_show_title 
-                                </div>";
-                        }else{
-                            $show_title_in_hover = "<div class=''>
-                                 <div></div>
-                                 $ays_show_title 
-                            </div>";
-                        }
-                    }
 
-                    
-                    // $show_title_in_hover = $disable_lightbox ? $show_title_in_hover : '';
 
-                    if($images_loading == 'current_loaded'){
-                        $current_image = '';
-                    }else{
-                        $current_image = $image;
-                    }
 
-                    $ays_caption = "";
-                    $ays_data_sub_html = "";
-                    if($ays_show_caption){
-                        $ays_caption = "<div class='ays_caption_wrap'>
-                                    <div class='ays_caption'>
-                                        <h4>".$image_titles[$key]."</h4>
-                                        <p>" . wp_unslash($image_descs[$key]) . "</p>
-                                    </div>
-                                </div>";
-                        $ays_data_sub_html = " data-sub-html='.ays_caption_wrap' ";
-                    }
-
-                    if (empty($image)) {
-                        $wh_attr = '';
-                    }else{
-                        $img_attr = getimagesize($image);
-                        $wh_attr = " width='".$img_attr[0]."' height='".$img_attr[1]."' ";
-                    }
-                    $gallery_view .= "<div class='item withImage ays_mosaic_column_item_".$id." ays_count_views' ".$wh_attr." data-src='" . $images[$key] . "' data-desc='" . $image_titles[$key] ." ". $image_alts[$key] ." ". $image_descs[$key] ."' ".$ays_data_sub_html.">";
-                         $gallery_view .= "<img src='" . $current_image . "' alt='" . wp_unslash($image_alts[$key]) . "' />
-                            <div id='lmap-".$id."' class='overlay-image' style='width: 50px; height: 50px;'></div>
-                            $ays_caption
-                            <div class='ays_image_loading_div'>$ays_images_loader</div>
-                             $show_title_in_hover
-                            <a href='javascript:void(0);'></a>
-                          </div>";
-                }
-                $gallery_view .= "
-                </div><div style='clear:both;'></div>";
-                break;
-            case "grid":
-                $gallery_view .= "<div class='ays_grid_row' id='ays_grid_row_".$id."'>";
-                foreach ($images_new as $key => $image){
-                    if($show_title == 'on' && $image_titles[$key] != ''){
-                        if($show_with_date == 'on'){
-                            $ays_show_with_date = "<span>".date( "F d, Y", intval($image_dates[$key]))."</span>";
-                        }else{
-                            $ays_show_with_date = "";
-                        }
-                        $ays_show_title = "<div class='ays_image_title'>
-                                                <span>".wp_unslash($image_titles[$key])."</span>
-                                                $ays_show_with_date
-                                             </div>";
-                    }else{
-                        $ays_show_title = '';
-                    }
-
-                    if (isset($images_categories[$key])) {
-                        if($images_categories[$key] == ""){
-                            $images_cat_data_id = "";
-                        }else{
-                            $img_cat_id = explode(',', $images_categories[$key]);                        
-                            $img_cat_ids = implode(" ", $img_cat_id);
-                            $images_cat_data_id = " data-cat='".wp_unslash($img_cat_ids)."' ";
-                        }                        
-                    }else{
-                        $images_cat_data_id = "";
-                    }
-
-                    if($images_loading == 'current_loaded'){
-                        $current_image = '';
-                    }else{
-                        $current_image = $image;
-                    }
-
-                    $img_tag = "";
-                    $vignette_div = "";
-                    if ($image_countries[$key] == null) {
-                        $img_tag ="<img class='ays_gallery_image' src='". $current_image ."' alt='" . wp_unslash($image_alts[$key]) . "'>";
-                    }
-                    else {
-                        $lat = $image_latitudes[$key];
-                        $lon = $image_longitudes[$key];
-                        $file = $image_countries[$key]['file'];
-                        $geo_height = $image_countries[$key]['height'];
-                        $geo_width = $image_countries[$key]['width'];
-                        $zoom = $image_countries[$key]['zoom'];
-                        $lmapId = "lmap-".$image_ids[$key]."";
-                        //$imgId = "img-".$image_ids[$key]."";
-                        $img_tag ="<img class='ays_gallery_image' src='". $current_image ."' alt='" . wp_unslash($image_alts[$key]) 
-                                  ."' onload='ays_add_vignette_to_image(\"".esc_attr("$lmapId")."\",\"".esc_attr($file)."\",".$lat.",".$lon.",".$zoom.")'>";
-                                      
-                        $vignette_div ="<div id='".$lmapId."' class='overlay-image' style='width: ".$geo_width."; height: ".$geo_height.";'></div>";
-                    }
-                    
-                    $image_url = "";
-                    // if($image_urls[$key] == ""){
-                    //     $image_url = "";
-                    // }else{
-                    //     $image_url = "<button type='button' data-url='".$image_urls[$key]."' class='ays_image_url'><i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_link'></i></button>";
-                    // }
-                    if($show_title_on == 'gallery_image'){
-                        $hiconpos = ($show_title=='on')?" style='margin-bottom:40px;' ":"";
-                        if($disable_lightbox){
-                            $show_title_in_hover = "<div class='ays_hover_mask animated'>".$vignette_div."<div $hiconpos>".$hover_icon."</div></div> $ays_show_title ";
-                        }else{
-                            $show_title_in_hover = "<div class=''><div $hiconpos></div></div> $ays_show_title ";
-                        }
-                     }elseif($show_title_on == 'image_hover'){
-                        if($disable_lightbox){
-                            $show_title_in_hover = "<div class='ays_hover_mask animated'>".$vignette_div."
-                                <div>".$hover_icon."</div>$ays_show_title</div>";
-                        }else{
-                            $show_title_in_hover = "<div class=''>$ays_show_title</div>";
-                        }
-                    }
-
-                    // $show_title_in_hover = $disable_lightbox ? $show_title_in_hover : '';
-
-                    $ays_caption = "";
-                    $ays_data_sub_html = "";
-                    if($ays_show_caption){
-                        $ays_caption = "<div class='ays_caption_wrap'>
-                                    <div class='ays_caption'>
-                                        <h4>".$image_titles[$key]."</h4>
-                                        <p>" . wp_unslash($image_descs[$key]) . "</p>
-                                    </div>
-                                </div>";
-                        $ays_data_sub_html = " data-sub-html='.ays_caption_wrap' ";
-                    }
-                    $gallery_view .="<div class='ays_grid_column_".$id." ays_count_views' style='width: calc(".($column_width)."% - ".($images_distance)."px);' ".$images_cat_data_id." data-src='" . $images[$key] . "' data-desc='" . $image_titles[$key] ." ". $image_alts[$key] ." ". $image_descs[$key] ."' ".$ays_data_sub_html.">";
-                        
-                    $gallery_view .=$img_tag;
-                    if ($image_countries[$key] != null && $vignette_display == 'permanent' ) {
-                        // add the vignette div beside the image
-                        $gallery_view .=$vignette_div;
-                    }
-
-                    $gallery_view .="$ays_caption
-                                    <div class='ays_image_loading_div'>$ays_images_loader</div>
-                                    $show_title_in_hover
-                                    <a href='javascript:void(0);'></a>
-                                </div>";
-                }
-                $gallery_view .= "</div>";
-                break;
-            case "masonry":
-                $gallery_view .= "<div class='ays_masonry_grid' id='ays_masonry_grid_".$id."'><div class='ays_masonry_grid-sizer'></div>";
-                foreach($images_new as $key=>$image){
-                    if($show_title == 'on' && $image_titles[$key] != ''){
-                        if($show_with_date == 'on'){
-                            $ays_show_with_date = "<span>".date( "F d, Y", intval($image_dates[$key]))."</span>";
-                        }else{
-                            $ays_show_with_date = "";
-                        }
-                        $ays_show_title = "<div class='ays_image_title'>
-                                                <span>".wp_unslash($image_titles[$key])."</span>
-                                                $ays_show_with_date
-                                             </div>";
-                    }else{
-                        $ays_show_title = '';
-                    }
-                    $image_url = "";
-                    // if($image_urls[$key] == ""){
-                    //     $image_url = "";
-                    // }else{
-                    //     $image_url = "<button type='button' data-url='".$image_urls[$key]."' class='ays_image_url'><i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_link'></i></button>";
-                    // }
-                    if($show_title_on == 'gallery_image'){
-                        $hiconpos = ($show_title=='on')?" style='margin-bottom:40px;' ":"";
-                        if($disable_lightbox){
-
-                            $show_title_in_hover = "<div class='ays_hover_mask animated'><div $hiconpos>".$hover_icon."</div></div> $ays_show_title ";
-                        }else{
-                            $show_title_in_hover = "<div class=''><div $hiconpos></div></div> $ays_show_title ";
-                        }
-                    }elseif($show_title_on == 'image_hover'){
-                        if($disable_lightbox){
-
-                            $show_title_in_hover = "<div class='ays_hover_mask animated'>
-                                <div>".$hover_icon."</div>
-                                $ays_show_title 
-                            </div>";
-                        }else{
-                            $show_title_in_hover = "<div class=''>
-                                 $ays_show_title 
-                            </div>";
-                        }
-                    }
-                    // TODO check that if lightbox is disabled, there is no hover
-                    // $show_title_in_hover = $disable_lightbox ? $show_title_in_hover : '';
-
-                    if($images_loading == 'current_loaded'){
-                        $current_image = '';
-                    }else{
-                        $current_image = $image;
-                    }
-                    
-                    $ays_caption = "";
-                    $ays_data_sub_html = "";
-                    if($ays_show_caption){
-                        $ays_caption = "<div class='ays_caption_wrap'>
-                                    <div class='ays_caption'>
-                                        <h4>".$image_titles[$key]."</h4>
-                                        <p>" . wp_unslash($image_descs[$key]) . "</p>
-                                    </div>
-                                </div>";
-                        $ays_data_sub_html = " data-sub-html='.ays_caption_wrap' ";
-                    }
-                    //MJO TODO remove console.log
-                    $gallery_view .= "<div class='ays_masonry_grid-item ays_masonry_item_".$id." ays_count_views' data-src='" . $images[$key] . "' data-desc='" . $image_titles[$key] ." ". $image_alts[$key] ." ". $image_descs[$key] ."' ".$ays_data_sub_html.">
-                                <img src='". $current_image ."' alt='".$image_alts[$key]."' style='box-shadow: none;' onload='console.log(\"ID=".$image_ids[$key]."\")'>
-                                <div id='lmap-".$id."' class='ays_vignette_div' style='width: 50px; height: 50px;'></div>
-                                $ays_caption
-                                <div class='ays_image_loading_div'>$ays_images_loader</div>
-                                $show_title_in_hover
-                                <a href='javascript:void(0);'></a>
-                            </div>";
-                }
-                $gallery_view .= "</div>";
-                break;
-            default:
-                $gallery_view .= "<div class='ays_grid_row' id='ays_grid_row_".$id."'>";
-                foreach ($images_new as $key => $image){
-                    if($show_title == 'on' && $image_titles[$key] != ''){
-                        if($show_with_date == 'on'){
-                            $ays_show_with_date = "<span>".date( "F d, Y", intval($image_dates[$key]))."</span>";
-                        }else{
-                            $ays_show_with_date = "";
-                        }
-                        $ays_show_title = "<div class='ays_image_title'>
-                                                <span>".wp_unslash($image_titles[$key])."</span>
-                                                $ays_show_with_date
-                                             </div>";
-                    }else{
-                        $ays_show_title = '';
-                    }
-                    $image_url = "";
-                    // if($image_urls[$key] == ""){
-                    //     $image_url = "";
-                    // }else{
-                    //     $image_url = "<button type='button' data-url='".$image_urls[$key]."' class='ays_image_url'><i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_link'></i></button>";
-                    // }
-                    if($show_title_on == 'gallery_image'){
-                        $hiconpos = ($show_title=='on')?" style='margin-bottom:40px;' ":"";
-                        if($disable_lightbox){
-
-                        $show_title_in_hover = "<div class='ays_hover_mask animated'><div $hiconpos>".$hover_icon."</div></div> $ays_show_title ";
-                        }else{ //if($image_url == ''){
-                            $show_title_in_hover = "<div class=''><div $hiconpos></div></div> $ays_show_title ";
-                        }
-                     }elseif($show_title_on == 'image_hover'){
-                        if($disable_lightbox){
-
-                        $show_title_in_hover = "<div class='ays_hover_mask animated'>
-                            <div>".$hover_icon."".$image_url."</div>
-                            $ays_show_title 
-                        </div>";
-                        }else {
-                            $show_title_in_hover = "<div class=''>
-                                 <div>".$image_url."</div>
-                                 $ays_show_title 
-                            </div>";
-                        }
-                     }
-                    
-                    // $show_title_in_hover = $disable_lightbox ? $show_title_in_hover : '';
-
-                    if($images_loading == 'current_loaded'){
-                        $current_image = '';
-                    }else{
-                        $current_image = $image;
-                    }
-
-                    $ays_caption = "";
-                    $ays_data_sub_html = "";
-                    if($ays_show_caption){
-                        $ays_caption = "<div class='ays_caption_wrap'>
-                                    <div class='ays_caption'>
-                                        <h4>".$image_titles[$key]."</h4>
-                                        <p>" . wp_unslash($image_descs[$key]) . "</p>
-                                    </div>
-                                </div>";
-                        $ays_data_sub_html = " data-sub-html='.ays_caption_wrap' ";
-                    }
-                    $gallery_view .="<div class='ays_grid_column_".$id."' style='width: calc(".($column_width)."% - ".($images_distance)."px);' data-src='" . $images[$key] . "' data-desc='" . $image_titles[$key] ." ". $image_alts[$key] ." ". $image_descs[$key] ."' ".$ays_data_sub_html.">
-                                    <img class='ays_gallery_image' src='" . $current_image . "' alt='" . wp_unslash($image_alts[$key]) . "'/>
-                                    $ays_caption
-                                    <div class='ays_image_loading_div'>$ays_images_loader</div>
-                                    $show_title_in_hover
-                                    <a href='javascript:void(0);'></a>
-                                </div>";
-                }
-                $gallery_view .= "</div>";
-                break;
-        }
         if($images_loading == 'current_loaded'){
             $gallery_view .= "<script>
                 if(typeof aysGalleryOptions === 'undefined'){
