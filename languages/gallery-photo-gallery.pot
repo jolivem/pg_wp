@@ -805,7 +805,7 @@ msgid "Choose how many images will be loaded after clicking on the ''Load More''
 msgstr ""
 
 #: ../admin/partials/actions/gallery-photo-gallery-admin-actions.php:1449
-msgid "Style options"
+msgid "Main options"
 msgstr ""
 
 #: ../admin/partials/actions/gallery-photo-gallery-admin-actions.php:1454

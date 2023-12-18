@@ -215,7 +215,7 @@ class Galleries_List_Table extends WP_List_Table{
             $ays_gpg_lg_keypress    = (isset($data['ays_gpg_lg_keypress']) && $data['ays_gpg_lg_keypress'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_lg_keypress'] )) : '';
             $ays_gpg_lg_esckey    = (isset($data['ays_gpg_lg_esckey']) && $data['ays_gpg_lg_esckey'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_lg_esckey'] )) : '';
 
-            $link_on_whole_img       = isset($data['link_on_whole_img']) && $data['link_on_whole_img'] == "on" ? "on" :"off";
+            //$link_on_whole_img       = isset($data['link_on_whole_img']) && $data['link_on_whole_img'] == "on" ? "on" :"off";
 
             $gpg_create_date = !isset($data['ays_gpg_create_date']) ? '0000-00-00 00:00:00' : sanitize_text_field( $data['ays_gpg_create_date'] );
 
@@ -291,7 +291,7 @@ class Galleries_List_Table extends WP_List_Table{
                 "ays_gallery_desc_color"    => $ays_gallery_desc_color,
                 "ays_gpg_title_color"       => $ays_gpg_title_color,
                 "ays_gpg_filter_cat_anim"   => $ays_gpg_filter_cat_anim,
-                "link_on_whole_img"         => $link_on_whole_img,
+                //"link_on_whole_img"         => $link_on_whole_img,
                 "create_date"               => $gpg_create_date,
                 "author"                    => $author,
                 'gpg_create_author'         => $gpg_create_author,

@@ -841,7 +841,7 @@ msgid ""
 msgstr ""
 
 #: ../admin/partials/actions/gallery-photo-gallery-admin-actions.php:1449
-msgid "Style options"
+msgid "Main options"
 msgstr ""
 
 #: ../admin/partials/actions/gallery-photo-gallery-admin-actions.php:1454

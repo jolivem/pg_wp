@@ -233,20 +233,21 @@ class Gallery_Photo_Gallery_Public {
 
         $gallery_options['enable_light_box'] = isset($gallery_options['enable_light_box']) ? $gallery_options['enable_light_box'] : "off";
 
-        $gallery_options['enable_search_img'] = isset($gallery_options['enable_search_img']) ? $gallery_options['enable_search_img'] : "off";
+        // $gallery_options['enable_search_img'] = isset($gallery_options['enable_search_img']) ? $gallery_options['enable_search_img'] : "off";
+        // $enable_search_img = ($gallery_options['enable_search_img'] != "off") ? true : false;
 
         $disable_lightbox = (isset($gallery_options['enable_light_box']) && $gallery_options['enable_light_box'] == "off" || $gallery_options['enable_light_box'] == "") ? true : false;
-        $enable_search_img = ($gallery_options['enable_search_img'] != "off") ? true : false;
 
         $hover_effect = (!isset($gallery_options['hover_effect']) || $gallery_options['hover_effect'] == null) ? "fadeIn" : $gallery_options['hover_effect'];
         $img_load_effect = (!isset($gallery_options['img_load_effect']) || $gallery_options['img_load_effect'] == null) ? "fadeIn" : $gallery_options['img_load_effect'];
 
-        $gpg_resp_width     = isset($gallery_options['resp_width']) && $gallery_options['resp_width'] == "on" ? true :false;
 
         $redircet_url_tab   = (isset($gallery_options['redirect_url_tab']) && $gallery_options['redirect_url_tab'] != '') ? $gallery_options['redirect_url_tab'] : "_blank";
 
-        $gpg_height_width_ratio = isset($gallery_options['height_width_ratio']) && !empty($gallery_options['height_width_ratio']) ? wp_unslash(sanitize_text_field($gallery_options['height_width_ratio'])) : 1;        
-        $resp_width_ratio = $gpg_resp_width ? $gpg_height_width_ratio : 1;        
+        //$gpg_resp_width     = isset($gallery_options['resp_width']) && $gallery_options['resp_width'] == "on" ? true :false;
+        $gpg_resp_width = false;
+        //$gpg_height_width_ratio = isset($gallery_options['height_width_ratio']) && !empty($gallery_options['height_width_ratio']) ? wp_unslash(sanitize_text_field($gallery_options['height_width_ratio'])) : 1;        
+        //$resp_width_ratio = $gpg_resp_width ? $gpg_height_width_ratio : 1;        
 
         /*
          * Gallery image settings
@@ -675,27 +676,27 @@ class Gallery_Photo_Gallery_Public {
         }
         
         $responsive_width_height = "";
-        if ($gpg_resp_width) {
-             if($images_loading == 'all_loaded'){
-                $responsive_width_height = "
-                $('#ays_grid_row_".$id." img.ays_gallery_image').each(function(){
-                        var realWidth = this.width;                    
-                        var ratio = parseFloat(".$resp_width_ratio.")*realWidth;                    
-                        $('#ays_grid_row_".$id." img.ays_gallery_image').each(function(e) {
-                            $(this).height(ratio);
-                        });
+        // if ($gpg_resp_width) {
+        //      if($images_loading == 'all_loaded'){
+        //         $responsive_width_height = "
+        //         $('#ays_grid_row_".$id." img.ays_gallery_image').each(function(){
+        //                 var realWidth = this.width;                    
+        //                 var ratio = parseFloat(".$resp_width_ratio.")*realWidth;                    
+        //                 $('#ays_grid_row_".$id." img.ays_gallery_image').each(function(e) {
+        //                     $(this).height(ratio);
+        //                 });
 
-                    });
-               ";
-            }elseif($images_loading == 'current_loaded'){
-                $responsive_width_height = "
-                    $('#ays_grid_row_".$id." img.ays_gallery_image').each(function(){
-                        var realWidth = $(this).parents('.ays_grid_column_".$id."').width();                    
-                        var ratio = parseFloat(".$resp_width_ratio.") * realWidth;                    
-                        $(this).parents('.ays_grid_column_".$id."').height(ratio);
-                    });";
-            }
-        }
+        //             });
+        //        ";
+        //     }elseif($images_loading == 'current_loaded'){
+        //         $responsive_width_height = "
+        //             $('#ays_grid_row_".$id." img.ays_gallery_image').each(function(){
+        //                 var realWidth = $(this).parents('.ays_grid_column_".$id."').width();                    
+        //                 var ratio = parseFloat(".$resp_width_ratio.") * realWidth;                    
+        //                 $(this).parents('.ays_grid_column_".$id."').height(ratio);
+        //             });";
+        //     }
+        // }
 
         $gallery_view .= "</div>
         <script>
@@ -1361,7 +1362,77 @@ class Gallery_Photo_Gallery_Public {
             $gallery_view .= "</div>";
         }
 
+        if($images_loading == 'current_loaded'){
+            $gallery_view .= "<script>
+                if(typeof aysGalleryOptions === 'undefined'){
+                    var aysGalleryOptions = {};
+                }
+                if(typeof aysGalleryOptions.galleryImages === 'undefined'){
+                    aysGalleryOptions.galleryImages = [];
+                }
+                aysGalleryOptions.galleryImages[".$id."] = '" . base64_encode( json_encode( $images_new ) ) . "';
+            </script>";
+        }       
+
         return $gallery_view;
+    
+    }// end ays_add_images()
+
+    private function get_over_icon($ays_hover_icon) {
+        switch($ays_hover_icon){
+            case 'none':
+                $hover_icon = "";
+                break;
+            case 'search_plus':
+                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_search_plus'></i>";
+                break;
+            case 'search':
+                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_search'></i>";
+                break;
+            case 'plus':
+                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_plus'></i>";
+                break;
+            case 'plus_circle':
+                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_plus_circle'></i>";
+                break;
+            case 'plus_square_fas': 
+                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_plus_square_fas'></i>";
+                break;
+            case 'plus_square_far':
+                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_plus_square_far'></i>";
+                break;
+            case 'expand':
+                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_expand'></i>";
+                break;
+            case 'image_fas':
+                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_image_fas'></i>";
+                break;
+            case 'image_far':
+                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_image_far'></i>";
+                break;
+            case 'images_fas':
+                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_images_fas'></i>";
+                break;
+            case 'images_far':
+                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_images_far'></i>";
+                break;
+            case 'eye_fas':
+                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_eye_fas'></i>";
+                break;
+            case 'eye_far':
+                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_eye_far'></i>";
+                break;
+            case 'camera_retro':
+                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_camera_retro'></i>";
+                break;
+            case 'camera':
+                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_camera'></i>";
+                break;
+            default:
+                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_search_plus'></i>";
+                break;
+        }
+        return $hover_icon;
     }
     
     protected function ays_get_gallery_content($gallery, $gallery_options, $gal_lightbox_options, $id){
@@ -1381,7 +1452,7 @@ class Gallery_Photo_Gallery_Public {
             $gal_cat_id[$cat_key] = $cat_value['id'];
             $gal_cat_title[$cat_key] = $cat_value['title'];
         }
-        $width = $gallery["width"];
+        //$width = $gallery["width"];
         $title = $gallery["title"];
         // $description = $gallery["description"];
         $description = Photo_Gallery_Data::ays_autoembed( $gallery["description"] );
@@ -1486,7 +1557,7 @@ class Gallery_Photo_Gallery_Public {
         
         $show_filter_cat = (!isset($gallery_options['ays_filter_cat'])) ? 'off' : $gallery_options['ays_filter_cat'];
 
-        $show_gal_title = (!isset($gallery_options['show_gal_title'])) ? 'on' : $gallery_options['show_gal_title'];
+        $show_gal_title = (!isset($gallery_options['show_gal_title'])) ? 'off' : $gallery_options['show_gal_title'];
         //$show_gal_desc = (!isset($gallery_options['show_gal_desc'])) ? 'off' : $gallery_options['show_gal_desc'];
 
         $lightbox_color_rgba = $this->hex2rgba($lightbox_color, 0.5);
@@ -1590,39 +1661,28 @@ class Gallery_Photo_Gallery_Public {
 
         $disable_lightbox = (isset($gallery_options['enable_light_box']) && $gallery_options['enable_light_box'] == "off" || $gallery_options['enable_light_box'] == "") ? true : false;
 
-        $link_on_whole_img = (isset($gallery_options['link_on_whole_img']) && $gallery_options['link_on_whole_img'] == "on") ? true : false;
+        //$link_on_whole_img = (isset($gallery_options['link_on_whole_img']) && $gallery_options['link_on_whole_img'] == "on") ? true : false;
 
-        $gallery_options['enable_search_img'] = isset($gallery_options['enable_search_img']) ? $gallery_options['enable_search_img'] : "off";
+        // $gallery_options['enable_search_img'] = isset($gallery_options['enable_search_img']) ? $gallery_options['enable_search_img'] : "off";
+        // $enable_search_img = ($gallery_options['enable_search_img'] != "off") ? true : false;
 
-        $enable_search_img = ($gallery_options['enable_search_img'] != "off") ? true : false;
-        $ays_width = $width == 0 ? '100%' : $width.'px'; 
+        //$ays_width = $width == 0 ? '100%' : $width.'px'; 
+        $ays_width = '100%';
 
         if($columns == null || $columns == 0){
             $columns = 3;
         }
         switch($view){
             case 'grid':
-                $gallery_item_class = ".ays_gallery_container_".$id." div.ays_grid_column_".$id;
-                $gallery_view_selector = "#ays_grid_row_".$id;
-                $gallery_lightbox_selector = "ays_grid_column_".$id;
                 $column_width = (100 / $columns); // TODO take into account border size !!
                 break;
             case 'mosaic':
-                $gallery_item_class = ".ays_gallery_container_".$id." .ays_mosaic_column_item_".$id;
-                $gallery_view_selector = "#ays_mosaic_".$id;
-                $gallery_lightbox_selector = "ays_mosaic_column_item_".$id;
                 $column_width = 100 / $columns;
                 break;
             case 'masonry':
-                $gallery_item_class = ".ays_gallery_container_".$id." .ays_masonry_item_".$id;
-                $gallery_view_selector = "#ays_masonry_grid_".$id;
-                $gallery_lightbox_selector = "ays_masonry_item_".$id;
                 $column_width = 100 / $columns;
                 break;
             default:
-                $gallery_item_class = ".ays_gallery_container_".$id." div.ays_grid_column_".$id;
-                $gallery_view_selector = "#ays_grid_row_".$id;
-                $gallery_lightbox_selector = "ays_grid_column_".$id;
                 $column_width = 100 / $columns;
                 break;
         }
@@ -1643,59 +1703,7 @@ class Gallery_Photo_Gallery_Public {
         //     }
         // }
         
-        switch($ays_hover_icon){
-            case 'none':
-                $hover_icon = "";
-                break;
-            case 'search_plus':
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_search_plus'></i>";
-                break;
-            case 'search':
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_search'></i>";
-                break;
-            case 'plus':
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_plus'></i>";
-                break;
-            case 'plus_circle':
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_plus_circle'></i>";
-                break;
-            case 'plus_square_fas': 
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_plus_square_fas'></i>";
-                break;
-            case 'plus_square_far':
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_plus_square_far'></i>";
-                break;
-            case 'expand':
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_expand'></i>";
-                break;
-            case 'image_fas':
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_image_fas'></i>";
-                break;
-            case 'image_far':
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_image_far'></i>";
-                break;
-            case 'images_fas':
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_images_fas'></i>";
-                break;
-            case 'images_far':
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_images_far'></i>";
-                break;
-            case 'eye_fas':
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_eye_fas'></i>";
-                break;
-            case 'eye_far':
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_eye_far'></i>";
-                break;
-            case 'camera_retro':
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_camera_retro'></i>";
-                break;
-            case 'camera':
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_camera'></i>";
-                break;
-            default:
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_search_plus'></i>";
-                break;
-        }
+        $hover_icon = $this->get_over_icon($ays_hover_icon);
 
         if ($ays_gallery_loader == 'text') {
             $ays_images_loader = "<p class='ays-loader-content'>". $gallery_loader_text_value ."</p>";
@@ -1790,15 +1798,16 @@ class Gallery_Photo_Gallery_Public {
             $ayg_gpg_cat_anim = "";
         }
 
-        if ($enable_search_img && $view != 'mosaic') {
-            $show_search_img = "<div class='ays_gallery_search_img'>
-                                    <label>Search
-                                        <input type='text' class='inp_search_img' id='inp_search_img_".$id."' placeholder='by title, description'>
-                                    </label>
-                                </div>";            
-        } else {
-            $show_search_img = "";
-        }
+        // if ($enable_search_img && $view != 'mosaic') {
+        //     $show_search_img = "<div class='ays_gallery_search_img'>
+        //                             <label>Search
+        //                                 <input type='text' class='inp_search_img' id='inp_search_img_".$id."' placeholder='by title, description'>
+        //                             </label>
+        //                         </div>";            
+        // } else {
+        //     $show_search_img = "";
+        // }
+        $show_search_img = "";
         
         $user_first_name        = '';
         $user_last_name         = '';
@@ -1886,21 +1895,6 @@ class Gallery_Photo_Gallery_Public {
         ///////////////////////////////
 
 
-
-
-
-        if($images_loading == 'current_loaded'){
-            $gallery_view .= "<script>
-                if(typeof aysGalleryOptions === 'undefined'){
-                    var aysGalleryOptions = {};
-                }
-                if(typeof aysGalleryOptions.galleryImages === 'undefined'){
-                    aysGalleryOptions.galleryImages = [];
-                }
-                aysGalleryOptions.galleryImages[".$id."] = '" . base64_encode( json_encode( $images_new ) ) . "';
-            </script>";
-        }       
-        
         $title_pos = (isset($gallery_options['title_position']) && $gallery_options['title_position'] !== null) ? $gallery_options['title_position'] : 'bottom';
         
 
@@ -1922,39 +1916,40 @@ class Gallery_Photo_Gallery_Public {
         //Hover animation Speed        
         $hover_animation_speed = (isset($gallery_options['hover_animation_speed']) && $gallery_options['hover_animation_speed'] !== '') ? abs($gallery_options['hover_animation_speed']) : 0.5;
 
-        $filter_thubnail = (isset($gallery_options['filter_thubnail']) && $gallery_options['filter_thubnail'] == "on") ? true : false;
-        $filter_thubnail_opt = (isset($gallery_options['filter_thubnail_opt'])) ? $gallery_options['filter_thubnail_opt'] : 'none';
+        //$filter_thubnail = (isset($gallery_options['filter_thubnail']) && $gallery_options['filter_thubnail'] == "on") ? true : false;
+        $filter_thubnail_opt = 'none';
         $filter_lightbox_opt = (isset($gal_lightbox_options['filter_lightbox_opt'])) ? $gal_lightbox_options['filter_lightbox_opt'] : 'none';        
 
-        switch ($filter_thubnail_opt) {
-            case 'blur':
-                $gpg_filter_image = 'blur(3px)';
-                break;
-            case 'brightness':
-                $gpg_filter_image = 'brightness(200%)';
-                break;
-            case 'contrast':
-                $gpg_filter_image = 'contrast(200%)';
-                break;
-            case 'grayscale':
-                $gpg_filter_image = 'grayscale(100%)';
-                break;
-            case 'hue_rotate':
-                $gpg_filter_image = 'hue-rotate(90deg)';
-                break;
-            case 'invert':
-                $gpg_filter_image = 'invert(100%)';
-                break;
-            case 'saturate':
-                $gpg_filter_image = 'saturate(8)';
-                break;
-            case 'sepia':
-                $gpg_filter_image = 'sepia(100%)';
-                break;                
-            default:
-                $gpg_filter_image = 'none';
-                    break;
-        }
+        // switch ($filter_thubnail_opt) {
+        //     case 'blur':
+        //         $gpg_filter_image = 'blur(3px)';
+        //         break;
+        //     case 'brightness':
+        //         $gpg_filter_image = 'brightness(200%)';
+        //         break;
+        //     case 'contrast':
+        //         $gpg_filter_image = 'contrast(200%)';
+        //         break;
+        //     case 'grayscale':
+        //         $gpg_filter_image = 'grayscale(100%)';
+        //         break;
+        //     case 'hue_rotate':
+        //         $gpg_filter_image = 'hue-rotate(90deg)';
+        //         break;
+        //     case 'invert':
+        //         $gpg_filter_image = 'invert(100%)';
+        //         break;
+        //     case 'saturate':
+        //         $gpg_filter_image = 'saturate(8)';
+        //         break;
+        //     case 'sepia':
+        //         $gpg_filter_image = 'sepia(100%)';
+        //         break;                
+        //     default:
+        //         $gpg_filter_image = 'none';
+        //             break;
+        // }
+        $gpg_filter_image = 'none';
 
         switch ($filter_lightbox_opt) {
             case 'blur':
@@ -1997,7 +1992,8 @@ class Gallery_Photo_Gallery_Public {
             $images_hover_scale = "";
         }
 
-        $gpg_resp_width         = isset($gallery_options['resp_width']) && $gallery_options['resp_width'] == "on" ? true :false;
+        //$gpg_resp_width = isset($gallery_options['resp_width']) && $gallery_options['resp_width'] == "on" ? true :false;
+        $gpg_resp_width = false;
 
         if ($gpg_resp_width) {
             $ays_thumb_height_mobile = "";
