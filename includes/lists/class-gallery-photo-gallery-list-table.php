@@ -84,10 +84,10 @@ class Galleries_List_Table extends WP_List_Table{
     public function add_or_edit_gallery($data){
         global $wpdb;
         $gallery_table = $wpdb->prefix . "ays_gallery";
-        error_log("add_or_edit_gallery() IN data: ".print_r($data, true));//TODO
+        //error_log("add_or_edit_gallery() IN data: ".print_r($data, true));//TODO
         if( isset($data["ays_gallery_action"]) && wp_verify_nonce( $data["ays_gallery_action"],"ays_gallery_action" ) ) {
             
-            error_log("add_or_edit_gallery() IN data: ".print_r($data, true));//TODO    
+            //error_log("add_or_edit_gallery() IN data: ".print_r($data, true));//TODO    
             
             // List of images
             if ($data["ays-image-path"] != NULL) {
@@ -118,7 +118,7 @@ class Galleries_List_Table extends WP_List_Table{
             $id                     = ( $data["id"] != NULL ) ? absint( intval( $data["id"] ) ) : null;
             
             // Gallery settings
-            error_log("TODO gallery id:".$id);
+            //error_log("TODO gallery id:".$id);
             $title                  = (isset($data["gallery_title"]) && $data["gallery_title"] != '') ? stripslashes(sanitize_text_field( $data["gallery_title"] )) : '';
             $description            = !isset($data['gallery_description']) ? '' : wp_kses_post( $data['gallery_description'] );
             $width                  = (isset($data['gallery_width']) && $data['gallery_width'] != '') ? wp_unslash(sanitize_text_field( $data['gallery_width'] )) : '';
@@ -140,6 +140,8 @@ class Galleries_List_Table extends WP_List_Table{
             $title_position         = (isset($data['image_title_position']) && $data['image_title_position'] != '')? wp_unslash(sanitize_text_field( $data['image_title_position'] )) : '';
             $show_with_date         = wp_unslash(sanitize_text_field( isset($data['ays_gpg_show_with_date']) ? $data['ays_gpg_show_with_date'] : '' ));
             $ays_images_loading     = (isset($data['ays_images_loading']) && $data['ays_images_loading'] != '') ? sanitize_text_field( $data['ays_images_loading'] ) : 'all_loaded';
+            $ays_images_request     = (isset($data['ays_images_request']) && $data['ays_images_request'] != '') ? sanitize_text_field( $data['ays_images_request'] ) : 'selection';
+            $query_categories       = (isset($data['ays_query_category']) && $data['ays_query_category'] != '') ? sanitize_text_field( implode('***', $data['ays_query_category']) ) : '';
             $gpg_redirect_url_tab   = (isset($data['gpg_redirect_url_tab']) && $data['gpg_redirect_url_tab'] != '') ? sanitize_text_field( $data['gpg_redirect_url_tab'] ) : '_blank';
             $ays_admin_pagination   = (isset($data['ays_admin_pagination']) && $data['ays_admin_pagination'] != '') ? wp_unslash(sanitize_text_field( $data['ays_admin_pagination'] )) : '';
             $ays_gpg_hover_zoom     = (isset($data['ays_gpg_hover_zoom']) && $data['ays_gpg_hover_zoom'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_hover_zoom'] )) : '';
@@ -297,6 +299,8 @@ class Galleries_List_Table extends WP_List_Table{
                 'gpg_create_author'         => $gpg_create_author,
                 "gallery_loader_custom_gif" => $gallery_loader_custom_gif,
                 "gallery_loader_custom_gif_width" => $gallery_loader_custom_gif_width,
+                "images_request"            => $ays_images_request,
+                "query_categories"          => $query_categories,
             );
             $lightbox_options = array(
                 "lightbox_counter"          => $ays_lightbox_counter,

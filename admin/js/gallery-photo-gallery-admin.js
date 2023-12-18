@@ -266,6 +266,27 @@
             $(document).find('.show_load_effect').hide(150);
             $(document).find('.ays_hide_hr').hide(150);
         });
+
+        // Images request type effect 
+        if($(document).find('input#ays_gpg_images_request_selection:checked').val() == "selection" ){
+            $(document).find('#image_selection').show();
+            $(document).find('#image_query').hide();
+        }
+        
+        if($(document).find('input#ays_gpg_images_request_query:checked').val() == "query" ){
+            $(document).find('#image_selection').hide();
+            $(document).find('#image_query').show();
+        }
+
+        $(document).find('label#gpg_images_request_selection').on('click', function(){
+            $(document).find('#image_selection').show();
+            $(document).find('#image_query').hide();
+        });
+
+        $(document).find('label#gpg_images_request_query').on('click', function(){
+            $(document).find('#image_selection').hide();
+            $(document).find('#image_query').show();
+        });
         // ----
         
         $(document).find('.ays-category').select2();
@@ -983,6 +1004,7 @@
                 $show_title = $(document).find('#show_title').prop('checked'),
                 $ays_hover_icon = $(document).find('input[name="ays-gpg-image-hover-icon"]:checked').first().val(),
                 $images_loading = $(document).find('input[name="ays_images_loading"]:checked').first().val(),
+                $images_request_type = $(document).find('input[name="ays_images_request"]:checked').first().val(),
                 $images_path = $(document).find('input[name="ays-image-path[]"]'),
                 $images_id = $(document).find('input[name="ays-image-id[]"]'),
                 $images_title = $(document).find('input[name="ays-image-title[]"]'),

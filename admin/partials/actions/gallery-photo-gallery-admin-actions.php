@@ -47,6 +47,7 @@ $g_options = array(
     "show_with_date"        => "",
     "images_distance"       => "5",
     "images_loading"        => "all_loaded",
+    "images_request"        => "selection",
     "gallery_loader"        => "flower",
     "hover_icon_size"       => "20",
     "thumbnail_title_size"  => "12",
@@ -227,6 +228,7 @@ $responsive_width = (!isset($gal_options['resp_width'])) ? 'on' : $gal_options['
 $enable_rtl_direction = (isset($gal_options['enable_rtl_direction']) && $gal_options['enable_rtl_direction'] == 'on') ? $gal_options['enable_rtl_direction'] : 'off';
 
 $loading_type = (isset($gal_options['images_loading']) && $gal_options['images_loading'] != '') ? $gal_options['images_loading'] : "all_loaded"; 
+$image_request_type = (isset($gal_options['images_request']) && $gal_options['images_request'] != '') ? $gal_options['images_request'] : "selection"; 
 
 //$redirect_type = (isset($gal_options['redirect_url_tab']) && $gal_options['redirect_url_tab'] != '') ? $gal_options['redirect_url_tab'] : "_blank"; 
 
@@ -285,6 +287,9 @@ if( $change_gpg_create_author  && $change_gpg_create_author > 0 ){
     );
 }
 
+$query_categories = isset($gal_options['query_categories']) ? $gal_options['query_categories'] : '';
+error_log( "CATEGORIES from options: ".$query_categories);
+
 $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_GPG_ADMIN_URL ."/images/loaders/loading.gif'></span>";
 ?>
 
@@ -298,20 +303,20 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
         </div>
     </div>
     <div class="container-fluid">
-    <form id="ays-gpg-form" method="post">
-    <input type="hidden" id="ays_submit_name">
-    <input type="hidden" name="ays_gpg_settings_tab" value="<?php echo esc_attr($ays_gpg_tab); ?>">
-    <input type="hidden" name="ays_gpg_create_date" value="<?php echo $gpg_create_date; ?>">    
-    <input type="hidden" name="ays_gpg_author" value="<?php echo esc_attr(json_encode($gpg_author, JSON_UNESCAPED_SLASHES)); ?>">
-    <h1 class="wp-heading-inline">
-        <?php echo $heading; ?>
-        <input type="submit" name="ays-submit-top" class="ays-submit button action-button button-primary ays-gpg-save-comp" value="<?php echo __("Save and close", $this->plugin_name);?>" gpg_submit_name="ays-submit" />        
-        <input type="submit" name="ays-apply-top" class="ays-submit action-button button ays-gpg-save-comp" id="ays-button-top-apply" title="Ctrl + s" data-toggle="tooltip" data-delay='{"show":"1000"}' value="<?php echo __("Save", $this->plugin_name);?>" gpg_submit_name="ays-apply"/>
-        <?php echo $loader_iamge; ?>
-    </h1>
-    <hr>
-    <h3><?php echo esc_attr( stripslashes( $gallery["title"] ) ); ?></h3>
-    <div class="form-group row">
+        <form id="ays-gpg-form" method="post">
+        <input type="hidden" id="ays_submit_name">
+        <input type="hidden" name="ays_gpg_settings_tab" value="<?php echo esc_attr($ays_gpg_tab); ?>">
+        <input type="hidden" name="ays_gpg_create_date" value="<?php echo $gpg_create_date; ?>">    
+        <input type="hidden" name="ays_gpg_author" value="<?php echo esc_attr(json_encode($gpg_author, JSON_UNESCAPED_SLASHES)); ?>">
+        <h1 class="wp-heading-inline">
+            <?php echo $heading; ?>
+            <input type="submit" name="ays-submit-top" class="ays-submit button action-button button-primary ays-gpg-save-comp" value="<?php echo __("Save and close", $this->plugin_name);?>" gpg_submit_name="ays-submit" />        
+            <input type="submit" name="ays-apply-top" class="ays-submit action-button button ays-gpg-save-comp" id="ays-button-top-apply" title="Ctrl + s" data-toggle="tooltip" data-delay='{"show":"1000"}' value="<?php echo __("Save", $this->plugin_name);?>" gpg_submit_name="ays-apply"/>
+            <?php echo $loader_iamge; ?>
+        </h1>
+        <hr>
+        <h3><?php echo esc_attr( stripslashes( $gallery["title"] ) ); ?></h3>
+        <div class="form-group row">
             <div class="col-sm-3">
                 <label for="gallery_title">
                     <?php echo __("Gallery Title", $this->plugin_name);?>
@@ -325,351 +330,385 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
             </div>
         </div>
 
-    <div>     
-        
-        <!-- <div class="ays-gallery-subtitle-main-box">
-            <p class="ays-subtitle">                
-                <?php if(isset($id) && count($get_all_galleries) > 1):?>
-                    <span class="ays-subtitle-inner-galleries-page ays-gallery-open-gpgs-list">
-                        <i class="ays_fa ays_fa_arrow_down" style="font-size: 15px;"></i>   
-                        <strong class="ays_gallery_title_in_top"><?php echo esc_attr( stripslashes( $gallery["title"] ) ); ?></strong>
-                    </span>
-                <?php endif; ?>               
-            </p>
-            <?php if(isset($id) && count($get_all_galleries) > 1):?>
-                <div class="ays-gallery-gpgs-data">
-                    <?php $var_counter = 0; foreach($get_all_galleries as $var => $var_name): if( intval($var_name['id']) == $id ){continue;} $var_counter++; ?>
-                        <?php ?>
-                        <label class="ays-gallery-message-vars-each-data-label">
-                            <input type="radio" class="ays-gallery-gpgs-each-data-checker" hidden id="ays_gallery_message_var_count_<?php echo $var_counter?>" name="ays_gallery_message_var_count">
-                            <div class="ays-gallery-gpgs-each-data">
-                                <input type="hidden" class="ays-gallery-gpgs-each-var" value="<?php echo $var; ?>">
-                                <a href="?page=gallery-photo-gallery&action=edit&gallery=<?php echo $var_name['id']?>" target="_blank" class="ays-gallery-go-to-gpgs"><span><?php echo stripslashes(esc_attr($var_name['title'])); ?></span></a>
-                            </div>
-                        </label>              
-                    <?php endforeach ?>
-                </div>                        
-            <?php endif; ?>
-        </div> -->
-        <?php if($id !== null): ?>
-        <div class="row">
-            <div class="col-sm-3">
-                <label> <?php echo __( "Shortcode", $this->plugin_name ); ?> </label>
-            </div>
-            <div class="col-sm-9">
-                <p style="font-size:14px; font-style:italic;">
-                    <strong class="ays-gallery-shortcode-box" onClick="selectElementContents(this)" data-toggle="tooltip" title="<?php echo __('Click for copy.', $this->plugin_name);?>" style="font-size:16px; font-style:normal;"><?php echo "[gallery_p_gallery id=".$id."]"; ?></strong>
+        <div>     
+            
+            <!-- <div class="ays-gallery-subtitle-main-box">
+                <p class="ays-subtitle">                
+                    <?php if(isset($id) && count($get_all_galleries) > 1):?>
+                        <span class="ays-subtitle-inner-galleries-page ays-gallery-open-gpgs-list">
+                            <i class="ays_fa ays_fa_arrow_down" style="font-size: 15px;"></i>   
+                            <strong class="ays_gallery_title_in_top"><?php echo esc_attr( stripslashes( $gallery["title"] ) ); ?></strong>
+                        </span>
+                    <?php endif; ?>               
                 </p>
+                <?php if(isset($id) && count($get_all_galleries) > 1):?>
+                    <div class="ays-gallery-gpgs-data">
+                        <?php $var_counter = 0; foreach($get_all_galleries as $var => $var_name): if( intval($var_name['id']) == $id ){continue;} $var_counter++; ?>
+                            <?php ?>
+                            <label class="ays-gallery-message-vars-each-data-label">
+                                <input type="radio" class="ays-gallery-gpgs-each-data-checker" hidden id="ays_gallery_message_var_count_<?php echo $var_counter?>" name="ays_gallery_message_var_count">
+                                <div class="ays-gallery-gpgs-each-data">
+                                    <input type="hidden" class="ays-gallery-gpgs-each-var" value="<?php echo $var; ?>">
+                                    <a href="?page=gallery-photo-gallery&action=edit&gallery=<?php echo $var_name['id']?>" target="_blank" class="ays-gallery-go-to-gpgs"><span><?php echo stripslashes(esc_attr($var_name['title'])); ?></span></a>
+                                </div>
+                            </label>              
+                        <?php endforeach ?>
+                    </div>                        
+                <?php endif; ?>
+            </div> -->
+            <?php if($id !== null): ?>
+            <div class="row">
+                <div class="col-sm-3">
+                    <label> <?php echo __( "Shortcode", $this->plugin_name ); ?> </label>
+                </div>
+                <div class="col-sm-9">
+                    <p style="font-size:14px; font-style:italic;">
+                        <strong class="ays-gallery-shortcode-box" onClick="selectElementContents(this)" data-toggle="tooltip" title="<?php echo __('Click for copy.', $this->plugin_name);?>" style="font-size:16px; font-style:normal;"><?php echo "[gallery_p_gallery id=".$id."]"; ?></strong>
+                    </p>
+                </div>
             </div>
+            <?php endif;?>
         </div>
-        <?php endif;?>
-    </div>
-    <hr>
-    <?php
-        echo "<style>
-                .ays_ays_img {
-                    display: block;
-                    width: 100%;
-                    height: 100%;
-                    background-image: url('".AYS_GPG_ADMIN_URL .'images/no-photo.png'."');
-                    background-size: cover;
-                    background-position: center center;
-                }
-            </style>";
-    ?>
-    <div class="ays-gpg-top-menu-wrapper">
-        <div class="ays_gpg_menu_left" data-scroll="0"><i class="ays_fa ays_fa_angle_left"></i></div>
-        <div class="ays-gpg-top-menu">
-            <div class="nav-tab-wrapper ays-gpg-top-tab-wrapper">
-                <a href="#tab1" data-tab="tab1" class="nav-tab <?php echo ($ays_gpg_tab == 'tab1') ? 'nav-tab-active' : ''; ?>">
-                    <?php echo __("Images", $this->plugin_name);?>
-                </a>
-                <a href="#tab2" data-tab="tab2" class="nav-tab <?php echo ($ays_gpg_tab == 'tab2') ? 'nav-tab-active' : ''; ?>">
-                    <?php echo __("Settings", $this->plugin_name);?>
-                </a>
-                <a href="#tab3" data-tab="tab3" class="nav-tab <?php echo ($ays_gpg_tab == 'tab3') ? 'nav-tab-active' : ''; ?>">
-                    <?php echo __("Styles", $this->plugin_name);?>
-                </a>
-                <a href="#tab4" data-tab="tab4" class="nav-tab <?php echo ($ays_gpg_tab == 'tab4') ? 'nav-tab-active' : ''; ?>">
-                    <?php echo __("Lightbox settings", $this->plugin_name);?>
-                </a>
-                <!-- <a href="#tab5" data-tab="tab5" class="nav-tab <?php echo ($ays_gpg_tab == 'tab5') ? 'nav-tab-active' : ''; ?>">
-                    <?php echo __("Lightbox effects", $this->plugin_name);?>
-                </a> -->
-            </div>  
-        </div>              
-        <div class="ays_gpg_menu_right" data-scroll="-1"><i class="ays_fa ays_fa_angle_right"></i></div>
-    </div>
-    <div id="tab1" class="ays-gallery-tab-content <?php echo ($ays_gpg_tab == 'tab1') ? 'ays-gallery-tab-content-active' : ''; ?>">
-        <br>
-         <!-- MJO removed description -->
-        <p class="ays-subtitle"><?php echo  __('Add Images', $this->plugin_name) ?></p>
-        <h6><?php echo  __('Upload images for your gallery', $this->plugin_name) ?></h6>
-        <!-- <button type="button" class="ays-add-images button"><?php //echo __("Add image +", $this->plugin_name); ?></button> -->
-        <button type="button" class="ays-add-multiple-images button"><?php echo __("Add multiple images +", $this->plugin_name); ?></button>
-        <!-- <button class="ays-add-video button"><?php //echo __("Add video +", $this->plugin_name); ?></button>-->
-        <button type="button" class="ays_bulk_del_images button" disabled><?php echo __("Delete", $this->plugin_name); ?></button>
-        <button type="button" class="ays_select_all_images button"><?php echo __("Select all", $this->plugin_name); ?></button>
-        <input type="hidden" id="ays_image_lang_title" value="<?php echo __("It shows the name of the inserted picture", $this->plugin_name ); ?>">
-        <input type="hidden" id="ays_image_lang_alt" value="<?php echo __("This field shows the alternate text when the picture is not loaded or not found", $this->plugin_name ); ?>">
-        <input type="hidden" id="ays_image_lang_desc" value="<?php echo __("This field shows the description of the chosen image", $this->plugin_name ); ?>">
-        <input type="hidden" id="ays_image_lang_url" value="<?php echo __("This section is for the URL address", $this->plugin_name ); ?>">
-        <input type="hidden" id="ays_image_cat" value="<?php echo __("Select image categories", $this->plugin_name ); ?>">
-        <hr/>
-        <div class="ays_gpg_page_sort">
-            <div id="ays_gpg_pagination">
-                <select name="ays_admin_pagination" id="ays_admin_pagination">
-                    <option <?php echo $admin_pagination == "all" ? "selected" : ""; ?> value="all"><?php echo __( "All", $this->plugin_name ); ?></option>
-                    <option <?php echo $admin_pagination == "5" ? "selected" : ""; ?> value="5"><?php echo __( "5", $this->plugin_name ); ?></option>
-                    <option <?php echo $admin_pagination == "10" ? "selected" : ""; ?> value="10"><?php echo __( "10", $this->plugin_name ); ?></option>
-                    <option <?php echo $admin_pagination == "15" ? "selected" : ""; ?> value="15"><?php echo __( "15", $this->plugin_name ); ?></option>
-                    <option <?php echo $admin_pagination == "20" ? "selected" : ""; ?> value="20"><?php echo __( "20", $this->plugin_name ); ?></option>
-                    <option <?php echo $admin_pagination == "25" ? "selected" : ""; ?> value="25"><?php echo __( "25", $this->plugin_name ); ?></option>
-                    <option <?php echo $admin_pagination == "30" ? "selected" : ""; ?> value="30"><?php echo __( "30", $this->plugin_name ); ?></option>
-                </select>            
-                <a class="ays_help" data-toggle="tooltip" title="<?php echo __("This field is for the creation of pagination", $this->plugin_name ); ?>">
-                   <i class="fas fa-info-circle"></i>
-                </a>
-                <span class="ays_gpg_image_hover_icon_text"><?php echo __( "Image pagination", $this->plugin_name ); ?></span>
-            </div>
-            <div id="ays_gpg_sort_cont">    
-            <a class="ays_help" data-toggle="tooltip" title="<?php echo __("Change the ordering", $this->plugin_name ); ?>">
-                   <i class="fas fa-info-circle"></i>
-                </a>            
-                <button class="ays_gpg_sort">
-                   <i class="fas fa-exchange-alt"></i>
-               </button>
-                              
-            </div>
-        </div>
-        <hr/>
-        <div class="paged_ays_accordion">
+        <hr>
         <?php
-            if($id == null) : // Gallery id NULL --> NEW 
-                error_log("$$$$$$$$$$$$$$$$$$$$ id is null");
+            echo "<style>
+                    .ays_ays_img {
+                        display: block;
+                        width: 100%;
+                        height: 100%;
+                        background-image: url('".AYS_GPG_ADMIN_URL .'images/no-photo.png'."');
+                        background-size: cover;
+                        background-position: center center;
+                    }
+                </style>";
         ?>
-        
-                <ul class="ays-accordion">
-                </ul>
-        <?php
-            else:
-                // Gallery id NOT NULL
-                error_log("^^^^^^^^^^^^^^ id is not null: ".$id);
-                // echo "url=".$gallery["images_urls"]; empty
-                // echo "dates=".$gallery["images_dates"]; with date
-                //$images = explode( "***", $gallery["images"] );
-                // $images_descriptions = explode( "***", $gallery["images_descs"] );
-                // $images_alts = explode( "***", $gallery["images_alts"] );
-                // $images_urls = explode( "***", $gallery["images_urls"] );
-                // $images_dates = explode( "***", $gallery["images_dates"] );
-                 $images_ids = explode( "***", $gallery["images_ids"] );
-                error_log("images_ids: ".print_r($images_ids, true));//TODO
-                //error_log("#-# images: ".print_r($images, true));//TODO
+        <div class="ays-gpg-top-menu-wrapper">
+            <div class="ays_gpg_menu_left" data-scroll="0"><i class="ays_fa ays_fa_angle_left"></i></div>
+            <div class="ays-gpg-top-menu">
+                <div class="nav-tab-wrapper ays-gpg-top-tab-wrapper">
+                    <a href="#tab1" data-tab="tab1" class="nav-tab <?php echo ($ays_gpg_tab == 'tab1') ? 'nav-tab-active' : ''; ?>">
+                        <?php echo __("Images", $this->plugin_name);?>
+                    </a>
+                    <a href="#tab2" data-tab="tab2" class="nav-tab <?php echo ($ays_gpg_tab == 'tab2') ? 'nav-tab-active' : ''; ?>">
+                        <?php echo __("Settings", $this->plugin_name);?>
+                    </a>
+                    <a href="#tab3" data-tab="tab3" class="nav-tab <?php echo ($ays_gpg_tab == 'tab3') ? 'nav-tab-active' : ''; ?>">
+                        <?php echo __("Styles", $this->plugin_name);?>
+                    </a>
+                    <a href="#tab4" data-tab="tab4" class="nav-tab <?php echo ($ays_gpg_tab == 'tab4') ? 'nav-tab-active' : ''; ?>">
+                        <?php echo __("Lightbox settings", $this->plugin_name);?>
+                    </a>
+                    <!-- <a href="#tab5" data-tab="tab5" class="nav-tab <?php echo ($ays_gpg_tab == 'tab5') ? 'nav-tab-active' : ''; ?>">
+                        <?php echo __("Lightbox effects", $this->plugin_name);?>
+                    </a> -->
+                </div>  
+            </div>              
+            <div class="ays_gpg_menu_right" data-scroll="-1"><i class="ays_fa ays_fa_angle_right"></i></div>
+        </div>
+        <div id="tab1" class="ays-gallery-tab-content <?php echo ($ays_gpg_tab == 'tab1') ? 'ays-gallery-tab-content-active' : ''; ?>">
+            <br>
+            <!-- MJO removed description -->
+            <p class="ays-subtitle"><?php echo  __('Add Images', $this->plugin_name) ?></p>
 
-                $gal_cat_ids = isset($gallery['categories_id']) && $gallery['categories_id'] != '' ? explode( "***", $gallery["categories_id"] ) : array();
-                if($admin_pagination != "all"){
-                    $pages = intval(ceil(count($images_ids)/$admin_pagination));
-                    $qanak = 0;
-                    if(isset($_COOKIE['ays_gpg_page_tab_free'])){
-                        $ays_page_cookie = explode("_", $_COOKIE['ays_gpg_page_tab_free']);
-                        if($ays_page_cookie[1] >= $pages){
-                            unset($_COOKIE['ays_gpg_page_tab_free']);
-                            setcookie('ays_gpg_page_tab_free', "", time() - 3600, "/");
-                            setcookie('ays_gpg_page_tab_free', 'tab_'.($pages-1), time() + 3600);
-                            $_COOKIE['ays_gpg_page_tab_free'] = 'tab_'.($pages-1);
-                        }
-                    }
+            <div>
+                <label class="ays_gpg_image_hover_icon" id="gpg_images_request_selection"><?php echo __("Select from library ", $this->plugin_name);?>
+                    <input type="radio" id="ays_gpg_images_request_selection" name="ays_images_request" value="selection"
+                        <?php echo ($image_request_type == "selection") ? "checked" : ""; ?> />
+                </label>
+                <label class="ays_gpg_image_hover_icon" id="gpg_images_request_query"><?php echo __("Query library ", $this->plugin_name);?> 
+                    <input type="radio" id="ays_gpg_images_request_query" name="ays_images_request" value="query" 
+                        <?php echo ($image_request_type == "query") ? "checked" : ""; ?>/>
+                </label>
+            </div>
 
-                    for($i = 0; $i < $pages; $i++){
-                        $accordion_active = (isset($_COOKIE['ays_gpg_page_tab_free']) && $_COOKIE['ays_gpg_page_tab_free'] == "tab_".($i)) ? 'ays_accordion_active' : '';
-            ?>
-            
-            <ul class="ays-accordion ays_accordion <?php echo $accordion_active; ?>" id="page_<?php echo $i; ?>">
-            
-            <?php
-                //error_log("admin_pagination=".$admin_pagination);//TODO
-                for ($key = $qanak, $j = 0; $key < count($images_ids); $key++, $j++ ) {
-                    if($j >= $admin_pagination){
-                        $qanak = $key;
-                        break;
-                    }
-                    //TODO test: remove the photo from the media gallery and check the galleries
-                    $query = "SELECT * FROM `".$wpdb->prefix."posts` WHERE `id` = '".$images_ids[$key]."'";
-                    $result_img =  $wpdb->get_results( $query, "ARRAY_A" );
-                    if (!empty($result_img)) {
+            <div id="image_selection">
 
-                        $img_id = $result_img[0]['ID'];
-                        $image = $result_img[0]['guid'];
 
-                        $img_thmb_src = wp_get_attachment_image_src($img_id,  'thumbnail');
-                        if($img_thmb_src === false){
-                            $img_thmb_src = $image;
-                        }else{
-                            $img_thmb_src = !empty($img_thmb_src) ? $img_thmb_src[0] : $image_no_photo;
-                        }
-                        
-                        $img_title = $result_img[0]['post_title'];
-                        $img_description = $result_img[0]['post_content'];
-                        $img_caption = $result_img[0]['post_excerpt'];
-                        $img_url = $result_img[0]['guid'];
-                        $img_date = $result_img[0]['post_date'];
-                        error_log("#*# img_id=".$img_id.", img_title=".$img_title.", img_description=".$img_description.", img_caption=".$img_caption.", img_url=".$img_url.", img_date=".$img_date);
-
-                        $img_thmb_html = !empty($img_thmb_src) ? '<img class="ays_ays_img" style="background-image:none;" src="'.$img_thmb_src.'">' : '<img class="ays_ays_img">';
-                        ?>
-                        <!-- id NOT NULL GALLERY -->
-                        <li class="ays-accordion_li">
-                            <input type="hidden" name="ays-image-path[]" value="<?php echo $image; ?>">
-                            <input type="hidden" name="ays-image-id[]" value="<?php echo $img_id; ?>">
-                            <div class="ays-image-attributes">
-                                <div class='ays_image_div'>                      
-                                    <div class="ays_image_thumb" style="display: block; position: relative;">
-                                        <div class="ays_image_edit_div" style="position: absolute;"><i class="ays-move-images"></i></div>
-                                        <div class='ays_image_thumb_img'><?php echo $img_thmb_html; ?></div>
-                                    </div>
-                                </div>
-                                <div class="ays_image_attr_item_cat">
-                                    <div class="ays_image_attr_item_parent">
-                                        <div>
-                                            <?php echo __("Title: ", $this->plugin_name);?>
-                                            <b><?php echo stripslashes(esc_attr($img_title)); ?></b>
-                                            <input type="hidden" name="ays-image-title[]" value="<?php echo stripslashes(esc_attr($img_title)); ?>"/>
-                                        </div>
-                                        <div>
-                                            <?php echo __("Description: ", $this->plugin_name);?>
-                                            <b><?php echo stripslashes(esc_attr($img_description)); ?></b>
-                                            <input type="hidden" name="ays-image-description[]" value="<?php echo stripslashes(esc_attr($img_description)); ?>"/>
-                                        </div>
-
-                                    </div>
-                                    <div class="ays_image_cat">
-                                        <label>
-                                            <?php echo __("Image Category", $this->plugin_name);?>
-                                            <a class="ays_help" data-toggle="tooltip" title="<?php echo __("Select image categories", $this->plugin_name ); ?>">
-                                            <i class="fas fa-info-circle"></i>
-                                            </a>
-                                        </label>
-                                        <select class="ays-category form-control" multiple="multiple">
-                                            <?php
-                                            $gal_cats_ids = isset($gal_cat_ids[$key]) && $gal_cat_ids[$key] != '' ? explode( ",", $gal_cat_ids[$key] ) : array();
-                                            foreach ( $gallery_categories as $gallery_category ) {
-                                                $checked = (in_array($gallery_category['id'], $gal_cats_ids)) ? "selected" : "";
-                                                echo "<option value='".$gallery_category['id']."' ".$checked.">".$gallery_category['title']."</option>";
-                                            }                                            
-                                            ?>
-                                        </select>
-                                        <input type="hidden" class="for_select_name" name="ays_gallery_category[]">
-                                    </div>
-                                </div>
-                                <input type="hidden" name="ays-image-date[]" class="ays_img_date" value="<?php echo $img_date; ?>" />
-                                <div class="ays_del_li_div"><input type="checkbox" class="ays_del_li"/></div>
-                                <div class='ays-delete-image_div'><i class="ays-delete-image"></i></div>
-                            </div>
-                        </li>
-                        <?php
-                        }
-                    }
+                <!-- <h6><?php echo  __('Upload images for your gallery', $this->plugin_name) ?></h6> -->
+                <hr/>
+                <!-- <button type="button" class="ays-add-images button"><?php //echo __("Add image +", $this->plugin_name); ?></button> -->
+                <button type="button" class="ays-add-multiple-images button"><?php echo __("Add multiple images +", $this->plugin_name); ?></button>
+                <!-- <button class="ays-add-video button"><?php //echo __("Add video +", $this->plugin_name); ?></button>-->
+                <button type="button" class="ays_bulk_del_images button" disabled><?php echo __("Delete", $this->plugin_name); ?></button>
+                <button type="button" class="ays_select_all_images button"><?php echo __("Select all", $this->plugin_name); ?></button>
+                <input type="hidden" id="ays_image_lang_title" value="<?php echo __("It shows the name of the inserted picture", $this->plugin_name ); ?>">
+                <input type="hidden" id="ays_image_lang_alt" value="<?php echo __("This field shows the alternate text when the picture is not loaded or not found", $this->plugin_name ); ?>">
+                <input type="hidden" id="ays_image_lang_desc" value="<?php echo __("This field shows the description of the chosen image", $this->plugin_name ); ?>">
+                <input type="hidden" id="ays_image_lang_url" value="<?php echo __("This section is for the URL address", $this->plugin_name ); ?>">
+                <input type="hidden" id="ays_image_cat" value="<?php echo __("Select image categories", $this->plugin_name ); ?>">
+                <hr/>
+                <div class="ays_gpg_page_sort">
+                    <div id="ays_gpg_pagination">
+                        <select name="ays_admin_pagination" id="ays_admin_pagination">
+                            <option <?php echo $admin_pagination == "all" ? "selected" : ""; ?> value="all"><?php echo __( "All", $this->plugin_name ); ?></option>
+                            <option <?php echo $admin_pagination == "5" ? "selected" : ""; ?> value="5"><?php echo __( "5", $this->plugin_name ); ?></option>
+                            <option <?php echo $admin_pagination == "10" ? "selected" : ""; ?> value="10"><?php echo __( "10", $this->plugin_name ); ?></option>
+                            <option <?php echo $admin_pagination == "15" ? "selected" : ""; ?> value="15"><?php echo __( "15", $this->plugin_name ); ?></option>
+                            <option <?php echo $admin_pagination == "20" ? "selected" : ""; ?> value="20"><?php echo __( "20", $this->plugin_name ); ?></option>
+                            <option <?php echo $admin_pagination == "25" ? "selected" : ""; ?> value="25"><?php echo __( "25", $this->plugin_name ); ?></option>
+                            <option <?php echo $admin_pagination == "30" ? "selected" : ""; ?> value="30"><?php echo __( "30", $this->plugin_name ); ?></option>
+                        </select>            
+                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __("This field is for the creation of pagination", $this->plugin_name ); ?>">
+                        <i class="fas fa-info-circle"></i>
+                        </a>
+                        <span class="ays_gpg_image_hover_icon_text"><?php echo __( "Image pagination", $this->plugin_name ); ?></span>
+                    </div>
+                    <div id="ays_gpg_sort_cont">    
+                    <a class="ays_help" data-toggle="tooltip" title="<?php echo __("Change the ordering", $this->plugin_name ); ?>">
+                        <i class="fas fa-info-circle"></i>
+                        </a>            
+                        <button class="ays_gpg_sort">
+                        <i class="fas fa-exchange-alt"></i>
+                    </button>
+                                    
+                    </div>
+                </div>
+                <hr/>
+                <div class="paged_ays_accordion">
+                <?php
+                    if($id == null) : // Gallery id NULL --> NEW 
+                        error_log("New gallery, id is null");
                 ?>
-            </ul>
-                <?php 
-                    }
-                }else{
-            ?>
-            <ul class="ays-accordion">
-            <?php                    
-                //echo "images=".$images[0];
-                foreach ( $images_ids as $key => $id ) {
-                    error_log( "key=".$key);
-                    error_log( "id=".$id);
-                    //error_log( "wpdb->prefix=".$wpdb->prefix);
-                    $query = "SELECT * FROM `".$wpdb->prefix."posts` WHERE `id` = '".$id."'";
-                    error_log( "query=".$query);
-                    $result_img =  $wpdb->get_results( $query, "ARRAY_A" );
-                    //error_log("#########images: ".print_r($result_img, true));
-                    //error_log("#########images: ".print_r($result_img, true));
-                    // error_log("#########id: ".$result_img[0]['ID']);
-                    // error_log("#########count: ".count($result_img));
-                    // error_log("#########this_site_path: ".$this_site_path);
-                    if (!empty($result_img)) {
+                
+                        <ul class="ays-accordion">
+                        </ul>
+                <?php
+                else:
+                    // Gallery id NOT NULL
+                    error_log("^^^^^^^^^^^^^^ id is not null: ".$id);
+                    // echo "url=".$gallery["images_urls"]; empty
+                    // echo "dates=".$gallery["images_dates"]; with date
+                    //$images = explode( "***", $gallery["images"] );
+                    // $images_descriptions = explode( "***", $gallery["images_descs"] );
+                    // $images_alts = explode( "***", $gallery["images_alts"] );
+                    // $images_urls = explode( "***", $gallery["images_urls"] );
+                    // $images_dates = explode( "***", $gallery["images_dates"] );
+                    $images_ids = explode( "***", $gallery["images_ids"] );
+                    //error_log("images_ids: ".print_r($images_ids, true));//TODO
+                    //error_log("#-# images: ".print_r($images, true));//TODO
 
-                        $image = $result_img[0]['guid'];
-                        $img_id = $result_img[0]['ID'];
+                    $gal_cat_ids = isset($gallery['categories_id']) && $gallery['categories_id'] != '' ? explode( "***", $gallery["categories_id"] ) : array();
+                    if($admin_pagination != "all"){
+                        $pages = intval(ceil(count($images_ids)/$admin_pagination));
+                        $qanak = 0;
+                        if(isset($_COOKIE['ays_gpg_page_tab_free'])){
+                            $ays_page_cookie = explode("_", $_COOKIE['ays_gpg_page_tab_free']);
+                            if($ays_page_cookie[1] >= $pages){
+                                unset($_COOKIE['ays_gpg_page_tab_free']);
+                                setcookie('ays_gpg_page_tab_free', "", time() - 3600, "/");
+                                setcookie('ays_gpg_page_tab_free', 'tab_'.($pages-1), time() + 3600);
+                                $_COOKIE['ays_gpg_page_tab_free'] = 'tab_'.($pages-1);
+                            }
+                        }
 
-                        $img_thmb_src = wp_get_attachment_image_src($img_id,  'thumbnail');
-                        if($img_thmb_src === false){
-                            //$img_thmb_src = $images[$key]; TODO test several thumnails, what about img_thmb_src[0]
-                            $img_thmb_src = $image;
-                        }else{
-                            $img_thmb_src = !empty($img_thmb_src) ? $img_thmb_src[0] : $image_no_photo;
+                        for($i = 0; $i < $pages; $i++){
+                            $accordion_active = (isset($_COOKIE['ays_gpg_page_tab_free']) && $_COOKIE['ays_gpg_page_tab_free'] == "tab_".($i)) ? 'ays_accordion_active' : '';
+                ?>
+                
+                <ul class="ays-accordion ays_accordion <?php echo $accordion_active; ?>" id="page_<?php echo $i; ?>">
+                
+                <?php
+                    //error_log("admin_pagination=".$admin_pagination);//TODO
+                    for ($key = $qanak, $j = 0; $key < count($images_ids); $key++, $j++ ) {
+                        if($j >= $admin_pagination){
+                            $qanak = $key;
+                            break;
                         }
                         //TODO test: remove the photo from the media gallery and check the galleries
-                        
-                        $img_title = $result_img[0]['post_title'];
-                        $img_description = $result_img[0]['post_content'];
-                        $img_caption = $result_img[0]['post_excerpt'];
-                        $img_url = $result_img[0]['guid'];
-                        $img_date = $result_img[0]['post_date'];
-                        error_log("#-# img_id=".$img_id.", img_title=".$img_title.", img_description=".$img_description.", img_caption=".$img_caption.", img_url=".$img_url.", img_date=".$img_date);
+                        $query = "SELECT * FROM `".$wpdb->prefix."posts` WHERE `id` = '".$images_ids[$key]."'";
+                        $result_img =  $wpdb->get_results( $query, "ARRAY_A" );
+                        if (!empty($result_img)) {
 
-                        $img_thmb_html = !empty($img_thmb_src) ? '<img class="ays_ays_img" style="background-image:none;" src="'.$img_thmb_src.'">' : '<img class="ays_ays_img">';
-                        ?>
-                        <!-- TOTO FOR EACH SAVED IMAGE -->
-                        <li class="ays-accordion_li">
-                            <input type="hidden" name="ays-image-path[]" value="<?php echo $image; ?>">
-                            <input type="hidden" name="ays-image-id[]" value="<?php echo $img_id; ?>">
-                            <div class="ays-image-attributes">
-                                <div class='ays_image_div'>                      
-                                    <div class="ays_image_thumb" style="display: block; position: relative;">
-                                        <div class="ays_image_edit_div" style="position: absolute;"><i class="ays-move-images"></i></div>
-                                        <div class='ays_image_thumb_img'><?php echo $img_thmb_html; ?></div>
-                                    </div>
-                                </div>
-                                <div class="ays_image_attr_item_cat">
-                                    <div class="ays_image_attr_item_parent">
-                                        <div>
-                                            <?php echo __("Title: ", $this->plugin_name);?>
-                                            <b><?php echo stripslashes(esc_attr($img_title)); ?></b>
-                                            <input type="hidden" name="ays-image-title[]" value="<?php echo stripslashes(esc_attr($img_date)); ?>"/>
-                                        </div>
-                                        <div>
-                                            <?php echo __("Description: ", $this->plugin_name);?>
-                                            <b><?php echo stripslashes(esc_attr("$img_description")); ?></b>
-                                            <input type="hidden" name="ays-image-description[]" value="<?php echo stripslashes(esc_attr("$img_description")); ?>"/>
-                                        </div>
+                            $img_id = $result_img[0]['ID'];
+                            $image = $result_img[0]['guid'];
 
+                            $img_thmb_src = wp_get_attachment_image_src($img_id,  'thumbnail');
+                            if($img_thmb_src === false){
+                                $img_thmb_src = $image;
+                            }else{
+                                $img_thmb_src = !empty($img_thmb_src) ? $img_thmb_src[0] : $image_no_photo;
+                            }
+                            
+                            $img_title = $result_img[0]['post_title'];
+                            $img_description = $result_img[0]['post_content'];
+                            $img_caption = $result_img[0]['post_excerpt'];
+                            $img_url = $result_img[0]['guid'];
+                            $img_date = $result_img[0]['post_date'];
+                            error_log("#*# img_id=".$img_id.", img_title=".$img_title.", img_description=".$img_description.", img_caption=".$img_caption.", img_url=".$img_url.", img_date=".$img_date);
+
+                            $img_thmb_html = !empty($img_thmb_src) ? '<img class="ays_ays_img" style="background-image:none;" src="'.$img_thmb_src.'">' : '<img class="ays_ays_img">';
+                            ?>
+                            <!-- id NOT NULL GALLERY -->
+                            <li class="ays-accordion_li">
+                                <input type="hidden" name="ays-image-path[]" value="<?php echo $image; ?>">
+                                <input type="hidden" name="ays-image-id[]" value="<?php echo $img_id; ?>">
+                                <div class="ays-image-attributes">
+                                    <div class='ays_image_div'>                      
+                                        <div class="ays_image_thumb" style="display: block; position: relative;">
+                                            <div class="ays_image_edit_div" style="position: absolute;"><i class="ays-move-images"></i></div>
+                                            <div class='ays_image_thumb_img'><?php echo $img_thmb_html; ?></div>
+                                        </div>
                                     </div>
-                                    <div class="ays_image_cat">
-                                        <label>
-                                            <?php echo __("Image Category", $this->plugin_name);?>
-                                            <a class="ays_help" data-toggle="tooltip" title="<?php echo __("Select image categories", $this->plugin_name ); ?>">
-                                            <i class="fas fa-info-circle"></i>
-                                            </a>
-                                        </label>
-                                        <select class="ays-category form-control" multiple="multiple">
-                                            <?php
-                                            $gal_cats_ids = isset($gal_cat_ids[$key]) && $gal_cat_ids[$key] != '' ? explode( ",", $gal_cat_ids[$key] ) : array();
-                                            foreach ( $gallery_categories as $gallery_category ) {
-                                                $checked = (in_array($gallery_category['id'], $gal_cats_ids)) ? "selected" : "";
-                                                echo "<option value='".$gallery_category['id']."' ".$checked.">".$gallery_category['title']."</option>";
-                                            }                                            
-                                            ?>
-                                        </select>
-                                        <input type="hidden" class="for_select_name" name="ays_gallery_category[]">
+                                    <div class="ays_image_attr_item_cat">
+                                        <div class="ays_image_attr_item_parent">
+                                            <div>
+                                                <?php echo __("Title: ", $this->plugin_name);?>
+                                                <b><?php echo stripslashes(esc_attr($img_title)); ?></b>
+                                                <input type="hidden" name="ays-image-title[]" value="<?php echo stripslashes(esc_attr($img_title)); ?>"/>
+                                            </div>
+                                            <div>
+                                                <?php echo __("Description: ", $this->plugin_name);?>
+                                                <b><?php echo stripslashes(esc_attr($img_description)); ?></b>
+                                                <input type="hidden" name="ays-image-description[]" value="<?php echo stripslashes(esc_attr($img_description)); ?>"/>
+                                            </div>
+
+                                        </div>
+                                        <div class="ays_image_cat">
+                                            <label>
+                                                <?php echo __("Image Category", $this->plugin_name);?>
+                                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __("Select image categories", $this->plugin_name ); ?>">
+                                                <i class="fas fa-info-circle"></i>
+                                                </a>
+                                            </label>
+                                            <select class="ays-category form-control" multiple="multiple">
+                                                <?php
+                                                $gal_cats_ids = isset($gal_cat_ids[$key]) && $gal_cat_ids[$key] != '' ? explode( ",", $gal_cat_ids[$key] ) : array();
+                                                foreach ( $gallery_categories as $gallery_category ) {
+                                                    $checked = (in_array($gallery_category['id'], $gal_cats_ids)) ? "selected" : "";
+                                                    echo "<option value='".$gallery_category['id']."' ".$checked.">".$gallery_category['title']."</option>";
+                                                }                                            
+                                                ?>
+                                            </select>
+                                            <input type="hidden" class="for_select_name" name="ays_gallery_category[]">
+                                        </div>
                                     </div>
+                                    <input type="hidden" name="ays-image-date[]" class="ays_img_date" value="<?php echo $img_date; ?>" />
+                                    <div class="ays_del_li_div"><input type="checkbox" class="ays_del_li"/></div>
+                                    <div class='ays-delete-image_div'><i class="ays-delete-image"></i></div>
                                 </div>
-                                <input type="hidden" name="ays-image-date[]" class="ays_img_date" value="<?php echo $img_date; ?>" /> 
-                                <div class="ays_del_li_div"><input type="checkbox" class="ays_del_li"/></div>
-                                <div class='ays-delete-image_div'><i class="ays-delete-image"></i></div>
-                            </div>
-                        </li>
-                        <?php
+                            </li>
+                            <?php
+                            }
                         }
-                    }
-                } // end foreach image
-                endif;
-            ?>
-            </ul>
-            </div>
+                    ?>
+                </ul>
+                    <?php 
+                        }
+                    }else{
+                ?>
+                <ul class="ays-accordion">
+                <?php                    
+                    //echo "images=".$images[0];
+                    foreach ( $images_ids as $key => $id ) {
+                        error_log( "key=".$key);
+                        error_log( "id=".$id);
+                        //error_log( "wpdb->prefix=".$wpdb->prefix);
+                        $query = "SELECT * FROM `".$wpdb->prefix."posts` WHERE `id` = '".$id."'";
+                        error_log( "query=".$query);
+                        $result_img =  $wpdb->get_results( $query, "ARRAY_A" );
+                        //error_log("#########images: ".print_r($result_img, true));
+                        //error_log("#########images: ".print_r($result_img, true));
+                        // error_log("#########id: ".$result_img[0]['ID']);
+                        // error_log("#########count: ".count($result_img));
+                        // error_log("#########this_site_path: ".$this_site_path);
+                        if (!empty($result_img)) {
+
+                            $image = $result_img[0]['guid'];
+                            $img_id = $result_img[0]['ID'];
+
+                            $img_thmb_src = wp_get_attachment_image_src($img_id,  'thumbnail');
+                            if($img_thmb_src === false){
+                                //$img_thmb_src = $images[$key]; TODO test several thumnails, what about img_thmb_src[0]
+                                $img_thmb_src = $image;
+                            }else{
+                                $img_thmb_src = !empty($img_thmb_src) ? $img_thmb_src[0] : $image_no_photo;
+                            }
+                            //TODO test: remove the photo from the media gallery and check the galleries
+                            
+                            $img_title = $result_img[0]['post_title'];
+                            $img_description = $result_img[0]['post_content'];
+                            $img_caption = $result_img[0]['post_excerpt'];
+                            $img_url = $result_img[0]['guid'];
+                            $img_date = $result_img[0]['post_date'];
+                            error_log("#-# img_id=".$img_id.", img_title=".$img_title.", img_description=".$img_description.", img_caption=".$img_caption.", img_url=".$img_url.", img_date=".$img_date);
+
+                            $img_thmb_html = !empty($img_thmb_src) ? '<img class="ays_ays_img" style="background-image:none;" src="'.$img_thmb_src.'">' : '<img class="ays_ays_img">';
+                            ?>
+                            <!-- TOTO FOR EACH SAVED IMAGE -->
+                            <li class="ays-accordion_li">
+                                <input type="hidden" name="ays-image-path[]" value="<?php echo $image; ?>">
+                                <input type="hidden" name="ays-image-id[]" value="<?php echo $img_id; ?>">
+                                <div class="ays-image-attributes">
+                                    <div class='ays_image_div'>                      
+                                        <div class="ays_image_thumb" style="display: block; position: relative;">
+                                            <div class="ays_image_edit_div" style="position: absolute;"><i class="ays-move-images"></i></div>
+                                            <div class='ays_image_thumb_img'><?php echo $img_thmb_html; ?></div>
+                                        </div>
+                                    </div>
+                                    <div class="ays_image_attr_item_cat">
+                                        <div class="ays_image_attr_item_parent">
+                                            <div>
+                                                <?php echo __("Title: ", $this->plugin_name);?>
+                                                <b><?php echo stripslashes(esc_attr($img_title)); ?></b>
+                                                <input type="hidden" name="ays-image-title[]" value="<?php echo stripslashes(esc_attr($img_date)); ?>"/>
+                                            </div>
+                                            <div>
+                                                <?php echo __("Description: ", $this->plugin_name);?>
+                                                <b><?php echo stripslashes(esc_attr("$img_description")); ?></b>
+                                                <input type="hidden" name="ays-image-description[]" value="<?php echo stripslashes(esc_attr("$img_description")); ?>"/>
+                                            </div>
+
+                                        </div>
+                                        <div class="ays_image_cat">
+                                            <label>
+                                                <?php echo __("Image Category", $this->plugin_name);?>
+                                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __("Select image categories", $this->plugin_name ); ?>">
+                                                <i class="fas fa-info-circle"></i>
+                                                </a>
+                                            </label>
+                                            <select class="ays-category form-control" multiple="multiple">
+                                                <?php
+                                                $gal_cats_ids = isset($gal_cat_ids[$key]) && $gal_cat_ids[$key] != '' ? explode( ",", $gal_cat_ids[$key] ) : array();
+                                                foreach ( $gallery_categories as $gallery_category ) {
+                                                    $checked = (in_array($gallery_category['id'], $gal_cats_ids)) ? "selected" : "";
+                                                    echo "<option value='".$gallery_category['id']."' ".$checked.">".$gallery_category['title']."</option>";
+                                                }                                            
+                                                ?>
+                                            </select>
+                                            <input type="hidden" class="for_select_name" name="ays_gallery_category[]">
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="ays-image-date[]" class="ays_img_date" value="<?php echo $img_date; ?>" /> 
+                                    <div class="ays_del_li_div"><input type="checkbox" class="ays_del_li"/></div>
+                                    <div class='ays-delete-image_div'><i class="ays-delete-image"></i></div>
+                                </div>
+                            </li>
+                            <?php
+                            }
+                        }
+                    } // end foreach image
+                    endif;
+                ?>
+                </ul>
+                </div>
+            </div> <!-- end image_selection -->
+            <div id="image_query">
+                <div class="ays_image_cat">
+                    <label>
+                        <?php echo __("Select categories", $this->plugin_name);?>
+                    </label>
+                    <select class="ays-category form-control" multiple="multiple">
+                        <?php
+                        $gal_cats_ids = $query_categories != '' ? explode( ",", $query_categories) : array();
+                        foreach ( $gallery_categories as $gallery_category ) {
+                            $checked = (in_array($gallery_category['id'], $gal_cats_ids)) ? "selected" : "";
+                            echo "<option value='".$gallery_category['id']."' ".$checked.">".$gallery_category['title']."</option>";
+                        }                                            
+                        ?>
+                    </select>
+                    <input type="hidden" class="for_select_name" name="ays_query_category[]">
+                </div>
+            </div><!-- end image_query -->
             <div class="ays_admin_pages">
                 <ul>
                     <?php
@@ -838,7 +877,10 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                             <input type="radio" id="ays_gpg_images_global_loading" name="ays_images_loading" value="all_loaded"
                             <?php echo ($loading_type == "all_loaded") ? "checked" : ""; ?> />
                         </label>
-                        <label class="ays_gpg_image_hover_icon" id="gpg_image_lazy_loading"><?php echo __("Lazy loading ", $this->plugin_name);?> <input type="radio" id="ays_gpg_images_lazy_loading" name="ays_images_loading" value="current_loaded" <?php echo ($loading_type == "current_loaded") ? "checked" : ""; ?>/></label>
+                        <label class="ays_gpg_image_hover_icon" id="gpg_image_lazy_loading"><?php echo __("Lazy loading ", $this->plugin_name);?>
+                            <input type="radio" id="ays_gpg_images_lazy_loading" name="ays_images_loading" value="current_loaded" 
+                            <?php echo ($loading_type == "current_loaded") ? "checked" : ""; ?>/>
+                        </label>
                     </div>
                 </div>
             </div>
@@ -1923,7 +1965,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 </div>
             </div>
             <hr/>
-            <div class="form-group row">
+            <!-- <div class="form-group row">
                 <div class="col-sm-2">
                     <label for="ays_gpg_filter_lightbox">
                         <?php echo __("Choose filter for lightbox", $this->plugin_name);?>
@@ -1946,7 +1988,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                     </select>
                 </div>
             </div>
-            <hr/>
+            <hr/> -->
             <div class="form-group row">
                 <div class="col-sm-2">
                     <label><?php echo __("Allow key control", $this->plugin_name);?></label>
