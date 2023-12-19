@@ -78,7 +78,10 @@ class Gallery_Photo_Gallery_Admin {
         wp_enqueue_style( $this->plugin_name . "-banner", plugin_dir_url( __FILE__ ) . 'css/gallery-photo-gallery-banner.css', array(), $this->version, 'all' );
 
         wp_enqueue_style('leaflet.css', 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css');
-        
+
+        wp_enqueue_style( 'select2', '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css', array(), $this->version, 'all' );
+        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/gallery-photo-gallery-admin.css', array(), $this->version, 'all' );        
+
         if(false === strpos($hook_suffix, $this->plugin_name))
             return;
 
@@ -96,10 +99,8 @@ class Gallery_Photo_Gallery_Admin {
         wp_enqueue_style( 'font-awesome', 'https://use.fontawesome.com/releases/v5.4.1/css/all.css', array(), $this->version, 'all');
         wp_enqueue_style('ays_gpg_font_awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css', array(), $this->version, 'all');
 		wp_enqueue_style( 'ays_pb_bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css', array(), $this->version, 'all' );
-        wp_enqueue_style( 'select2', '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css', array(), $this->version, 'all' );
         wp_enqueue_style( $this->plugin_name."-mosaic.css", plugin_dir_url( __FILE__ ) . 'css/jquery.mosaic.min.css', array(), $this->version, 'all' );
         wp_enqueue_style( $this->plugin_name."-masonry.css", plugin_dir_url( __FILE__ ) . 'css/masonry.pkgd.css', array(), $this->version, 'all' );
-        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/gallery-photo-gallery-admin.css', array(), $this->version, 'all' );
 
 		wp_enqueue_style( 'animate.css', plugin_dir_url( __FILE__ ) . 'css/animate.css', array(), $this->version, 'all' );
 
@@ -441,7 +442,6 @@ class Gallery_Photo_Gallery_Admin {
         global $wpdb;
 
         $sql = "SELECT * FROM {$wpdb->prefix}ays_gallery_categories";
-
         $result = $wpdb->get_results($sql, 'ARRAY_A');
 
         return $result;
@@ -899,7 +899,6 @@ class Gallery_Photo_Gallery_Admin {
     // HANDLE CUSTOM MEDIA ATTRIBUTES: latitude, longitude and vignette
         
     function get_vignette_options() {
-        $directory_courant = ABSPATH;
 
         // Afficher le chemin
         // echo $directory_courant;
@@ -936,6 +935,44 @@ class Gallery_Photo_Gallery_Admin {
 
     }
 
+ 
+    // TODO can be removed, not used
+    // function get_all_categories() {
+
+    //     // Afficher le chemin
+    //     // echo $directory_courant;
+    //     // echo AYS_GPG_DIR;
+    
+    //     $dict = array();
+    //     // Add None
+    //     $dict["None"] = "None";
+
+    //     $worldfile = AYS_GPG_DIR . 'assets/world.json';
+    //     //echo $worldfile;
+    //     // // Utiliser glob pour obtenir la liste des fichiers dans le dossier
+    //     //$files = glob($directory . '/*');
+    //     $json = file_get_contents($worldfile); 
+    //     if ($json === false) {
+    //         // deal with error...
+    //     }
+        
+    //     $json_a = json_decode($json, true);
+    //     if ($json_a === null) {
+    //         // deal with error...
+    //     }
+        
+    //     foreach ($json_a as $country) {
+    //         $file = $country['file'];
+    //         //$str = json_encode($country);
+    //         //echo $str
+    //         $option = str_replace('_', ' ', $file);
+    //         $option = str_replace('.geojson', '', $option);
+    //         $dict[$file] = $option;
+    //     }
+
+    //     return $dict;
+    // }
+
     function other_way_to_get_countries() {
     
         $directory_courant = ABSPATH;
@@ -969,14 +1006,16 @@ class Gallery_Photo_Gallery_Admin {
 
     // Add custom field to media edit screen
     public function add_custom_fields_to_media_edit_screen($form_fields, $post) {
+
         $latitude_value = get_post_meta($post->ID, '_latitude', true);
         $longitude_value = get_post_meta($post->ID, '_longitude', true);
         $vignette_value = get_post_meta($post->ID, '_vignette', true);
+        $category_value = get_post_meta($post->ID, '_category', true);
 
         // echo $vignette_value;
         // echo $latitude_value;
         // echo $longitude_value;
-
+        
         $form_fields['latitude'] = array(
             'label' => 'Latitude',
             'input' => 'text',
@@ -991,6 +1030,7 @@ class Gallery_Photo_Gallery_Admin {
             'show_in_edit' => true,
         );
 
+        // display vignette selection
         $vignette_options = $this->get_vignette_options();
 
         $vignette_dropdown = '<select id="select-country" name="attachments[' . $post->ID . '][vignette]">';
@@ -1003,15 +1043,36 @@ class Gallery_Photo_Gallery_Admin {
             'label' => 'Vignette',
             'input' => 'text',
             'input' => 'html',
-            'html' => $vignette_dropdown,// . $leaflet_map,
+            'html' => $vignette_dropdown,
             'show_in_edit' => true,
         );
 
+        // display categories selection
+        $gallery_categories = $this->ays_get_gallery_categories();
+        $categories_dropdown = '<select id="select-categories" name="attachments[' . $post->ID . '][category]">';
+
+        $gal_cats_ids = $category_value;
+        //$gal_cats_ids = array();
+        foreach ( $gallery_categories as $gallery_category ) {
+            $checked = $gallery_category['id'] == $category_value ? "selected" : "";
+            $categories_dropdown .= "<option value='".$gallery_category['id']."' ".$checked.">".$gallery_category['title']."</option>";
+        }  
+        $categories_dropdown .= '</select>';
+        
+        $form_fields['category'] = array(
+            'label' => 'Category',
+            'input' => 'text',
+            'input' => 'html',
+            'html' => $categories_dropdown,
+            'show_in_edit' => true,
+        );
+        
         return $form_fields;
     }
-
+    // TODO add the category "uncategorized" and hide it from the list of categories
     // hook callback for saving custom field value
     public function save_custom_fields_value($post, $attachment) {
+        error_log("save attachment: IN ".print_r($attachment, true));
         if (isset($attachment['latitude'])) {
             update_post_meta($post['ID'], '_latitude', $attachment['latitude']);
         }
@@ -1021,6 +1082,10 @@ class Gallery_Photo_Gallery_Admin {
 
         if (isset($attachment['vignette'])) {
             update_post_meta($post['ID'], '_vignette', $attachment['vignette']);
+        }
+
+        if (isset($attachment['category'])) {
+            update_post_meta($post['ID'], '_category', $attachment['category']);
         }
 
         return $post;

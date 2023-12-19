@@ -288,7 +288,7 @@ if( $change_gpg_create_author  && $change_gpg_create_author > 0 ){
 }
 
 $query_categories = isset($gal_options['query_categories']) ? $gal_options['query_categories'] : '';
-error_log( "CATEGORIES from options: ".$query_categories);
+//error_log( "CATEGORIES from options: ".$query_categories);
 
 $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_GPG_ADMIN_URL ."/images/loaders/loading.gif'></span>";
 ?>
@@ -320,9 +320,6 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
             <div class="col-sm-3">
                 <label for="gallery_title">
                     <?php echo __("Gallery Title", $this->plugin_name);?>
-                    <a class="ays_help" data-toggle="tooltip" title="<?php echo __("In this field is noted the name of the gallery", $this->plugin_name ); ?>">
-                       <i class="fas fa-info-circle"></i>
-                    </a>
                 </label>
             </div>
             <div class="col-sm-9">
@@ -475,7 +472,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 <?php
                 else:
                     // Gallery id NOT NULL
-                    error_log("^^^^^^^^^^^^^^ id is not null: ".$id);
+                    //error_log("^^^^^^^^^^^^^^ id is not null: ".$id);
                     // echo "url=".$gallery["images_urls"]; empty
                     // echo "dates=".$gallery["images_dates"]; with date
                     //$images = explode( "***", $gallery["images"] );
@@ -508,12 +505,39 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 <ul class="ays-accordion ays_accordion <?php echo $accordion_active; ?>" id="page_<?php echo $i; ?>">
                 
                 <?php
+
+                    $sql = "SELECT * FROM {$wpdb->prefix}ays_gallery_categories";
+                    $result_categories = $wpdb->get_results($sql, 'ARRAY_A');
+
                     //error_log("admin_pagination=".$admin_pagination);//TODO
                     for ($key = $qanak, $j = 0; $key < count($images_ids); $key++, $j++ ) {
                         if($j >= $admin_pagination){
                             $qanak = $key;
                             break;
                         }
+
+                        // query from table postmeta
+                        $query = "SELECT meta_key, meta_value FROM `".$wpdb->prefix."postmeta` WHERE `post_id` = '".$image_ids[$key]."'";
+                        error_log("query: ".$query);
+                        $result_meta =  $wpdb->get_results( $query, "ARRAY_A" );
+                        $category_id = -1;
+                        $category = '';
+                        if (count($result_meta) > 0) {
+                            foreach ($result_meta as $item) {
+                                if ($item['meta_key'] === '_category') {
+                                    $category_id = $item['meta_value'];
+                                }
+                            }
+
+                            if (count($result_categories) > 0 && $category_id > 0) {
+                                foreach ($result_categories as $item) {
+                                    if ($item['id'] === $category_id) {
+                                        $category = $item['title'];
+                                    }
+                                }
+                            }
+                        }
+
                         //TODO test: remove the photo from the media gallery and check the galleries
                         $query = "SELECT * FROM `".$wpdb->prefix."posts` WHERE `id` = '".$images_ids[$key]."'";
                         $result_img =  $wpdb->get_results( $query, "ARRAY_A" );
@@ -561,14 +585,14 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                                                 <b><?php echo stripslashes(esc_attr($img_description)); ?></b>
                                                 <input type="hidden" name="ays-image-description[]" value="<?php echo stripslashes(esc_attr($img_description)); ?>"/>
                                             </div>
-
+                                            <div>
+                                                <?php echo __("Category: ", $this->plugin_name);?>
+                                                <b><?php echo stripslashes(esc_attr($category)); ?></b>
+                                            </div>
                                         </div>
-                                        <div class="ays_image_cat">
+                                        <!-- <div class="ays_image_cat">
                                             <label>
                                                 <?php echo __("Image Category", $this->plugin_name);?>
-                                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __("Select image categories", $this->plugin_name ); ?>">
-                                                <i class="fas fa-info-circle"></i>
-                                                </a>
                                             </label>
                                             <select class="ays-category form-control" multiple="multiple">
                                                 <?php
@@ -580,7 +604,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                                                 ?>
                                             </select>
                                             <input type="hidden" class="for_select_name" name="ays_gallery_category[]">
-                                        </div>
+                                        </div> -->
                                     </div>
                                     <input type="hidden" name="ays-image-date[]" class="ays_img_date" value="<?php echo $img_date; ?>" />
                                     <div class="ays_del_li_div"><input type="checkbox" class="ays_del_li"/></div>
@@ -597,14 +621,40 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                     }else{
                 ?>
                 <ul class="ays-accordion">
-                <?php                    
+                <?php
+
+                    $sql = "SELECT * FROM {$wpdb->prefix}ays_gallery_categories";
+                    $result_categories = $wpdb->get_results($sql, 'ARRAY_A');
+
                     //echo "images=".$images[0];
+                    // loop for all image ids
                     foreach ( $images_ids as $key => $id ) {
-                        error_log( "key=".$key);
-                        error_log( "id=".$id);
-                        //error_log( "wpdb->prefix=".$wpdb->prefix);
+                        
+                        // query from table postmeta
+                        $query = "SELECT meta_key, meta_value FROM `".$wpdb->prefix."postmeta` WHERE `post_id` = '".$id."'";
+                        error_log("query: ".$query);
+                        $result_meta =  $wpdb->get_results( $query, "ARRAY_A" );
+                        $category_id = -1;
+                        $category = '';
+                        if (count($result_meta) > 0) {
+           
+                            foreach ($result_meta as $item) {
+                                if ($item['meta_key'] === '_category') {
+                                    $category_id = $item['meta_value'];
+                                }
+                            }
+
+                            if (count($result_categories) > 0 && $category_id > 0) {
+                                foreach ($result_categories as $item) {
+                                    if ($item['id'] === $category_id) {
+                                        $category = $item['title'];
+                                    }
+                                }
+                            }
+                        }    
+                        
                         $query = "SELECT * FROM `".$wpdb->prefix."posts` WHERE `id` = '".$id."'";
-                        error_log( "query=".$query);
+                        //error_log( "query=".$query);
                         $result_img =  $wpdb->get_results( $query, "ARRAY_A" );
                         //error_log("#########images: ".print_r($result_img, true));
                         //error_log("#########images: ".print_r($result_img, true));
@@ -630,7 +680,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                             $img_caption = $result_img[0]['post_excerpt'];
                             $img_url = $result_img[0]['guid'];
                             $img_date = $result_img[0]['post_date'];
-                            error_log("#-# img_id=".$img_id.", img_title=".$img_title.", img_description=".$img_description.", img_caption=".$img_caption.", img_url=".$img_url.", img_date=".$img_date);
+                            //error_log("#-# img_id=".$img_id.", img_title=".$img_title.", img_description=".$img_description.", img_caption=".$img_caption.", img_url=".$img_url.", img_date=".$img_date);
 
                             $img_thmb_html = !empty($img_thmb_src) ? '<img class="ays_ays_img" style="background-image:none;" src="'.$img_thmb_src.'">' : '<img class="ays_ays_img">';
                             ?>
@@ -657,14 +707,14 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                                                 <b><?php echo stripslashes(esc_attr("$img_description")); ?></b>
                                                 <input type="hidden" name="ays-image-description[]" value="<?php echo stripslashes(esc_attr("$img_description")); ?>"/>
                                             </div>
-
+                                            <div>
+                                                <?php echo __("Category: ", $this->plugin_name);?>
+                                                <b><?php echo stripslashes(esc_attr("$category")); ?></b>
+                                            </div>
                                         </div>
-                                        <div class="ays_image_cat">
+                                        <!-- <div class="ays_image_cat">
                                             <label>
                                                 <?php echo __("Image Category", $this->plugin_name);?>
-                                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __("Select image categories", $this->plugin_name ); ?>">
-                                                <i class="fas fa-info-circle"></i>
-                                                </a>
                                             </label>
                                             <select class="ays-category form-control" multiple="multiple">
                                                 <?php
@@ -676,7 +726,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                                                 ?>
                                             </select>
                                             <input type="hidden" class="for_select_name" name="ays_gallery_category[]">
-                                        </div>
+                                        </div> -->
                                     </div>
                                     <input type="hidden" name="ays-image-date[]" class="ays_img_date" value="<?php echo $img_date; ?>" /> 
                                     <div class="ays_del_li_div"><input type="checkbox" class="ays_del_li"/></div>
@@ -693,22 +743,35 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 </div>
             </div> <!-- end image_selection -->
             <div id="image_query">
-                <div class="ays_image_cat">
-                    <label>
-                        <?php echo __("Select categories", $this->plugin_name);?>
-                    </label>
-                    <select class="ays-category form-control" multiple="multiple">
-                        <?php
-                        $gal_cats_ids = $query_categories != '' ? explode( ",", $query_categories) : array();
-                        foreach ( $gallery_categories as $gallery_category ) {
-                            $checked = (in_array($gallery_category['id'], $gal_cats_ids)) ? "selected" : "";
-                            echo "<option value='".$gallery_category['id']."' ".$checked.">".$gallery_category['title']."</option>";
-                        }                                            
-                        ?>
-                    </select>
-                    <input type="hidden" class="for_select_name" name="ays_query_category[]">
+
+
+                <h6 class="ays-subtitle"><?php echo  __('Query options', $this->plugin_name) ?></h6>
+                <hr/>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label for="ays_filter_cat">
+                            <?php echo __("Select categories", $this->plugin_name);?>
+                            <span class="ays_option_note">
+                                <?php echo __("Leave empty to disable query by category", $this->plugin_name);?>
+                            </span>
+                        </label>
+                    </div>
+                    <div class="col-sm-9">
+                        <select class="ays-category form-control" multiple="multiple">
+                            <?php
+                            $gal_cats_ids = $query_categories != '' ? explode( ",", $query_categories) : array();
+                            foreach ( $gallery_categories as $gallery_category ) {
+                                $checked = (in_array($gallery_category['id'], $gal_cats_ids)) ? "selected" : "";
+                                echo "<option value='".$gallery_category['id']."' ".$checked.">".$gallery_category['title']."</option>";
+                            }                                            
+                            ?>
+                        </select>
+                        <input type="hidden" class="for_select_name" name="ays_query_category[]">
+                    </div>
                 </div>
+
             </div><!-- end image_query -->
+
             <div class="ays_admin_pages">
                 <ul>
                     <?php
@@ -799,9 +862,6 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 <div class="col-sm-3">
                     <label>
                         <?php echo __("Show gallery title", $this->plugin_name);?>
-                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __("You can decide whether to show the title and description of the gallery or not", $this->plugin_name);?>">
-                           <i class="fas fa-info-circle"></i>
-                        </a>
                     </label>
                 </div>
                 <div class="col-sm-9">
@@ -813,9 +873,6 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 <div class="col-sm-3">
                     <label for="ays_image_sizes">
                         <?php echo __("Thumbnail Size", $this->plugin_name);?>
-                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __("The size of the image in the thumbnail", $this->plugin_name);?>">
-                           <i class="fas fa-info-circle"></i>
-                        </a>
                     </label>
                 </div>
                 <div class="col-sm-9">            
@@ -889,9 +946,6 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 <div class="col-sm-3">
                     <label for="gallery_img_loading_effect">
                         <?php echo __("Images loading effect", $this->plugin_name);?>
-                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __("Choose Images loading animation", $this->plugin_name);?>">
-                           <i class="fas fa-info-circle"></i>
-                        </a>
                     </label>
                 </div>
                 <div class="col-sm-9">
@@ -953,9 +1007,6 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 <div class="col-sm-3">
                     <label for="link_on_whole_img">
                         <?php echo __("Make a link on the whole image", $this->plugin_name);?>
-                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __("Make a URL redirection while clicking on any spot on the image container. Please note that the option works when the Disable lightbox option is activated.", $this->plugin_name);?>">
-                           <i class="fas fa-info-circle"></i>
-                        </a>
                     </label>
                 </div>
                 <div class="col-sm-9">
@@ -967,9 +1018,6 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 <div class="col-sm-3">
                     <label for="gpg_search_img">
                         <?php echo __("Enable search for image", $this->plugin_name);?>
-                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __("This option is not compatible with the Mosaic layout.", $this->plugin_name);?>">
-                           <i class="fas fa-info-circle"></i>
-                        </a>
                     </label>
                 </div>
                 <div class="col-sm-9">
@@ -981,9 +1029,6 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 <div class="col-sm-3">
                     <label for="gallery_width">
                         <?php echo __("Gallery Width", $this->plugin_name);?>
-                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __("This field shows the width of the Gallery", $this->plugin_name);?>">
-                           <i class="fas fa-info-circle"></i>
-                        </a>
                     </label>
                 </div>
                 <div class="col-sm-9 ays_gpg_display_flex_width">
@@ -1045,9 +1090,6 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 <div class="col-sm-3">
                     <label for="gpg_height_width_ratio">
                         <?php echo __("Height / Width ratio", $this->plugin_name);?>
-                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __("This ratio indicates the quantitative relation between height and width. For example, if you give 1.2 value to ratio while the width is 300, then the height will be 300x1.2=360.", $this->plugin_name);?>">
-                           <i class="fas fa-info-circle"></i>
-                        </a>
                     </label>
                 </div>
                 <div class="col-sm-9">
@@ -1378,9 +1420,6 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 <div class="col-sm-3">
                     <label for='ays_gallery_desc_color'>
                         <?php echo __("Gallery description text color", $this->plugin_name);?>
-                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __("The color of the Gallery description", $this->plugin_name);?>">
-                           <i class="fas fa-info-circle"></i>
-                        </a>
                     </label>
                 </div>
                 <div class="col-sm-9">                    
@@ -1443,9 +1482,6 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                     <div class="col-sm-3">
                         <label for="gallery_img_hover_simple">
                             <?php echo __("Hover animation", $this->plugin_name);?>
-                            <!-- <a class="ays_help" data-toggle="tooltip" title="<?php echo __("Hover appearing animation of the images of Gallery", $this->plugin_name);?>">
-                               <i class="fas fa-info-circle"></i>
-                            </a> -->
                         </label>
                     </div>
                     <div class="col-sm-3">
@@ -1521,9 +1557,6 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                     <label for="ays_gpg_hover_animation_speed">
                         <span>
                             <?php echo  __('Animation speed', $this->plugin_name) ?>
-                            <!-- <a class="ays_help" data-toggle="tooltip" title="<?php echo __("Specify the animation speed of the image.", $this->plugin_name); ?>">
-                                <i class="fas fa-info-circle"></i>
-                            </a> -->
                         </span>
                     </label>
                 </div>
@@ -1536,9 +1569,6 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 <div class="col-sm-3">
                     <label>
                         <?php echo __("Hover opacity", $this->plugin_name);?>
-                        <!-- <a class="ays_help" data-toggle="tooltip" title="<?php echo __("The transparency degree of the image hover", $this->plugin_name);?>">
-                           <i class="fas fa-info-circle"></i>
-                        </a> -->
                     </label>
                 </div>
                 <div class="col-sm-3 gpg_range_div">
@@ -1571,9 +1601,6 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 <div class="col-sm-3">
                     <label>
                         <?php echo __("Zoom icon", $this->plugin_name);?>
-                        <!-- <a class="ays_help" data-toggle="tooltip" title="<?php echo __("During hover, the icon seen on the image", $this->plugin_name);?>">
-                           <i class="fas fa-info-circle"></i>
-                        </a> -->
                     </label>
                 </div>
                 <div class="col-sm-9">

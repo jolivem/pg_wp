@@ -597,7 +597,7 @@ class Galleries_List_Table extends WP_List_Table{
     }    
 
     function column_title( $item ) {
-        error_log("column_title IN");
+        //error_log("column_title IN");
         $delete_nonce = wp_create_nonce( $this->plugin_name . "-delete-gallery" );
         $duplicate_nonce = wp_create_nonce( $this->plugin_name . "-duplicate-gallery" );
         $gallery_title = esc_attr(stripcslashes($item['title']));

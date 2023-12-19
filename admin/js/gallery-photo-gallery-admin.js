@@ -811,6 +811,7 @@
                     if(accordion.length > 1){
                         accordion = $(document).find('ul.ays-accordion.ays_accordion_active');
                     }
+                    
                     console.log("attachment[i] = ", attachment[i]);
                     let newListImage = '<li class="ays-accordion_li">' +
                         //'           TOTO IMAGE NOT SAVED' +
@@ -824,29 +825,15 @@
                         '                   </div>' +
                         '               </div>' + 
                         '               <div class="ays_image_attr_item_cat">' +
-                        '               <div class="ays_image_attr_item_parent">' +
-                        '                   <div>Title: <b>'+(attachment[i].title)+'</b>' +
-                        '                       <input type="hidden" class="ays_img_title" type="text" name="ays-image-title[]" value="'+(attachment[i].title)+'" placeholder="Image title"/>' +
-                        '                   </div>' +
-                        '                   <div>Description: <b>'+(attachment[i].description)+'</b>' +
-                        '                       <input type="hidden" class="ays_img_desc" type="text" name="ays-image-description[]" value="'+(attachment[i].description)+'" placeholder="Image description"/>' +
+                        '                   <div class="ays_image_attr_item_parent">' +
+                        '                       <div>Title: <b>'+(attachment[i].title)+'</b>' +
+                        '                           <input type="hidden" class="ays_img_title" type="text" name="ays-image-title[]" value="'+(attachment[i].title)+'" placeholder="Image title"/>' +
+                        '                       </div>' +
+                        '                       <div>Description: <b>'+(attachment[i].description)+'</b>' +
+                        '                           <input type="hidden" class="ays_img_desc" type="text" name="ays-image-description[]" value="'+(attachment[i].description)+'" placeholder="Image description"/>' +
+                        '                       </div>' +
                         '                   </div>' +
                         '               </div>' +
-                        '               <div class="ays_image_cat">' +
-                        '                   <label>Image Category'+
-                        '                    <a class="ays_help" data-toggle="tooltip" title="'+ays_img_cat_tooltip+'">'+
-                        '                       <i class="fas fa-info-circle"></i>'+
-                        '                    </a></label>' +
-                        '                   <select class="ays-category form-control" multiple="multiple">';
-                        
-                            for (var j = 0; j < ays_gpg_admin['categories'].length; j++) {
-                                newListImage += '<option value="'+ays_gpg_admin['categories'][j]['id']+'">'+ays_gpg_admin['categories'][j]['title']+'</option>';
-                            }
-
-                        newListImage +='</select>' +
-                        '<input type="hidden" class="for_select_name" name="ays_gallery_category[]">' +
-                        '                </div>' +
-                        '           </div>' +
                         '               <input type="hidden" name="ays-image-date[]" class="ays_img_date" value="'+(date)+'"/>' +
                         '               <div class="ays_del_li_div"><input type="checkbox" class="ays_del_li"/></div>'+
                         '               <div class="ays-delete-image_div"><i class="ays-delete-image"></i></div>' +

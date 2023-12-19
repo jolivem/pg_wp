@@ -135,6 +135,14 @@
     margin-bottom: 3px;
 }
 
+.ays_option_note {
+    text-align: left;
+    display: block;
+    font-size: 11px;
+    font-style: italic;
+    margin-bottom: 3px;
+}
+
 #ays-gallery-form .ays_image_attr_item input {
     padding: 5px 5px;
     margin-bottom: 0; 
