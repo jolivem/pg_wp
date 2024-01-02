@@ -97,7 +97,7 @@ class GLP_Admin {
 		 * class.
 		 */
         wp_enqueue_style( 'font-awesome', 'https://use.fontawesome.com/releases/v5.4.1/css/all.css', array(), $this->version, 'all');
-        wp_enqueue_style('ays_gpg_font_awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css', array(), $this->version, 'all');
+        wp_enqueue_style('glp_font_awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css', array(), $this->version, 'all');
 		wp_enqueue_style( 'ays_pb_bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css', array(), $this->version, 'all' );
         wp_enqueue_style( $this->plugin_name."-mosaic.css", plugin_dir_url( __FILE__ ) . 'css/jquery.mosaic.min.css', array(), $this->version, 'all' );
         wp_enqueue_style( $this->plugin_name."-masonry.css", plugin_dir_url( __FILE__ ) . 'css/masonry.pkgd.css', array(), $this->version, 'all' );
@@ -128,7 +128,7 @@ class GLP_Admin {
         if (false !== strpos($hook_suffix, "plugins.php")){
             wp_enqueue_script( 'sweetalert-js', '//cdn.jsdelivr.net/npm/sweetalert2@7.26.29/dist/sweetalert2.all.min.js', array('jquery'), $this->version, true );
             wp_enqueue_script( $this->plugin_name . '-adminjs', plugin_dir_url( __FILE__ ) . 'js/admin.js', array( 'jquery' ), $this->version, true );
-            wp_localize_script($this->plugin_name . '-adminjs',  'ays_gpg_admin_ajax', array('ajax_url' => admin_url('admin-ajax.php')));
+            wp_localize_script($this->plugin_name . '-adminjs',  'glp_admin_ajax', array('ajax_url' => admin_url('admin-ajax.php')));
         }
         wp_enqueue_script('leaflet', 'https://unpkg.com/leaflet/dist/leaflet.js', array('jquery'), '1.7.1', true);
 
@@ -153,7 +153,7 @@ class GLP_Admin {
         wp_enqueue_media();
         
 		wp_enqueue_script( "ays_pb_popper", 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js', array( 'jquery' ), $this->version, true );
-        wp_enqueue_style('ays_gpg_code_mirror', 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/codemirror.css', array(), $this->version, 'all');
+        wp_enqueue_style('glp_code_mirror', 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/codemirror.css', array(), $this->version, 'all');
 		wp_enqueue_script( "ays_pb_bootstrap", 'https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( 'select2js', '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js', array('jquery'), $this->version, true );
         wp_enqueue_script( 'imagesloaded.min.js', 'https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js', array( 'jquery' ), $this->version, true );
@@ -172,7 +172,7 @@ class GLP_Admin {
             'searching'         => __( "Searching...", $this->plugin_name ),
         ));
 
-        $gpg_banner_date = $this->ays_gpg_update_banner_time();
+        $gpg_banner_date = $this->glp_update_banner_time();
         wp_localize_script( $this->plugin_name . "admin", 'galleryLangObj', array(
             'gpgBannerDate'      => $gpg_banner_date,
             'copied'             => __( 'Copied!', $this->plugin_name),
@@ -183,7 +183,7 @@ class GLP_Admin {
         ) );
         
         $cats = $this->ays_get_gallery_categories();
-        wp_localize_script($this->plugin_name . "admin",  'ays_gpg_admin', array(
+        wp_localize_script($this->plugin_name . "admin",  'glp_admin', array(
             'categories' => $cats,
             'nextGalleryPage' => __( 'Are you sure you want to go to the next gallery page?', $this->plugin_name),
             'prevGalleryPage' => __( 'Are you sure you want to go to the previous gallery page?', $this->plugin_name),
@@ -464,17 +464,17 @@ class GLP_Admin {
         return $aysGlobal_array;
       }
     
-    function ays_gpg_register_tinymce_plugin($plugin_array) {
-        $plugin_array['ays_gpg_button_mce'] = AYS_GPG_BASE_URL .'/ays_gpg_shortcode.js';
+    function glp_register_tinymce_plugin($plugin_array) {
+        $plugin_array['glp_button_mce'] = AYS_GPG_BASE_URL .'/glp_shortcode.js';
         return $plugin_array;
     }
     
-    function ays_gpg_add_tinymce_button($buttons) {
-        $buttons[] = "ays_gpg_button_mce";
+    function glp_add_tinymce_button($buttons) {
+        $buttons[] = "glp_button_mce";
         return $buttons;
     }
     
-    function gen_ays_gpg_shortcode_callback() {
+    function gen_glp_shortcode_callback() {
         $shortcode_data = $this->ays_get_gpg_options();
 
         ?>
@@ -502,7 +502,7 @@ class GLP_Admin {
                         <select id="ays_gpg" style="padding: 2px; height: 25px; font-size: 16px;width:100%;">
                             <option>--Select Gallery--</option>
                                 <?php foreach($shortcode_data as $index=>$data)
-                                    echo '<option id="'.$data[0].'" value="'.$data[0].'" mw="'.$data[2].'" mh="'.$data[3].'" class="ays_gpg_options">'.$data[1].'</option>';
+                                    echo '<option id="'.$data[0].'" value="'.$data[0].'" mw="'.$data[2].'" mh="'.$data[3].'" class="glp_options">'.$data[1].'</option>';
                                 ?>
                         </select>
                         </span>
@@ -631,7 +631,7 @@ class GLP_Admin {
         return $d && $d->format($format) == $date;
     }
 
-    public static function ays_gpg_restriction_string($type, $x, $length){
+    public static function glp_restriction_string($type, $x, $length){
         $output = "";
         switch($type){
             case "char":                
@@ -752,7 +752,7 @@ class GLP_Admin {
 
     }
 
-    public function ays_gpg_author_user_search() {
+    public function glp_author_user_search() {
         $search = isset($_REQUEST['search']) && $_REQUEST['search'] != '' ? sanitize_text_field( $_REQUEST['search'] ) : null;
         $checked = isset($_REQUEST['val']) && $_REQUEST['val'] !='' ? sanitize_text_field( $_REQUEST['val'] ) : null;
 
@@ -801,8 +801,8 @@ class GLP_Admin {
         $content = array();
         $var_counter = 0; 
 
-        $content[] = '<div class="ays-gpg-message-vars-box">';
-            $content[] = '<div class="ays-gpg-message-vars-icon">';
+        $content[] = '<div class="glp-message-vars-box">';
+            $content[] = '<div class="glp-message-vars-icon">';
                 $content[] = '<div>';
                     $content[] = '<i class="ays_fa ays_fa_link"></i>';
                 $content[] = '</div>';
@@ -813,13 +813,13 @@ class GLP_Admin {
                     $content[] = '</a>';
                 $content[] = '</div>';
             $content[] = '</div>';
-            $content[] = '<div class="ays-gpg-message-vars-data">';
+            $content[] = '<div class="glp-message-vars-data">';
                 foreach($gallery_message_vars as $var => $var_name){
                     $var_counter++;
-                    $content[] = '<label class="ays-gpg-message-vars-each-data-label">';
-                        $content[] = '<input type="radio" class="ays-gpg-message-vars-each-data-checker" hidden id="ays_gpg_message_var_count_'. $var_counter .'" name="ays_gpg_message_var_count">';
-                        $content[] = '<div class="ays-gpg-message-vars-each-data">';
-                            $content[] = '<input type="hidden" class="ays-gpg-message-vars-each-var" value="'. $var .'">';
+                    $content[] = '<label class="glp-message-vars-each-data-label">';
+                        $content[] = '<input type="radio" class="glp-message-vars-each-data-checker" hidden id="glp_message_var_count_'. $var_counter .'" name="glp_message_var_count">';
+                        $content[] = '<div class="glp-message-vars-each-data">';
+                            $content[] = '<input type="hidden" class="glp-message-vars-each-var" value="'. $var .'">';
                             $content[] = '<span>'. $var_name .'</span>';
                         $content[] = '</div>';
                     $content[] = '</label>';
@@ -848,16 +848,16 @@ class GLP_Admin {
         wp_redirect($add_new_gpg_url);
     }
 
-    public function ays_gpg_dismiss_button(){
+    public function glp_dismiss_button(){
 
         $data = array(
             'status' => false,
         );
 
-        if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'ays_gpg_dismiss_button') { 
+        if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'glp_dismiss_button') { 
             if( (isset( $_REQUEST['_ajax_nonce'] ) && wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'photo-gallery-sale-banner' )) && current_user_can( 'manage_options' )){
-                update_option('ays_gpg_sale_btn', 1);
-                update_option('ays_gpg_sale_date', current_time( 'mysql' ));
+                update_option('glp_sale_btn', 1);
+                update_option('glp_sale_date', current_time( 'mysql' ));
                 $data['status'] = true;
             }
         }
@@ -868,32 +868,32 @@ class GLP_Admin {
         wp_die();
     }
 
-    public function ays_gpg_update_banner_time(){
+    public function glp_update_banner_time(){
 
         $date = time() + ( 3 * 24 * 60 * 60 ) + (int) ( get_option( 'gmt_offset' ) * HOUR_IN_SECONDS);
         // $date = time() + ( 60 ) + (int) ( get_option( 'gmt_offset' ) * HOUR_IN_SECONDS); // for testing | 1 min
         $next_3_days = date('M d, Y H:i:s', $date);
 
-        $ays_gpg_banner_time = get_option('ays_gpg_banner_time');
+        $glp_banner_time = get_option('glp_banner_time');
 
-        if ( !$ays_gpg_banner_time || is_null( $ays_gpg_banner_time ) ) {
-            update_option('ays_gpg_banner_time', $next_3_days ); 
+        if ( !$glp_banner_time || is_null( $glp_banner_time ) ) {
+            update_option('glp_banner_time', $next_3_days ); 
         }
 
-        $get_ays_gpg_banner_time = get_option('ays_gpg_banner_time');
+        $get_glp_banner_time = get_option('glp_banner_time');
 
         $val = 60*60*24*0.5; // half day
         // $val = 60; // for testing | 1 min
 
         $current_date = current_time( 'mysql' );
-        $date_diff = strtotime($current_date) - intval(strtotime($get_ays_gpg_banner_time));
+        $date_diff = strtotime($current_date) - intval(strtotime($get_glp_banner_time));
 
         $days_diff = $date_diff / $val;
         if(intval($days_diff) > 0 ){
-            update_option('ays_gpg_banner_time', $next_3_days);
+            update_option('glp_banner_time', $next_3_days);
         }
 
-        return $get_ays_gpg_banner_time;
+        return $get_glp_banner_time;
     }
 
     // HANDLE CUSTOM MEDIA ATTRIBUTES: latitude, longitude and vignette

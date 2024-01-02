@@ -125,41 +125,41 @@ class Galleries_List_Table extends WP_List_Table{
             $height                 = 0;
             $view_type              = isset($data['ays-view-type']) && $data['ays-view-type'] != '' ? sanitize_text_field( $data['ays-view-type'] ) : '';
             $columns_count          = (isset($data['ays-columns-count']) && $data['ays-columns-count'] != '') ? absint( intval( $data['ays-columns-count'] ) ) : '';
-            $images_distance        = (isset($data['ays-gpg-images-distance']) && $data['ays-gpg-images-distance'] != '') ? absint( intval( $data['ays-gpg-images-distance'] ) ) : '5';
+            $images_distance        = (isset($data['glp-images-distance']) && $data['glp-images-distance'] != '') ? absint( intval( $data['glp-images-distance'] ) ) : '5';
             $hover_effect           = (isset($data['ays_hover_simple']) && $data['ays_hover_simple'] != '') ? sanitize_text_field( $data['ays_hover_simple'] ) : '';
             $img_load_effect        = (isset($data['ays_img_load_effect']) && $data['ays_img_load_effect'] != '') ? sanitize_text_field( $data['ays_img_load_effect'] ) : '';
-            $hover_opacity          = (isset($data['ays-gpg-image-hover-opacity']) && $data['ays-gpg-image-hover-opacity'] != '') ? sanitize_text_field( $data['ays-gpg-image-hover-opacity'] ) : '';
-            $hover_color            = (isset($data['ays-gpg-hover-color']) && $data['ays-gpg-hover-color'] != '') ? sanitize_text_field( $data['ays-gpg-hover-color'] ) : '';
-            $hover_icon             = (isset($data['ays-gpg-image-hover-icon']) && $data['ays-gpg-image-hover-icon'] != '') ? sanitize_text_field( $data['ays-gpg-image-hover-icon'] ) : '';
+            $hover_opacity          = (isset($data['glp-image-hover-opacity']) && $data['glp-image-hover-opacity'] != '') ? sanitize_text_field( $data['glp-image-hover-opacity'] ) : '';
+            $hover_color            = (isset($data['glp-hover-color']) && $data['glp-hover-color'] != '') ? sanitize_text_field( $data['glp-hover-color'] ) : '';
+            $hover_icon             = (isset($data['glp-image-hover-icon']) && $data['glp-image-hover-icon'] != '') ? sanitize_text_field( $data['glp-image-hover-icon'] ) : '';
             $image_sizes            = (isset($data['ays_image_sizes']) && $data['ays_image_sizes'] != '') ? sanitize_text_field( $data['ays_image_sizes'] ) : '';
             $custom_css             = isset($data['gallery_custom_css']) && $data['gallery_custom_css'] != '' ? stripslashes( esc_attr($data['gallery_custom_css'])) : '';
-            $lightbox_color         = (isset($data['ays-gpg-lightbox-color']) && $data['ays-gpg-lightbox-color'] != '') ? wp_unslash(sanitize_text_field( $data['ays-gpg-lightbox-color'] )) : '';
+            $lightbox_color         = (isset($data['glp-lightbox-color']) && $data['glp-lightbox-color'] != '') ? wp_unslash(sanitize_text_field( $data['glp-lightbox-color'] )) : '';
             $images_orderby         = (isset($data['ays_images_ordering']) && $data['ays_images_ordering'] != '') ? wp_unslash(sanitize_text_field( $data['ays_images_ordering'] )) : '';
-            $show_title             =  wp_unslash(sanitize_text_field( isset($data['ays_gpg_show_title']) ? $data['ays_gpg_show_title'] : '' ));
-            $show_title_on          = (isset($data['ays_gpg_show_title_on']) && $data['ays_gpg_show_title_on'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_show_title_on'] )) : '';
+            $show_title             =  wp_unslash(sanitize_text_field( isset($data['glp_show_title']) ? $data['glp_show_title'] : '' ));
+            $show_title_on          = (isset($data['glp_show_title_on']) && $data['glp_show_title_on'] != '') ? wp_unslash(sanitize_text_field( $data['glp_show_title_on'] )) : '';
             $title_position         = (isset($data['image_title_position']) && $data['image_title_position'] != '')? wp_unslash(sanitize_text_field( $data['image_title_position'] )) : '';
-            $show_with_date         = wp_unslash(sanitize_text_field( isset($data['ays_gpg_show_with_date']) ? $data['ays_gpg_show_with_date'] : '' ));
+            $show_with_date         = wp_unslash(sanitize_text_field( isset($data['glp_show_with_date']) ? $data['glp_show_with_date'] : '' ));
             $ays_images_loading     = (isset($data['ays_images_loading']) && $data['ays_images_loading'] != '') ? sanitize_text_field( $data['ays_images_loading'] ) : 'all_loaded';
             $ays_images_request     = (isset($data['ays_images_request']) && $data['ays_images_request'] != '') ? sanitize_text_field( $data['ays_images_request'] ) : 'selection';
             $query_categories       = (isset($data['ays_query_category']) && $data['ays_query_category'] != '') ? sanitize_text_field( implode('***', $data['ays_query_category']) ) : '';
             $gpg_redirect_url_tab   = (isset($data['gpg_redirect_url_tab']) && $data['gpg_redirect_url_tab'] != '') ? sanitize_text_field( $data['gpg_redirect_url_tab'] ) : '_blank';
             $ays_admin_pagination   = (isset($data['ays_admin_pagination']) && $data['ays_admin_pagination'] != '') ? wp_unslash(sanitize_text_field( $data['ays_admin_pagination'] )) : '';
-            $ays_gpg_hover_zoom     = (isset($data['ays_gpg_hover_zoom']) && $data['ays_gpg_hover_zoom'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_hover_zoom'] )) : '';
-            $vignette_display       = (isset($data['ays_gpg_vignette_display']) && $data['ays_gpg_vignette_display'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_vignette_display'] )) : '';
+            $glp_hover_zoom     = (isset($data['glp_hover_zoom']) && $data['glp_hover_zoom'] != '') ? wp_unslash(sanitize_text_field( $data['glp_hover_zoom'] )) : '';
+            $vignette_display       = (isset($data['glp_vignette_display']) && $data['glp_vignette_display'] != '') ? wp_unslash(sanitize_text_field( $data['glp_vignette_display'] )) : '';
             //Hover zoom animation speed
             $hover_zoom_animation_speed = (isset($data['gpg_hover_zoom_animation_speed']) && $data['gpg_hover_zoom_animation_speed'] !== '') ? abs($data['gpg_hover_zoom_animation_speed']) : 0.5;
             //Hover animation speed
-            $hover_animation_speed = (isset($data['ays_gpg_hover_animation_speed']) && $data['ays_gpg_hover_animation_speed'] !== '') ? abs($data['ays_gpg_hover_animation_speed']) : 0.5;
+            $hover_animation_speed = (isset($data['glp_hover_animation_speed']) && $data['glp_hover_animation_speed'] !== '') ? abs($data['glp_hover_animation_speed']) : 0.5;
             //Hover scale animation speed
             $hover_scale_animation_speed = (isset($data['gpg_hover_scale_animation_speed']) && $data['gpg_hover_scale_animation_speed'] !== '') ? abs($data['gpg_hover_scale_animation_speed']) : 1;
-            $ays_gpg_hover_scale    = wp_unslash(sanitize_text_field( isset($data['ays_gpg_hover_scale']) ? $data['ays_gpg_hover_scale'] : 'no' ));
-            $ays_images_b_radius    = (isset($data['ays-gpg-images-border-radius']) && $data['ays-gpg-images-border-radius'] != '') ? wp_unslash(sanitize_text_field( $data['ays-gpg-images-border-radius'] )) : '';
-            $ays_hover_icon_size    = (isset($data['ays-gpg-hover-icon-size']) && $data['ays-gpg-hover-icon-size'] != '') ? wp_unslash(sanitize_text_field( $data['ays-gpg-hover-icon-size'] )) : '';
-            $ays_gpg_thumbnail_title_size = (isset($data['ays_gpg_thumbnail_title_size']) && $data['ays_gpg_thumbnail_title_size'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_thumbnail_title_size'] )) : '';
-            $ays_gpg_loader         = (isset($data['ays_gpg_loader']) && $data['ays_gpg_loader'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_loader'] )) : '';
+            $glp_hover_scale    = wp_unslash(sanitize_text_field( isset($data['glp_hover_scale']) ? $data['glp_hover_scale'] : 'no' ));
+            $ays_images_b_radius    = (isset($data['glp-images-border-radius']) && $data['glp-images-border-radius'] != '') ? wp_unslash(sanitize_text_field( $data['glp-images-border-radius'] )) : '';
+            $ays_hover_icon_size    = (isset($data['glp-hover-icon-size']) && $data['glp-hover-icon-size'] != '') ? wp_unslash(sanitize_text_field( $data['glp-hover-icon-size'] )) : '';
+            $glp_thumbnail_title_size = (isset($data['glp_thumbnail_title_size']) && $data['glp_thumbnail_title_size'] != '') ? wp_unslash(sanitize_text_field( $data['glp_thumbnail_title_size'] )) : '';
+            $glp_loader         = (isset($data['glp_loader']) && $data['glp_loader'] != '') ? wp_unslash(sanitize_text_field( $data['glp_loader'] )) : '';
 
             // Gallery loader text value
-            $gallery_loader_text_value = (isset($data['ays_gpg_loader_text_value']) && $data['ays_gpg_loader_text_value'] != '') ? sanitize_text_field( $data['ays_gpg_loader_text_value'] ) : '';
+            $gallery_loader_text_value = (isset($data['glp_loader_text_value']) && $data['glp_loader_text_value'] != '') ? sanitize_text_field( $data['glp_loader_text_value'] ) : '';
 
             // Gallery loader custom gif
             $gallery_loader_custom_gif = (isset($data['ays_gallery_loader_custom_gif']) && $data['ays_gallery_loader_custom_gif'] != '') ? sanitize_text_field( $data['ays_gallery_loader_custom_gif'] ) : '';
@@ -171,33 +171,33 @@ class Galleries_List_Table extends WP_List_Table{
             // Gallery loader custom gif width
             $gallery_loader_custom_gif_width = (isset($data['ays_gallery_loader_custom_gif_width']) && sanitize_text_field( $data['ays_gallery_loader_custom_gif_width'] ) != '') ? absint( intval( $data['ays_gallery_loader_custom_gif_width'] ) ) : 100;
             
-            $ays_images_border      = wp_unslash(sanitize_text_field( isset($data['ays_gpg_images_border']) ? $data['ays_gpg_images_border'] : '' ));
-            $ays_images_b_width     = (isset($data['ays_gpg_images_border_width']) && $data['ays_gpg_images_border_width'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_images_border_width'] )) : '';
-            $ays_images_b_style     = (isset($data['ays_gpg_images_border_style']) && $data['ays_gpg_images_border_style'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_images_border_style'] )) : '';
-            $ays_images_b_color     = (isset($data['ays_gpg_border_color']) && $data['ays_gpg_border_color'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_border_color'] )) : '';
+            $ays_images_border      = wp_unslash(sanitize_text_field( isset($data['glp_images_border']) ? $data['glp_images_border'] : '' ));
+            $ays_images_b_width     = (isset($data['glp_images_border_width']) && $data['glp_images_border_width'] != '') ? wp_unslash(sanitize_text_field( $data['glp_images_border_width'] )) : '';
+            $ays_images_b_style     = (isset($data['glp_images_border_style']) && $data['glp_images_border_style'] != '') ? wp_unslash(sanitize_text_field( $data['glp_images_border_style'] )) : '';
+            $ays_images_b_color     = (isset($data['glp_border_color']) && $data['glp_border_color'] != '') ? wp_unslash(sanitize_text_field( $data['glp_border_color'] )) : '';
             $thumb_height_mobile    = wp_unslash(sanitize_text_field( isset($data['ays-thumb-height-mobile']) ? $data['ays-thumb-height-mobile'] : '' ));
             $thumb_height_desktop   = wp_unslash(sanitize_text_field( isset($data['ays-thumb-height-desktop']) ? $data['ays-thumb-height-desktop'] : '' ));
         
-            $ays_lightbox_counter   = (isset($data['ays_gpg_lightbox_counter']) && $data['ays_gpg_lightbox_counter'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_lightbox_counter'] )) : '';
-            $ays_lightbox_autoplay  = (isset($data['ays_gpg_lightbox_autoplay']) && $data['ays_gpg_lightbox_autoplay'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_lightbox_autoplay'] )) : '';
-            $ays_lg_pause           = (isset($data['ays_gpg_lightbox_pause']) && $data['ays_gpg_lightbox_pause'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_lightbox_pause'] )) : '';
-            $ays_lg_show_caption    = (isset($data['ays_gpg_show_caption']) && $data['ays_gpg_show_caption'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_show_caption'] )) : '';
+            $ays_lightbox_counter   = (isset($data['glp_lightbox_counter']) && $data['glp_lightbox_counter'] != '') ? wp_unslash(sanitize_text_field( $data['glp_lightbox_counter'] )) : '';
+            $ays_lightbox_autoplay  = (isset($data['glp_lightbox_autoplay']) && $data['glp_lightbox_autoplay'] != '') ? wp_unslash(sanitize_text_field( $data['glp_lightbox_autoplay'] )) : '';
+            $ays_lg_pause           = (isset($data['glp_lightbox_pause']) && $data['glp_lightbox_pause'] != '') ? wp_unslash(sanitize_text_field( $data['glp_lightbox_pause'] )) : '';
+            $ays_lg_show_caption    = (isset($data['glp_show_caption']) && $data['glp_show_caption'] != '') ? wp_unslash(sanitize_text_field( $data['glp_show_caption'] )) : '';
             
             $gallery_img_position = (isset($data['gallery_img_position']) && $data['gallery_img_position'] != '') ? wp_unslash(sanitize_text_field( $data['gallery_img_position'] )) : 'center-center';
         
-            $ays_show_gal_title     = (isset($data['ays_gpg_title_show']) && $data['ays_gpg_title_show'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_title_show'] )) : '';
-            //$ays_show_gal_desc      = (isset($data['ays_gpg_desc_show']) && $data['ays_gpg_desc_show'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_desc_show'] )) : '';
+            $ays_show_gal_title     = (isset($data['glp_title_show']) && $data['glp_title_show'] != '') ? wp_unslash(sanitize_text_field( $data['glp_title_show'] )) : '';
+            //$ays_show_gal_desc      = (isset($data['glp_desc_show']) && $data['glp_desc_show'] != '') ? wp_unslash(sanitize_text_field( $data['glp_desc_show'] )) : '';
             $images_hover_effect    = (isset($data['ays_images_hover_effect']) && $data['ays_images_hover_effect'] != '') ? sanitize_text_field( $data['ays_images_hover_effect'] ) : '';
             $hover_dir_aware        = (isset($data['ays_hover_dir_aware']) && $data['ays_hover_dir_aware'] != '') ? sanitize_text_field( $data['ays_hover_dir_aware'] ) : '';
 
             $enable_light_box       = isset($data['av_light_box']) && $data['av_light_box'] == "on" ? "on" :"off";
             $enable_search_img      = isset($data['gpg_search_img']) && $data['gpg_search_img'] == "on" ? "on" :"off";
             $ays_filter_cat         = isset($data['ays_filter_cat']) && $data['ays_filter_cat'] == "on" ? "on" :"off";
-            $ays_gpg_filter_thubnail_opt = isset($data['ays_gpg_filter_thubnail_opt']) ? $data['ays_gpg_filter_thubnail_opt'] : "";
-            $ays_gpg_filter_lightbox_opt = isset($data['ays_gpg_filter_lightbox_opt']) ? $data['ays_gpg_filter_lightbox_opt'] : "";
+            $glp_filter_thubnail_opt = isset($data['glp_filter_thubnail_opt']) ? $data['glp_filter_thubnail_opt'] : "";
+            $glp_filter_lightbox_opt = isset($data['glp_filter_lightbox_opt']) ? $data['glp_filter_lightbox_opt'] : "";
             $custom_class = (isset($data['ays_custom_class']) && $data['ays_custom_class'] != "") ? $data['ays_custom_class'] : '';
 
-            $ays_gpg_ordering_asc_desc = (isset($data['ays_gpg_ordering_asc_desc']) && $data['ays_gpg_ordering_asc_desc'] != '') ? $data['ays_gpg_ordering_asc_desc'] : "ascending";
+            $glp_ordering_asc_desc = (isset($data['glp_ordering_asc_desc']) && $data['glp_ordering_asc_desc'] != '') ? $data['glp_ordering_asc_desc'] : "ascending";
         
             $gpg_resp_width            = isset($data['gpg_resp_width']) && $data['gpg_resp_width'] == "on" ? "on" :"off";
             $gpg_height_width_ratios   = isset($data['gpg_height_width_ratio']) && !empty($data['gpg_height_width_ratio']) ? wp_unslash(sanitize_text_field($data['gpg_height_width_ratio'])) : 1;
@@ -211,17 +211,17 @@ class Galleries_List_Table extends WP_List_Table{
             $ays_gallery_desc_color = (isset($data['ays_gallery_desc_color']) && $data['ays_gallery_desc_color'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gallery_desc_color'] )) : '#000';
 
             //Thubnail title color 
-            $ays_gpg_title_color = (isset($data['ays_gpg_thumbnail_title_color']) && $data['ays_gpg_thumbnail_title_color'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_thumbnail_title_color'] )) : '#ffffff';
+            $glp_title_color = (isset($data['glp_thumbnail_title_color']) && $data['glp_thumbnail_title_color'] != '') ? wp_unslash(sanitize_text_field( $data['glp_thumbnail_title_color'] )) : '#ffffff';
             
-            $ays_gpg_filter_cat_anim = (isset($data['ays_filter_cat_animation']) && $data['ays_filter_cat_animation'] != '') ? sanitize_text_field( $data['ays_filter_cat_animation'] ) : 'fadeIn';
-            $ays_gpg_lg_keypress    = (isset($data['ays_gpg_lg_keypress']) && $data['ays_gpg_lg_keypress'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_lg_keypress'] )) : '';
-            $ays_gpg_lg_esckey    = (isset($data['ays_gpg_lg_esckey']) && $data['ays_gpg_lg_esckey'] != '') ? wp_unslash(sanitize_text_field( $data['ays_gpg_lg_esckey'] )) : '';
+            $glp_filter_cat_anim = (isset($data['ays_filter_cat_animation']) && $data['ays_filter_cat_animation'] != '') ? sanitize_text_field( $data['ays_filter_cat_animation'] ) : 'fadeIn';
+            $glp_lg_keypress    = (isset($data['glp_lg_keypress']) && $data['glp_lg_keypress'] != '') ? wp_unslash(sanitize_text_field( $data['glp_lg_keypress'] )) : '';
+            $glp_lg_esckey    = (isset($data['glp_lg_esckey']) && $data['glp_lg_esckey'] != '') ? wp_unslash(sanitize_text_field( $data['glp_lg_esckey'] )) : '';
 
             //$link_on_whole_img       = isset($data['link_on_whole_img']) && $data['link_on_whole_img'] == "on" ? "on" :"off";
 
-            $gpg_create_date = !isset($data['ays_gpg_create_date']) ? '0000-00-00 00:00:00' : sanitize_text_field( $data['ays_gpg_create_date'] );
+            $gpg_create_date = !isset($data['glp_create_date']) ? '0000-00-00 00:00:00' : sanitize_text_field( $data['glp_create_date'] );
 
-            $author = ( isset($data['ays_gpg_author']) && $data['ays_gpg_author'] != "" ) ? stripcslashes( sanitize_text_field( $data['ays_gpg_author'] ) ) : '';
+            $author = ( isset($data['glp_author']) && $data['glp_author'] != "" ) ? stripcslashes( sanitize_text_field( $data['glp_author'] ) ) : '';
 
             // Change the author of the current gallery
             $gpg_create_author = ( isset($data['ays_gallery_create_author']) && $data['ays_gallery_create_author'] != "" ) ? absint( sanitize_text_field( $data['ays_gallery_create_author'] ) ) : '';
@@ -244,12 +244,12 @@ class Galleries_List_Table extends WP_List_Table{
                 'view_type'                 => $view_type,
                 'border_radius'             => $ays_images_b_radius,
                 'admin_pagination'          => $ays_admin_pagination,
-                'hover_zoom'                => $ays_gpg_hover_zoom,
+                'hover_zoom'                => $glp_hover_zoom,
                 'vignette_display'          => $vignette_display,
                 'hover_zoom_animation_speed'=> $hover_zoom_animation_speed,
                 'hover_animation_speed'     => $hover_animation_speed,
                 'hover_scale_animation_speed'=> $hover_scale_animation_speed,
-                'hover_scale'               => $ays_gpg_hover_scale,
+                'hover_scale'               => $glp_hover_scale,
                 'show_gal_title'            => $ays_show_gal_title,
                 //'show_gal_desc'             => $ays_show_gal_desc,
                 "images_hover_effect"       => $images_hover_effect,
@@ -274,25 +274,25 @@ class Galleries_List_Table extends WP_List_Table{
                 "images_distance"           => $images_distance,
                 "images_loading"            => $ays_images_loading,
                 "redirect_url_tab"          => $gpg_redirect_url_tab,
-                "gallery_loader"            => $ays_gpg_loader,
+                "gallery_loader"            => $glp_loader,
                 "gallery_loader_text_value" => $gallery_loader_text_value,
                 "hover_icon_size"           => $ays_hover_icon_size,
-                "thumbnail_title_size"      => $ays_gpg_thumbnail_title_size,
+                "thumbnail_title_size"      => $glp_thumbnail_title_size,
                 "thumb_height_mobile"       => $thumb_height_mobile,
                 "thumb_height_desktop"      => $thumb_height_desktop,
                 "enable_light_box"          => $enable_light_box,
                 "enable_search_img"         => $enable_search_img,
                 "ays_filter_cat"            => $ays_filter_cat,
-                "filter_thubnail_opt"       => $ays_gpg_filter_thubnail_opt,
-                "ordering_asc_desc"         => $ays_gpg_ordering_asc_desc,
+                "filter_thubnail_opt"       => $glp_filter_thubnail_opt,
+                "ordering_asc_desc"         => $glp_ordering_asc_desc,
                 "custom_class"              => $custom_class,
                 "resp_width"                => $gpg_resp_width,
                 "height_width_ratio"        => $gpg_height_width_ratio,
                 "enable_rtl_direction"      => $gpg_enable_rtl,
                 "ays_gallery_title_color"   => $ays_gallery_title_color,
                 "ays_gallery_desc_color"    => $ays_gallery_desc_color,
-                "ays_gpg_title_color"       => $ays_gpg_title_color,
-                "ays_gpg_filter_cat_anim"   => $ays_gpg_filter_cat_anim,
+                "glp_title_color"       => $glp_title_color,
+                "glp_filter_cat_anim"   => $glp_filter_cat_anim,
                 //"link_on_whole_img"         => $link_on_whole_img,
                 "create_date"               => $gpg_create_date,
                 "author"                    => $author,
@@ -307,9 +307,9 @@ class Galleries_List_Table extends WP_List_Table{
                 "lightbox_autoplay"         => $ays_lightbox_autoplay,
                 "lb_pause"                  => $ays_lg_pause,
                 "lb_show_caption"           => $ays_lg_show_caption,
-                "filter_lightbox_opt"       => $ays_gpg_filter_lightbox_opt,
-                "lb_keypress"               => $ays_gpg_lg_keypress,
-                "lb_esckey"                 => $ays_gpg_lg_esckey,
+                "filter_lightbox_opt"       => $glp_filter_lightbox_opt,
+                "lb_keypress"               => $glp_lg_keypress,
+                "lb_esckey"                 => $glp_lg_esckey,
                 
             );
             $submit_type = (isset($data['submit_type'])) ?  $data['submit_type'] : '';
@@ -362,7 +362,7 @@ class Galleries_List_Table extends WP_List_Table{
                 );
                 $message = "updated";
             }
-            $ays_gpg_tab = isset($data['ays_gpg_settings_tab']) ? $data['ays_gpg_settings_tab'] : 'tab1';
+            $glp_tab = isset($data['glp_settings_tab']) ? $data['glp_settings_tab'] : 'tab1';
             if( $gallery_result >= 0 ){
                 if($submit_type == ''){
                     $url = esc_url_raw( remove_query_arg(["action", "gallery"]  ) ) . "&status=" . $message . "&type=success";
@@ -373,11 +373,11 @@ class Galleries_List_Table extends WP_List_Table{
                         $url = esc_url_raw( add_query_arg( array(
                             "action"                => "edit",
                             "gallery"               => $wpdb->insert_id,
-                            "ays_gpg_settings_tab"  => $ays_gpg_tab,
+                            "glp_settings_tab"  => $glp_tab,
                             "status"                => $message
                         ) ) );
                     }else{
-                        $url = esc_url_raw( remove_query_arg(false) ) . '&ays_gpg_settings_tab='.$ays_gpg_tab.'&status=' . $message;
+                        $url = esc_url_raw( remove_query_arg(false) ) . '&glp_settings_tab='.$glp_tab.'&status=' . $message;
                     }
 
                     wp_redirect( $url );
@@ -605,7 +605,7 @@ class Galleries_List_Table extends WP_List_Table{
         $q = esc_attr($gallery_title);
         $gallery_title_length = intval( $this->title_length );
 
-        $restitle = GLP_Admin::ays_gpg_restriction_string("word", $gallery_title, $gallery_title_length);
+        $restitle = GLP_Admin::glp_restriction_string("word", $gallery_title, $gallery_title_length);
 
         $title = sprintf( '<a href="?page=%s&action=%s&gallery=%d" title="%s">%s</a>', esc_attr( $_REQUEST['page'] ), 'edit', absint( $item['id'] ), $q, $restitle);
 
@@ -620,11 +620,11 @@ class Galleries_List_Table extends WP_List_Table{
 
     function column_shortcode( $item ) {
         error_log("column_shortcode IN");
-        return sprintf('<div class="ays-gpg-shortcode-container">
-                    <div class="ays-gpg-copy-image" data-bs-toggle="tooltip" title="'. esc_html(__('Click to copy',$this->plugin_name)).'">
+        return sprintf('<div class="glp-shortcode-container">
+                    <div class="glp-copy-image" data-bs-toggle="tooltip" title="'. esc_html(__('Click to copy',$this->plugin_name)).'">
                             <img src="'. esc_url(AYS_GPG_ADMIN_URL) . '/images/icons/copy-image.svg">
                     </div>                                            
-                    <input type="text" class="ays-gpg-shortcode-input" readonly value="'. esc_attr('[gallery_p_gallery id="%s"]').'" />
+                    <input type="text" class="glp-shortcode-input" readonly value="'. esc_attr('[gallery_p_gallery id="%s"]').'" />
                 </div>', $item["id"]);
         // return sprintf("<input type='text' onClick='this.setSelectionRange(0, this.value.length)' readonly value='[gallery_p_gallery id=%s]'  />", $item["id"]);        
     }

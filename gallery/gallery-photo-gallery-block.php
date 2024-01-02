@@ -3,7 +3,7 @@
      * Enqueue front end and editor JavaScript
      */
 
-    function ays_gpg_gutenberg_scripts() {        
+    function glp_gutenberg_scripts() {        
         global $current_screen;
         global $wp_version;
         $version1 = $wp_version;
@@ -59,7 +59,7 @@
         }
     }
 
-    function ays_gpg_gutenberg_block_register() {
+    function glp_gutenberg_block_register() {
         
         global $wpdb;
         $block_name = 'gallery';
@@ -126,6 +126,6 @@
 
     if(function_exists("register_block_type")){
             // Hook scripts function into block editor hook
-        add_action( 'enqueue_block_editor_assets', 'ays_gpg_gutenberg_scripts' );
-        add_action( 'init', 'ays_gpg_gutenberg_block_register' );
+        add_action( 'enqueue_block_editor_assets', 'glp_gutenberg_scripts' );
+        add_action( 'init', 'glp_gutenberg_block_register' );
     }

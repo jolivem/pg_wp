@@ -239,7 +239,7 @@ registerBlockType( 'gallery-photo-gallery/gallery', {
         }
         var aysElement = el(
             aysSelect, {
-                className: 'ays_gpg_block_select',
+                className: 'glp_block_select',
                 label: 'Select Gallery',
                 value: props.attributes.metaFieldValue,
                 onChange: function( content ) {
@@ -259,7 +259,7 @@ registerBlockType( 'gallery-photo-gallery/gallery', {
 
         var aysElement2 = el(
             aysSelect, {
-                className: 'ays_gpg_block_select',
+                className: 'glp_block_select',
                 label: '',
                 value: props.attributes.metaFieldValue,
                 onChange: function( content ) {
@@ -292,7 +292,7 @@ registerBlockType( 'gallery-photo-gallery/gallery', {
                     el(
                         "div",
                         {
-                            className: 'ays_gpg_block_container',
+                            className: 'glp_block_container',
                             key: "inspector",
                         },
                         aysElement
@@ -307,7 +307,7 @@ registerBlockType( 'gallery-photo-gallery/gallery', {
             el(
                 "div",
                 {
-                    className: 'ays_gpg_block_select_gallery',
+                    className: 'glp_block_select_gallery',
                     key: "inspector",
                 },
                 aysElement2
@@ -329,7 +329,7 @@ registerBlockType( 'gallery-photo-gallery/gallery', {
                     el(
                         "div",
                         {
-                            className: 'ays_gpg_block_container',
+                            className: 'glp_block_container',
                             key: "inspector",
                         },
                         aysElement

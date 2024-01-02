@@ -184,15 +184,15 @@ class Gallery_Photo_Gallery {
         // Add menu item
         $this->loader->add_action( 'admin_menu', $plugin_admin, 'add_plugin_admin_menu' );
         
-        $this->loader->add_action('wp_ajax_gen_ays_gpg_shortcode', $plugin_admin, 'gen_ays_gpg_shortcode_callback');
-        $this->loader->add_filter("mce_external_plugins", $plugin_admin, "ays_gpg_register_tinymce_plugin");
-        $this->loader->add_filter('mce_buttons', $plugin_admin, 'ays_gpg_add_tinymce_button');
+        $this->loader->add_action('wp_ajax_gen_glp_shortcode', $plugin_admin, 'gen_glp_shortcode_callback');
+        $this->loader->add_filter("mce_external_plugins", $plugin_admin, "glp_register_tinymce_plugin");
+        $this->loader->add_filter('mce_buttons', $plugin_admin, 'glp_add_tinymce_button');
 
         $this->loader->add_action( 'wp_ajax_deactivate_plugin_option_pm', $plugin_admin, 'deactivate_plugin_option');
         $this->loader->add_action( 'wp_ajax_nopriv_deactivate_plugin_option_pm', $plugin_admin, 'deactivate_plugin_option');
 
-        $this->loader->add_action( 'wp_ajax_ays_gpg_author_user_search', $plugin_admin, 'ays_gpg_author_user_search' );
-        $this->loader->add_action( 'wp_ajax_nopriv_ays_gpg_author_user_search', $plugin_admin, 'ays_gpg_author_user_search' );
+        $this->loader->add_action( 'wp_ajax_glp_author_user_search', $plugin_admin, 'glp_author_user_search' );
+        $this->loader->add_action( 'wp_ajax_nopriv_glp_author_user_search', $plugin_admin, 'glp_author_user_search' );
 
         // Add Settings link to the plugin
         $plugin_basename = plugin_basename( plugin_dir_path( __DIR__ ) . $this->plugin_name . '.php' );
@@ -211,11 +211,11 @@ class Gallery_Photo_Gallery {
 		$this->loader->add_action( 'in_admin_footer', $plugin_admin, 'gallery_admin_footer', 1 );
 
 		// Sale Banner
-        // $this->loader->add_action( 'admin_notices', $plugin_admin, 'ays_gpg_sale_baner', 1 );
-        //$this->loader->add_action( 'admin_notices', $data_admin, 'ays_gpg_sale_baner', 1 );
+        // $this->loader->add_action( 'admin_notices', $plugin_admin, 'glp_sale_baner', 1 );
+        //$this->loader->add_action( 'admin_notices', $data_admin, 'glp_sale_baner', 1 );
 
-        $this->loader->add_action( 'wp_ajax_ays_gpg_dismiss_button', $plugin_admin, 'ays_gpg_dismiss_button' );
-        $this->loader->add_action( 'wp_ajax_nopriv_ays_gpg_dismiss_button', $plugin_admin, 'ays_gpg_dismiss_button' );
+        $this->loader->add_action( 'wp_ajax_glp_dismiss_button', $plugin_admin, 'glp_dismiss_button' );
+        $this->loader->add_action( 'wp_ajax_nopriv_glp_dismiss_button', $plugin_admin, 'glp_dismiss_button' );
 
 		// custom fields
 		$this->loader->add_filter('attachment_fields_to_edit', $plugin_admin, 'add_custom_fields_to_media_edit_screen', 10, 2);

@@ -39,11 +39,11 @@
         $next_gallery_cat_id = (isset( $next_gallery_cat['id'] ) && $next_gallery_cat['id'] != "") ? absint( $next_gallery_cat['id'] ) : null;
     }
 
-    $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_GPG_ADMIN_URL ."/images/loaders/loading.gif'></span>";
+    $loader_iamge = "<span class='display_none glp_loader_box'><img src='". AYS_GPG_ADMIN_URL ."/images/loaders/loading.gif'></span>";
 ?>
 <div class="wrap">
-    <div class="ays-gpg-heading-box">
-        <div class="ays-gpg-wordpress-user-manual-box">
+    <div class="glp-heading-box">
+        <div class="glp-wordpress-user-manual-box">
             <a href="https://ays-pro.com/wordpress-photo-gallery-user-manual" target="_blank" style="text-decoration: none;font-size: 13px;">
                 <i class="ays_fa ays_fa_file_text"></i>
                 <span style="margin-left: 3px;text-decoration: underline;"><?php echo __("View Documentation", $this->plugin_name); ?></span>
@@ -53,7 +53,7 @@
     <div class="container-fluid">
         <h1><?php echo $heading; ?></h1>
         <hr/>
-        <form class="ays-gpg-category-form" id="ays-gpg-category-form" method="post">
+        <form class="glp-category-form" id="glp-category-form" method="post">
             <div class="form-group row">
                 <div class="col-sm-2">
                     <label for='ays-title'>
@@ -78,7 +78,7 @@
                 </label>
                 <?php
                 $content = (stripslashes(htmlentities($gallery_category['description'])));
-                $editor_id = 'ays-gpg-description';
+                $editor_id = 'glp-description';
                 $settings = array('editor_height'=>$gpg_wp_editor_height,'textarea_name'=>'ays_description','editor_class'=>'ays-textarea');
                 wp_editor($content,$editor_id,$settings);
                 ?>
@@ -102,8 +102,8 @@
                     );
 
                     $other_attributes = array( 'id' => 'ays-button' );
-                    submit_button( __( 'Save and close', $this->plugin_name ), 'primary ays-gpg-save-comp', 'ays_submit', true, $other_attributes );
-                    submit_button(__('Save', $this->plugin_name), 'ays-gpg-save-comp', 'ays_apply', false, $save_attributes);
+                    submit_button( __( 'Save and close', $this->plugin_name ), 'primary glp-save-comp', 'ays_submit', true, $other_attributes );
+                    submit_button(__('Save', $this->plugin_name), 'glp-save-comp', 'ays_apply', false, $save_attributes);
                     echo $loader_iamge;
                             
                     $buttons_html = '</div>';

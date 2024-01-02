@@ -1,13 +1,13 @@
 <?php
 //TODO fix nb of images per page, ex selected 25 -> count 5
 global $wpdb;
-if (!isset($_COOKIE['ays_gpg_page_tab_free'])) {
-    setcookie('ays_gpg_page_tab_free', 'tab_0', time() + 3600);
+if (!isset($_COOKIE['glp_page_tab_free'])) {
+    setcookie('glp_page_tab_free', 'tab_0', time() + 3600);
 }
-if(isset($_GET['ays_gpg_settings_tab'])){
-    $ays_gpg_tab = sanitize_key( $_GET['ays_gpg_settings_tab'] );
+if(isset($_GET['glp_settings_tab'])){
+    $glp_tab = sanitize_key( $_GET['glp_settings_tab'] );
 }else{
-    $ays_gpg_tab = 'tab1';
+    $glp_tab = 'tab1';
 }
 $action = (isset($_GET['action'])) ? sanitize_text_field( $_GET['action'] ) : '';
 $heading = '';
@@ -192,21 +192,21 @@ $gallery_loader_custom_gif = (isset($gal_options['gallery_loader_custom_gif']) &
 //  Gallery loader custom gif width
 $gallery_loader_custom_gif_width = (isset($gal_options['gallery_loader_custom_gif_width']) && $gal_options['gallery_loader_custom_gif_width'] != '') ? absint( intval( $gal_options['gallery_loader_custom_gif_width'] ) ) : 100;
 
-$ays_gpg_view_type = (!isset($gal_options['view_type']) || $gal_options['view_type'] == "") ? "grid" : $gal_options['view_type'];
+$glp_view_type = (!isset($gal_options['view_type']) || $gal_options['view_type'] == "") ? "grid" : $gal_options['view_type'];
 
-$ays_gpg_border_radius = !isset($gal_options['border_radius']) || $gal_options['border_radius'] == "" ? "0" : ($gal_options['border_radius']);
-$ays_gpg_hover_icon_size = !isset($gal_options['hover_icon_size']) ? "20" : ($gal_options['hover_icon_size']);
-$ays_gpg_thumbnail_title_size = !isset($gal_options['thumbnail_title_size']) ? "12" : ($gal_options['thumbnail_title_size']);
+$glp_border_radius = !isset($gal_options['border_radius']) || $gal_options['border_radius'] == "" ? "0" : ($gal_options['border_radius']);
+$glp_hover_icon_size = !isset($gal_options['hover_icon_size']) ? "20" : ($gal_options['hover_icon_size']);
+$glp_thumbnail_title_size = !isset($gal_options['thumbnail_title_size']) ? "12" : ($gal_options['thumbnail_title_size']);
 $ays_thumb_height_mobile = !isset($gal_options['thumb_height_mobile']) ? "170" : ($gal_options['thumb_height_mobile']);
 $ays_thumb_height_desktop = !isset($gal_options['thumb_height_desktop']) ? "260" : ($gal_options['thumb_height_desktop']);
 
-$ays_gpg_lightbox_counter           = (!isset($gal_lightbox_options['lightbox_counter'])) ? "true" : $gal_lightbox_options['lightbox_counter'];
-$ays_gpg_lightbox_autoplay          = (!isset($gal_lightbox_options['lightbox_autoplay'])) ? "true" : $gal_lightbox_options['lightbox_autoplay'];
-$ays_gpg_lightbox_pause             = (!isset($gal_lightbox_options['lb_pause'])) ? "5000" : $gal_lightbox_options['lb_pause'];
-$ays_gpg_show_caption               = (!isset($gal_lightbox_options['lb_show_caption'])) ? "true" : $gal_lightbox_options['lb_show_caption'];
+$glp_lightbox_counter           = (!isset($gal_lightbox_options['lightbox_counter'])) ? "true" : $gal_lightbox_options['lightbox_counter'];
+$glp_lightbox_autoplay          = (!isset($gal_lightbox_options['lightbox_autoplay'])) ? "true" : $gal_lightbox_options['lightbox_autoplay'];
+$glp_lightbox_pause             = (!isset($gal_lightbox_options['lb_pause'])) ? "5000" : $gal_lightbox_options['lb_pause'];
+$glp_show_caption               = (!isset($gal_lightbox_options['lb_show_caption'])) ? "true" : $gal_lightbox_options['lb_show_caption'];
 
-$ays_gpg_lg_keypress = (!isset($gal_lightbox_options["lb_keypress"])) ? "true" : $gal_lightbox_options["lb_keypress"];
-$ays_gpg_lg_esckey = (!isset($gal_lightbox_options["lb_esckey"])) ? "true" : $gal_lightbox_options["lb_esckey"];
+$glp_lg_keypress = (!isset($gal_lightbox_options["lb_keypress"])) ? "true" : $gal_lightbox_options["lb_keypress"];
+$glp_lg_esckey = (!isset($gal_lightbox_options["lb_esckey"])) ? "true" : $gal_lightbox_options["lb_esckey"];
 
 // Gallery image position
 $gallery_img_position = (isset($gal_options['gallery_img_position']) && $gal_options['gallery_img_position'] != 'center-center') ? $gal_options['gallery_img_position'] : 'center-center';
@@ -233,7 +233,7 @@ $image_request_type = (isset($gal_options['images_request']) && $gal_options['im
 //$redirect_type = (isset($gal_options['redirect_url_tab']) && $gal_options['redirect_url_tab'] != '') ? $gal_options['redirect_url_tab'] : "_blank"; 
 
 //thumbnail title color
-$thumbnail_title_color = isset($gal_options['ays_gpg_title_color']) ? esc_attr(stripslashes($gal_options['ays_gpg_title_color'])) : '#ffffff';
+$thumbnail_title_color = isset($gal_options['glp_title_color']) ? esc_attr(stripslashes($gal_options['glp_title_color'])) : '#ffffff';
 
 //Gallery title color
 $gallery_title_color = isset($gal_options['ays_gallery_title_color']) ? esc_attr(stripslashes($gal_options['ays_gallery_title_color'])) : '#000';
@@ -242,7 +242,7 @@ $gallery_title_color = isset($gal_options['ays_gallery_title_color']) ? esc_attr
 $gallery_desc_color = isset($gal_options['ays_gallery_desc_color']) ? esc_attr(stripslashes($gal_options['ays_gallery_desc_color'])) : '#000';
 
 //filter by cat anim
-$ays_gpg_filter_cat_anim = isset($gal_options['ays_gpg_filter_cat_anim']) ? sanitize_text_field($gal_options['ays_gpg_filter_cat_anim']) : 'fadeIn';
+$glp_filter_cat_anim = isset($gal_options['glp_filter_cat_anim']) ? sanitize_text_field($gal_options['glp_filter_cat_anim']) : 'fadeIn';
 
 $gpg_create_date = (isset($gal_options['create_date']) && $gal_options['create_date'] != '') ? $gal_options['create_date'] : "0000-00-00 00:00:00";
 
@@ -258,7 +258,7 @@ if(isset($gal_options['author']) && $gal_options['author'] != 'null'){
 }
 
 // Custom CSS
-$ays_gpg_custom_css = (isset($gallery['custom_css']) && $gallery['custom_css'] != '') ? stripslashes( esc_attr( $gallery['custom_css'] ) ) : '';
+$glp_custom_css = (isset($gallery['custom_css']) && $gallery['custom_css'] != '') ? stripslashes( esc_attr( $gallery['custom_css'] ) ) : '';
 
 // General Settings | options
 $gen_options = ($this->settings_obj->ays_get_setting('options') === false) ? array() : json_decode( stripcslashes($this->settings_obj->ays_get_setting('options') ), true);
@@ -278,10 +278,10 @@ if( $change_gpg_create_author  && $change_gpg_create_author > 0 ){
 
     $sql_users = "SELECT ID,display_name FROM {$users_table} WHERE ID = {$change_gpg_create_author}";
 
-    $ays_gpg_create_author_data = $wpdb->get_row($sql_users, "ARRAY_A");
+    $glp_create_author_data = $wpdb->get_row($sql_users, "ARRAY_A");
 } else {
     $change_gpg_create_author = $user_id;
-    $ays_gpg_create_author_data = array(
+    $glp_create_author_data = array(
         "ID" => $user_id,
         "display_name" => $user->data->display_name,
     );
@@ -290,12 +290,12 @@ if( $change_gpg_create_author  && $change_gpg_create_author > 0 ){
 $query_categories = isset($gal_options['query_categories']) ? $gal_options['query_categories'] : '';
 //error_log( "CATEGORIES from options: ".$query_categories);
 
-$loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_GPG_ADMIN_URL ."/images/loaders/loading.gif'></span>";
+$loader_iamge = "<span class='display_none glp_loader_box'><img src='". AYS_GPG_ADMIN_URL ."/images/loaders/loading.gif'></span>";
 ?>
 
 <div class="wrap">
-    <div class="ays-gpg-heading-box">
-        <div class="ays-gpg-wordpress-user-manual-box">
+    <div class="glp-heading-box">
+        <div class="glp-wordpress-user-manual-box">
             <a href="https://ays-pro.com/wordpress-photo-gallery-user-manual" target="_blank" style="text-decoration: none;font-size: 13px;">
                 <i class="ays_fa ays_fa_file_text"></i>
                 <span style="margin-left: 3px;text-decoration: underline;"><?php echo __("View Documentation", $this->plugin_name); ?></span>
@@ -303,15 +303,15 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
         </div>
     </div>
     <div class="container-fluid">
-        <form id="ays-gpg-form" method="post">
+        <form id="glp-form" method="post">
         <input type="hidden" id="ays_submit_name">
-        <input type="hidden" name="ays_gpg_settings_tab" value="<?php echo esc_attr($ays_gpg_tab); ?>">
-        <input type="hidden" name="ays_gpg_create_date" value="<?php echo $gpg_create_date; ?>">    
-        <input type="hidden" name="ays_gpg_author" value="<?php echo esc_attr(json_encode($gpg_author, JSON_UNESCAPED_SLASHES)); ?>">
+        <input type="hidden" name="glp_settings_tab" value="<?php echo esc_attr($glp_tab); ?>">
+        <input type="hidden" name="glp_create_date" value="<?php echo $gpg_create_date; ?>">    
+        <input type="hidden" name="glp_author" value="<?php echo esc_attr(json_encode($gpg_author, JSON_UNESCAPED_SLASHES)); ?>">
         <h1 class="wp-heading-inline">
             <?php echo $heading; ?>
-            <input type="submit" name="ays-submit-top" class="ays-submit button action-button button-primary ays-gpg-save-comp" value="<?php echo __("Save and close", $this->plugin_name);?>" gpg_submit_name="ays-submit" />        
-            <input type="submit" name="ays-apply-top" class="ays-submit action-button button ays-gpg-save-comp" id="ays-button-top-apply" title="Ctrl + s" data-toggle="tooltip" data-delay='{"show":"1000"}' value="<?php echo __("Save", $this->plugin_name);?>" gpg_submit_name="ays-apply"/>
+            <input type="submit" name="ays-submit-top" class="ays-submit button action-button button-primary glp-save-comp" value="<?php echo __("Save and close", $this->plugin_name);?>" gpg_submit_name="ays-submit" />        
+            <input type="submit" name="ays-apply-top" class="ays-submit action-button button glp-save-comp" id="ays-button-top-apply" title="Ctrl + s" data-toggle="tooltip" data-delay='{"show":"1000"}' value="<?php echo __("Save", $this->plugin_name);?>" gpg_submit_name="ays-apply"/>
             <?php echo $loader_iamge; ?>
         </h1>
         <hr>
@@ -379,41 +379,41 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                     }
                 </style>";
         ?>
-        <div class="ays-gpg-top-menu-wrapper">
-            <div class="ays_gpg_menu_left" data-scroll="0"><i class="ays_fa ays_fa_angle_left"></i></div>
-            <div class="ays-gpg-top-menu">
-                <div class="nav-tab-wrapper ays-gpg-top-tab-wrapper">
-                    <a href="#tab1" data-tab="tab1" class="nav-tab <?php echo ($ays_gpg_tab == 'tab1') ? 'nav-tab-active' : ''; ?>">
+        <div class="glp-top-menu-wrapper">
+            <div class="glp_menu_left" data-scroll="0"><i class="ays_fa ays_fa_angle_left"></i></div>
+            <div class="glp-top-menu">
+                <div class="nav-tab-wrapper glp-top-tab-wrapper">
+                    <a href="#tab1" data-tab="tab1" class="nav-tab <?php echo ($glp_tab == 'tab1') ? 'nav-tab-active' : ''; ?>">
                         <?php echo __("Images", $this->plugin_name);?>
                     </a>
-                    <a href="#tab2" data-tab="tab2" class="nav-tab <?php echo ($ays_gpg_tab == 'tab2') ? 'nav-tab-active' : ''; ?>">
+                    <a href="#tab2" data-tab="tab2" class="nav-tab <?php echo ($glp_tab == 'tab2') ? 'nav-tab-active' : ''; ?>">
                         <?php echo __("Settings", $this->plugin_name);?>
                     </a>
-                    <a href="#tab3" data-tab="tab3" class="nav-tab <?php echo ($ays_gpg_tab == 'tab3') ? 'nav-tab-active' : ''; ?>">
+                    <a href="#tab3" data-tab="tab3" class="nav-tab <?php echo ($glp_tab == 'tab3') ? 'nav-tab-active' : ''; ?>">
                         <?php echo __("Styles", $this->plugin_name);?>
                     </a>
-                    <a href="#tab4" data-tab="tab4" class="nav-tab <?php echo ($ays_gpg_tab == 'tab4') ? 'nav-tab-active' : ''; ?>">
+                    <a href="#tab4" data-tab="tab4" class="nav-tab <?php echo ($glp_tab == 'tab4') ? 'nav-tab-active' : ''; ?>">
                         <?php echo __("Lightbox settings", $this->plugin_name);?>
                     </a>
-                    <!-- <a href="#tab5" data-tab="tab5" class="nav-tab <?php echo ($ays_gpg_tab == 'tab5') ? 'nav-tab-active' : ''; ?>">
+                    <!-- <a href="#tab5" data-tab="tab5" class="nav-tab <?php echo ($glp_tab == 'tab5') ? 'nav-tab-active' : ''; ?>">
                         <?php echo __("Lightbox effects", $this->plugin_name);?>
                     </a> -->
                 </div>  
             </div>              
-            <div class="ays_gpg_menu_right" data-scroll="-1"><i class="ays_fa ays_fa_angle_right"></i></div>
+            <div class="glp_menu_right" data-scroll="-1"><i class="ays_fa ays_fa_angle_right"></i></div>
         </div>
-        <div id="tab1" class="ays-gallery-tab-content <?php echo ($ays_gpg_tab == 'tab1') ? 'ays-gallery-tab-content-active' : ''; ?>">
+        <div id="tab1" class="ays-gallery-tab-content <?php echo ($glp_tab == 'tab1') ? 'ays-gallery-tab-content-active' : ''; ?>">
             <br>
             <!-- MJO removed description -->
             <p class="ays-subtitle"><?php echo  __('Add Images', $this->plugin_name) ?></p>
 
             <div>
-                <label class="ays_gpg_image_hover_icon" id="gpg_images_request_selection"><?php echo __("Select from library ", $this->plugin_name);?>
-                    <input type="radio" id="ays_gpg_images_request_selection" name="ays_images_request" value="selection"
+                <label class="glp_image_hover_icon" id="gpg_images_request_selection"><?php echo __("Select from library ", $this->plugin_name);?>
+                    <input type="radio" id="glp_images_request_selection" name="ays_images_request" value="selection"
                         <?php echo ($image_request_type == "selection") ? "checked" : ""; ?> />
                 </label>
-                <label class="ays_gpg_image_hover_icon" id="gpg_images_request_query"><?php echo __("Query library ", $this->plugin_name);?> 
-                    <input type="radio" id="ays_gpg_images_request_query" name="ays_images_request" value="query" 
+                <label class="glp_image_hover_icon" id="gpg_images_request_query"><?php echo __("Query library ", $this->plugin_name);?> 
+                    <input type="radio" id="glp_images_request_query" name="ays_images_request" value="query" 
                         <?php echo ($image_request_type == "query") ? "checked" : ""; ?>/>
                 </label>
             </div>
@@ -434,8 +434,8 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 <input type="hidden" id="ays_image_lang_url" value="<?php echo __("This section is for the URL address", $this->plugin_name ); ?>">
                 <input type="hidden" id="ays_image_cat" value="<?php echo __("Select image categories", $this->plugin_name ); ?>">
                 <hr/>
-                <div class="ays_gpg_page_sort">
-                    <div id="ays_gpg_pagination">
+                <div class="glp_page_sort">
+                    <div id="glp_pagination">
                         <select name="ays_admin_pagination" id="ays_admin_pagination">
                             <option <?php echo $admin_pagination == "all" ? "selected" : ""; ?> value="all"><?php echo __( "All", $this->plugin_name ); ?></option>
                             <option <?php echo $admin_pagination == "5" ? "selected" : ""; ?> value="5"><?php echo __( "5", $this->plugin_name ); ?></option>
@@ -448,13 +448,13 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                         <a class="ays_help" data-toggle="tooltip" title="<?php echo __("This field is for the creation of pagination", $this->plugin_name ); ?>">
                         <i class="fas fa-info-circle"></i>
                         </a>
-                        <span class="ays_gpg_image_hover_icon_text"><?php echo __( "Image pagination", $this->plugin_name ); ?></span>
+                        <span class="glp_image_hover_icon_text"><?php echo __( "Image pagination", $this->plugin_name ); ?></span>
                     </div>
-                    <div id="ays_gpg_sort_cont">    
+                    <div id="glp_sort_cont">    
                     <a class="ays_help" data-toggle="tooltip" title="<?php echo __("Change the ordering", $this->plugin_name ); ?>">
                         <i class="fas fa-info-circle"></i>
                         </a>            
-                        <button class="ays_gpg_sort">
+                        <button class="glp_sort">
                         <i class="fas fa-exchange-alt"></i>
                     </button>
                                     
@@ -488,18 +488,18 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                     if($admin_pagination != "all"){
                         $pages = intval(ceil(count($images_ids)/$admin_pagination));
                         $qanak = 0;
-                        if(isset($_COOKIE['ays_gpg_page_tab_free'])){
-                            $ays_page_cookie = explode("_", $_COOKIE['ays_gpg_page_tab_free']);
+                        if(isset($_COOKIE['glp_page_tab_free'])){
+                            $ays_page_cookie = explode("_", $_COOKIE['glp_page_tab_free']);
                             if($ays_page_cookie[1] >= $pages){
-                                unset($_COOKIE['ays_gpg_page_tab_free']);
-                                setcookie('ays_gpg_page_tab_free', "", time() - 3600, "/");
-                                setcookie('ays_gpg_page_tab_free', 'tab_'.($pages-1), time() + 3600);
-                                $_COOKIE['ays_gpg_page_tab_free'] = 'tab_'.($pages-1);
+                                unset($_COOKIE['glp_page_tab_free']);
+                                setcookie('glp_page_tab_free', "", time() - 3600, "/");
+                                setcookie('glp_page_tab_free', 'tab_'.($pages-1), time() + 3600);
+                                $_COOKIE['glp_page_tab_free'] = 'tab_'.($pages-1);
                             }
                         }
 
                         for($i = 0; $i < $pages; $i++){
-                            $accordion_active = (isset($_COOKIE['ays_gpg_page_tab_free']) && $_COOKIE['ays_gpg_page_tab_free'] == "tab_".($i)) ? 'ays_accordion_active' : '';
+                            $accordion_active = (isset($_COOKIE['glp_page_tab_free']) && $_COOKIE['glp_page_tab_free'] == "tab_".($i)) ? 'ays_accordion_active' : '';
                 ?>
                 
                 <ul class="ays-accordion ays_accordion <?php echo $accordion_active; ?>" id="page_<?php echo $i; ?>">
@@ -778,7 +778,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                         if($admin_pagination != "all"){
                             if($pages > 0){
                                 for($page = 0; $page < $pages; $page++ ){
-                                    if(isset($_COOKIE['ays_gpg_page_tab_free']) && $_COOKIE['ays_gpg_page_tab_free'] == "tab_".($page)){
+                                    if(isset($_COOKIE['glp_page_tab_free']) && $_COOKIE['glp_page_tab_free'] == "tab_".($page)){
                                         $page_active = 'ays_page_active';
                                     }else{                                        
                                         $page_active = '';
@@ -806,7 +806,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 </div>
             </div> -->
 		</div>
-		<div id="tab2" class="ays-gallery-tab-content <?php echo ($ays_gpg_tab == 'tab2') ? 'ays-gallery-tab-content-active' : ''; ?>">
+		<div id="tab2" class="ays-gallery-tab-content <?php echo ($glp_tab == 'tab2') ? 'ays-gallery-tab-content-active' : ''; ?>">
             <h6 class="ays-subtitle"><?php echo  __('General options', $this->plugin_name) ?></h6>
             <hr/>
             <div class="form-group row">
@@ -822,8 +822,8 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                     <input type="checkbox" id="ays_filter_cat" class="" name="ays_filter_cat" <?php echo (isset($gal_options['ays_filter_cat']) && $gal_options['ays_filter_cat'] == "on") ? "checked" : ""; ?> />
                 </div>
             </div>
-            <hr class="ays_gpg_show_hide_anim_hr" style="<?php echo (isset($gal_options['ays_filter_cat']) && $gal_options['ays_filter_cat'] == "on") ? 'display:block' : 'display:none' ; ?>"/>
-            <div class="form-group row" id="ays_gpg_dilter_cat_animation" style="<?php echo (isset($gal_options['ays_filter_cat']) && $gal_options['ays_filter_cat'] == "on") ? 'display:flex' : 'display:none' ; ?>">
+            <hr class="glp_show_hide_anim_hr" style="<?php echo (isset($gal_options['ays_filter_cat']) && $gal_options['ays_filter_cat'] == "on") ? 'display:block' : 'display:none' ; ?>"/>
+            <div class="form-group row" id="glp_dilter_cat_animation" style="<?php echo (isset($gal_options['ays_filter_cat']) && $gal_options['ays_filter_cat'] == "on") ? 'display:flex' : 'display:none' ; ?>">
                 <div class="col-sm-3">
                     <label for="ays_filter_cat_animation">
                         <?php echo __("Categories filter animation", $this->plugin_name);?>
@@ -835,24 +835,24 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 <div class="col-sm-9">
                     <select id="ays_filter_cat_animation" class="ays-text-input ays-text-input-short" name="ays_filter_cat_animation">
                         <optgroup label="Fading Entrances">
-                            <option <?php echo 'fadeIn' == $ays_gpg_filter_cat_anim ? 'selected' : ''; ?> value="fadeIn">Fade In</option>
-                            <option <?php echo 'fadeInDown' == $ays_gpg_filter_cat_anim ? 'selected' : ''; ?> value="fadeInDown">Fade In Down</option>
-                            <option <?php echo 'fadeInLeft' == $ays_gpg_filter_cat_anim ? 'selected' : ''; ?> value="fadeInLeft">Fade In Left</option>
-                            <option <?php echo 'fadeInRight' == $ays_gpg_filter_cat_anim ? 'selected' : ''; ?> value="fadeInRight">Fade In Right</option>
-                            <option <?php echo 'fadeInUp' == $ays_gpg_filter_cat_anim ? 'selected' : ''; ?> value="fadeInUp">Fade In Up</option>
+                            <option <?php echo 'fadeIn' == $glp_filter_cat_anim ? 'selected' : ''; ?> value="fadeIn">Fade In</option>
+                            <option <?php echo 'fadeInDown' == $glp_filter_cat_anim ? 'selected' : ''; ?> value="fadeInDown">Fade In Down</option>
+                            <option <?php echo 'fadeInLeft' == $glp_filter_cat_anim ? 'selected' : ''; ?> value="fadeInLeft">Fade In Left</option>
+                            <option <?php echo 'fadeInRight' == $glp_filter_cat_anim ? 'selected' : ''; ?> value="fadeInRight">Fade In Right</option>
+                            <option <?php echo 'fadeInUp' == $glp_filter_cat_anim ? 'selected' : ''; ?> value="fadeInUp">Fade In Up</option>
                         </optgroup>
                         <optgroup label="Sliding Entrances">
-                            <option <?php echo ($ays_gpg_filter_cat_anim == "slideInUp") ? "selected" : ""; ?> value="slideInUp"><?php echo __("Slide Up", $this->plugin_name);?></option>
-                            <option <?php echo ($ays_gpg_filter_cat_anim == "slideInDown") ? "selected" : ""; ?> value="slideInDown"><?php echo __("Slide Down", $this->plugin_name);?></option>
-                            <option <?php echo ($ays_gpg_filter_cat_anim == "slideInLeft") ? "selected" : ""; ?> value="slideInLeft"><?php echo __("Slide Left", $this->plugin_name);?></option>
-                            <option <?php echo ($ays_gpg_filter_cat_anim == "slideInRight") ? "selected" : ""; ?> value="slideInRight"><?php echo __("Slide Right", $this->plugin_name);?></option>
+                            <option <?php echo ($glp_filter_cat_anim == "slideInUp") ? "selected" : ""; ?> value="slideInUp"><?php echo __("Slide Up", $this->plugin_name);?></option>
+                            <option <?php echo ($glp_filter_cat_anim == "slideInDown") ? "selected" : ""; ?> value="slideInDown"><?php echo __("Slide Down", $this->plugin_name);?></option>
+                            <option <?php echo ($glp_filter_cat_anim == "slideInLeft") ? "selected" : ""; ?> value="slideInLeft"><?php echo __("Slide Left", $this->plugin_name);?></option>
+                            <option <?php echo ($glp_filter_cat_anim == "slideInRight") ? "selected" : ""; ?> value="slideInRight"><?php echo __("Slide Right", $this->plugin_name);?></option>
                         </optgroup>                                
                         <optgroup label="Zoom Entrances">
-                            <option <?php echo 'zoomIn' == $ays_gpg_filter_cat_anim ? 'selected' : ''; ?> value="zoomIn">Zoom In</option> 
-                            <option <?php echo 'zoomInDown' == $ays_gpg_filter_cat_anim ? 'selected' : ''; ?> value="zoomInDown">Zoom In Down</option> 
-                            <option <?php echo 'zoomInLeft' == $ays_gpg_filter_cat_anim ? 'selected' : ''; ?> value="zoomInLeft">Zoom In Left</option> 
-                            <option <?php echo 'zoomInRight' == $ays_gpg_filter_cat_anim ? 'selected' : ''; ?> value="zoomInRight">Zoom In Right</option> 
-                            <option <?php echo 'zoomInUp' == $ays_gpg_filter_cat_anim ? 'selected' : ''; ?> value="zoomInUp">Zoom In Up</option> 
+                            <option <?php echo 'zoomIn' == $glp_filter_cat_anim ? 'selected' : ''; ?> value="zoomIn">Zoom In</option> 
+                            <option <?php echo 'zoomInDown' == $glp_filter_cat_anim ? 'selected' : ''; ?> value="zoomInDown">Zoom In Down</option> 
+                            <option <?php echo 'zoomInLeft' == $glp_filter_cat_anim ? 'selected' : ''; ?> value="zoomInLeft">Zoom In Left</option> 
+                            <option <?php echo 'zoomInRight' == $glp_filter_cat_anim ? 'selected' : ''; ?> value="zoomInRight">Zoom In Right</option> 
+                            <option <?php echo 'zoomInUp' == $glp_filter_cat_anim ? 'selected' : ''; ?> value="zoomInUp">Zoom In Up</option> 
                         </optgroup>
                     </select>
                 </div>
@@ -865,7 +865,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                     </label>
                 </div>
                 <div class="col-sm-9">
-                    <input type="checkbox" class="" name="ays_gpg_title_show" <?php echo (isset($gal_options['show_gal_title']) && $gal_options['show_gal_title'] == "on") ? "checked" : ""; ?> />
+                    <input type="checkbox" class="" name="glp_title_show" <?php echo (isset($gal_options['show_gal_title']) && $gal_options['show_gal_title'] == "on") ? "checked" : ""; ?> />
                 </div>
             </div>
             <hr/> -->
@@ -912,7 +912,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                     </select>
                 </div>
                 <div class="col-sm-6">                
-                    <select name="ays_gpg_ordering_asc_desc" class="ays-text-input ays-text-input-short" id="ays_gpg_ordering_asc_desc" <?php echo ($gal_options['images_orderby'] == "random" || $gal_options['images_orderby'] == "noordering") ? "style='display:none;'" : ""; ?>>
+                    <select name="glp_ordering_asc_desc" class="ays-text-input ays-text-input-short" id="glp_ordering_asc_desc" <?php echo ($gal_options['images_orderby'] == "random" || $gal_options['images_orderby'] == "noordering") ? "style='display:none;'" : ""; ?>>
                         <option <?php echo ($ordering_asc_desc == "ascending") ? "selected" : ""; ?> value="ascending"><?php echo __("Ascending", $this->plugin_name);?></option>
                         <option <?php echo ($ordering_asc_desc == "descending") ? "selected" : ""; ?> value="descending"><?php echo __("Descending", $this->plugin_name);?></option>
                     </select>
@@ -930,12 +930,12 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 </div>
                 <div class="col-sm-9">
                     <div>
-                        <label class="ays_gpg_image_hover_icon" id="gpg_image_global_loading"><?php echo __("Global loading ", $this->plugin_name);?>
-                            <input type="radio" id="ays_gpg_images_global_loading" name="ays_images_loading" value="all_loaded"
+                        <label class="glp_image_hover_icon" id="gpg_image_global_loading"><?php echo __("Global loading ", $this->plugin_name);?>
+                            <input type="radio" id="glp_images_global_loading" name="ays_images_loading" value="all_loaded"
                             <?php echo ($loading_type == "all_loaded") ? "checked" : ""; ?> />
                         </label>
-                        <label class="ays_gpg_image_hover_icon" id="gpg_image_lazy_loading"><?php echo __("Lazy loading ", $this->plugin_name);?>
-                            <input type="radio" id="ays_gpg_images_lazy_loading" name="ays_images_loading" value="current_loaded" 
+                        <label class="glp_image_hover_icon" id="gpg_image_lazy_loading"><?php echo __("Lazy loading ", $this->plugin_name);?>
+                            <input type="radio" id="glp_images_lazy_loading" name="ays_images_loading" value="current_loaded" 
                             <?php echo ($loading_type == "current_loaded") ? "checked" : ""; ?>/>
                         </label>
                     </div>
@@ -992,10 +992,10 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 </div>
                 <div class="col-sm-9">
                     <div>
-                        <label class="ays_gpg_image_hover_icon"><?php echo __("New Tab", $this->plugin_name);?>
+                        <label class="glp_image_hover_icon"><?php echo __("New Tab", $this->plugin_name);?>
                             <input type="radio" id="gpg_redirect_url_new_tab" name="gpg_redirect_url_tab" value="_blank" <?php echo ($redirect_type == "_blank") ? "checked" : ""; ?>/>
                         </label>
-                        <label class="ays_gpg_image_hover_icon"><?php echo __("Current Tab", $this->plugin_name);?>
+                        <label class="glp_image_hover_icon"><?php echo __("Current Tab", $this->plugin_name);?>
                             <input type="radio" id="gpg_redirect_url_current_tab" name="gpg_redirect_url_tab" value="_self"
                             <?php echo ($redirect_type == "_self") ? "checked" : ""; ?> />
                         </label>
@@ -1031,13 +1031,13 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                         <?php echo __("Gallery Width", $this->plugin_name);?>
                     </label>
                 </div>
-                <div class="col-sm-9 ays_gpg_display_flex_width">
+                <div class="col-sm-9 glp_display_flex_width">
                     <div>
                        <input type="number" id="gallery_width" class="ays-text-input ays-text-input-short" name="gallery_width" placeholder="<?php echo __("Gallery Width", $this->plugin_name);?>" value="<?php echo $gallery["width"] == 0 ? '' : $gallery["width"]; ?>"/>
-                    <span class="ays_gpg_image_hover_icon_text"><?php echo __("For 100% leave blank", $this->plugin_name);?></span>
+                    <span class="glp_image_hover_icon_text"><?php echo __("For 100% leave blank", $this->plugin_name);?></span>
                     </div>
-                    <div class="ays_gpg_dropdown_max_width">
-                        <input type="text" value="px" class="ays-gpg-form-hint-for-size" disabled="">
+                    <div class="glp_dropdown_max_width">
+                        <input type="text" value="px" class="glp-form-hint-for-size" disabled="">
                     </div>
                 </div>
             </div> -->
@@ -1072,7 +1072,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 
             ?>
             <hr class="hr_pakel" <?php echo $pakel1;?> >
-            <!-- <div class="form-group row" id="ays_gpg_resp_width" <?php echo $bacel;?>>
+            <!-- <div class="form-group row" id="glp_resp_width" <?php echo $bacel;?>>
                 <div class="col-sm-3">
                     <label for="gpg_resp_width">
                         <?php echo __("Responsive Width/Height", $this->plugin_name);?>
@@ -1093,7 +1093,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                     </label>
                 </div>
                 <div class="col-sm-9">
-                    <input type="number" class="ays-text-input ays-text-input-short ays_gpg_height_width_ratio" name="gpg_height_width_ratio" id="gpg_height_width_ratio" step="0.1" value="<?php echo $gpg_height_width_ratio; ?>" placeholder="Example: 1 or 1.2 ...">
+                    <input type="number" class="ays-text-input ays-text-input-short glp_height_width_ratio" name="gpg_height_width_ratio" id="gpg_height_width_ratio" step="0.1" value="<?php echo $gpg_height_width_ratio; ?>" placeholder="Example: 1 or 1.2 ...">
                 </div>
             </div> -->
             
@@ -1113,12 +1113,12 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                                 <?php echo __("For mobile:", $this->plugin_name);?>
                             </label>
                         </div>                        
-                        <div class="col-sm-9 ays_gpg_display_flex_width">
+                        <div class="col-sm-9 glp_display_flex_width">
                             <div>
                                <input type="number" id="ays_thumb_height_mobile" name="ays-thumb-height-mobile" class="ays-text-input ays-text-input-short" value="<?php echo $ays_thumb_height_mobile; ?>"/>
                             </div>
-                            <div class="ays_gpg_dropdown_max_width">
-                                <input type="text" value="px" class="ays-gpg-form-hint-for-size" disabled="">
+                            <div class="glp_dropdown_max_width">
+                                <input type="text" value="px" class="glp-form-hint-for-size" disabled="">
                             </div>
                         </div>
                     </div>
@@ -1128,12 +1128,12 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                                 <?php echo __("For desktop:", $this->plugin_name);?>
                             </label>
                         </div>
-                        <div class="col-sm-9 ays_gpg_display_flex_width">
+                        <div class="col-sm-9 glp_display_flex_width">
                             <div>
                                <input type="number" id="ays_thumb_height_desktop" name="ays-thumb-height-desktop" class="ays-text-input ays-text-input-short" value="<?php echo $ays_thumb_height_desktop; ?>"/>
                             </div>
-                            <div class="ays_gpg_dropdown_max_width">
-                                <input type="text" value="px" class="ays-gpg-form-hint-for-size" disabled="">
+                            <div class="glp_dropdown_max_width">
+                                <input type="text" value="px" class="glp-form-hint-for-size" disabled="">
                             </div>
                         </div>
                     </div>
@@ -1183,7 +1183,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                     <select class="ays-text-input ays-text-input-short select2-container-200-width" id='ays_gallery_create_author'name='ays_gallery_create_author'>
                         <option value=""><?php echo __('Select User',$this->plugin_name)?></option>
                         <?php
-                            echo "<option value='" . $ays_gpg_create_author_data['ID'] . "' selected>" . $ays_gpg_create_author_data['display_name'] . "</option>";
+                            echo "<option value='" . $glp_create_author_data['ID'] . "' selected>" . $glp_create_author_data['display_name'] . "</option>";
                         ?>
                     </select>
                 </div>
@@ -1197,7 +1197,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
             );
 
         ?>
-        <div id="tab3" class="ays-gallery-tab-content <?php echo ($ays_gpg_tab == 'tab3') ? 'ays-gallery-tab-content-active' : ''; ?>">
+        <div id="tab3" class="ays-gallery-tab-content <?php echo ($glp_tab == 'tab3') ? 'ays-gallery-tab-content-active' : ''; ?>">
             <h6 class="ays-subtitle"><?php echo  __('Main options', $this->plugin_name) ?></h6>            
             <hr/>
             <div class="form-group row">
@@ -1214,9 +1214,9 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                         <?php
                             foreach($view_type_names as $key => $name):
                         ?>
-                        <label class="ays_gpg_view_type_radio">
+                        <label class="glp_view_type_radio">
                             <input type="radio" class="ays-view-type" name="ays-view-type" 
-                                   <?php echo ($ays_gpg_view_type == $key) ? "checked" : ""; ?>
+                                   <?php echo ($glp_view_type == $key) ? "checked" : ""; ?>
                                    <?php echo ("grid" == $key || "mosaic" == $key || "masonry" == $key) ? "" : "disabled"; ?>
                                    value="<?php echo $key; ?>"/>
                             <?php if($key == "grid" || $key == "mosaic" || $key == "masonry"): ?>
@@ -1241,11 +1241,11 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 </div>
                 <div class="col-sm-9">
                     <div>
-                        <label class="ays_gpg_image_hover_icon ays_gpg_vignette_display"><?php echo __("Permanent ", $this->plugin_name); ?>
-                            <input name="ays_gpg_vignette_display" type="radio" value="permanent" <?php echo ($ays_vignette_display == "permanent") ? "checked" : ''; ?>>
+                        <label class="glp_image_hover_icon glp_vignette_display"><?php echo __("Permanent ", $this->plugin_name); ?>
+                            <input name="glp_vignette_display" type="radio" value="permanent" <?php echo ($ays_vignette_display == "permanent") ? "checked" : ''; ?>>
                         </label>
-                        <label class="ays_gpg_image_hover_icon ays_gpg_vignette_display"><?php echo __("When hover ", $this->plugin_name); ?>
-                            <input name="ays_gpg_vignette_display" type="radio" value="hover" <?php echo ($ays_vignette_display == "hover") ? "checked" : ''; ?>>
+                        <label class="glp_image_hover_icon glp_vignette_display"><?php echo __("When hover ", $this->plugin_name); ?>
+                            <input name="glp_vignette_display" type="radio" value="hover" <?php echo ($ays_vignette_display == "hover") ? "checked" : ''; ?>>
                         </label>
                     </div>                
                 </div>
@@ -1261,35 +1261,35 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                         </a> -->
                     </label>
                 </div>
-                <div class="col-sm-9 ays_gpg_display_flex_width">
+                <div class="col-sm-9 glp_display_flex_width">
                     <div>
-                        <input name="ays-gpg-images-distance" class="ays-text-input ays-text-input-short" type="number" value="<?php echo $images_distance; ?>">
+                        <input name="glp-images-distance" class="ays-text-input ays-text-input-short" type="number" value="<?php echo $images_distance; ?>">
                     </div>
-                    <div class="ays_gpg_dropdown_max_width">
-                        <input type="text" value="px" class="ays-gpg-form-hint-for-size" disabled="">
+                    <div class="glp_dropdown_max_width">
+                        <input type="text" value="px" class="glp-form-hint-for-size" disabled="">
                     </div>
                 </div>
             </div>
             <hr/>
             <div class="form-group row">
                 <div class="col-sm-3">
-                    <label for="ays_gpg_images_border">
+                    <label for="glp_images_border">
                         <?php echo __("Add border", $this->plugin_name);?>
                     </label>
                 </div>
                 <div class="col-sm-9">
-                    <input id="ays_gpg_images_border" name="ays_gpg_images_border" class="" type="checkbox" <?php echo ($ays_images_border == 'on') ? 'checked' : ''; ?>>
-                    <div class="ays_gpg_border_options">
-                        <div class="ays_gpg_border_options_div ays_gpg_display_flex_width">
+                    <input id="glp_images_border" name="glp_images_border" class="" type="checkbox" <?php echo ($ays_images_border == 'on') ? 'checked' : ''; ?>>
+                    <div class="glp_border_options">
+                        <div class="glp_border_options_div glp_display_flex_width">
                             <div>
-                               <input type="number" class="ays_gpg_images_border_width" style="width: 50px;" min="0" max="10" maxlength="2" name="ays_gpg_images_border_width" value="<?php echo $ays_images_border_width; ?>" onkeypress="if(this.value.length==2) return false;">
+                               <input type="number" class="glp_images_border_width" style="width: 50px;" min="0" max="10" maxlength="2" name="glp_images_border_width" value="<?php echo $ays_images_border_width; ?>" onkeypress="if(this.value.length==2) return false;">
                             </div>
-                            <div class="ays_gpg_dropdown_max_width">
-                                <input type="text" value="px" class="ays-gpg-form-hint-for-size" disabled="">
+                            <div class="glp_dropdown_max_width">
+                                <input type="text" value="px" class="glp-form-hint-for-size" disabled="">
                             </div>                            
                         </div>
-                        <div class="ays_gpg_border_options_div gpg_images_border_style">
-                            <select name="ays_gpg_images_border_style">
+                        <div class="glp_border_options_div gpg_images_border_style">
+                            <select name="glp_images_border_style">
                             <option value="solid" <?php echo $ays_images_border_style == "solid" ? 'selected' : ''; ?>>Solid</option>
                             <option value="dashed" <?php echo $ays_images_border_style == "dashed" ? 'selected' : ''; ?>>Dashed</option>
                             <option value="dotted" <?php echo $ays_images_border_style == "dotted" ? 'selected' : ''; ?>>Dotted</option>
@@ -1301,8 +1301,8 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                             <option value="none" <?php echo $ays_images_border_style == "none" ? 'selected' : ''; ?>>None</option>
                         </select>
                         </div>
-                        <div class="ays_gpg_border_options_div">
-                            <input name="ays_gpg_border_color" class="ays_gpg_border_color" type="text" data-alpha="true" value="<?php echo $ays_images_border_color; ?>" data-default-color="#000000">
+                        <div class="glp_border_options_div">
+                            <input name="glp_border_color" class="glp_border_color" type="text" data-alpha="true" value="<?php echo $ays_images_border_color; ?>" data-default-color="#000000">
                         </div>
                     </div>
                 </div>
@@ -1317,12 +1317,12 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                         </a> -->
                     </label>
                 </div>                
-                <div class="col-sm-9 ays_gpg_display_flex_width">
+                <div class="col-sm-9 glp_display_flex_width">
                     <div>
-                        <input name="ays-gpg-images-border-radius" class="ays-text-input ays-text-input-short" type="number" value="<?php echo $ays_gpg_border_radius ?>">
+                        <input name="glp-images-border-radius" class="ays-text-input ays-text-input-short" type="number" value="<?php echo $glp_border_radius ?>">
                     </div>
-                    <div class="ays_gpg_dropdown_max_width">
-                        <input type="text" value="px" class="ays-gpg-form-hint-for-size" disabled="">
+                    <div class="glp_dropdown_max_width">
+                        <input type="text" value="px" class="glp-form-hint-for-size" disabled="">
                     </div>
                 </div>
             </div>
@@ -1337,7 +1337,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 <div class="col-sm-9">
                     <div class="form-group row">
                         <div class="col-sm-3">
-                            <input type="checkbox" id="show_title" class="" name="ays_gpg_show_title" <?php echo ($gal_options['show_title'] == "on") ? "checked" : ""; ?>/>
+                            <input type="checkbox" id="show_title" class="" name="glp_show_title" <?php echo ($gal_options['show_title'] == "on") ? "checked" : ""; ?>/>
                         </div>
                         <div class="col-sm-9 show_with_date">
                             <div class="form-group row">
@@ -1350,8 +1350,8 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                                     </label>
                                 </div>
                                 <div class="col-sm-8">
-                                    <label class="ays_gpg_image_hover_icon"><?php echo __( "Thumbnail hover ", $this->plugin_name); ?><input type="radio" class="ays_gpg_show_title_on" name="ays_gpg_show_title_on" <?php echo ($show_thumb_title_on == "image_hover") ? "checked" : ""; ?> value="image_hover"/></label>
-                                    <label class="ays_gpg_image_hover_icon"><?php echo __( "Gallery thumbnail ", $this->plugin_name); ?><input type="radio" class="ays_gpg_show_title_on" name="ays_gpg_show_title_on" <?php echo ($show_thumb_title_on == "gallery_image") ? "checked" : ""; ?> value="gallery_image"/></label>
+                                    <label class="glp_image_hover_icon"><?php echo __( "Thumbnail hover ", $this->plugin_name); ?><input type="radio" class="glp_show_title_on" name="glp_show_title_on" <?php echo ($show_thumb_title_on == "image_hover") ? "checked" : ""; ?> value="image_hover"/></label>
+                                    <label class="glp_image_hover_icon"><?php echo __( "Gallery thumbnail ", $this->plugin_name); ?><input type="radio" class="glp_show_title_on" name="glp_show_title_on" <?php echo ($show_thumb_title_on == "gallery_image") ? "checked" : ""; ?> value="gallery_image"/></label>
                                 </div>                                
                             </div>
                             <div class="form-group row">
@@ -1364,8 +1364,8 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                                     </label>
                                 </div>
                                 <div class="col-sm-8">
-                                    <label class="ays_gpg_image_hover_icon"><?php echo __("Bottom", $this->plugin_name);?> <input type="radio" class="image_title_position_bottom" name="image_title_position" <?php echo ($thumb_title_position == "bottom") ? "checked" : ""; ?> value="bottom"/></label>
-                                    <label class="ays_gpg_image_hover_icon"><?php echo __("Top", $this->plugin_name);?> <input type="radio" class="image_title_position_top" name="image_title_position" <?php echo ($thumb_title_position == "top") ? "checked" : ""; ?> value="top"/></label>
+                                    <label class="glp_image_hover_icon"><?php echo __("Bottom", $this->plugin_name);?> <input type="radio" class="image_title_position_bottom" name="image_title_position" <?php echo ($thumb_title_position == "bottom") ? "checked" : ""; ?> value="bottom"/></label>
+                                    <label class="glp_image_hover_icon"><?php echo __("Top", $this->plugin_name);?> <input type="radio" class="image_title_position_top" name="image_title_position" <?php echo ($thumb_title_position == "top") ? "checked" : ""; ?> value="top"/></label>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -1377,8 +1377,8 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                                     </label>
                                 </div>    
                                 <div class="col-sm-8">
-                                    <label class="ays_gpg_image_hover_icon"><?php echo __("Yes", $this->plugin_name);?> <input type="radio" class="image_title_position_bottom" name="ays_gpg_show_with_date" <?php echo ($gal_options['show_with_date'] == "on") ? "checked" : ""; ?> value="on"/></label>
-                                    <label class="ays_gpg_image_hover_icon"><?php echo __("No", $this->plugin_name);?> <input type="radio" class="image_title_position_bottom" name="ays_gpg_show_with_date" <?php echo ($gal_options['show_with_date'] == "") ? "checked" : ""; ?> value=""/></label>
+                                    <label class="glp_image_hover_icon"><?php echo __("Yes", $this->plugin_name);?> <input type="radio" class="image_title_position_bottom" name="glp_show_with_date" <?php echo ($gal_options['show_with_date'] == "on") ? "checked" : ""; ?> value="on"/></label>
+                                    <label class="glp_image_hover_icon"><?php echo __("No", $this->plugin_name);?> <input type="radio" class="image_title_position_bottom" name="glp_show_with_date" <?php echo ($gal_options['show_with_date'] == "") ? "checked" : ""; ?> value=""/></label>
                                 </div>
                             </div>
                         </div>
@@ -1392,12 +1392,12 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                         <?php echo __("Title size", $this->plugin_name);?>
                     </label>
                 </div>               
-                <div class="col-sm-9 ays_gpg_display_flex_width">
+                <div class="col-sm-9 glp_display_flex_width">
                     <div>
-                        <input name="ays_gpg_thumbnail_title_size" class="ays-text-input ays-text-input-short" type="number" value="<?php echo $ays_gpg_thumbnail_title_size; ?>">
+                        <input name="glp_thumbnail_title_size" class="ays-text-input ays-text-input-short" type="number" value="<?php echo $glp_thumbnail_title_size; ?>">
                     </div>
-                    <div class="ays_gpg_dropdown_max_width">
-                        <input type="text" value="px" class="ays-gpg-form-hint-for-size" disabled="">
+                    <div class="glp_dropdown_max_width">
+                        <input type="text" value="px" class="glp-form-hint-for-size" disabled="">
                     </div>
                 </div>
             </div>
@@ -1437,13 +1437,13 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                     </label>
                 </div>
                 <div class="col-sm-9">
-                    <input name="ays-gpg-lightbox-color" class="ays_gpg_lightbox_color" data-alpha="true" type="text" value="<?php echo isset($gal_options['lightbox_color']) ? esc_attr(stripslashes($gal_options['lightbox_color'])) : 'rgba(0,0,0,0)'; ?>" data-default-color="rgba(0,0,0,0)">
+                    <input name="glp-lightbox-color" class="glp_lightbox_color" data-alpha="true" type="text" value="<?php echo isset($gal_options['lightbox_color']) ? esc_attr(stripslashes($gal_options['lightbox_color'])) : 'rgba(0,0,0,0)'; ?>" data-default-color="rgba(0,0,0,0)">
                 </div>
             </div>
             <hr/>
             <div class="form-group row">
                 <div class="col-sm-3">
-                    <label for='ays_gpg_thumbnail_title_color'>
+                    <label for='glp_thumbnail_title_color'>
                         <?php echo __("Title text color", $this->plugin_name);?>
                         <!-- <a class="ays_help" data-toggle="tooltip" title="<?php echo __("Choose the color of the title text on the thumbnail. Make it transparent if you want.", $this->plugin_name);?>">
                            <i class="fas fa-info-circle"></i>
@@ -1451,7 +1451,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                     </label>
                 </div>
                 <div class="col-sm-9">
-                    <input id="ays_gpg_thumbnail_title_color" name="ays_gpg_thumbnail_title_color" data-alpha="true" type="text" value="<?php echo $thumbnail_title_color; ?>" data-default-color="#ffffff">
+                    <input id="glp_thumbnail_title_color" name="glp_thumbnail_title_color" data-alpha="true" type="text" value="<?php echo $thumbnail_title_color; ?>" data-default-color="#ffffff">
                 </div>
             </div>
             <hr/>
@@ -1468,11 +1468,11 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 </div>
                 <div class="col-sm-9">
                     <div>
-                        <label class="ays_gpg_image_hover_icon"><?php echo __("Simple animation ", $this->plugin_name);?>
+                        <label class="glp_image_hover_icon"><?php echo __("Simple animation ", $this->plugin_name);?>
                             <input type="radio" class="ays_hover_effect_radio ays_hover_effect_radio_simple" name="ays_images_hover_effect" <?php
                                echo ($ays_images_hover_effect == "simple") ? "checked" : ""; ?> value="simple"/>
                         </label>
-                        <label class="ays_gpg_image_hover_icon" style="<?php echo ($gal_options['view_type'] == "masonry") ? "color: rgb(204, 204, 204);" : ""; ?>"><?php echo __("Direction-aware ", $this->plugin_name);?> <input type="radio" class="ays_hover_effect_radio ays_hover_effect_radio_dir_aware" name="ays_images_hover_effect" <?php echo ($ays_images_hover_effect == "dir_aware") ? "checked" : ""; ?> <?php echo ($gal_options['view_type'] == "masonry") ? "disabled='disabled'" : ""; ?> value="dir_aware"/></label>
+                        <label class="glp_image_hover_icon" style="<?php echo ($gal_options['view_type'] == "masonry") ? "color: rgb(204, 204, 204);" : ""; ?>"><?php echo __("Direction-aware ", $this->plugin_name);?> <input type="radio" class="ays_hover_effect_radio ays_hover_effect_radio_dir_aware" name="ays_images_hover_effect" <?php echo ($ays_images_hover_effect == "dir_aware") ? "checked" : ""; ?> <?php echo ($gal_options['view_type'] == "masonry") ? "disabled='disabled'" : ""; ?> value="dir_aware"/></label>
                     </div>
                 </div>
             </div>
@@ -1554,14 +1554,14 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
             </div>
             <div class="form-group row">
                 <div class="col-sm-3">
-                    <label for="ays_gpg_hover_animation_speed">
+                    <label for="glp_hover_animation_speed">
                         <span>
                             <?php echo  __('Animation speed', $this->plugin_name) ?>
                         </span>
                     </label>
                 </div>
                 <div class="col-sm-9">
-                    <input id="ays_gpg_hover_animation_speed" type="number" class="ays-text-input ays-text-input-short" name="ays_gpg_hover_animation_speed" value="<?php echo $hover_animation_speed; ?>" step="0.1">
+                    <input id="glp_hover_animation_speed" type="number" class="ays-text-input ays-text-input-short" name="glp_hover_animation_speed" value="<?php echo $hover_animation_speed; ?>" step="0.1">
                 </div>
             </div>
             <hr>
@@ -1573,7 +1573,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 </div>
                 <div class="col-sm-3 gpg_range_div">
                     <div>
-                        <input class="gpg_opacity_demo_val form-control-range" id="formControlRange" name="ays-gpg-image-hover-opacity" type="range" min="0" max="1" step="0.01" value="<?php echo isset($gal_options['hover_opacity']) ? $gal_options['hover_opacity'] : '0.5'; ?>">
+                        <input class="gpg_opacity_demo_val form-control-range" id="formControlRange" name="glp-image-hover-opacity" type="range" min="0" max="1" step="0.01" value="<?php echo isset($gal_options['hover_opacity']) ? $gal_options['hover_opacity'] : '0.5'; ?>">
                     </div>                    
                 </div>
                 <div class="col-sm-6">                    
@@ -1591,7 +1591,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                     </label>
                 </div>
                 <div class="col-sm-9">
-                    <input name="ays-gpg-hover-color" class="ays_gpg_hover_color" data-alpha="true" type="text" value="<?php echo isset($gal_options['hover_color']) ? esc_attr(stripslashes($gal_options['hover_color'])) : '#000000'; ?>" data-default-color="#000000">
+                    <input name="glp-hover-color" class="glp_hover_color" data-alpha="true" type="text" value="<?php echo isset($gal_options['hover_color']) ? esc_attr(stripslashes($gal_options['hover_color'])) : '#000000'; ?>" data-default-color="#000000">
                 </div>
             </div>
             <hr/>
@@ -1611,71 +1611,71 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                             $ays_hover_icon = $gal_options['hover_icon'];
                         }
                     ?>
-                    <label class="ays_gpg_image_hover_icon">
-                        <input type="radio" name="ays-gpg-image-hover-icon" value="none" <?php echo $ays_hover_icon == 'none' ? 'checked' : ''; ?> />
+                    <label class="glp_image_hover_icon">
+                        <input type="radio" name="glp-image-hover-icon" value="none" <?php echo $ays_hover_icon == 'none' ? 'checked' : ''; ?> />
                         <i>None</i>
                     </label>
-                    <label class="ays_gpg_image_hover_icon">
-                        <input type="radio" name="ays-gpg-image-hover-icon" value="search_plus" <?php echo $ays_hover_icon == 'search_plus' ? 'checked' : ''; ?> />
+                    <label class="glp_image_hover_icon">
+                        <input type="radio" name="glp-image-hover-icon" value="search_plus" <?php echo $ays_hover_icon == 'search_plus' ? 'checked' : ''; ?> />
                         <i class="fas fa-search-plus"></i>
                     </label>
-                    <label class="ays_gpg_image_hover_icon">
-                        <input type="radio" name="ays-gpg-image-hover-icon" value="search" <?php echo $ays_hover_icon == 'search' ? 'checked' : ''; ?>/>
+                    <label class="glp_image_hover_icon">
+                        <input type="radio" name="glp-image-hover-icon" value="search" <?php echo $ays_hover_icon == 'search' ? 'checked' : ''; ?>/>
                         <i class="fas fa-search"></i>
                     </label>
-                    <label class="ays_gpg_image_hover_icon">
-                        <input type="radio" name="ays-gpg-image-hover-icon" value="plus" <?php echo $ays_hover_icon == 'plus' ? 'checked' : ''; ?>/>
+                    <label class="glp_image_hover_icon">
+                        <input type="radio" name="glp-image-hover-icon" value="plus" <?php echo $ays_hover_icon == 'plus' ? 'checked' : ''; ?>/>
                         <i class="fas fa-plus"></i>
                     </label>
-                    <label class="ays_gpg_image_hover_icon">
-                        <input type="radio" name="ays-gpg-image-hover-icon" value="plus_circle" <?php echo $ays_hover_icon == 'plus_circle' ? 'checked' : ''; ?>/>
+                    <label class="glp_image_hover_icon">
+                        <input type="radio" name="glp-image-hover-icon" value="plus_circle" <?php echo $ays_hover_icon == 'plus_circle' ? 'checked' : ''; ?>/>
                         <i class="fas fa-plus-circle"></i>
                     </label>
-                    <label class="ays_gpg_image_hover_icon">
-                        <input type="radio" name="ays-gpg-image-hover-icon" value="plus_square_fas" <?php echo $ays_hover_icon == 'plus_square_fas' ? 'checked' : ''; ?>/>
+                    <label class="glp_image_hover_icon">
+                        <input type="radio" name="glp-image-hover-icon" value="plus_square_fas" <?php echo $ays_hover_icon == 'plus_square_fas' ? 'checked' : ''; ?>/>
                         <i class="fas fa-plus-square"></i>
                     </label>
-                    <label class="ays_gpg_image_hover_icon">
-                        <input type="radio" name="ays-gpg-image-hover-icon" value="plus_square_far" <?php echo $ays_hover_icon == 'plus_square_far' ? 'checked' : ''; ?>/>
+                    <label class="glp_image_hover_icon">
+                        <input type="radio" name="glp-image-hover-icon" value="plus_square_far" <?php echo $ays_hover_icon == 'plus_square_far' ? 'checked' : ''; ?>/>
                         <i class="far fa-plus-square"></i>
                     </label>
-                    <label class="ays_gpg_image_hover_icon">
-                        <input type="radio" name="ays-gpg-image-hover-icon" value="expand" <?php echo $ays_hover_icon == 'expand' ? 'checked' : ''; ?>/>
+                    <label class="glp_image_hover_icon">
+                        <input type="radio" name="glp-image-hover-icon" value="expand" <?php echo $ays_hover_icon == 'expand' ? 'checked' : ''; ?>/>
                         <i class="fas fa-expand"></i>
                     </label>
-                    <label class="ays_gpg_image_hover_icon">
-                        <input type="radio" name="ays-gpg-image-hover-icon" value="image_fas" <?php echo $ays_hover_icon == 'image_fas' ? 'checked' : ''; ?>/>
+                    <label class="glp_image_hover_icon">
+                        <input type="radio" name="glp-image-hover-icon" value="image_fas" <?php echo $ays_hover_icon == 'image_fas' ? 'checked' : ''; ?>/>
                         <i class="fas fa-image"></i>
                     </label>
-                    <label class="ays_gpg_image_hover_icon">
-                        <input type="radio" name="ays-gpg-image-hover-icon" value="image_far" <?php echo $ays_hover_icon == 'image_far' ? 'checked' : ''; ?>/>
+                    <label class="glp_image_hover_icon">
+                        <input type="radio" name="glp-image-hover-icon" value="image_far" <?php echo $ays_hover_icon == 'image_far' ? 'checked' : ''; ?>/>
                         <i class="far fa-image"></i>
                     </label>
-                    <label class="ays_gpg_image_hover_icon">
-                        <input type="radio" name="ays-gpg-image-hover-icon" value="images_fas" <?php echo $ays_hover_icon == 'images_fas' ? 'checked' : ''; ?>/>
+                    <label class="glp_image_hover_icon">
+                        <input type="radio" name="glp-image-hover-icon" value="images_fas" <?php echo $ays_hover_icon == 'images_fas' ? 'checked' : ''; ?>/>
                         <i class="fas fa-images"></i>
                     </label>
-                    <label class="ays_gpg_image_hover_icon">
-                        <input type="radio" name="ays-gpg-image-hover-icon" value="images_far" <?php echo $ays_hover_icon == 'images_far' ? 'checked' : ''; ?>/>
+                    <label class="glp_image_hover_icon">
+                        <input type="radio" name="glp-image-hover-icon" value="images_far" <?php echo $ays_hover_icon == 'images_far' ? 'checked' : ''; ?>/>
                         <i class="far fa-images"></i>
                     </label>
-                    <label class="ays_gpg_image_hover_icon">
-                        <input type="radio" name="ays-gpg-image-hover-icon" value="eye_fas" <?php echo $ays_hover_icon == 'eye_fas' ? 'checked' : ''; ?>/>
+                    <label class="glp_image_hover_icon">
+                        <input type="radio" name="glp-image-hover-icon" value="eye_fas" <?php echo $ays_hover_icon == 'eye_fas' ? 'checked' : ''; ?>/>
                         <i class="fas fa-eye"></i>
                     </label>
-                    <label class="ays_gpg_image_hover_icon">
-                        <input type="radio" name="ays-gpg-image-hover-icon" value="eye_far" <?php echo $ays_hover_icon == 'eye_far' ? 'checked' : ''; ?>/>
+                    <label class="glp_image_hover_icon">
+                        <input type="radio" name="glp-image-hover-icon" value="eye_far" <?php echo $ays_hover_icon == 'eye_far' ? 'checked' : ''; ?>/>
                         <i class="far fa-eye"></i>
                     </label>
-                    <label class="ays_gpg_image_hover_icon">
-                        <input type="radio" name="ays-gpg-image-hover-icon" value="camera_retro" <?php echo $ays_hover_icon == 'camera_retro' ? 'checked' : ''; ?>/>
+                    <label class="glp_image_hover_icon">
+                        <input type="radio" name="glp-image-hover-icon" value="camera_retro" <?php echo $ays_hover_icon == 'camera_retro' ? 'checked' : ''; ?>/>
                         <i class="fas fa-camera-retro"></i>
                     </label>
-                    <label class="ays_gpg_image_hover_icon">
-                        <input type="radio" name="ays-gpg-image-hover-icon" value="camera" <?php echo $ays_hover_icon == 'camera' ? 'checked' : ''; ?>/>
+                    <label class="glp_image_hover_icon">
+                        <input type="radio" name="glp-image-hover-icon" value="camera" <?php echo $ays_hover_icon == 'camera' ? 'checked' : ''; ?>/>
                         <i class="fas fa-camera"></i>
                     </label>
-                    <p class="ays_gpg_image_hover_icon_text"><span><?php echo __("Select icon for the gallery images", $this->plugin_name);?></span></p>
+                    <p class="glp_image_hover_icon_text"><span><?php echo __("Select icon for the gallery images", $this->plugin_name);?></span></p>
                 </div>
             </div>
             <hr/>
@@ -1685,12 +1685,12 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                         <?php echo __("Zoom icon size", $this->plugin_name);?>
                     </label>
                 </div>
-                <div class="col-sm-9 ays_gpg_display_flex_width">
+                <div class="col-sm-9 glp_display_flex_width">
                     <div>
-                        <input name="ays-gpg-hover-icon-size" class="ays-text-input ays-text-input-short" type="number" value="<?php echo $ays_gpg_hover_icon_size; ?>">
+                        <input name="glp-hover-icon-size" class="ays-text-input ays-text-input-short" type="number" value="<?php echo $glp_hover_icon_size; ?>">
                     </div>
-                    <div class="ays_gpg_dropdown_max_width">
-                        <input type="text" value="px" class="ays-gpg-form-hint-for-size" disabled="">
+                    <div class="glp_dropdown_max_width">
+                        <input type="text" value="px" class="glp-form-hint-for-size" disabled="">
                     </div>
                 </div>
             </div>
@@ -1706,13 +1706,13 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 </div>
                 <div class="col-sm-9">
                     <div>
-                        <label class="ays_gpg_image_hover_icon ays_gpg_hover_zoom"><?php echo __("Yes ", $this->plugin_name); ?><input name="ays_gpg_hover_zoom" type="radio" value="yes" <?php echo ($ays_hover_zoom == "yes") ? "checked" : ''; ?>></label>
-                        <label class="ays_gpg_image_hover_icon ays_gpg_hover_zoom"><?php echo __("No ", $this->plugin_name); ?><input name="ays_gpg_hover_zoom" type="radio" value="no" <?php echo ($ays_hover_zoom == "no") ? "checked" : ''; ?>></label>
+                        <label class="glp_image_hover_icon glp_hover_zoom"><?php echo __("Yes ", $this->plugin_name); ?><input name="glp_hover_zoom" type="radio" value="yes" <?php echo ($ays_hover_zoom == "yes") ? "checked" : ''; ?>></label>
+                        <label class="glp_image_hover_icon glp_hover_zoom"><?php echo __("No ", $this->plugin_name); ?><input name="glp_hover_zoom" type="radio" value="no" <?php echo ($ays_hover_zoom == "no") ? "checked" : ''; ?>></label>
                     </div>                
                     <hr class="hover_zoom_animation_speed <?php echo $ays_hover_zoom == "yes" ? "" : "display_none"?>">
                     <div class="form-group row hover_zoom_animation_speed <?php echo $ays_hover_zoom == "yes" ? "" : "display_none"?>">
                         <div class="col-sm-2">
-                            <label for="ays_gpg_hover_zoom_animation_speed">
+                            <label for="glp_hover_zoom_animation_speed">
                                 <span>
                                     <?php echo  __('Animation speed', $this->plugin_name) ?>
                                     <a class="ays_help" data-toggle="tooltip" title="<?php echo __("Specify the animation speed of the zoom effect of the image.", $this->plugin_name); ?>">
@@ -1722,7 +1722,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                             </label>
                         </div>
                         <div class="col-sm-10">
-                            <input id="ays_gpg_hover_zoom_animation_speed" type="number" class="ays-text-input ays-text-input-short" name="gpg_hover_zoom_animation_speed" value="<?php echo $hover_zoom_animation_speed; ?>" step="0.1">
+                            <input id="glp_hover_zoom_animation_speed" type="number" class="ays-text-input ays-text-input-short" name="gpg_hover_zoom_animation_speed" value="<?php echo $hover_zoom_animation_speed; ?>" step="0.1">
                         </div>
                     </div>
                 </div>
@@ -1739,13 +1739,13 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 </div>
                 <div class="col-sm-9">
                     <div>
-                        <label class="ays_gpg_image_hover_icon ays_gpg_hover_scale"><?php echo __("Yes ", $this->plugin_name); ?><input name="ays_gpg_hover_scale" type="radio" value="yes" <?php echo ($ays_hover_scale == "yes") ? "checked" : ''; ?>></label>
-                        <label class="ays_gpg_image_hover_icon ays_gpg_hover_scale"><?php echo __("No ", $this->plugin_name); ?><input name="ays_gpg_hover_scale" type="radio" value="no" <?php echo ($ays_hover_scale == "no") ? "checked" : ''; ?>></label>
+                        <label class="glp_image_hover_icon glp_hover_scale"><?php echo __("Yes ", $this->plugin_name); ?><input name="glp_hover_scale" type="radio" value="yes" <?php echo ($ays_hover_scale == "yes") ? "checked" : ''; ?>></label>
+                        <label class="glp_image_hover_icon glp_hover_scale"><?php echo __("No ", $this->plugin_name); ?><input name="glp_hover_scale" type="radio" value="no" <?php echo ($ays_hover_scale == "no") ? "checked" : ''; ?>></label>
                     </div>
                     <hr class="hover_scale_animation_speed <?php echo $ays_hover_scale == "yes" ? "" : "display_none"?>">
                     <div class="form-group row hover_scale_animation_speed <?php echo $ays_hover_scale == "yes" ? "" : "display_none"?>">
                         <div class="col-sm-2">
-                            <label for="ays_gpg_hover_scale_animation_speed">
+                            <label for="glp_hover_scale_animation_speed">
                                 <span>
                                     <?php echo  __('Animation speed', $this->plugin_name) ?>
                                     <a class="ays_help" data-toggle="tooltip" title="<?php echo __("Specify the animation speed of the scale effect of the image.", $this->plugin_name); ?>">
@@ -1755,7 +1755,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                             </label>
                         </div>
                         <div class="col-sm-10">
-                            <input id="ays_gpg_hover_scale_animation_speed" type="number" class="ays-text-input ays-text-input-short" name="gpg_hover_scale_animation_speed" value="<?php echo $hover_scale_animation_speed; ?>" step="0.1">
+                            <input id="glp_hover_scale_animation_speed" type="number" class="ays-text-input ays-text-input-short" name="gpg_hover_scale_animation_speed" value="<?php echo $hover_scale_animation_speed; ?>" step="0.1">
                         </div>
                     </div>
                 </div>
@@ -1763,7 +1763,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
             <hr/> -->
             <!-- <div class="form-group row">
                 <div class="col-sm-3">
-                    <label for="ays_gpg_filter_thubnail">
+                    <label for="glp_filter_thubnail">
                         <?php echo __("Choose filter for thumbnail", $this->plugin_name);?>
                         <a class="ays_help" data-toggle="tooltip" title="<?php echo __("The filter property defines visual effects to images of Gallery", $this->plugin_name);?>">
                            <i class="fas fa-info-circle"></i>
@@ -1771,7 +1771,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                     </label>
                 </div>
                 <div class="col-sm-9">
-                    <select id="ays_gpg_filter_thubnail" class="ays-text-input ays-text-input-short" name="ays_gpg_filter_thubnail_opt">
+                    <select id="glp_filter_thubnail" class="ays-text-input ays-text-input-short" name="glp_filter_thubnail_opt">
                         <option <?php echo (isset($gal_options['filter_thubnail_opt']) && $gal_options['filter_thubnail_opt'] == "none") ? "selected" : ""; ?> value="none"><?php echo __("Default none", $this->plugin_name);?></option>
                         <option <?php echo (isset($gal_options['filter_thubnail_opt']) && $gal_options['filter_thubnail_opt'] == "blur") ? "selected" : ""; ?> value="blur"><?php echo __("Blur", $this->plugin_name);?></option>
                         <option <?php echo (isset($gal_options['filter_thubnail_opt']) && $gal_options['filter_thubnail_opt'] == "brightness") ? "selected" : ""; ?> value="brightness"><?php echo __("Brightness", $this->plugin_name);?></option>
@@ -1793,70 +1793,70 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                         <?php echo __("Loader style", $this->plugin_name);?>
                     </label>
                 </div>
-                <div class="col-sm-9 ays_gpg_toggle_loader_parent">
-                    <label class="ays_gpg_image_hover_icon">
-                        <input name="ays_gpg_loader" class="ays_gpg_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="flower" <?php echo ($ays_gallery_loader == 'flower') ? 'checked' : ''; ?>>
+                <div class="col-sm-9 glp_toggle_loader_parent">
+                    <label class="glp_image_hover_icon">
+                        <input name="glp_loader" class="glp_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="flower" <?php echo ($ays_gallery_loader == 'flower') ? 'checked' : ''; ?>>
                         <img style="width: 50px;" src="<?php echo AYS_GPG_PUBLIC_URL.'/images/flower.svg' ?>">
                     </label>
-                    <label class="ays_gpg_image_hover_icon">
-                        <input name="ays_gpg_loader" class="ays_gpg_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="ball" <?php echo ($ays_gallery_loader == 'ball') ? 'checked' : ''; ?> />
+                    <label class="glp_image_hover_icon">
+                        <input name="glp_loader" class="glp_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="ball" <?php echo ($ays_gallery_loader == 'ball') ? 'checked' : ''; ?> />
                         <img style="width: 50px;" src="<?php echo AYS_GPG_PUBLIC_URL.'/images/ball.svg' ?>">
                     </label>
-                    <label class="ays_gpg_image_hover_icon">
-                        <input name="ays_gpg_loader" class="ays_gpg_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="bars" <?php echo ($ays_gallery_loader == 'bars') ? 'checked' : ''; ?> />
+                    <label class="glp_image_hover_icon">
+                        <input name="glp_loader" class="glp_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="bars" <?php echo ($ays_gallery_loader == 'bars') ? 'checked' : ''; ?> />
                         <img style="width: 50px;" src="<?php echo AYS_GPG_PUBLIC_URL.'/images/bars.svg' ?>">
                     </label>
-                    <label class="ays_gpg_image_hover_icon">
-                        <input name="ays_gpg_loader" class="ays_gpg_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="curved_bar" <?php echo ($ays_gallery_loader == 'curved_bar') ? 'checked' : ''; ?>>
+                    <label class="glp_image_hover_icon">
+                        <input name="glp_loader" class="glp_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="curved_bar" <?php echo ($ays_gallery_loader == 'curved_bar') ? 'checked' : ''; ?>>
                         <img style="width: 50px;" src="<?php echo AYS_GPG_PUBLIC_URL.'/images/curved_bar.svg' ?>">
                     </label>
-                    <label class="ays_gpg_image_hover_icon">
-                        <input name="ays_gpg_loader" class="ays_gpg_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="react" <?php echo ($ays_gallery_loader == 'react') ? 'checked' : ''; ?>>
+                    <label class="glp_image_hover_icon">
+                        <input name="glp_loader" class="glp_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="react" <?php echo ($ays_gallery_loader == 'react') ? 'checked' : ''; ?>>
                         <img style="width: 50px;" src="<?php echo AYS_GPG_PUBLIC_URL.'/images/react.svg' ?>">
                     </label>
-                    <label class="ays_gpg_image_hover_icon">
-                        <input name="ays_gpg_loader" class="ays_gpg_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="gallery" <?php echo ($ays_gallery_loader == 'gallery') ? 'checked' : ''; ?>>
+                    <label class="glp_image_hover_icon">
+                        <input name="glp_loader" class="glp_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="gallery" <?php echo ($ays_gallery_loader == 'gallery') ? 'checked' : ''; ?>>
                         <img style="width: 50px;" src="<?php echo AYS_GPG_PUBLIC_URL.'/images/gallery.svg' ?>">
                     </label>
-                    <label class="ays_gpg_image_hover_icon">
-                        <input name="ays_gpg_loader" class="ays_gpg_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="fracox" <?php echo ($ays_gallery_loader == 'fracox') ? 'checked' : ''; ?>>
+                    <label class="glp_image_hover_icon">
+                        <input name="glp_loader" class="glp_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="fracox" <?php echo ($ays_gallery_loader == 'fracox') ? 'checked' : ''; ?>>
                         <img style="width: 50px;" src="<?php echo AYS_GPG_PUBLIC_URL.'/images/fracox.svg' ?>">
                     </label>
-                    <label class="ays_gpg_image_hover_icon">
-                        <input name="ays_gpg_loader" class="ays_gpg_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="fracoxner" <?php echo ($ays_gallery_loader == 'fracoxner') ? 'checked' : ''; ?>>
+                    <label class="glp_image_hover_icon">
+                        <input name="glp_loader" class="glp_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="fracoxner" <?php echo ($ays_gallery_loader == 'fracoxner') ? 'checked' : ''; ?>>
                         <img style="width: 50px;" src="<?php echo AYS_GPG_PUBLIC_URL.'/images/fracoxner.svg' ?>">
                     </label>
-                    <label class="ays_gpg_image_hover_icon">
-                        <input name="ays_gpg_loader" class="ays_gpg_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="frik" <?php echo ($ays_gallery_loader == 'frik') ? 'checked' : ''; ?>>
+                    <label class="glp_image_hover_icon">
+                        <input name="glp_loader" class="glp_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="frik" <?php echo ($ays_gallery_loader == 'frik') ? 'checked' : ''; ?>>
                         <img style="width: 50px;" src="<?php echo AYS_GPG_PUBLIC_URL.'/images/frik.svg' ?>">
                     </label>
-                    <label class="ays_gpg_image_hover_icon">
-                        <input name="ays_gpg_loader" class="ays_gpg_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="clock_frik" <?php echo ($ays_gallery_loader == 'clock_frik') ? 'checked' : ''; ?>>
+                    <label class="glp_image_hover_icon">
+                        <input name="glp_loader" class="glp_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="clock_frik" <?php echo ($ays_gallery_loader == 'clock_frik') ? 'checked' : ''; ?>>
                         <img style="width: 50px;" src="<?php echo AYS_GPG_PUBLIC_URL.'/images/clock_frik.svg' ?>">
                     </label>
-                    <label class="ays_gpg_image_hover_icon">
-                        <input name="ays_gpg_loader" class="ays_gpg_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="in_yan" <?php echo ($ays_gallery_loader == 'in_yan') ? 'checked' : ''; ?>>
+                    <label class="glp_image_hover_icon">
+                        <input name="glp_loader" class="glp_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="in_yan" <?php echo ($ays_gallery_loader == 'in_yan') ? 'checked' : ''; ?>>
                         <img style="width: 50px;" src="<?php echo AYS_GPG_PUBLIC_URL.'/images/in_yan.svg' ?>">
                     </label>
                     <hr/>
-                    <label class="ays_gpg_image_hover_icon">
-                        <input name="ays_gpg_loader" class="ays_gpg_toggle_loader_radio" data-flag="true" data-type="text" type="radio" value="text" <?php echo ($ays_gallery_loader == 'text') ? 'checked' : ''; ?>>
-                        <div class="ays_gpg_loader_text">
+                    <label class="glp_image_hover_icon">
+                        <input name="glp_loader" class="glp_toggle_loader_radio" data-flag="true" data-type="text" type="radio" value="text" <?php echo ($ays_gallery_loader == 'text') ? 'checked' : ''; ?>>
+                        <div class="glp_loader_text">
                             <?php echo __( "Text" , $this->plugin_name ); ?>
                         </div>
-                        <div class="ays_gpg_toggle_loader_target <?php echo ($ays_gallery_loader == 'text') ? '' : 'display_none' ?>" data-type="text">
-                            <input type="text" class="ays-text-input" data-type="text" id="ays_gpg_loader_text_value" name="ays_gpg_loader_text_value" value="<?php echo $gallery_loader_text_value; ?>">
+                        <div class="glp_toggle_loader_target <?php echo ($ays_gallery_loader == 'text') ? '' : 'display_none' ?>" data-type="text">
+                            <input type="text" class="ays-text-input" data-type="text" id="glp_loader_text_value" name="glp_loader_text_value" value="<?php echo $gallery_loader_text_value; ?>">
                         </div>
                     </label>
-                    <label class="ays_gpg_image_hover_icon">
-                        <input name="ays_gpg_loader" class="ays_gpg_toggle_loader_radio" data-flag="true" data-type="gif" type="radio" value="custom_gif" <?php echo ($ays_gallery_loader == 'custom_gif') ? 'checked' : ''; ?>>
-                        <div class="ays_gpg_loader_custom_gif">
+                    <label class="glp_image_hover_icon">
+                        <input name="glp_loader" class="glp_toggle_loader_radio" data-flag="true" data-type="gif" type="radio" value="custom_gif" <?php echo ($ays_gallery_loader == 'custom_gif') ? 'checked' : ''; ?>>
+                        <div class="glp_loader_custom_gif">
                             <?php echo __( "Gif" , $this->plugin_name ); ?>
                         </div>
-                        <div class="ays_gpg_toggle_loader_target ays-image-wrap <?php echo ($ays_gallery_loader == 'custom_gif') ? '' : 'display_none' ?>" data-type="gif">
+                        <div class="glp_toggle_loader_target ays-image-wrap <?php echo ($ays_gallery_loader == 'custom_gif') ? '' : 'display_none' ?>" data-type="gif">
                             <a href="javascript:void(0)" style="<?php echo ($gallery_loader_custom_gif == '') ? 'display:inline-block' : 'display:none'; ?>" class="ays-add-image add_gallery_loader_custom_gif"><?php echo __('Add Gif', $this->plugin_name); ?></a>
                             <input type="hidden" class="ays-image-path" id="ays_gallery_loader_custom_gif" name="ays_gallery_loader_custom_gif" value="<?php echo $gallery_loader_custom_gif; ?>"/>
-                            <div class="ays-gpg-image-container" style="<?php echo ($gallery_loader_custom_gif == '') ? 'display:none' : 'display:block'; ?>">
+                            <div class="glp-image-container" style="<?php echo ($gallery_loader_custom_gif == '') ? 'display:none' : 'display:block'; ?>">
                                 <span class="ays-edit-img ays-edit-gallery-loader-custom-gif">
                                     <i class="fa fa_pencil_square_o"></i>
                                 </span>
@@ -1864,7 +1864,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                                 <img  src="<?php echo $gallery_loader_custom_gif; ?>" class="img_gallery_loader_custom_gif"/>
                             </div>
                         </div>
-                        <div class="ays_gpg_toggle_loader_target ays_gif_loader_width_container <?php echo ($ays_gallery_loader == 'custom_gif') ? 'display_flex' : 'display_none'; ?>" data-type="gif" style="margin: 10px;">
+                        <div class="glp_toggle_loader_target ays_gif_loader_width_container <?php echo ($ays_gallery_loader == 'custom_gif') ? 'display_flex' : 'display_none'; ?>" data-type="gif" style="margin: 10px;">
                             <div>
                                 <label for='ays_gallery_loader_custom_gif_width'>
                                     <?php echo __('Width (px)', $this->plugin_name); ?>
@@ -1905,11 +1905,11 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                     </label>
                 </div>
                 <div class="col-sm-9">
-                    <textarea class="ays-textarea" name="gallery_custom_css" id="gallery_custom_css"><?php echo $ays_gpg_custom_css ?></textarea>
+                    <textarea class="ays-textarea" name="gallery_custom_css" id="gallery_custom_css"><?php echo $glp_custom_css ?></textarea>
                 </div>
             </div> -->
         </div>
-        <div id="tab4" class="ays-gallery-tab-content <?php echo ($ays_gpg_tab == 'tab4') ? 'ays-gallery-tab-content-active' : ''; ?>">
+        <div id="tab4" class="ays-gallery-tab-content <?php echo ($glp_tab == 'tab4') ? 'ays-gallery-tab-content-active' : ''; ?>">
             <h6 class="ays-subtitle"><?php echo  __('Lightbox options', $this->plugin_name) ?></h6>
             <hr/>
             <div class="form-group row">
@@ -1933,11 +1933,11 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                     </label>
                 </div>
                 <div class="col-sm-10">
-                    <label class="ays_gpg_image_hover_icon"><?php echo __("Enable ", $this->plugin_name);?>
-                        <input type="radio" class="" name="ays_gpg_lightbox_counter" <?php echo ($ays_gpg_lightbox_counter == "true") ? "checked" : ""; ?> value="true"/>
+                    <label class="glp_image_hover_icon"><?php echo __("Enable ", $this->plugin_name);?>
+                        <input type="radio" class="" name="glp_lightbox_counter" <?php echo ($glp_lightbox_counter == "true") ? "checked" : ""; ?> value="true"/>
                     </label>
-                    <label class="ays_gpg_image_hover_icon"><?php echo __("Disable ", $this->plugin_name);?> 
-                        <input type="radio" class="" name="ays_gpg_lightbox_counter" <?php echo ($ays_gpg_lightbox_counter == "false") ? "checked" : ""; ?> value="false"/>
+                    <label class="glp_image_hover_icon"><?php echo __("Disable ", $this->plugin_name);?> 
+                        <input type="radio" class="" name="glp_lightbox_counter" <?php echo ($glp_lightbox_counter == "false") ? "checked" : ""; ?> value="false"/>
                     </label>
                 </div>
             </div>
@@ -1949,11 +1949,11 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                     </label>
                 </div>
                 <div class="col-sm-10">
-                    <label class="ays_gpg_image_hover_icon"><?php echo __("Enable ", $this->plugin_name);?>
-                        <input type="radio" class="" name="ays_gpg_show_caption" <?php echo ($ays_gpg_show_caption == "true") ? "checked" : ""; ?> value="true"/>
+                    <label class="glp_image_hover_icon"><?php echo __("Enable ", $this->plugin_name);?>
+                        <input type="radio" class="" name="glp_show_caption" <?php echo ($glp_show_caption == "true") ? "checked" : ""; ?> value="true"/>
                     </label>
-                    <label class="ays_gpg_image_hover_icon"><?php echo __("Disable ", $this->plugin_name);?> 
-                        <input type="radio" class="" name="ays_gpg_show_caption" <?php echo ($ays_gpg_show_caption == "false") ? "checked" : ""; ?> value="false"/>
+                    <label class="glp_image_hover_icon"><?php echo __("Disable ", $this->plugin_name);?> 
+                        <input type="radio" class="" name="glp_show_caption" <?php echo ($glp_show_caption == "false") ? "checked" : ""; ?> value="false"/>
                     </label>
                 </div>
             </div>
@@ -1965,11 +1965,11 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                     </label>
                 </div>
                 <div class="col-sm-2">
-                    <label class="ays_gpg_image_hover_icon"><?php echo __("Enable ", $this->plugin_name);?>
-                        <input type="radio" class="ays_enable_disable" name="ays_gpg_lightbox_autoplay" <?php echo ($ays_gpg_lightbox_autoplay == "true") ? "checked" : ""; ?> value="true"/>
+                    <label class="glp_image_hover_icon"><?php echo __("Enable ", $this->plugin_name);?>
+                        <input type="radio" class="ays_enable_disable" name="glp_lightbox_autoplay" <?php echo ($glp_lightbox_autoplay == "true") ? "checked" : ""; ?> value="true"/>
                     </label>
-                    <label class="ays_gpg_image_hover_icon"><?php echo __("Disable ", $this->plugin_name);?> 
-                        <input type="radio" class="ays_enable_disable" name="ays_gpg_lightbox_autoplay" <?php echo ($ays_gpg_lightbox_autoplay == "false") ? "checked" : ""; ?> value="false"/>
+                    <label class="glp_image_hover_icon"><?php echo __("Disable ", $this->plugin_name);?> 
+                        <input type="radio" class="ays_enable_disable" name="glp_lightbox_autoplay" <?php echo ($glp_lightbox_autoplay == "false") ? "checked" : ""; ?> value="false"/>
                     </label>
                 </div>
                 <div class="col-sm-8 ays_hidden">
@@ -1979,13 +1979,13 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                                 <?php echo __("Slide duration", $this->plugin_name);?>
                             </label>
                         </div>                        
-                        <div class="col-sm-9 ays_gpg_display_flex_width">
+                        <div class="col-sm-9 glp_display_flex_width">
                             <div>
-                               <input type="number" class="ays-text-input" name="ays_gpg_lightbox_pause" value="<?php echo $ays_gpg_lightbox_pause; ?>" />
-                                <span class="ays_gpg_image_hover_icon_text"><?php echo __("1 sec = 1000 ms", $this->plugin_name);?></span>
+                               <input type="number" class="ays-text-input" name="glp_lightbox_pause" value="<?php echo $glp_lightbox_pause; ?>" />
+                                <span class="glp_image_hover_icon_text"><?php echo __("1 sec = 1000 ms", $this->plugin_name);?></span>
                             </div>
-                            <div class="ays_gpg_dropdown_max_width">
-                                <input type="text" value="ms" class="ays-gpg-form-hint-for-size" disabled="">
+                            <div class="glp_dropdown_max_width">
+                                <input type="text" value="ms" class="glp-form-hint-for-size" disabled="">
                             </div>
                         </div>
                     </div>
@@ -1994,7 +1994,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
             <hr/>
             <!-- <div class="form-group row">
                 <div class="col-sm-2">
-                    <label for="ays_gpg_filter_lightbox">
+                    <label for="glp_filter_lightbox">
                         <?php echo __("Choose filter for lightbox", $this->plugin_name);?>
                         <a class="ays_help" data-toggle="tooltip" title="<?php echo __("The filter property defines visual effects to images of Gallery", $this->plugin_name);?>">
                            <i class="fas fa-info-circle"></i>
@@ -2002,7 +2002,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                     </label>
                 </div>
                 <div class="col-sm-10">
-                    <select id="ays_gpg_filter_lightbox" class="ays-text-input ays-text-input-short" name="ays_gpg_filter_lightbox_opt">
+                    <select id="glp_filter_lightbox" class="ays-text-input ays-text-input-short" name="glp_filter_lightbox_opt">
                         <option <?php echo (isset($gal_lightbox_options['filter_lightbox_opt']) && $gal_lightbox_options['filter_lightbox_opt'] == "none") ? "selected" : ""; ?> value="none"><?php echo __("None", $this->plugin_name);?></option>
                         <option <?php echo (isset($gal_lightbox_options['filter_lightbox_opt']) && $gal_lightbox_options['filter_lightbox_opt'] == "blur") ? "selected" : ""; ?> value="blur"><?php echo __("Blur", $this->plugin_name);?></option>
                         <option <?php echo (isset($gal_lightbox_options['filter_lightbox_opt']) && $gal_lightbox_options['filter_lightbox_opt'] == "brightness") ? "selected" : ""; ?> value="brightness"><?php echo __("Brightness", $this->plugin_name);?></option>
@@ -2021,11 +2021,11 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                     <label><?php echo __("Allow key control", $this->plugin_name);?></label>
                 </div>
                 <div class="col-sm-2">
-                    <label class="ays_gpg_image_hover_icon"><?php echo __("Enable ", $this->plugin_name);?>
-                        <input type="radio" class="ays_enable_disable" name="ays_gpg_lg_keypress" <?php echo ($ays_gpg_lg_keypress == "true") ? "checked" : ""; ?> value="true"/>
+                    <label class="glp_image_hover_icon"><?php echo __("Enable ", $this->plugin_name);?>
+                        <input type="radio" class="ays_enable_disable" name="glp_lg_keypress" <?php echo ($glp_lg_keypress == "true") ? "checked" : ""; ?> value="true"/>
                     </label>
-                    <label class="ays_gpg_image_hover_icon"><?php echo __("Disable ", $this->plugin_name);?> 
-                        <input type="radio" class="ays_enable_disable" name="ays_gpg_lg_keypress" <?php echo ($ays_gpg_lg_keypress == "false") ? "checked" : ""; ?> value="false"/>
+                    <label class="glp_image_hover_icon"><?php echo __("Disable ", $this->plugin_name);?> 
+                        <input type="radio" class="ays_enable_disable" name="glp_lg_keypress" <?php echo ($glp_lg_keypress == "false") ? "checked" : ""; ?> value="false"/>
                     </label>
                 </div>
                 <div class="col-sm-8 ays_hidden">
@@ -2034,11 +2034,11 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                             <label><?php echo __("Allow Esc key", $this->plugin_name);?></label>
                         </div>
                         <div class="col-sm-8">
-                            <label class="ays_gpg_image_hover_icon"><?php echo __("Enable ", $this->plugin_name);?>
-                                <input type="radio" class="" name="ays_gpg_lg_esckey" <?php echo ($ays_gpg_lg_esckey == "true") ? "checked" : ""; ?> value="true"/>
+                            <label class="glp_image_hover_icon"><?php echo __("Enable ", $this->plugin_name);?>
+                                <input type="radio" class="" name="glp_lg_esckey" <?php echo ($glp_lg_esckey == "true") ? "checked" : ""; ?> value="true"/>
                             </label>
-                            <label class="ays_gpg_image_hover_icon"><?php echo __("Disable ", $this->plugin_name);?> 
-                                <input type="radio" class="" name="ays_gpg_lg_esckey" <?php echo ($ays_gpg_lg_esckey == "false") ? "checked" : ""; ?> value="false"/>
+                            <label class="glp_image_hover_icon"><?php echo __("Disable ", $this->plugin_name);?> 
+                                <input type="radio" class="" name="glp_lg_esckey" <?php echo ($glp_lg_esckey == "false") ? "checked" : ""; ?> value="false"/>
                             </label>
                         </div>
                     </div>                    
@@ -2048,21 +2048,21 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 <div class="col-sm-12 only_pro">
                     <div class="pro_features">
                         <div>                            
-                            <a href="https://ays-pro.com/wordpress/photo-gallery/" target="_blank" class="ays-gpg-new-upgrade-button-link">
-                                <div class="ays-gpg-new-upgrade-button-box">
+                            <a href="https://ays-pro.com/wordpress/photo-gallery/" target="_blank" class="glp-new-upgrade-button-link">
+                                <div class="glp-new-upgrade-button-box">
                                     <div>
                                         <img src="<?php echo AYS_GPG_ADMIN_URL.'/images/icons/gpg_locked_24x24.svg'?>">
-                                        <img src="<?php echo AYS_GPG_ADMIN_URL.'/images/icons/gpg_unlocked_24x24.svg'?>" class="ays-gpg-new-upgrade-button-hover">
+                                        <img src="<?php echo AYS_GPG_ADMIN_URL.'/images/icons/gpg_unlocked_24x24.svg'?>" class="glp-new-upgrade-button-hover">
                                     </div>
-                                    <div class="ays-gpg-new-upgrade-button"><?php echo __("Upgrade", $this->plugin_name); ?></div>
+                                    <div class="glp-new-upgrade-button"><?php echo __("Upgrade", $this->plugin_name); ?></div>
                                 </div>
                             </a>
-                            <div class="ays-gpg-center-big-main-button-box ays-gpg-new-big-button-flex">
-                                <div class="ays-gpg-center-big-upgrade-button-box">
-                                    <a href="https://ays-pro.com/wordpress/photo-gallery/" target="_blank" class="ays-gpg-new-upgrade-button-link">
-                                        <div class="ays-gpg-center-new-big-upgrade-button">
-                                            <img src="<?php echo AYS_GPG_ADMIN_URL.'/images/icons/gpg_locked_24x24.svg'?>" class="ays-gpg-new-button-img-hide">
-                                            <img src="<?php echo AYS_GPG_ADMIN_URL.'/images/icons/gpg_unlocked_24x24.svg'?>" class="ays-gpg-new-upgrade-button-hover">  
+                            <div class="glp-center-big-main-button-box glp-new-big-button-flex">
+                                <div class="glp-center-big-upgrade-button-box">
+                                    <a href="https://ays-pro.com/wordpress/photo-gallery/" target="_blank" class="glp-new-upgrade-button-link">
+                                        <div class="glp-center-new-big-upgrade-button">
+                                            <img src="<?php echo AYS_GPG_ADMIN_URL.'/images/icons/gpg_locked_24x24.svg'?>" class="glp-new-button-img-hide">
+                                            <img src="<?php echo AYS_GPG_ADMIN_URL.'/images/icons/gpg_unlocked_24x24.svg'?>" class="glp-new-upgrade-button-hover">  
                                             <?php echo __("Upgrade", $this->plugin_name); ?>
                                         </div>
                                     </a>
@@ -2074,24 +2074,24 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 </div>
             </div> -->
         </div>
-        <!-- <div id="tab5" class="only_pro ays-gallery-tab-content <?php echo ($ays_gpg_tab == 'tab5') ? 'ays-gallery-tab-content-active' : ''; ?>" style="padding-top: 15px;">
+        <!-- <div id="tab5" class="only_pro ays-gallery-tab-content <?php echo ($glp_tab == 'tab5') ? 'ays-gallery-tab-content-active' : ''; ?>" style="padding-top: 15px;">
             <div class="pro_features">
                 <div>                    
-                    <a href="https://ays-pro.com/wordpress/photo-gallery/" target="_blank" class="ays-gpg-new-upgrade-button-link">
-                        <div class="ays-gpg-new-upgrade-button-box">
+                    <a href="https://ays-pro.com/wordpress/photo-gallery/" target="_blank" class="glp-new-upgrade-button-link">
+                        <div class="glp-new-upgrade-button-box">
                             <div>
                                 <img src="<?php echo AYS_GPG_ADMIN_URL.'/images/icons/gpg_locked_24x24.svg'?>">
-                                <img src="<?php echo AYS_GPG_ADMIN_URL.'/images/icons/gpg_unlocked_24x24.svg'?>" class="ays-gpg-new-upgrade-button-hover">
+                                <img src="<?php echo AYS_GPG_ADMIN_URL.'/images/icons/gpg_unlocked_24x24.svg'?>" class="glp-new-upgrade-button-hover">
                             </div>
-                            <div class="ays-gpg-new-upgrade-button"><?php echo __("Upgrade", $this->plugin_name); ?></div>
+                            <div class="glp-new-upgrade-button"><?php echo __("Upgrade", $this->plugin_name); ?></div>
                         </div>
                     </a>
-                    <div class="ays-gpg-center-big-main-button-box ays-gpg-new-big-button-flex">
-                        <div class="ays-gpg-center-big-upgrade-button-box">
-                            <a href="https://ays-pro.com/wordpress/photo-gallery/" target="_blank" class="ays-gpg-new-upgrade-button-link">
-                                <div class="ays-gpg-center-new-big-upgrade-button">
-                                    <img src="<?php echo AYS_GPG_ADMIN_URL.'/images/icons/gpg_locked_24x24.svg'?>" class="ays-gpg-new-button-img-hide">
-                                    <img src="<?php echo AYS_GPG_ADMIN_URL.'/images/icons/gpg_unlocked_24x24.svg'?>" class="ays-gpg-new-upgrade-button-hover">  
+                    <div class="glp-center-big-main-button-box glp-new-big-button-flex">
+                        <div class="glp-center-big-upgrade-button-box">
+                            <a href="https://ays-pro.com/wordpress/photo-gallery/" target="_blank" class="glp-new-upgrade-button-link">
+                                <div class="glp-center-new-big-upgrade-button">
+                                    <img src="<?php echo AYS_GPG_ADMIN_URL.'/images/icons/gpg_locked_24x24.svg'?>" class="glp-new-button-img-hide">
+                                    <img src="<?php echo AYS_GPG_ADMIN_URL.'/images/icons/gpg_unlocked_24x24.svg'?>" class="glp-new-upgrade-button-hover">  
                                     <?php echo __("Upgrade", $this->plugin_name); ?>
                                 </div>
                             </a>
@@ -2112,8 +2112,8 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                     $buttons_html .= '<div class="ays_submit_button ays_save_buttons_box">';
                     echo $buttons_html;
             ?>
-                <input type="submit" name="ays-submit" class="button ays-submit ays-button button-primary ays-gpg-save-comp" value="<?php echo __("Save and close", $this->plugin_name);?>" gpg_submit_name="ays-submit" />            
-                <input type="submit" name="ays-apply" id="ays_submit_apply" class="button ays-button ays-submit ays-gpg-save-comp" title="Ctrl + s" data-toggle="tooltip" data-delay='{"show":"1000"}' value="<?php echo __("Save", $this->plugin_name);?>" gpg_submit_name="ays-apply"/>
+                <input type="submit" name="ays-submit" class="button ays-submit ays-button button-primary glp-save-comp" value="<?php echo __("Save and close", $this->plugin_name);?>" gpg_submit_name="ays-submit" />            
+                <input type="submit" name="ays-apply" id="ays_submit_apply" class="button ays-button ays-submit glp-save-comp" title="Ctrl + s" data-toggle="tooltip" data-delay='{"show":"1000"}' value="<?php echo __("Save", $this->plugin_name);?>" gpg_submit_name="ays-apply"/>
                 <?php echo $loader_iamge; ?> 
             <?php
                         
@@ -2151,16 +2151,16 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
 		</div> -->        
         <button type="button" class="ays_gallery_live_preview" data-container="body" data-toggle="popover" data-placement="top" data-content="<?php echo __("View your gallery in live preview. In the preview you can’t see Thumbnail size and Image order changes.", $this->plugin_name);?>" data-original-title="<?php echo __("Gallery preview", $this->plugin_name);?>"><i class="fas fa-search-plus"></i></button>    
         <button class="ays_gallery_live_save" type="submit" name="ays-apply"><i class="far fa-save" gpg_submit_name="ays-apply"></i></button>
-        <input type="hidden" id="ays_gpg_admin_url" value="<?php echo AYS_GPG_ADMIN_URL; ?>"/>
+        <input type="hidden" id="glp_admin_url" value="<?php echo AYS_GPG_ADMIN_URL; ?>"/>
     </form>
     </div>
     
     <!--  Start modal preview -->
     <div class="ays_gallery_live_preview_popup">
-        <a class="ays_live_preview_close"><i class="ays_gpg_fa ays_gpg_fa_times_circle"></i></a>
+        <a class="ays_live_preview_close"><i class="glp_fa glp_fa_times_circle"></i></a>
         <div class='ays_gallery_container'>
         </div>
-        <div class="ays_gpg_live_overlay"></div>
+        <div class="glp_live_overlay"></div>
     </div>
     <!--  End modal preview -->
 </div>

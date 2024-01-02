@@ -1,16 +1,16 @@
-/*select.ays_gpg_block_select {
+/*select.glp_block_select {
     text-align: center;
     font-size: 18px;
     width: 100%;
     height: auto;
     padding: 5px;
 }
-.ays_gpg_block_container select {
+.glp_block_container select {
     width: 100%;
     margin: 0;
 }
 
-.ays_gpg_block_container {
+.glp_block_container {
     box-sizing: border-box;
 }
 .svg_shortcode { 
@@ -20,7 +20,7 @@
     color: #666;
 } */
 
-select.ays_gpg_block_select {
+select.glp_block_select {
     text-align: center;
     font-size: 18px;
     width: 100%;
@@ -32,15 +32,15 @@ select.ays_gpg_block_select {
     display: none;
 }
 
-.ays_gpg_block_container {
+.glp_block_container {
     box-sizing: border-box;
 }
 
-.ays_gpg_block_select_gallery .ays_gpg_block_select {
+.glp_block_select_gallery .glp_block_select {
     width: 350px !important;
 }
 
-.ays_gpg_block_select_gallery {
+.glp_block_select_gallery {
     padding: 20px;
     display: flex;
     justify-content: center;

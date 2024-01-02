@@ -13,19 +13,19 @@ class Gallery_Settings_Actions {
         if( isset($data["settings_action"]) && wp_verify_nonce( $data["settings_action"], 'settings_action' ) ){
             $success = 0;
             // WP Editor height
-            $gpg_wp_editor_height = (isset($data['ays_gpg_wp_editor_height']) && $data['ays_gpg_wp_editor_height'] != '') ? absint( sanitize_text_field($data['ays_gpg_wp_editor_height']) ) : 100 ;
+            $gpg_wp_editor_height = (isset($data['glp_wp_editor_height']) && $data['glp_wp_editor_height'] != '') ? absint( sanitize_text_field($data['glp_wp_editor_height']) ) : 100 ;
 
             // All images text
-            $gpg_all_images_text = (isset($data['ays_gpg_all_images_text']) && $data['ays_gpg_all_images_text'] != '') ? stripslashes( esc_attr($data['ays_gpg_all_images_text']) ) : 'All';
+            $gpg_all_images_text = (isset($data['glp_all_images_text']) && $data['glp_all_images_text'] != '') ? stripslashes( esc_attr($data['glp_all_images_text']) ) : 'All';
             
             // Gallery title length
             $ays_galleries_title_length = (isset($data['ays_galleries_title_length']) && $data['ays_galleries_title_length'] != '') ? absint( sanitize_text_field($data['ays_galleries_title_length']) ) : 5 ;
 
             // Gallery categories title length
-            $gpg_categories_title_length = (isset($data['ays_gpg_categories_title_length']) && intval($data['ays_gpg_categories_title_length']) != 0) ? absint(sanitize_text_field($data['ays_gpg_categories_title_length'])) : 5;
+            $gpg_categories_title_length = (isset($data['glp_categories_title_length']) && intval($data['glp_categories_title_length']) != 0) ? absint(sanitize_text_field($data['glp_categories_title_length'])) : 5;
 
             // General CSS File
-            $gpg_exclude_general_css = (isset( $data['ays_gpg_exclude_general_css'] ) && sanitize_text_field( $data['ays_gpg_exclude_general_css'] ) == 'on') ? 'on' : 'off';
+            $gpg_exclude_general_css = (isset( $data['glp_exclude_general_css'] ) && sanitize_text_field( $data['glp_exclude_general_css'] ) == 'on') ? 'on' : 'off';
 
             $options = array(
                 "gpg_wp_editor_height"          => $gpg_wp_editor_height,
@@ -43,8 +43,8 @@ class Gallery_Settings_Actions {
             $message = "saved";
             if($success > 0){
                 $tab = "";
-                if(isset($data['ays_gpg_tab'])){
-                    $tab = "&ays_gpg_tab=".$data['ays_gpg_tab'];
+                if(isset($data['glp_tab'])){
+                    $tab = "&glp_tab=".$data['glp_tab'];
                 }
                 $url = admin_url('admin.php') . "?page=gallery-photo-gallery-settings" . $tab . '&status=' . $message;
                 wp_redirect( $url );

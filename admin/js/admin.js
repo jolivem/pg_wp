@@ -24,7 +24,7 @@
             if (result.value) upgrade_plugin = true;
             var data = {action: 'deactivate_plugin_option_pm', upgrade_plugin: upgrade_plugin};
             $.ajax({
-                url: ays_gpg_admin_ajax.ajax_url,
+                url: glp_admin_ajax.ajax_url,
                 method: 'post',
                 dataType: 'json',
                 data: data,

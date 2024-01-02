@@ -4,10 +4,10 @@ $actions = $this->settings_obj;
 if (isset($_REQUEST['ays_submit'])) {
 	$actions->store_data($_REQUEST);
 }
-if (isset($_GET['ays_gpg_tab'])) {
-	$ays_gpg_tab = sanitize_key($_GET['ays_gpg_tab']);
+if (isset($_GET['glp_tab'])) {
+	$glp_tab = sanitize_key($_GET['glp_tab']);
 } else {
-	$ays_gpg_tab = 'tab1';
+	$glp_tab = 'tab1';
 }
 $db_data = $actions->get_db_data();
 
@@ -29,11 +29,11 @@ $gpg_categories_title_length = (isset($options['gpg_categories_title_length']) &
 $options['gpg_exclude_general_css'] = isset($options['gpg_exclude_general_css']) ? esc_attr( $options['gpg_exclude_general_css'] ) : 'off';
 $gpg_exclude_general_css = (isset($options['gpg_exclude_general_css']) && esc_attr( $options['gpg_exclude_general_css'] ) == "on") ? true : false;
 
-$loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_GPG_ADMIN_URL ."/images/loaders/loading.gif'></span>";
+$loader_iamge = "<span class='display_none glp_loader_box'><img src='". AYS_GPG_ADMIN_URL ."/images/loaders/loading.gif'></span>";
 ?>
 <div class="wrap" style="position:relative;">
-    <div class="ays-gpg-heading-box">
-        <div class="ays-gpg-wordpress-user-manual-box">
+    <div class="glp-heading-box">
+        <div class="glp-wordpress-user-manual-box">
             <a href="https://ays-pro.com/wordpress-photo-gallery-user-manual" target="_blank" style="text-decoration: none;font-size: 13px;">
                 <i class="ays_fa ays_fa_file_text"></i>
                 <span style="margin-left: 3px;text-decoration: underline;"><?php echo __("View Documentation", $this->plugin_name); ?></span>
@@ -41,8 +41,8 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
         </div>
     </div>
     <div class="container-fluid">
-        <form method="post" class="ays-gpg-general-settings-form">
-            <input type="hidden" name="ays_gpg_tab" value="<?php echo esc_attr($ays_gpg_tab); ?>">
+        <form method="post" class="glp-general-settings-form">
+            <input type="hidden" name="glp_tab" value="<?php echo esc_attr($glp_tab); ?>">
             <h1 class="wp-heading-inline">
 				<?php
 				echo __('Settings', $this->plugin_name);
@@ -57,19 +57,19 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
             <div class="ays-gen-settings-wrapper">
                 <div>
                     <div class="nav-tab-wrapper" style="position:sticky; top:35px;">
-                        <a href="#tab1" data-tab="tab1" class="nav-tab <?php echo ($ays_gpg_tab == 'tab1') ? 'nav-tab-active' : ''; ?>">
+                        <a href="#tab1" data-tab="tab1" class="nav-tab <?php echo ($glp_tab == 'tab1') ? 'nav-tab-active' : ''; ?>">
 							<?php echo __("General", $this->plugin_name); ?>
                         </a>
-                        <a href="#tab2" data-tab="tab2" class="nav-tab <?php echo ($ays_gpg_tab == 'tab2') ? 'nav-tab-active' : ''; ?>">
+                        <a href="#tab2" data-tab="tab2" class="nav-tab <?php echo ($glp_tab == 'tab2') ? 'nav-tab-active' : ''; ?>">
                             <?php echo __("Shortcodes", $this->plugin_name);?>
                         </a>
-                        <a href="#tab3" data-tab="tab3" class="nav-tab <?php echo ($ays_gpg_tab == 'tab3') ? 'nav-tab-active' : ''; ?>">
+                        <a href="#tab3" data-tab="tab3" class="nav-tab <?php echo ($glp_tab == 'tab3') ? 'nav-tab-active' : ''; ?>">
                             <?php echo __("Message variables", $this->plugin_name);?>
                         </a>
                     </div>
                 </div>
-                <div class="ays-gpg-tabs-wrapper">
-                    <div id="tab1" class="ays-gpg-tab-content <?php echo ($ays_gpg_tab == 'tab1') ? 'ays-gpg-tab-content-active' : ''; ?>">
+                <div class="glp-tabs-wrapper">
+                    <div id="tab1" class="glp-tab-content <?php echo ($glp_tab == 'tab1') ? 'glp-tab-content-active' : ''; ?>">
                         <p class="ays-subtitle"><?php echo __('General Settings',$this->plugin_name)?></p>
                         <hr/>                        
                         <fieldset>
@@ -79,7 +79,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                             </legend>
                             <div class="form-group row">
                                 <div class="col-sm-4">
-                                    <label for="ays_gpg_wp_editor_height">
+                                    <label for="glp_wp_editor_height">
                                         <?php echo __( "WP Editor height", $this->plugin_name ); ?>
                                         <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Give the default value to the height of the WP Editor. It will apply to all WP Editors within the plugin on the dashboard.',$this->plugin_name); ?>">
                                             <i class="fas fa-info-circle"></i>
@@ -87,13 +87,13 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                                     </label>
                                 </div>
                                 <div class="col-sm-8">
-                                    <input type="number" name="ays_gpg_wp_editor_height" id="ays_gpg_wp_editor_height" class="ays-text-input" value="<?php echo $gpg_wp_editor_height; ?>">
+                                    <input type="number" name="glp_wp_editor_height" id="glp_wp_editor_height" class="ays-text-input" value="<?php echo $gpg_wp_editor_height; ?>">
                                 </div>
                             </div>
                             <hr/>
                             <div class="form-group row">
                                 <div class="col-sm-4">
-                                    <label for="ays_gpg_all_images_text">
+                                    <label for="glp_all_images_text">
                                         <?php echo __( "Show All images text", $this->plugin_name ); ?>
                                         <a class="ays_help" data-toggle="tooltip" title='<?php echo __('Write the text you prefer for the "All" category to see all the images on the Front-end.',$this->plugin_name); ?>'>
                                             <i class="fas fa-info-circle"></i>
@@ -101,7 +101,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                                     </label>
                                 </div>
                                 <div class="col-sm-8">
-                                    <input type="text" name="ays_gpg_all_images_text" id="ays_gpg_all_images_text" class="ays-text-input" value="<?php echo $gpg_all_images_text; ?>">
+                                    <input type="text" name="glp_all_images_text" id="glp_all_images_text" class="ays-text-input" value="<?php echo $gpg_all_images_text; ?>">
                                 </div>
                             </div>
                         </fieldset>
@@ -126,7 +126,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-4">
-                                    <label for="ays_gpg_categories_title_length">
+                                    <label for="glp_categories_title_length">
                                         <?php echo __( "Gallery categories list table", $this->plugin_name ); ?>
                                         <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Determine the length of the results to be shown in the Gallery categories List Table by putting your preferred count of words in the following field. (For example: if you put 10,  you will see the first 10 words of each result in the Question categories page of your dashboard.', $this->plugin_name); ?>">
                                             <i class="fa fa-info-circle"></i>
@@ -134,7 +134,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                                     </label>
                                 </div>
                                 <div class="col-sm-8">
-                                    <input type="number" name="ays_gpg_categories_title_length" id="ays_gpg_categories_title_length" class="ays-text-input" value="<?php echo $gpg_categories_title_length; ?>">
+                                    <input type="number" name="glp_categories_title_length" id="glp_categories_title_length" class="ays-text-input" value="<?php echo $gpg_categories_title_length; ?>">
                                 </div>
                             </div>
                         </fieldset>
@@ -146,7 +146,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                             </legend>
                             <div class="form-group row">
                                 <div class="col-sm-4">
-                                    <label for="ays_gpg_exclude_general_css">
+                                    <label for="glp_exclude_general_css">
                                         <?php echo __( "Exclude general CSS file from home page", $this->plugin_name ); ?>
                                         <a class="ays_help" data-toggle="tooltip" title="<?php echo __('If the option is enabled, then the gallery general CSS file will not be applied to the home page. Please note, that if you have inserted the gallery on the home page, then the option must be disabled so that the CSS File can normally work for that gallery.',$this->plugin_name); ?>">
                                             <i class="fa fa-info-circle"></i>
@@ -154,12 +154,12 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                                     </label>
                                 </div>
                                 <div class="col-sm-8">
-                                    <input type="checkbox" name="ays_gpg_exclude_general_css" id="ays_gpg_exclude_general_css" value="on" <?php echo $gpg_exclude_general_css ? 'checked' : ''; ?>>
+                                    <input type="checkbox" name="glp_exclude_general_css" id="glp_exclude_general_css" value="on" <?php echo $gpg_exclude_general_css ? 'checked' : ''; ?>>
                                 </div>
                             </div>
                         </fieldset>                                                       
                     </div>
-                    <div id="tab2" class="ays-gpg-tab-content <?php echo ($ays_gpg_tab == 'tab2') ? 'ays-gpg-tab-content-active' : ''; ?>">
+                    <div id="tab2" class="glp-tab-content <?php echo ($glp_tab == 'tab2') ? 'glp-tab-content-active' : ''; ?>">
                         <p class="ays-subtitle"><?php echo __('Shortcodes',$this->plugin_name)?></p>
                         <hr/>
                         <fieldset>
@@ -171,7 +171,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                                 <div class="col-sm-12" style="padding:20px;">
                                     <div class="form-group row">
                                         <div class="col-sm-4">
-                                            <label for="ays_gpg_creation_date">
+                                            <label for="glp_creation_date">
                                                 <?php echo __( "Show gallery creation date", $this->plugin_name ); ?>
                                                 <a class="ays_help" data-toggle="tooltip" title="<?php echo esc_attr( __("You need to insert Your Gallery ID in the shortcode. It will show the creation date of the particular gallery. If there is no gallery available/found with that particular Gallery ID, the shortcode will be empty.",$this->plugin_name) ); ?>">
                                                     <i class="fa fa-info-circle"></i>
@@ -179,7 +179,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                                             </label>
                                         </div>
                                         <div class="col-sm-8">
-                                            <input type="text" id="ays_gpg_creation_date" class="ays-text-input" onclick="this.setSelectionRange(0, this.value.length)" readonly="" value='[ays_gallery_creation_date id="Your_Gallery_ID"]'>
+                                            <input type="text" id="glp_creation_date" class="ays-text-input" onclick="this.setSelectionRange(0, this.value.length)" readonly="" value='[ays_gallery_creation_date id="Your_Gallery_ID"]'>
                                         </div>
                                     </div>
                                 </div>                                
@@ -189,7 +189,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                                 <div class="col-sm-12" style="padding:20px;">
                                     <div class="form-group row">
                                         <div class="col-sm-4">
-                                            <label for="ays_gpg_current_author">
+                                            <label for="glp_current_author">
                                                 <?php echo __( "Show current gallery author", $this->plugin_name ); ?>
                                                 <a class="ays_help" data-toggle="tooltip" title="<?php echo esc_attr( __("You need to insert Your Gallery ID in the shortcode. It will show the current author of the particular gallery. If there is no gallery available/found with that particular Gallery ID, the shortcode will be empty.",$this->plugin_name) ); ?>">
                                                     <i class="fa fa-info-circle"></i>
@@ -197,7 +197,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                                             </label>
                                         </div>
                                         <div class="col-sm-8">
-                                            <input type="text" id="ays_gpg_current_author" class="ays-text-input" onclick="this.setSelectionRange(0, this.value.length)" readonly="" value='[ays_gallery_current_author id="Your_Gallery_ID"]'>
+                                            <input type="text" id="glp_current_author" class="ays-text-input" onclick="this.setSelectionRange(0, this.value.length)" readonly="" value='[ays_gallery_current_author id="Your_Gallery_ID"]'>
                                         </div>
                                     </div>
                                 </div>
@@ -372,7 +372,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                             </div>
                         </fieldset>              
                     </div>
-                    <div id="tab3" class="ays-gpg-tab-content <?php echo ($ays_gpg_tab == 'tab3') ? 'ays-gpg-tab-content-active' : ''; ?>">
+                    <div id="tab3" class="glp-tab-content <?php echo ($glp_tab == 'tab3') ? 'glp-tab-content-active' : ''; ?>">
                         <p class="ays-subtitle">
                             <?php echo __('Message variables',$this->plugin_name)?>
                             <a class="ays_help" data-toggle="tooltip" data-html="true" title="<p style='margin-bottom:3px;'><?php echo __( 'You can copy these variables and paste them in the following options from the gallery settings', $this->plugin_name ); ?>:</p>
@@ -482,7 +482,7 @@ $loader_iamge = "<span class='display_none ays_gpg_loader_box'><img src='". AYS_
                 'data-toggle' => 'tooltip',
                 'data-delay'=> '{"show":"1000"}'
             );
-			submit_button(__('Save changes', $this->plugin_name), 'primary ays-button ays-gpg-save-comp', 'ays_submit', true, $save_bottom_attributes);
+			submit_button(__('Save changes', $this->plugin_name), 'primary ays-button glp-save-comp', 'ays_submit', true, $save_bottom_attributes);
             echo $loader_iamge;
 			?>
         </form>

@@ -1,7 +1,7 @@
 (function( $ ) {
 	'use strict';
     $(document).ready(function (){
-        var checkCountdownIsExists = $(document).find('#ays-gpg-countdown-main-container');
+        var checkCountdownIsExists = $(document).find('#glp-countdown-main-container');
         if ( checkCountdownIsExists.length > 0 ) {
             var second  = 1000,
                 minute  = second * 60,
@@ -30,9 +30,9 @@
 
                 //do something later when date is reached
                 if (distance_new < 0) {
-                    var headline  = document.getElementById("ays-gpg-countdown-headline"),
-                        countdown = document.getElementById("ays-gpg-countdown"),
-                        content   = document.getElementById("ays-gpg-countdown-content");
+                    var headline  = document.getElementById("glp-countdown-headline"),
+                        countdown = document.getElementById("glp-countdown"),
+                        content   = document.getElementById("glp-countdown-content");
 
                   // headline.innerText = "Sale is over!";
                   countdown.style.display = "none";
@@ -47,10 +47,10 @@
             var now = new Date().getTime();
             var distance_new = countDown_new - now;
 
-            var countDownDays    = document.getElementById("ays-gpg-countdown-days");
-            var countDownHours   = document.getElementById("ays-gpg-countdown-hours");
-            var countDownMinutes = document.getElementById("ays-gpg-countdown-minutes");
-            var countDownSeconds = document.getElementById("ays-gpg-countdown-seconds");
+            var countDownDays    = document.getElementById("glp-countdown-days");
+            var countDownHours   = document.getElementById("glp-countdown-hours");
+            var countDownMinutes = document.getElementById("glp-countdown-minutes");
+            var countDownSeconds = document.getElementById("glp-countdown-seconds");
 
             if((countDownDays !== null || countDownHours !== null || countDownMinutes !== null || countDownSeconds !== null) && distance_new > 0){
 
@@ -60,9 +60,9 @@
                 var countDownSeconds_innerText = Math.floor((distance_new % (minute)) / second);
 
                 if( isNaN(countDownDays_innerText) || isNaN(countDownHours_innerText) || isNaN(countDownMinutes_innerText) || isNaN(countDownSeconds_innerText) ){
-                    var headline  = document.getElementById("ays-gpg-countdown-headline"),
-                        countdown = document.getElementById("ays-gpg-countdown"),
-                        content   = document.getElementById("ays-gpg-countdown-content");
+                    var headline  = document.getElementById("glp-countdown-headline"),
+                        countdown = document.getElementById("glp-countdown"),
+                        content   = document.getElementById("glp-countdown-content");
 
                     // headline.innerText = "Sale is over!";
                     countdown.style.display = "none";

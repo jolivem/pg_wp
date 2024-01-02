@@ -1826,7 +1826,7 @@ msgid "Offer ends in:"
 msgstr ""
 
 #: ../includes/class-gallery-photo-gallery-data.php:190
-msgid "Limited Time <span class='ays-gpg-dicount-wrap-color'>20%</span> SALE on <span><a href='https://ays-pro.com/wordpress/photo-gallery' target='_blank' class='ays-gpg-dicount-wrap-color ays-gpg-dicount-wrap-text-decoration' style='display:block;'>Photo Gallery</a></span>"
+msgid "Limited Time <span class='glp-dicount-wrap-color'>20%</span> SALE on <span><a href='https://ays-pro.com/wordpress/photo-gallery' target='_blank' class='glp-dicount-wrap-color glp-dicount-wrap-text-decoration' style='display:block;'>Photo Gallery</a></span>"
 msgstr ""
 
 #: ../includes/class-gallery-photo-gallery-data.php:193
@@ -1841,13 +1841,13 @@ msgstr ""
 #: ../includes/class-gallery-photo-gallery-data.php:255
 msgid ""
 "Limited Time \n"
-"                            <span class='ays-gpg-dicount-wrap-color-helloween' style='color:#b2ff00;'>20%</span> \n"
+"                            <span class='glp-dicount-wrap-color-helloween' style='color:#b2ff00;'>20%</span> \n"
 "                            <span>\n"
 "                                SALE on\n"
 "                            </span> \n"
 "                            <br>\n"
-"                            <span style='' class='ays-gpg-helloween-bundle'>\n"
-"                                <a href='https://ays-pro.com/wordpress/photo-gallery?utm_source=dashboard-gallery&utm_medium=free-gallery&utm_campaign=sale-banner-gallery' target='_blank' class='ays-gpg-dicount-wrap-color-helloween ays-gpg-dicount-wrap-text-decoration-helloween' style='display:block; color:#b2ff00;margin-right:6px;'>\n"
+"                            <span style='' class='glp-helloween-bundle'>\n"
+"                                <a href='https://ays-pro.com/wordpress/photo-gallery?utm_source=dashboard-gallery&utm_medium=free-gallery&utm_campaign=sale-banner-gallery' target='_blank' class='glp-dicount-wrap-color-helloween glp-dicount-wrap-text-decoration-helloween' style='display:block; color:#b2ff00;margin-right:6px;'>\n"
 "                                    Photo Gallery\n"
 "                                </a>\n"
 "                            </span>"

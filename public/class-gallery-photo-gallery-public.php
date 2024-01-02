@@ -214,14 +214,14 @@ class Gallery_Photo_Gallery_Public {
                                       $gallery_options['hover_dir_aware'] == null ||
                                       $gallery_options['hover_dir_aware'] == "") ? "slide" : $gallery_options['hover_dir_aware'];        
         $images_distance = (isset($gallery_options['images_distance']) && $gallery_options['images_distance'] != '') ? absint( intval( $gallery_options['images_distance'] ) ) : '5';
-        $ays_gpg_lightbox_counter = (!isset($gal_lightbox_options['lightbox_counter']) ||
+        $glp_lightbox_counter = (!isset($gal_lightbox_options['lightbox_counter']) ||
                                     $gal_lightbox_options['lightbox_counter'] == false) ? "true" : $gal_lightbox_options['lightbox_counter'];
-        $ays_gpg_lightbox_autoplay = (!isset($gal_lightbox_options['lightbox_autoplay']) ||
+        $glp_lightbox_autoplay = (!isset($gal_lightbox_options['lightbox_autoplay']) ||
                                     $gal_lightbox_options['lightbox_autoplay'] == false) ? "true" : $gal_lightbox_options['lightbox_autoplay'];
-        $ays_gpg_lightbox_pause  = (!isset($gal_lightbox_options['lb_pause']) ||
+        $glp_lightbox_pause  = (!isset($gal_lightbox_options['lb_pause']) ||
                                     $gal_lightbox_options['lb_pause'] == '') ? "5000" : $gal_lightbox_options['lb_pause'];
-        $ays_gpg_lg_keypress                = (!isset($gal_lightbox_options["lb_keypress"])) ? "true" : $gal_lightbox_options["lb_keypress"];
-        $ays_gpg_lg_esckey                  = (!isset($gal_lightbox_options["lb_esckey"])) ? "true" : $gal_lightbox_options["lb_esckey"];
+        $glp_lg_keypress                = (!isset($gal_lightbox_options["lb_keypress"])) ? "true" : $gal_lightbox_options["lb_keypress"];
+        $glp_lg_esckey                  = (!isset($gal_lightbox_options["lb_esckey"])) ? "true" : $gal_lightbox_options["lb_esckey"];
 
         $images_hover_zoom = (!isset($gallery_options['hover_zoom']) ||
                               $gallery_options['hover_zoom'] == '' ||
@@ -375,21 +375,21 @@ class Gallery_Photo_Gallery_Public {
         if($images_loading == 'all_loaded'){        
             $ays_gal_loader_display = "display: block";
             if ($ays_gallery_loader == 'text') {
-                $ays_images_all_loaded = "<div class='gpg_loader_".$id." ays_gpg_loader'>
+                $ays_images_all_loaded = "<div class='gpg_loader_".$id." glp_loader'>
                     <p class='ays-loader-content'>". $gallery_loader_text_value ."</p>
                 </div>";
             }elseif ($ays_gallery_loader == 'custom_gif') {
                 if ($gallery_loader_custom_gif != '') {
-                    $ays_images_all_loaded = "<div class='gpg_loader_".$id." ays_gpg_loader'>
+                    $ays_images_all_loaded = "<div class='gpg_loader_".$id." glp_loader'>
                         <img src='". $gallery_loader_custom_gif ."' style='". $gallery_loader_custom_gif_width_css ."'>
                         </div>";
                 }else{
-                    $ays_images_all_loaded = "<div class='gpg_loader_".$id." ays_gpg_loader'>
+                    $ays_images_all_loaded = "<div class='gpg_loader_".$id." glp_loader'>
                         <img src='".AYS_GPG_PUBLIC_URL."images/flower.svg'>
                     </div>";
                 }
             }else{
-                $ays_images_all_loaded = "<div class='gpg_loader_".$id." ays_gpg_loader'>
+                $ays_images_all_loaded = "<div class='gpg_loader_".$id." glp_loader'>
                         <img src='".AYS_GPG_PUBLIC_URL."images/$ays_gallery_loader.svg'>
                     </div>";
             }
@@ -408,7 +408,7 @@ class Gallery_Photo_Gallery_Public {
         }
         
         if($images_loading == 'current_loaded'){
-            $ays_gpg_lazy_load = "
+            $glp_lazy_load = "
             var this_image_load_counter = 0;
             $(document).find('.ays_gallery_container_".$id." .$gallery_lightbox_selector > img').each(function(e, img){
                 var this_image = $(this);
@@ -522,24 +522,24 @@ class Gallery_Photo_Gallery_Public {
                     }
                 }
             });";
-            $ays_gpg_container_display_none_js = "";
-            $ays_gpg_container_display_block_js = "";
-            $ays_gpg_container_error_message_js = "";
+            $glp_container_display_none_js = "";
+            $glp_container_display_block_js = "";
+            $glp_container_error_message_js = "";
             $ays_gal_loader_display_js = "";
             $ays_gal_loader_none_js = "";
-            $ays_gpg_container_css = "display: block;";
+            $glp_container_css = "display: block;";
             $ays_images_lazy_loader_css = ".ays_gallery_container_".$id." .ays_image_loading_div {
                                                 display: flex;
                                             }";
-            $ays_gpg_lazy_load_masonry = "aysgrid.masonry('layout');";
-            $ays_gpg_lazy_load_mosaic = "$(document).find('.ays_gallery_container_".$id." .mosaic_".$id."').Mosaic({
+            $glp_lazy_load_masonry = "aysgrid.masonry('layout');";
+            $glp_lazy_load_mosaic = "$(document).find('.ays_gallery_container_".$id." .mosaic_".$id."').Mosaic({
                                             innerGap: {$images_distance},
                                             refitOnResize: true,
                                             showTailWhenNotEnoughItemsForEvenOneRow: true,
                                             maxRowHeight: 250,
                                             maxRowHeightPolicy: 'tail'
                                         });";
-            $ays_gpg_lazy_load_mosaic_css = ".ays_mosaic_column_item_".$id." a>img {
+            $glp_lazy_load_mosaic_css = ".ays_mosaic_column_item_".$id." a>img {
                                                 opacity: 0;
                                              }
                                              .ays_mosaic_column_item_".$id." a div.ays_hover_mask {
@@ -547,20 +547,20 @@ class Gallery_Photo_Gallery_Public {
                                              }";
         // end if($images_loading == 'current_loaded'){
         }else{        
-            $ays_gpg_lazy_load = '';
-            $ays_gpg_container_display_none_js = "$(document).find('.ays_gallery_container_".$id."').css({'display': 'none'});";
+            $glp_lazy_load = '';
+            $glp_container_display_none_js = "$(document).find('.ays_gallery_container_".$id."').css({'display': 'none'});";
             
             $ays_gal_loader_display_js = "$(document).find('".$ays_gal_loader_class."').css({'display': 'flex', 'animation-name': 'fadeIn'});";
             $ays_gal_loader_none_js = "$(document).find('".$ays_gal_loader_class."').css({'display': 'none', 'animation-name': 'fadeOut'});";
-            $ays_gpg_container_display_block_js = "$(document).find('.ays_gallery_container_".$id."').css({'display': 'block', 'animation-name': 'fadeIn'});";
-            $ays_gpg_container_error_message_js = "$(document).find('.ays_gallery_container_".$id."').prepend(errorImage);";
-            $ays_gpg_container_css = "display: none;";
+            $glp_container_display_block_js = "$(document).find('.ays_gallery_container_".$id."').css({'display': 'block', 'animation-name': 'fadeIn'});";
+            $glp_container_error_message_js = "$(document).find('.ays_gallery_container_".$id."').prepend(errorImage);";
+            $glp_container_css = "display: none;";
             $ays_images_lazy_loader_css = ".ays_gallery_container_".$id." .ays_image_loading_div {
                                                 display: none;
                                             }";
-            $ays_gpg_lazy_load_masonry = "";
-            $ays_gpg_lazy_load_mosaic = "";
-            $ays_gpg_lazy_load_mosaic_css = "";
+            $glp_lazy_load_masonry = "";
+            $glp_lazy_load_mosaic = "";
+            $glp_lazy_load_mosaic_css = "";
         }        
         $gallery_view = $ays_images_all_loaded;
 
@@ -582,23 +582,23 @@ class Gallery_Photo_Gallery_Public {
                             selector: '.$gallery_lightbox_selector',
                             share: false,
                             hash: false,
-                            addClass:'ays_gpg_lightbox_".$id."',
+                            addClass:'glp_lightbox_".$id."',
                             fullScreen: false,
                             autoplay: false,
-                            pause: $ays_gpg_lightbox_pause,
+                            pause: $glp_lightbox_pause,
                             mousewheel: false,
                             keyPress: false,
                             actualSize: false,
                             pager: false,
                             download: false,
-                            autoplayControls: $ays_gpg_lightbox_autoplay,
-                            counter: $ays_gpg_lightbox_counter,
+                            autoplayControls: $glp_lightbox_autoplay,
+                            counter: $glp_lightbox_counter,
                             showThumbByDefault: false,
                             getCaptionFromTitleOrAlt: false,
                             subHtmlSelectorRelative: true
                         };                        
 
-                        $(document).on('click', '.ays_gpg_category_filter', function(e) {
+                        $(document).on('click', '.glp_category_filter', function(e) {
                             var ays_cat = $(this).data('cat');
                             var ays_img_cat = document.getElementsByClassName('ays_grid_column_".$id."');
                             var galContainer = $(this).parents('.ays_gallery_container_".$id."');
@@ -610,7 +610,7 @@ class Gallery_Photo_Gallery_Public {
                                 mainGallery.css('animation-name', anim_effect);
                                 mainGallery.css('animation-duration', '.5s');
                                 mainGallery.find('.ays_grid_column_".$id."').hide();
-                                mainGallery.removeClass('ays_gpg_display_none');
+                                mainGallery.removeClass('glp_display_none');
                                 mainGallery.find('.ays_grid_column_".$id."').fadeIn(400);
                                 mainGallery.attr('id','ays_grid_row_".$id."');
                             }else{
@@ -625,7 +625,7 @@ class Gallery_Photo_Gallery_Public {
                                 galContainer.find('.gpgFilteredContainer').css('animation-name', anim_effect);
                                 galContainer.find('.gpgFilteredContainer').css('animation-duration', '.5s');
                                 galContainer.find('.ays_grid_column_".$id."').fadeIn(400);
-                                mainGallery.addClass('ays_gpg_display_none');
+                                mainGallery.addClass('glp_display_none');
                                 mainGallery.removeAttr('id');
                                 ". $cat_show_lightbox ."
                                 ". $hover_effect__simple_js ."
@@ -641,9 +641,9 @@ class Gallery_Photo_Gallery_Public {
             $ays_images_lazy_loader_css
             
             .ays_gallery_container_".$id." {
-                $ays_gpg_container_css
+                $glp_container_css
             }
-            $ays_gpg_lazy_load_mosaic_css
+            $glp_lazy_load_mosaic_css
             .gpg_gal_loader_".$id."  {
                 $ays_gal_loader_display;
                 justify-content: center;
@@ -746,8 +746,8 @@ class Gallery_Photo_Gallery_Public {
                             gutter: '.$images_distance.',
                             
                         }); 
-                        '.$ays_gpg_lazy_load.'
-                        '.$ays_gpg_lazy_load_mosaic.'
+                        '.$glp_lazy_load.'
+                        '.$glp_lazy_load_mosaic.'
 
                         setTimeout(function(){
                             $(document).find(".ays_gallery_container_'.$id.' .mosaic_'.$id.'").Mosaic({
@@ -764,17 +764,17 @@ class Gallery_Photo_Gallery_Public {
                             selector: ".gpgSearchContainer",
                             share: false,
                             hash: false,
-                            addClass:"ays_gpg_lightbox_'.$id.'",
+                            addClass:"glp_lightbox_'.$id.'",
                             fullScreen: false,
                             autoplay: false,
-                            pause: '.$ays_gpg_lightbox_pause.',
+                            pause: '.$glp_lightbox_pause.',
                             mousewheel: false,
                             keyPress: false,
                             actualSize: false,
                             pager: false,
                             download: false,
-                            autoplayControls: '.$ays_gpg_lightbox_autoplay.',
-                            counter: '.$ays_gpg_lightbox_counter.',
+                            autoplayControls: '.$glp_lightbox_autoplay.',
+                            counter: '.$glp_lightbox_counter.',
                             showThumbByDefault: false,
                             getCaptionFromTitleOrAlt: false,
                             subHtmlSelectorRelative: true
@@ -823,17 +823,17 @@ class Gallery_Photo_Gallery_Public {
                                             selector: ".'.$gallery_lightbox_selector.'",
                                             share: false,
                                             hash: false,
-                                            addClass:"ays_gpg_lightbox_'.$id.'",
+                                            addClass:"glp_lightbox_'.$id.'",
                                             fullScreen: false,
                                             autoplay: false,
-                                            pause: '.$ays_gpg_lightbox_pause.',
+                                            pause: '.$glp_lightbox_pause.',
                                             mousewheel: false,
                                             keyPress: false,
                                             actualSize: false,
                                             pager: false,
                                             download: false,
-                                            autoplayControls: '.$ays_gpg_lightbox_autoplay.',
-                                            counter: '.$ays_gpg_lightbox_counter.',
+                                            autoplayControls: '.$glp_lightbox_autoplay.',
+                                            counter: '.$glp_lightbox_counter.',
                                             showThumbByDefault: false,
                                             getCaptionFromTitleOrAlt: false,
                                             subHtmlSelectorRelative: true
@@ -848,18 +848,18 @@ class Gallery_Photo_Gallery_Public {
                                 selector: '.$gallery_lightbox_selector',
                                 share: false,
                                 hash: false,
-                                addClass:'ays_gpg_lightbox_".$id."',
+                                addClass:'glp_lightbox_".$id."',
                                 fullScreen: false,
                                 autoplay: false,
-                                pause: $ays_gpg_lightbox_pause,
+                                pause: $glp_lightbox_pause,
                                 mousewheel: false,
-                                keyPress: $ays_gpg_lg_keypress,
-                                escKey: $ays_gpg_lg_esckey,
+                                keyPress: $glp_lg_keypress,
+                                escKey: $glp_lg_esckey,
                                 actualSize: false,
                                 pager: false,
                                 download: false,
-                                autoplayControls: $ays_gpg_lightbox_autoplay,
-                                counter: $ays_gpg_lightbox_counter,
+                                autoplayControls: $glp_lightbox_autoplay,
+                                counter: $glp_lightbox_counter,
                                 showThumbByDefault: false,
                                 getCaptionFromTitleOrAlt: false,
                                 subHtmlSelectorRelative: true
@@ -867,7 +867,7 @@ class Gallery_Photo_Gallery_Public {
                         }
                         $gallery_view .= "$(document).find('.ays_gallery_container_".$id."').imagesLoaded()
                             .done( function( instance ){
-                                $ays_gpg_container_display_block_js
+                                $glp_container_display_block_js
                                 ".$responsive_width_height."
                                 $ays_gal_loader_none_js
                                 $(document).find('.ays_gallery_container_".$id." .mosaic_".$id."').Mosaic({
@@ -889,8 +889,8 @@ class Gallery_Photo_Gallery_Public {
                             })
                             .fail( function() {
                                 var errorImage = $('<div><p>".__("Some of the images haven\'t been loaded", $this->plugin_name)."</p></div>');
-                                $ays_gpg_container_error_message_js
-                                $ays_gpg_container_display_block_js
+                                $glp_container_error_message_js
+                                $glp_container_display_block_js
                                 $ays_gal_loader_none_js
                                 $(document).find('.ays_masonry_item_".$id.">img, .ays_mosaic_column_item_".$id.">img, .ays_grid_column_".$id.">img').each(function(e, img){
                                     if(img.getAttribute('src') == '' || img.getAttribute('src') == undefined){
@@ -963,24 +963,24 @@ class Gallery_Photo_Gallery_Public {
 
                     });
                     ".$ays_gal_loader_display_js." 
-                    ".$ays_gpg_lazy_load." 
-                    ".$ays_gpg_lazy_load_mosaic." ";
+                    ".$glp_lazy_load." 
+                    ".$glp_lazy_load_mosaic." ";
 
                     $gallery_view .='var gpgSearchLightboxOptions = {
                         selector: ".gpgSearchContainer",
                         share: false,
                         hash: false,
-                        addClass:"ays_gpg_lightbox_'.$id.'",
+                        addClass:"glp_lightbox_'.$id.'",
                         fullScreen: false,
                         autoplay: false,
-                        pause: '.$ays_gpg_lightbox_pause.',
+                        pause: '.$glp_lightbox_pause.',
                         mousewheel: false,
                         keyPress: false,
                         actualSize: false,
                         pager: false,
                         download: false,
-                        autoplayControls: '.$ays_gpg_lightbox_autoplay.',
-                        counter: '.$ays_gpg_lightbox_counter.',
+                        autoplayControls: '.$glp_lightbox_autoplay.',
+                        counter: '.$glp_lightbox_counter.',
                         showThumbByDefault: false,
                         getCaptionFromTitleOrAlt: false,
                         subHtmlSelectorRelative: true
@@ -1029,17 +1029,17 @@ class Gallery_Photo_Gallery_Public {
                                         selector: ".'.$gallery_lightbox_selector.'",
                                         share: false,
                                         hash: false,
-                                        addClass:"ays_gpg_lightbox_'.$id.'",
+                                        addClass:"glp_lightbox_'.$id.'",
                                         fullScreen: false,
                                         autoplay: false,
-                                        pause: '.$ays_gpg_lightbox_pause.',
+                                        pause: '.$glp_lightbox_pause.',
                                         mousewheel: false,
                                         keyPress: false,
                                         actualSize: false,
                                         pager: false,
                                         download: false,
-                                        autoplayControls: '.$ays_gpg_lightbox_autoplay.',
-                                        counter: '.$ays_gpg_lightbox_counter.',
+                                        autoplayControls: '.$glp_lightbox_autoplay.',
+                                        counter: '.$glp_lightbox_counter.',
                                         showThumbByDefault: false,
                                         getCaptionFromTitleOrAlt: false,
                                         subHtmlSelectorRelative: true
@@ -1053,18 +1053,18 @@ class Gallery_Photo_Gallery_Public {
                             selector: '.$gallery_lightbox_selector',
                             share: false,
                             hash: false,
-                            addClass:'ays_gpg_lightbox_".$id."',
+                            addClass:'glp_lightbox_".$id."',
                             fullScreen: false,
                             autoplay: false,
-                            pause: $ays_gpg_lightbox_pause,
+                            pause: $glp_lightbox_pause,
                             mousewheel: false,
-                            keyPress: $ays_gpg_lg_keypress,
-                            escKey: $ays_gpg_lg_esckey,
+                            keyPress: $glp_lg_keypress,
+                            escKey: $glp_lg_esckey,
                             actualSize: false,
                             pager: false,
                             download: false,
-                            autoplayControls: $ays_gpg_lightbox_autoplay,
-                            counter: $ays_gpg_lightbox_counter,
+                            autoplayControls: $glp_lightbox_autoplay,
+                            counter: $glp_lightbox_counter,
                             showThumbByDefault: false,
                             getCaptionFromTitleOrAlt: false,
                             subHtmlSelectorRelative: true
@@ -1282,7 +1282,7 @@ class Gallery_Photo_Gallery_Public {
             // if($image_urls[$key] == ""){
             //     $image_url = "";
             // }else{
-            //     $image_url = "<button type='button' data-url='".$image_urls[$key]."' class='ays_image_url'><i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_link'></i></button>";
+            //     $image_url = "<button type='button' data-url='".$image_urls[$key]."' class='ays_image_url'><i class='glp_fa ays_fa_for_gallery glp_fa_link'></i></button>";
             // }
             if($show_title_on == 'gallery_image'){
                 $hiconpos = ($show_title=='on')?" style='margin-bottom:40px;' ":"";
@@ -1384,52 +1384,52 @@ class Gallery_Photo_Gallery_Public {
                 $hover_icon = "";
                 break;
             case 'search_plus':
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_search_plus'></i>";
+                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_search_plus'></i>";
                 break;
             case 'search':
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_search'></i>";
+                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_search'></i>";
                 break;
             case 'plus':
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_plus'></i>";
+                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_plus'></i>";
                 break;
             case 'plus_circle':
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_plus_circle'></i>";
+                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_plus_circle'></i>";
                 break;
             case 'plus_square_fas': 
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_plus_square_fas'></i>";
+                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_plus_square_fas'></i>";
                 break;
             case 'plus_square_far':
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_plus_square_far'></i>";
+                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_plus_square_far'></i>";
                 break;
             case 'expand':
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_expand'></i>";
+                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_expand'></i>";
                 break;
             case 'image_fas':
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_image_fas'></i>";
+                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_image_fas'></i>";
                 break;
             case 'image_far':
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_image_far'></i>";
+                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_image_far'></i>";
                 break;
             case 'images_fas':
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_images_fas'></i>";
+                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_images_fas'></i>";
                 break;
             case 'images_far':
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_images_far'></i>";
+                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_images_far'></i>";
                 break;
             case 'eye_fas':
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_eye_fas'></i>";
+                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_eye_fas'></i>";
                 break;
             case 'eye_far':
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_eye_far'></i>";
+                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_eye_far'></i>";
                 break;
             case 'camera_retro':
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_camera_retro'></i>";
+                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_camera_retro'></i>";
                 break;
             case 'camera':
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_camera'></i>";
+                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_camera'></i>";
                 break;
             default:
-                $hover_icon = "<i class='ays_gpg_fa ays_fa_for_gallery ays_gpg_fa_search_plus'></i>";
+                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_search_plus'></i>";
                 break;
         }
         return $hover_icon;
@@ -1489,7 +1489,7 @@ class Gallery_Photo_Gallery_Public {
         $ays_thumb_height_mobile  = (!isset($gallery_options['thumb_height_mobile'])) ? "170" : $gallery_options['thumb_height_mobile'];
         $ays_thumb_height_desktop  = (!isset($gallery_options['thumb_height_desktop'])) ? "260" : $gallery_options['thumb_height_desktop'];
 
-        $thumnail_title_color = (isset($gallery_options['ays_gpg_title_color']) && $gallery_options['ays_gpg_title_color'] != '') ? $gallery_options['ays_gpg_title_color'] : '#ffffff'; 
+        $thumnail_title_color = (isset($gallery_options['glp_title_color']) && $gallery_options['glp_title_color'] != '') ? $gallery_options['glp_title_color'] : '#ffffff'; 
 
         $gallery_title_color = (isset($gallery_options['ays_gallery_title_color']) && $gallery_options['ays_gallery_title_color'] != '') ? $gallery_options['ays_gallery_title_color'] : '#000'; 
 
@@ -1514,11 +1514,11 @@ class Gallery_Photo_Gallery_Public {
         $ays_images_border_color    = (!isset($gallery_options['images_border_color']) ||
                                         $gallery_options['images_border_color'] == false) ? '#000000' : $gallery_options['images_border_color'];
         
-        $ays_gpg_lightbox_counter = (!isset($gal_lightbox_options['lightbox_counter']) ||
+        $glp_lightbox_counter = (!isset($gal_lightbox_options['lightbox_counter']) ||
                                     $gal_lightbox_options['lightbox_counter'] == false) ? "true" : $gal_lightbox_options['lightbox_counter'];
-        $ays_gpg_lightbox_autoplay = (!isset($gal_lightbox_options['lightbox_autoplay']) ||
+        $glp_lightbox_autoplay = (!isset($gal_lightbox_options['lightbox_autoplay']) ||
                                     $gal_lightbox_options['lightbox_autoplay'] == false) ? "true" : $gal_lightbox_options['lightbox_autoplay'];
-        $ays_gpg_lightbox_pause  = (!isset($gal_lightbox_options['lb_pause']) ||
+        $glp_lightbox_pause  = (!isset($gal_lightbox_options['lb_pause']) ||
                                     $gal_lightbox_options['lb_pause'] == '') ? "5000" : $gal_lightbox_options['lb_pause'];
 
 
@@ -1538,7 +1538,7 @@ class Gallery_Photo_Gallery_Public {
 
         $ays_ordering_asc_desc = (isset($gallery_options['ordering_asc_desc']) && $gallery_options['ordering_asc_desc'] != '') ? $gallery_options['ordering_asc_desc'] : 'ascending';
         
-        $ays_gpg_filter_by_cat_effect = (!isset($gallery_options['ays_gpg_filter_cat_anim']) || $gallery_options['ays_gpg_filter_cat_anim'] == null) ? "fadeIn" : $gallery_options['ays_gpg_filter_cat_anim'];
+        $glp_filter_by_cat_effect = (!isset($gallery_options['glp_filter_cat_anim']) || $gallery_options['glp_filter_cat_anim'] == null) ? "fadeIn" : $gallery_options['glp_filter_cat_anim'];
 
         $ays_show_caption = true;
         if(isset($gal_lightbox_options['lb_show_caption'])){
@@ -1783,13 +1783,13 @@ class Gallery_Photo_Gallery_Public {
         $ayg_gpg_cat_anim = '';
         if($show_filter_cat == "on" && $view == "grid"){
             $imgs_cat_id = array_unique($imgs_cat_id);
-            $ayg_gpg_cat_anim = $ays_gpg_filter_by_cat_effect; 
+            $ayg_gpg_cat_anim = $glp_filter_by_cat_effect; 
             $show_gallery_filter_cat = "<div class='ays_gallery_filter_cat' data-anim='".$ayg_gpg_cat_anim."'>
-                                        <a href='javascript:void(0);' class='ays_gpg_category_filter' data-cat='all'>".$gpg_all_images_text."</a>
+                                        <a href='javascript:void(0);' class='glp_category_filter' data-cat='all'>".$gpg_all_images_text."</a>
                                     ";                                   
             foreach ($gal_cat_id as $gal_cat_key => $gal_cat_value) {
                 if (in_array($gal_cat_value, $imgs_cat_id)) {
-                    $show_gallery_filter_cat .="<a href='javascript:void(0);' class='ays_gpg_category_filter' data-cat='".$gal_cat_value."'>".$gal_cat_title[$gal_cat_key]."</a>";                                    
+                    $show_gallery_filter_cat .="<a href='javascript:void(0);' class='glp_category_filter' data-cat='".$gal_cat_value."'>".$gal_cat_title[$gal_cat_key]."</a>";                                    
                 }
             }
              $show_gallery_filter_cat .=" </div>";
@@ -2113,7 +2113,7 @@ class Gallery_Photo_Gallery_Public {
                     filter: ".$gpg_filter_image.";
                 }
 
-                .ays_gpg_lightbox_".$id." .lg-image, .ays_gpg_lightbox_".$id." .lg-thumb-item img{
+                .glp_lightbox_".$id." .lg-image, .glp_lightbox_".$id." .lg-thumb-item img{
                     filter: ".$gpg_filter_lightbox_image.";
                 }
                 
@@ -2158,12 +2158,12 @@ class Gallery_Photo_Gallery_Public {
                 div.mosaic_".$id." .ays_mosaic_column_item_".$id." > div.ays_hover_mask {
                     font-size: 40px !important;
                 }
-                div.ays_masonry_grid div.ays_masonry_item_".$id." div.ays_hover_mask i.ays_gpg_fa,
-                div.ays_masonry_grid div.ays_masonry_item_".$id." div.ays_hover_mask .ays_gpg_fa,
-                div.ays_grid_row div.ays_grid_column_".$id." div.ays_hover_mask i.ays_gpg_fa,
-                div.ays_grid_row div.ays_grid_column_".$id." div.ays_hover_mask .ays_gpg_fa,
-                .mosaic_".$id." .ays_mosaic_column_item_".$id." div.ays_hover_mask i.ays_gpg_fa,
-                .mosaic_".$id." .ays_mosaic_column_item_".$id." div.ays_hover_mask .ays_gpg_fa {
+                div.ays_masonry_grid div.ays_masonry_item_".$id." div.ays_hover_mask i.glp_fa,
+                div.ays_masonry_grid div.ays_masonry_item_".$id." div.ays_hover_mask .glp_fa,
+                div.ays_grid_row div.ays_grid_column_".$id." div.ays_hover_mask i.glp_fa,
+                div.ays_grid_row div.ays_grid_column_".$id." div.ays_hover_mask .glp_fa,
+                .mosaic_".$id." .ays_mosaic_column_item_".$id." div.ays_hover_mask i.glp_fa,
+                .mosaic_".$id." .ays_mosaic_column_item_".$id." div.ays_hover_mask .glp_fa {
                     font-size: {$images_hover_icon_size}px !important;
                     opacity: 1 !important;
                 }

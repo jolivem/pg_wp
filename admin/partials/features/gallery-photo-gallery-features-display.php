@@ -1,6 +1,6 @@
 <div class="wrap">
-    <div class="ays-gpg-heading-box">
-        <div class="ays-gpg-wordpress-user-manual-box">
+    <div class="glp-heading-box">
+        <div class="glp-wordpress-user-manual-box">
             <a href="https://ays-pro.com/wordpress-photo-gallery-user-manual" target="_blank" style="text-decoration: none;font-size: 13px;">
                 <i class="ays_fa ays_fa_file_text"></i>
                 <span style="margin-left: 3px;text-decoration: underline;"><?php echo __("View Documentation", $this->plugin_name); ?></span>
@@ -10,7 +10,7 @@
     <h1 class="wp-heading-inline">
         <?php echo __(esc_html(get_admin_page_title()),$this->plugin_name); ?>
     </h1>
-    <div class="ays-gpg-features-wrap">
+    <div class="glp-features-wrap">
         <div class="comparison">
             <table>
                 <thead>
@@ -38,7 +38,7 @@
                         <div class="price-now"><span style="text-decoration: line-through; color: red;">$49</span>
                                 </div>
                         <div class="price-now"><span>$39</span>
-                        <div class="ays-gpg-pracing-table-td-flex">
+                        <div class="glp-pracing-table-td-flex">
                             <a href="https://ays-pro.com/wordpress/photo-gallery" class="price-buy"><?php echo __('Buy now',$this->plugin_name)?><span class="hide-mobile"></span></a>
                             <span><?php echo __('(One-time payment)', $this->plugin_name); ?></span>
                         </div>
@@ -47,7 +47,7 @@
                         <div class="price-now"><span style="text-decoration: line-through; color: red;">$129</span>
                                 </div>
                         <div class="price-now"><span>$103</span>
-                        <div class="ays-gpg-pracing-table-td-flex">
+                        <div class="glp-pracing-table-td-flex">
                             <a href="https://ays-pro.com/wordpress/photo-gallery" class="price-buy"><?php echo __('Buy now',$this->plugin_name)?><span class="hide-mobile"></span></a>
                             <span><?php echo __('(One-time payment)', $this->plugin_name); ?></span>
                         </div>
@@ -61,9 +61,9 @@
                 </tr>
                 <tr>
                     <td><?php echo __('Install on unlimited sites',$this->plugin_name)?></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
                 </tr>
                 <tr>
                     <td> </td>
@@ -101,9 +101,9 @@
                 </tr>
                 <tr>
                     <td><?php echo __('Unlimited galleries',$this->plugin_name)?></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
                 </tr>
                 <tr>
                     <td> </td>
@@ -111,9 +111,9 @@
                 </tr>
                 <tr class="compare-row">
                     <td><?php echo __('Unlimited items',$this->plugin_name)?></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -122,8 +122,8 @@
                 <tr>
                     <td><?php echo __('30+ awesome views',$this->plugin_name)?></td>
                     <td><span>–</span></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -132,8 +132,8 @@
                 <tr>
                     <td><?php echo __('20+ Transition effects',$this->plugin_name)?></td>
                     <td><span>–</span></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -142,8 +142,8 @@
                 <tr>
                     <td><?php echo __('20+ Animation easing effects',$this->plugin_name)?></td>
                     <td><span>–</span></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -152,8 +152,8 @@
                 <tr>
                     <td><?php echo __('Transition speed (in ms)',$this->plugin_name)?></td>
                     <td><span>–</span></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -162,8 +162,8 @@
                 <tr>
                     <td><?php echo __('Lightbox overlay settings',$this->plugin_name)?></td>
                     <td><span>–</span></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -172,8 +172,8 @@
                 <tr>
                     <td><?php echo __('Lightbox live preview',$this->plugin_name)?></td>
                     <td><span>–</span></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -182,8 +182,8 @@
                 <tr>
                     <td><?php echo __('Share buttons',$this->plugin_name)?></td>
                     <td><span>–</span></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -192,8 +192,8 @@
                 <tr>
                     <td><?php echo __('Full screen button',$this->plugin_name)?></td>
                     <td><span>–</span></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -202,8 +202,8 @@
                 <tr>
                     <td><?php echo __('Images actual size button',$this->plugin_name)?></td>
                     <td><span>–</span></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -212,8 +212,8 @@
                 <tr>
                     <td><?php echo __('Download button',$this->plugin_name)?></td>
                     <td><span>–</span></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -222,8 +222,8 @@
                 <tr>
                     <td><?php echo __('Mouse wheel',$this->plugin_name)?></td>
                     <td><span>–</span></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -232,8 +232,8 @@
                 <tr>
                     <td><?php echo __('Thumbnails settings',$this->plugin_name)?></td>
                     <td><span>–</span></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -242,8 +242,8 @@
                 <tr>
                     <td><?php echo __('Key control',$this->plugin_name)?></td>
                     <td><span>–</span></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
-                    <td><i class="ays_gpg_fa ays_gpg_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
+                    <td><i class="glp_fa glp_fa_check"></i></td>
                 </tr>
                 <tr>
                     <td> </td>
@@ -252,13 +252,13 @@
                     <td></td>
                     <td></td>
                     <td>                        
-                        <div class="ays-gpg-pracing-table-td-flex">
+                        <div class="glp-pracing-table-td-flex">
                             <a href="https://ays-pro.com/wordpress/photo-gallery" class="price-buy"><?php echo __('Buy now',$this->plugin_name)?><span class="hide-mobile"></span></a>
                             <span><?php echo __('(One-time payment)', $this->plugin_name); ?></span>
                         </div>
                     </td>
                     <td>
-                        <div class="ays-gpg-pracing-table-td-flex">
+                        <div class="glp-pracing-table-td-flex">
                             <a href="https://ays-pro.com/wordpress/photo-gallery" class="price-buy"><?php echo __('Buy now',$this->plugin_name)?><span class="hide-mobile"></span></a>
                             <span><?php echo __('(One-time payment)', $this->plugin_name); ?></span>
                         </div>
@@ -267,32 +267,32 @@
                 </tbody>
             </table>
         </div>
-        <div class="ays-gpg-row">
-            <div class="ays-gpg-col-4">
+        <div class="glp-row">
+            <div class="glp-col-4">
                 <a href="<?php echo AYS_GPG_ADMIN_URL . '/images/features/pro1-compressor.png'; ?>" class="open-lightbox">
                     <img src="<?php echo AYS_GPG_ADMIN_URL . '/images/features/pro1-compressor.png'; ?>" width="100%" alt="PRO Feature 1" title="PRO Feature 1" />
                 </a>
             </div>
-            <div class="ays-gpg-col-4">
+            <div class="glp-col-4">
                 <a href="<?php echo AYS_GPG_ADMIN_URL . '/images/features/pro2-compressor.png'; ?>" class="open-lightbox">
                     <img src="<?php echo AYS_GPG_ADMIN_URL . '/images/features/pro2-compressor.png'; ?>" width="100%" alt="PRO Feature 2" title="PRO Feature 2" />
                 </a>
             </div>
-            <div class="ays-gpg-col-4">
+            <div class="glp-col-4">
                 <a href="<?php echo AYS_GPG_ADMIN_URL . '/images/features/pro3-compressor.png'; ?>" class="open-lightbox">
                     <img src="<?php echo AYS_GPG_ADMIN_URL . '/images/features/pro3-compressor.png'; ?>" width="100%" alt="PRO Feature 3" title="PRO Feature 3" />
                 </a>
             </div>
-            <div class="ays-gpg-col-4">
+            <div class="glp-col-4">
                 <a href="<?php echo AYS_GPG_ADMIN_URL . '/images/features/pro4-compressor.png'; ?>" class="open-lightbox">
                     <img src="<?php echo AYS_GPG_ADMIN_URL . '/images/features/pro4-compressor.png'; ?>" width="100%" alt="PRO Feature 4" title="PRO Feature 4" />
                 </a>
             </div>
         </div>
-        <div class="ays-gpg-sm-content-row-sg">
-            <div class="ays-gpg-sm-guarantee-container-sg ays-gpg-sm-center-box-sg">
+        <div class="glp-sm-content-row-sg">
+            <div class="glp-sm-guarantee-container-sg glp-sm-center-box-sg">
                 <img src="<?php echo AYS_GPG_ADMIN_URL ?>/images/money_back_logo.webp" alt="Best money-back guarantee logo">
-                <div class="ays-gpg-sm-guarantee-text-container-sg">
+                <div class="glp-sm-guarantee-text-container-sg">
                     <h3><?php echo __("30 day money back guarantee !!!", $this->plugin_name); ?></h3>
                     <p>
                         <?php echo __("We're sure that you'll love our Photo Gallery plugin, but, if for some reason, you're not

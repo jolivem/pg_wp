@@ -4,8 +4,8 @@
 ?>
 
 <div class="wrap">
-    <div class="ays-gpg-heading-box">
-        <div class="ays-gpg-wordpress-user-manual-box">
+    <div class="glp-heading-box">
+        <div class="glp-wordpress-user-manual-box">
             <a href="https://ays-pro.com/wordpress-photo-gallery-user-manual" target="_blank" style="text-decoration: none;font-size: 13px;">
                 <i class="ays_fa ays_fa_file_text"></i>
                 <span style="margin-left: 3px;text-decoration: underline;"><?php echo __("View Documentation", $this->plugin_name); ?></span>
