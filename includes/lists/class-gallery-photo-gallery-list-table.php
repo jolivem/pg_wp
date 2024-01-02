@@ -6,7 +6,7 @@ class Galleries_List_Table extends WP_List_Table{
     /** Class constructor */
     public function __construct($plugin_name) {
         $this->plugin_name = $plugin_name;
-        $this->title_length = Gallery_Photo_Gallery_Admin::get_gpg_listtables_title_length('galleries');
+        $this->title_length = GLP_Admin::get_gpg_listtables_title_length('galleries');
         parent::__construct( array(
             "singular" => __( "Gallery", $this->plugin_name ), //singular name of the listed records
             "plural"   => __( "Galleries", $this->plugin_name ), //plural name of the listed records
@@ -605,7 +605,7 @@ class Galleries_List_Table extends WP_List_Table{
         $q = esc_attr($gallery_title);
         $gallery_title_length = intval( $this->title_length );
 
-        $restitle = Gallery_Photo_Gallery_Admin::ays_gpg_restriction_string("word", $gallery_title, $gallery_title_length);
+        $restitle = GLP_Admin::ays_gpg_restriction_string("word", $gallery_title, $gallery_title_length);
 
         $title = sprintf( '<a href="?page=%s&action=%s&gallery=%d" title="%s">%s</a>', esc_attr( $_REQUEST['page'] ), 'edit', absint( $item['id'] ), $q, $restitle);
 
@@ -648,7 +648,7 @@ class Galleries_List_Table extends WP_List_Table{
             $author = array("name"=>"Unknown");
         }
         $text = "";
-        if(Gallery_Photo_Gallery_Admin::validateDate($date)){
+        if(GLP_Admin::validateDate($date)){
             $text .= "<p><b>Date:</b> ".$date."</p>";
         }
         if($author['name'] !== "Unknown"){

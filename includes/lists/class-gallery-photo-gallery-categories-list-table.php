@@ -6,7 +6,7 @@ class Gpg_Categories_List_Table extends WP_List_Table{
     /** Class constructor */
     public function __construct($plugin_name) {
         $this->plugin_name = $plugin_name;
-        $this->title_length = Gallery_Photo_Gallery_Admin::get_gpg_listtables_title_length('gallery_categories');
+        $this->title_length = GLP_Admin::get_gpg_listtables_title_length('gallery_categories');
         parent::__construct( array(
             'singular' => __( 'Gallery Category', $this->plugin_name ), //singular name of the listed records
             'plural'   => __( 'Gallery Categories', $this->plugin_name ), //plural name of the listed records
@@ -242,7 +242,7 @@ class Gpg_Categories_List_Table extends WP_List_Table{
         switch ( $column_name ) {
             case 'title':
             case 'description':
-                return Gallery_Photo_Gallery_Admin::ays_restriction_string("word",strip_tags($item[ $column_name ]), 15);
+                return GLP_Admin::ays_restriction_string("word",strip_tags($item[ $column_name ]), 15);
                 break;
             case 'items_count':
             case 'id':
@@ -287,7 +287,7 @@ class Gpg_Categories_List_Table extends WP_List_Table{
         $column_t = esc_attr( stripcslashes($item['title']) );
         $t = esc_attr($column_t);
 
-        $restitle = Gallery_Photo_Gallery_Admin::ays_restriction_string("word", $column_t, $gallery_categories_title_length);
+        $restitle = GLP_Admin::ays_restriction_string("word", $column_t, $gallery_categories_title_length);
         $title = sprintf( '<a href="?page=%s&action=%s&gallery_category=%d" title="%s"><strong>%s</strong></a>', esc_attr( $_REQUEST['page'] ), 'edit', absint( $item['id'] ), $t, $restitle );        
 
         $actions = array(

@@ -21,7 +21,7 @@
         $this->gallery_obj->duplicate_galleries($id);
     }
 
-    $gallery_max_id = Gallery_Photo_Gallery_Admin::get_gallery_max_id('gallery');
+    $gallery_max_id = GLP_Admin::get_gallery_max_id('gallery');
 
     $plus_icon_svg = "<span class=''><img src='". AYS_GPG_ADMIN_URL ."/images/icons/plus=icon.svg'></span>";
 ?>

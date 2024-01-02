@@ -88,7 +88,7 @@ class Gallery_Photo_Gallery {
 	 *
 	 * - Gallery_Photo_Gallery_Loader. Orchestrates the hooks of the plugin.
 	 * - Gallery_Photo_Gallery_i18n. Defines internationalization functionality.
-	 * - Gallery_Photo_Gallery_Admin. Defines all hooks for the admin area.
+	 * - GLP_Admin. Defines all hooks for the admin area.
 	 * - Gallery_Photo_Gallery_Public. Defines all hooks for the public side of the site.
 	 *
 	 * Create an instance of the loader which will be used to register the hooks
@@ -122,7 +122,7 @@ class Gallery_Photo_Gallery {
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-gallery-photo-gallery-admin.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/glp-admin.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
@@ -176,7 +176,7 @@ class Gallery_Photo_Gallery {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Gallery_Photo_Gallery_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin = new GLP_Admin( $this->get_plugin_name(), $this->get_version() );
 		$data_admin   = new Photo_Gallery_Data( $this->get_plugin_name(), $this->get_version() );
 		
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );

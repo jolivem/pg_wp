@@ -20,7 +20,7 @@
  * @subpackage Gallery_Photo_Gallery/admin
  * @author     AYS Pro LLC <info@ays-pro.com>
  */
-class Gallery_Photo_Gallery_Admin {
+class GLP_Admin {
 
 	/**
 	 * The ID of this plugin.
@@ -362,13 +362,13 @@ class Gallery_Photo_Gallery_Admin {
         $action = (isset($_GET['action'])) ? sanitize_text_field( $_GET['action'] ) : '';
         switch ( $action ) {
             case 'add':
-                include_once( 'partials/actions/gallery-photo-gallery-admin-actions.php' );
+                include_once( 'partials/glp-admin-actions.php' );
                 break;
             case 'edit':
-                include_once( 'partials/actions/gallery-photo-gallery-admin-actions.php' );
+                include_once( 'partials/glp-admin-actions.php' );
                 break;
             default:
-                include_once( 'partials/gallery-photo-gallery-admin-display.php' );
+                include_once( 'partials/glp-admin-display.php' );
         }
     }
 
@@ -377,13 +377,13 @@ class Gallery_Photo_Gallery_Admin {
 
         switch ($action) {
             case 'add':
-                include_once('partials/categories/actions/gallery-photo-gallery-categories-actions.php');
+                include_once('partials/glp-categories-actions.php');
                 break;
             case 'edit':
-                include_once('partials/categories/actions/gallery-photo-gallery-categories-actions.php');
+                include_once('partials/glp-categories-actions.php');
                 break;
             default:
-                include_once('partials/categories/gallery-photo-gallery-categories-display.php');
+                include_once('partials/glp-categories-display.php');
         }
     }    
 
