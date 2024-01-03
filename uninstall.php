@@ -30,16 +30,16 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
-if(get_option('ays_gallery_photo_gallery_upgrade_plugin','false') === 'false'){
+if(get_option('glp_upgrade_plugin','false') === 'false'){
     global $wpdb;
-    $table = $wpdb->prefix . 'ays_gallery';
-    $cat_table = $wpdb->prefix . 'ays_gallery_categories';
-    $settings_table = $wpdb->prefix . 'ays_gallery_settings';
+    $table = $wpdb->prefix . 'glp_gallery';
+    $cat_table = $wpdb->prefix . 'glp_gallery_categories';
+    $settings_table = $wpdb->prefix . 'glp_gallery_settings';
 
     $wpdb->query("DROP TABLE IF EXISTS `".$table."`");
     $wpdb->query("DROP TABLE IF EXISTS `".$cat_table."`");
     $wpdb->query("DROP TABLE IF EXISTS `".$settings_table."`");
 
-    delete_option( 'ays_gallery_db_version' );
-    delete_option( "ays_gallery_photo_gallery_upgrade_plugin" );
+    delete_option( 'glp_gallery_db_version' );
+    delete_option( "glp_upgrade_plugin" );
 }

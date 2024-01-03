@@ -441,7 +441,7 @@ class GLP_Admin {
     public static function ays_get_gallery_categories(){
         global $wpdb;
 
-        $sql = "SELECT * FROM {$wpdb->prefix}ays_gallery_categories";
+        $sql = "SELECT * FROM {$wpdb->prefix}glp_gallery_categories";
         $result = $wpdb->get_results($sql, 'ARRAY_A');
 
         return $result;
@@ -449,7 +449,7 @@ class GLP_Admin {
 
     public static function ays_get_gpg_options(){
         global $wpdb;
-        $table_name = $wpdb->prefix . 'ays_gallery';
+        $table_name = $wpdb->prefix . 'glp_gallery';
         $res = $wpdb->get_results("SELECT id, title, width, height FROM ".$table_name."");
         $aysGlobal_array = array();
 
@@ -601,13 +601,13 @@ class GLP_Admin {
 
     public function deactivate_plugin_option(){
         $request_value = $_REQUEST['upgrade_plugin'];
-        $upgrade_option = get_option('ays_gallery_photo_gallery_upgrade_plugin','');
+        $upgrade_option = get_option('glp_upgrade_plugin','');
         if($upgrade_option === ''){
-            add_option('ays_gallery_photo_gallery_upgrade_plugin',$request_value);
+            add_option('glp_upgrade_plugin',$request_value);
         }else{
-            update_option('ays_gallery_photo_gallery_upgrade_plugin',$request_value);
+            update_option('glp_upgrade_plugin',$request_value);
         }
-        echo json_encode(array('option'=>get_option('ays_gallery_photo_gallery_upgrade_plugin','')));
+        echo json_encode(array('option'=>get_option('glp_upgrade_plugin','')));
         wp_die();
     }
 
@@ -657,7 +657,7 @@ class GLP_Admin {
     public static function get_gpg_listtables_title_length( $listtable_name ) {
         global $wpdb;
 
-        $settings_table = $wpdb->prefix . "ays_gallery_settings";
+        $settings_table = $wpdb->prefix . "glp_gallery_settings";
         $sql = "SELECT meta_value FROM ".$settings_table." WHERE meta_key = 'options'";
         $result = $wpdb->get_var($sql);
         $options = ($result == "") ? array() : json_decode(stripcslashes($result), true);
@@ -683,7 +683,7 @@ class GLP_Admin {
     public function get_next_or_prev_gallery_by_id( $id, $type = "next" ) {
         global $wpdb;
 
-        $gallery_table = esc_sql( $wpdb->prefix . "ays_gallery" );
+        $gallery_table = esc_sql( $wpdb->prefix . "glp_gallery" );
 
         $where = array();
         $where_condition = "";
@@ -719,7 +719,7 @@ class GLP_Admin {
     public function get_next_or_prev_gallery_cat_by_id( $id, $type = "next" ) {
         global $wpdb;
 
-        $gallery_cat_table = esc_sql( $wpdb->prefix . "ays_gallery_categories" );
+        $gallery_cat_table = esc_sql( $wpdb->prefix . "glp_gallery_categories" );
 
         $where = array();
         $where_condition = "";

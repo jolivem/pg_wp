@@ -78,7 +78,7 @@ class Ays_Gallery_Extra_Shortcodes_Public
     public function get_curent_gallery_creation_date( $id ){
         global $wpdb;
 
-        $gallery_table = esc_sql( $wpdb->prefix . "ays_gallery" );
+        $gallery_table = esc_sql( $wpdb->prefix . "glp_gallery" );
 
         if (is_null($id) || $id == 0 ) {
             return null;
@@ -266,7 +266,7 @@ class Ays_Gallery_Extra_Shortcodes_Public
 
     public function get_gallery_images_count( $id ){
         global $wpdb;
-        $gallery_table = esc_sql( $wpdb->prefix . "ays_gallery" );
+        $gallery_table = esc_sql( $wpdb->prefix . "glp_gallery" );
         $sql = "SELECT `images`
                 FROM `{$gallery_table}`
                 WHERE id=" . absint( $id );
@@ -338,7 +338,7 @@ class Ays_Gallery_Extra_Shortcodes_Public
 
     public function get_gallery_images_count_by_category( $id ){
         global $wpdb;
-        $gallery_table = esc_sql( $wpdb->prefix . "ays_gallery" );
+        $gallery_table = esc_sql( $wpdb->prefix . "glp_gallery" );
         $sql = "SELECT `categories_id`
                 FROM `{$gallery_table}`";
        

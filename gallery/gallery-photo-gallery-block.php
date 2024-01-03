@@ -65,7 +65,7 @@
         $block_name = 'gallery';
         $block_namespace = 'gallery-photo-gallery/' . $block_name;
         
-        $sql = "SELECT * FROM ". $wpdb->prefix . "ays_gallery";
+        $sql = "SELECT * FROM ". $wpdb->prefix . "glp_gallery";
         $results = $wpdb->get_results($sql, "ARRAY_A");
         
         register_block_type(

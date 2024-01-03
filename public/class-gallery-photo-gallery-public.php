@@ -1090,7 +1090,7 @@ class Gallery_Photo_Gallery_Public {
     public function ays_get_gallery_by_id( $id ) {
         global $wpdb;
 
-        $sql = "SELECT * FROM {$wpdb->prefix}ays_gallery WHERE id={$id}";
+        $sql = "SELECT * FROM {$wpdb->prefix}glp_gallery WHERE id={$id}";
 
         $result = $wpdb->get_row( $sql, "ARRAY_A" );
 
@@ -1100,7 +1100,7 @@ class Gallery_Photo_Gallery_Public {
     public function ays_get_gallery_category() {
         global $wpdb;
 
-        $sql = "SELECT * FROM {$wpdb->prefix}ays_gallery_categories";
+        $sql = "SELECT * FROM {$wpdb->prefix}glp_gallery_categories";
 
         $result = $wpdb->get_results( $sql, "ARRAY_A" );
 
@@ -1111,7 +1111,7 @@ class Gallery_Photo_Gallery_Public {
         global $wpdb;
 
         $sql = "SELECT *
-                FROM {$wpdb->prefix}ays_gallery_categories
+                FROM {$wpdb->prefix}glp_gallery_categories
                 WHERE id=" . $id;
 
         $category = $wpdb->get_row($sql, 'ARRAY_A');

@@ -29,7 +29,7 @@ class Galleries_List_Table extends WP_List_Table{
 
         global $wpdb;
 
-        $sql = "SELECT * FROM {$wpdb->prefix}ays_gallery";
+        $sql = "SELECT * FROM {$wpdb->prefix}glp_gallery";
 
         $where = array();
 
@@ -69,7 +69,7 @@ class Galleries_List_Table extends WP_List_Table{
     public function get_gallery_by_id( $id ){
         global $wpdb;
 
-        $gallery_table = esc_sql($wpdb->prefix . "ays_gallery");
+        $gallery_table = esc_sql($wpdb->prefix . "glp_gallery");
 
         $id = absint( sanitize_text_field( $id ));
         $sql = "SELECT * FROM ".$gallery_table." WHERE id = %d";
@@ -83,7 +83,7 @@ class Galleries_List_Table extends WP_List_Table{
 
     public function add_or_edit_gallery($data){
         global $wpdb;
-        $gallery_table = $wpdb->prefix . "ays_gallery";
+        $gallery_table = $wpdb->prefix . "glp_gallery";
         //error_log("add_or_edit_gallery() IN data: ".print_r($data, true));//TODO
         if( isset($data["ays_gallery_action"]) && wp_verify_nonce( $data["ays_gallery_action"],"ays_gallery_action" ) ) {
             
@@ -395,7 +395,7 @@ class Galleries_List_Table extends WP_List_Table{
     public static function delete_galleries( $id ) {
         global $wpdb;
         $wpdb->delete(
-            "{$wpdb->prefix}ays_gallery",
+            "{$wpdb->prefix}glp_gallery",
             array( "id" => $id ),
             array( "%d" )
         );
@@ -412,7 +412,7 @@ class Galleries_List_Table extends WP_List_Table{
 
         $filter = array();
 
-        $sql = "SELECT COUNT(*) FROM {$wpdb->prefix}ays_gallery";
+        $sql = "SELECT COUNT(*) FROM {$wpdb->prefix}glp_gallery";
 
         $search = ( isset( $_REQUEST['s'] ) ) ? esc_sql( sanitize_text_field( $_REQUEST['s'] ) ) : false;
         if( $search ){
@@ -435,7 +435,7 @@ class Galleries_List_Table extends WP_List_Table{
     //TODO test duplicate
     public function duplicate_galleries( $id ){
         global $wpdb;
-        $galleries_table = $wpdb->prefix."ays_gallery";
+        $galleries_table = $wpdb->prefix."glp_gallery";
         $gallery = $this->get_gallery_by_id($id);
        
         $user_id = get_current_user_id();
@@ -499,7 +499,7 @@ class Galleries_List_Table extends WP_List_Table{
 
     private function get_max_id() {
         global $wpdb;
-        $gallery_table = $wpdb->prefix . 'ays_gallery';
+        $gallery_table = $wpdb->prefix . 'glp_gallery';
 
         $sql = "SELECT max(id) FROM {$gallery_table}";
 

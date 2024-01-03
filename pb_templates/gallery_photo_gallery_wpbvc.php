@@ -62,7 +62,7 @@ if( class_exists( 'WPBakeryShortCode' ) ) {
 
         public function get_active_galleries(){
             global $wpdb;
-            $gallery_table = $wpdb->prefix . 'ays_gallery';
+            $gallery_table = $wpdb->prefix . 'glp_gallery';
             $sql = "SELECT id,title FROM {$gallery_table};";
             $results = $wpdb->get_results( $sql, ARRAY_A );
             $options = array();

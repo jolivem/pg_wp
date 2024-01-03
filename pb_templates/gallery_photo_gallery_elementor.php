@@ -80,7 +80,7 @@ class Widget_GPG_Custom_Elementor_Thing extends Widget_Base {
 
     public function get_active_galleries(){
         global $wpdb;
-        $gallery_table = $wpdb->prefix . 'ays_gallery';
+        $gallery_table = $wpdb->prefix . 'glp_gallery';
         $sql = "SELECT id,title FROM {$gallery_table};";
         $results = $wpdb->get_results( $sql, ARRAY_A );
         $options = array();
@@ -92,7 +92,7 @@ class Widget_GPG_Custom_Elementor_Thing extends Widget_Base {
 
     public function get_default_gallery(){
         global $wpdb;
-        $gallery_table = $wpdb->prefix . 'ays_gallery';
+        $gallery_table = $wpdb->prefix . 'glp_gallery';
         $sql = "SELECT id FROM {$gallery_table} limit 1;";
         $id = $wpdb->get_var( $sql );
 

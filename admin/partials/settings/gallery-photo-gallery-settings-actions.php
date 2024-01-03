@@ -9,7 +9,7 @@ class Gallery_Settings_Actions {
 
     public function store_data($data){
         global $wpdb;
-        $settings_table = $wpdb->prefix . "ays_gallery_settings";
+        $settings_table = $wpdb->prefix . "glp_gallery_settings";
         if( isset($data["settings_action"]) && wp_verify_nonce( $data["settings_action"], 'settings_action' ) ){
             $success = 0;
             // WP Editor height
@@ -55,7 +55,7 @@ class Gallery_Settings_Actions {
 
     public function get_db_data(){
         global $wpdb;
-        $settings_table = esc_sql($wpdb->prefix . "ays_gallery_settings");
+        $settings_table = esc_sql($wpdb->prefix . "glp_gallery_settings");
         $sql = "SELECT * FROM ".$settings_table;
         
         $results = $wpdb->get_results($sql, 'ARRAY_A');
@@ -68,7 +68,7 @@ class Gallery_Settings_Actions {
 
     public static function ays_get_setting($meta_key){
         global $wpdb;
-        $settings_table = esc_sql($wpdb->prefix . "ays_gallery_settings");
+        $settings_table = esc_sql($wpdb->prefix . "glp_gallery_settings");
 
         if($wpdb->get_var("SHOW TABLES LIKE '$settings_table'") != $settings_table) {
             return false;
@@ -89,7 +89,7 @@ class Gallery_Settings_Actions {
 
     public function check_setting_options(){
         global $wpdb;
-        $settings_table = esc_sql($wpdb->prefix . "ays_gallery_settings");
+        $settings_table = esc_sql($wpdb->prefix . "glp_gallery_settings");
         $options = esc_sql('options');
         $sql = "SELECT COUNT(*) FROM ".$settings_table." WHERE meta_key = %s";
 
@@ -105,7 +105,7 @@ class Gallery_Settings_Actions {
 
     public function ays_add_setting($meta_key, $meta_value, $note = "", $options = ""){
         global $wpdb;
-        $settings_table = $wpdb->prefix . "ays_gallery_settings";
+        $settings_table = $wpdb->prefix . "glp_gallery_settings";
         $result = $wpdb->insert(
             $settings_table,
             array(
@@ -125,7 +125,7 @@ class Gallery_Settings_Actions {
     public function ays_update_setting($meta_key, $meta_value, $note = null, $options = null){
         global $wpdb;
 
-        $settings_table = $wpdb->prefix . "ays_gallery_settings";
+        $settings_table = $wpdb->prefix . "glp_gallery_settings";
         $value = array(
             'meta_value'  => $meta_value,
         );
@@ -153,7 +153,7 @@ class Gallery_Settings_Actions {
 
     public function ays_delete_setting($meta_key){
         global $wpdb;
-        $settings_table = $wpdb->prefix . "ays_gallery_settings";
+        $settings_table = $wpdb->prefix . "glp_gallery_settings";
         $wpdb->delete(
             $settings_table,
             array( 'meta_key' => $meta_key ),

@@ -506,7 +506,7 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". AYS_GPG_
                 
                 <?php
 
-                    $sql = "SELECT * FROM {$wpdb->prefix}ays_gallery_categories";
+                    $sql = "SELECT * FROM {$wpdb->prefix}glp_gallery_categories";
                     $result_categories = $wpdb->get_results($sql, 'ARRAY_A');
 
                     //error_log("admin_pagination=".$admin_pagination);//TODO
@@ -623,7 +623,7 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". AYS_GPG_
                 <ul class="ays-accordion">
                 <?php
 
-                    $sql = "SELECT * FROM {$wpdb->prefix}ays_gallery_categories";
+                    $sql = "SELECT * FROM {$wpdb->prefix}glp_gallery_categories";
                     $result_categories = $wpdb->get_results($sql, 'ARRAY_A');
 
                     //echo "images=".$images[0];

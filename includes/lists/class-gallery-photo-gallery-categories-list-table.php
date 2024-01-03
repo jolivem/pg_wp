@@ -59,7 +59,7 @@ class Gpg_Categories_List_Table extends WP_List_Table{
 
         global $wpdb;
 
-        $sql = "SELECT * FROM {$wpdb->prefix}ays_gallery_categories";
+        $sql = "SELECT * FROM {$wpdb->prefix}glp_gallery_categories";
 
         $where = array();
 
@@ -100,7 +100,7 @@ class Gpg_Categories_List_Table extends WP_List_Table{
     public function get_gallery_category( $id ) {
         global $wpdb;
 
-        $sql = "SELECT * FROM {$wpdb->prefix}ays_gallery_categories WHERE id=" . absint( sanitize_text_field( $id ) );
+        $sql = "SELECT * FROM {$wpdb->prefix}glp_gallery_categories WHERE id=" . absint( sanitize_text_field( $id ) );
 
         $result = $wpdb->get_row($sql, 'ARRAY_A');
 
@@ -109,7 +109,7 @@ class Gpg_Categories_List_Table extends WP_List_Table{
 
     public function add_edit_gallery_category( $data ){
         global $wpdb;
-        $gpg_category_table = $wpdb->prefix . 'ays_gallery_categories';
+        $gpg_category_table = $wpdb->prefix . 'glp_gallery_categories';
         $ays_change_type = (isset($data['ays_change_type']))?$data['ays_change_type']:'';
         if( isset($data["gallery_category_action"]) && wp_verify_nonce( $data["gallery_category_action"],'gallery_category_action' ) ){
             $id = absint( intval( $data['id'] ) );
@@ -168,7 +168,7 @@ class Gpg_Categories_List_Table extends WP_List_Table{
     public static function delete_gallery_categories( $id ) {
         global $wpdb;
         $wpdb->delete(
-            "{$wpdb->prefix}ays_gallery_categories",
+            "{$wpdb->prefix}glp_gallery_categories",
             array( 'id' => $id ),
             array( '%d' )
         );
@@ -185,7 +185,7 @@ class Gpg_Categories_List_Table extends WP_List_Table{
 
         $filter = array();
 
-        $sql = "SELECT COUNT(*) FROM {$wpdb->prefix}ays_gallery_categories";
+        $sql = "SELECT COUNT(*) FROM {$wpdb->prefix}glp_gallery_categories";
 
         $search = ( isset( $_REQUEST['s'] ) ) ? $_REQUEST['s'] : false;
         if( $search ){
@@ -203,26 +203,11 @@ class Gpg_Categories_List_Table extends WP_List_Table{
     public static function all_record_count() {
         global $wpdb;
 
-        $sql = "SELECT COUNT(*) FROM {$wpdb->prefix}ays_gallery_categories";
+        $sql = "SELECT COUNT(*) FROM {$wpdb->prefix}glp_gallery_categories";
 
         return $wpdb->get_var( $sql );
     }
 
-   /* public static function published_quiz_categories_count() {
-        global $wpdb;
-
-        $sql = "SELECT COUNT(*) FROM {$wpdb->prefix}aysquiz_quizcategories WHERE published=1";
-
-        return $wpdb->get_var( $sql );
-    }*/
-  /*  
-    public static function unpublished_quiz_categories_count() {
-        global $wpdb;
-
-        $sql = "SELECT COUNT(*) FROM {$wpdb->prefix}aysquiz_quizcategories WHERE published=0";
-
-        return $wpdb->get_var( $sql );
-    }*/
 
     /** Text displayed when no customer data is available */
     public function no_items() {
@@ -317,7 +302,7 @@ class Gpg_Categories_List_Table extends WP_List_Table{
 
         $result = 0;
         if( isset( $item['id'] ) && absint( sanitize_text_field( $item['id'] ) ) > 0){
-            $sql = "SELECT COUNT(*) FROM {$wpdb->prefix}ays_gallery WHERE categories_id = " . absint( sanitize_text_field($item['id'] ) );
+            $sql = "SELECT COUNT(*) FROM {$wpdb->prefix}glp_gallery WHERE categories_id = " . absint( sanitize_text_field($item['id'] ) );
             $result = $wpdb->get_var($sql);
         }
 

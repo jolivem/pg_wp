@@ -1,6 +1,6 @@
 <?php
-global $ays_gallery_db_version;
-$ays_gallery_db_version = '3.3.6';
+global $glp_gallery_db_version;
+$glp_gallery_db_version = '3.3.6';
 /**
  * Fired during plugin activation
  *
@@ -34,14 +34,14 @@ class Gallery_Photo_Gallery_Activator {
 	public static function activate() {
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         global $wpdb;
-        global $ays_gallery_db_version;
-        $installed_ver = get_option( "ays_gallery_db_version" );
+        global $glp_gallery_db_version;
+        $installed_ver = get_option( "glp_gallery_db_version" );
 
-        $table = $wpdb->prefix . 'ays_gallery';
-        $photo_categories_table  =   $wpdb->prefix . 'ays_gallery_categories';        
-        $general_settings_table  =   $wpdb->prefix . 'ays_gallery_settings';        
+        $table = $wpdb->prefix . 'glp_gallery';
+        $photo_categories_table  =   $wpdb->prefix . 'glp_gallery_categories';        
+        $general_settings_table  =   $wpdb->prefix . 'glp_gallery_settings';        
         $charset_collate = $wpdb->get_charset_collate();
-        if($installed_ver != $ays_gallery_db_version) {
+        if($installed_ver != $glp_gallery_db_version) {
             
             $sql = "CREATE TABLE `" . $table . "` (
                   `id` INT(16) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -102,13 +102,13 @@ class Gallery_Photo_Gallery_Activator {
             }else{
                 dbDelta( $sql );
             }
-            update_option('ays_gallery_db_version', $ays_gallery_db_version);
+            update_option('glp_gallery_db_version', $glp_gallery_db_version);
         }
 	}
 
     public static function ays_gallery_db_check() {
-        global $ays_gallery_db_version;
-        if ( get_site_option( 'ays_gallery_db_version' ) != $ays_gallery_db_version ) {
+        global $glp_gallery_db_version;
+        if ( get_site_option( 'glp_gallery_db_version' ) != $glp_gallery_db_version ) {
             self::activate();
         }
     }
