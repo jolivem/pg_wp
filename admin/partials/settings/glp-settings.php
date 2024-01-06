@@ -35,7 +35,7 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
     <div class="glp-heading-box">
         <div class="glp-wordpress-user-manual-box">
             <a href="https://glp-plugin.com/wordpress-photo-gallery-user-manual" target="_blank" style="text-decoration: none;font-size: 13px;">
-                <i class="ays_fa ays_fa_file_text"></i>
+                <i class="ays_glp glp_fa_file_text"></i>
                 <span style="margin-left: 3px;text-decoration: underline;"><?php echo __("View Documentation", $this->plugin_name); ?></span>
             </a>
         </div>
@@ -74,7 +74,7 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                         <hr/>                        
                         <fieldset>
                             <legend>
-                                <strong style="font-size:30px;"><i class="fa ays_fa_question_circle"></i></strong>
+                                <strong style="font-size:30px;"><i class="fa glp_fa_question_circle"></i></strong>
                                 <h5><?php echo __('Default parameters for gallery',$this->plugin_name)?></h5>
                             </legend>
                             <div class="form-group row">
@@ -141,7 +141,7 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                         <hr>
                         <fieldset>
                             <legend>
-                                <strong style="font-size:30px;"><i class="fa ays_fa_file_code"></i></strong>
+                                <strong style="font-size:30px;"><i class="fa glp_fa_file_code"></i></strong>
                                 <h5><?php echo __('General CSS File',$this->plugin_name); ?></h5>
                             </legend>
                             <div class="form-group row">

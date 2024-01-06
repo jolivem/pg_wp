@@ -45,7 +45,7 @@
     <div class="glp-heading-box">
         <div class="glp-wordpress-user-manual-box">
             <a href="https://glp-plugin.com/wordpress-photo-gallery-user-manual" target="_blank" style="text-decoration: none;font-size: 13px;">
-                <i class="ays_fa ays_fa_file_text"></i>
+                <i class="ays_glp glp_fa_file_text"></i>
                 <span style="margin-left: 3px;text-decoration: underline;"><?php echo __("View Documentation", $this->plugin_name); ?></span>
             </a>
         </div>
@@ -59,7 +59,7 @@
                     <label for='ays-title'>
                         <?php echo __('Title', $this->plugin_name); ?>
                         <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Title of the category',$this->plugin_name)?>">
-                            <i class="ays_fa ays_fa_info_circle"></i>
+                            <i class="ays_glp glp_fa_info_circle"></i>
                         </a>
                     </label>
                 </div>
@@ -73,7 +73,7 @@
                 <label for='ays-description'>
                     <?php echo __('Description', $this->plugin_name); ?>
                     <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Provide more information about the gallery category',$this->plugin_name)?>">
-                        <i class="ays_fa ays_fa_info_circle"></i>
+                        <i class="ays_glp glp_fa_info_circle"></i>
                     </a>
                 </label>
                 <?php

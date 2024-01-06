@@ -1,6 +1,6 @@
 <?php
 /*
-Element Description: VC Gallery - Photo Gallery
+Element Description: VC Geolocated Photo
 */
 if( class_exists( 'WPBakeryShortCode' ) ) {
     // Element Class
@@ -20,22 +20,22 @@ if( class_exists( 'WPBakeryShortCode' ) ) {
             // Map the block with vc_map()
             vc_map(
                 array(
-                    'name' => __('Gallery - Photo Gallery', 'text-domain'),
+                    'name' => __('Geolocated Photo', 'text-domain'),
                     'base' => 'vc_galleryphotogallery',
-                    'description' => __('The Best Gallery - Photo Gallery Ever', 'text-domain'),
-                    'category' => __('Gallery - Photo Gallery by AYS', 'text-domain'),
+                    'description' => __('Geolocated Photos', 'text-domain'),
+                    'category' => __('Geolocated Photo', 'text-domain'),
                     'icon' => GLP_ADMIN_URL . '/images/gall_icon.png',
                     'params' => array(
                         array(
                             'type' => 'dropdown',
                             'holder' => 'div',
                             'class' => 'gallery_vc_select',
-                            'heading' => __( 'Gallery - Photo Gallery', 'text-domain' ),
+                            'heading' => __( 'Geolocated Photo', 'text-domain' ),
                             'param_name' => 'gallery',
                             'value' => $this->get_active_galleries(),
                             'description' => __( 'Please select your gallery from dropdown', 'text-domain' ),
                             'admin_label' => true,
-                            'group' => 'Gallery - Photo Gallery'
+                            'group' => 'Geolocated Photo'
                         )
                     )
                 )

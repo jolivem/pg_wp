@@ -18,7 +18,7 @@
  *
  * @package    Geolocated_Photo
  * @subpackage Geolocated_Photo/admin
- * @author     AYS Pro LLC <info@glp-plugin.com>
+ * @author     GLP <info@glp-plugin.com>
  */
 class GLP_Admin {
 
@@ -763,7 +763,7 @@ class GLP_Admin {
         $content[] = '<div class="glp-message-vars-box">';
             $content[] = '<div class="glp-message-vars-icon">';
                 $content[] = '<div>';
-                    $content[] = '<i class="ays_fa ays_fa_link"></i>';
+                    $content[] = '<i class="ays_glp glp_fa_link"></i>';
                 $content[] = '</div>';
                 $content[] = '<div>';
                     $content[] = '<span>'. __("Message Variables" , $this->plugin_name) .'</span>';
@@ -793,7 +793,7 @@ class GLP_Admin {
 
     public static function get_gallery_max_id( $table ) {
         global $wpdb;
-        $db_table = $wpdb->prefix . 'ays_'.$table;;
+        $db_table = $wpdb->prefix . 'glp_'.$table;;
 
         $sql = "SELECT MAX(id) FROM {$db_table}";
 

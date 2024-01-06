@@ -289,10 +289,10 @@ class Gpg_Categories_List_Table extends WP_List_Table{
     /*function column_published( $item ) {
         switch( $item['published'] ) {
             case "1":
-                return '<span class="ays-publish-status"><i class="ays_fa ays_fa_check_square_o" aria-hidden="true"></i>'. __('Published',$this->plugin_name) . '</span>';
+                return '<span class="ays-publish-status"><i class="ays_glp glp_fa_check_square_o" aria-hidden="true"></i>'. __('Published',$this->plugin_name) . '</span>';
                 break;
             case "0":
-                return '<span class="ays-publish-status"><i class="ays_fa ays_fa_square_o" aria-hidden="true"></i>'. __('Unublished',$this->plugin_name) . '</span>';
+                return '<span class="ays-publish-status"><i class="ays_glp glp_fa_square_o" aria-hidden="true"></i>'. __('Unublished',$this->plugin_name) . '</span>';
                 break;
         }
     }*/

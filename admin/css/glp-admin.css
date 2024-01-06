@@ -334,12 +334,12 @@ select#ays_gallery_create_author.select2-container-200-width + .select2.select2-
     content: "\f2ed";
 }
 
-.ays_fa_file_code::before {
+.glp_fa_file_code::before {
     content: "\f1c9";
     font-weight: 400;
 }
 
-.ays_fa_arrow_down::before {
+.glp_fa_arrow_down::before {
     content: "\f078";
     font-weight: 400;
 }
@@ -460,7 +460,7 @@ svg.ays-move-images{
     content: "\f303";
 }
 
-.ays_fa_file_text::before {
+.glp_fa_file_text::before {
     content: "\f15c";
 }
 
@@ -735,7 +735,7 @@ div.ays-notice-banner .navigation-bar li a:after {
     margin-right: 5px;
 }
 
-.ays_fa {
+.ays_glp {
     display: inline-block;
     font: normal normal normal 14px/1 FontAwesome;
     font-size: inherit;
@@ -750,7 +750,7 @@ div.ays-notice-banner .navigation-bar li a:after {
     width: 100%;
 }
 
-.ays-notice-banner #menu li a.toggle_ddmenu i.ays_fa{
+.ays-notice-banner #menu li a.toggle_ddmenu i.ays_glp{
     transition: .1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
@@ -1131,11 +1131,11 @@ a.ays-add-image {
     font-weight: 400;
 }
 
-.ays_fa_angle_left:before {
+.glp_fa_angle_left:before {
     content: "\f104";
     font-weight: 900;
 }
-.ays_fa_angle_right:before {
+.glp_fa_angle_right:before {
     content: "\f105";
     font-weight: 900;
 }
@@ -2055,12 +2055,12 @@ a.glp-new-upgrade-button-link:active {
     font-weight: 400;
 }
 
-.ays_fa_question_circle:before {
+.glp_fa_question_circle:before {
     content: "\f059";
     font-weight: 400;
 }
 
-.ays_fa_text::before {
+.glp_fa_text::before {
     content: "\f036";
     font-weight: 400;
 }
@@ -2069,10 +2069,10 @@ a.glp-new-upgrade-button-link:active {
     content: "\f00c";
     font-weight: 900;
 }
-i.ays_fa_diamond::before {
+i.glp_fa_diamond::before {
    content: "\f219";
 }
-i.ays_fa_ellipsis_h:before {
+i.glp_fa_ellipsis_h:before {
     content: "\f141";
     font-weight: 400;
 }

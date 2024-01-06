@@ -13,8 +13,8 @@
             var countDown_new = new Date(gpgCountdownEndTime).getTime();
 
             if ( isNaN(countDown_new) || isFinite(countDown_new) == false ) {
-                var AYS_GALLERY_MILLISECONDS = 3 * day;
-                var countdownStartDate = new Date(Date.now() + AYS_GALLERY_MILLISECONDS);
+                var GLP_GALLERY_MILLISECONDS = 3 * day;
+                var countdownStartDate = new Date(Date.now() + GLP_GALLERY_MILLISECONDS);
                 var gpgCountdownEndTime = countdownStartDate.aysGalleryCustomFormat( "#YYYY#-#MM#-#DD# #hhhh#:#mm#:#ss#" );
                 var countDown_new = new Date(gpgCountdownEndTime).getTime();
             }

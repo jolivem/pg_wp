@@ -25,7 +25,7 @@
  * @since      1.0.0
  * @package    Geolocated_Photo
  * @subpackage Geolocated_Photo/includes
- * @author     AYS Pro LLC <info@glp-plugin.com>
+ * @author     GLP <info@glp-plugin.com>
  */
 class Geolocated_Photo {
 
@@ -67,8 +67,8 @@ class Geolocated_Photo {
 	 * @since    1.0.0
 	 */
 	public function __construct() {
-		if ( defined( 'AYS_GALLERY_NAME_VERSION' ) ) {
-			$this->version = AYS_GALLERY_NAME_VERSION;
+		if ( defined( 'GLP_GALLERY_NAME_VERSION' ) ) {
+			$this->version = GLP_GALLERY_NAME_VERSION;
 		} else {
 			$this->version = '3.0.4';
 		}

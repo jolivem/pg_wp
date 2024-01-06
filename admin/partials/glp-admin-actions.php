@@ -297,7 +297,7 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
     <div class="glp-heading-box">
         <div class="glp-wordpress-user-manual-box">
             <a href="https://glp-plugin.com/wordpress-photo-gallery-user-manual" target="_blank" style="text-decoration: none;font-size: 13px;">
-                <i class="ays_fa ays_fa_file_text"></i>
+                <i class="ays_glp glp_fa_file_text"></i>
                 <span style="margin-left: 3px;text-decoration: underline;"><?php echo __("View Documentation", $this->plugin_name); ?></span>
             </a>
         </div>
@@ -333,7 +333,7 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                 <p class="ays-subtitle">                
                     <?php if(isset($id) && count($get_all_galleries) > 1):?>
                         <span class="ays-subtitle-inner-galleries-page ays-gallery-open-gpgs-list">
-                            <i class="ays_fa ays_fa_arrow_down" style="font-size: 15px;"></i>   
+                            <i class="ays_glp glp_fa_arrow_down" style="font-size: 15px;"></i>   
                             <strong class="ays_gallery_title_in_top"><?php echo esc_attr( stripslashes( $gallery["title"] ) ); ?></strong>
                         </span>
                     <?php endif; ?>               
@@ -380,7 +380,7 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                 </style>";
         ?>
         <div class="glp-top-menu-wrapper">
-            <div class="glp_menu_left" data-scroll="0"><i class="ays_fa ays_fa_angle_left"></i></div>
+            <div class="glp_menu_left" data-scroll="0"><i class="ays_glp glp_fa_angle_left"></i></div>
             <div class="glp-top-menu">
                 <div class="nav-tab-wrapper glp-top-tab-wrapper">
                     <a href="#tab1" data-tab="tab1" class="nav-tab <?php echo ($glp_tab == 'tab1') ? 'nav-tab-active' : ''; ?>">
@@ -400,7 +400,7 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                     </a> -->
                 </div>  
             </div>              
-            <div class="glp_menu_right" data-scroll="-1"><i class="ays_fa ays_fa_angle_right"></i></div>
+            <div class="glp_menu_right" data-scroll="-1"><i class="ays_glp glp_fa_angle_right"></i></div>
         </div>
         <div id="tab1" class="ays-gallery-tab-content <?php echo ($glp_tab == 'tab1') ? 'ays-gallery-tab-content-active' : ''; ?>">
             <br>

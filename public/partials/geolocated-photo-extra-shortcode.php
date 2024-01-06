@@ -18,7 +18,7 @@
  *
  * @package    Geolocated_Photo
  * @subpackage Geolocated_Photo/public
- * @author     AYS Pro LLC <info@glp-plugin.com>
+ * @author     GLP <info@glp-plugin.com>
  */
 class Ays_Gallery_Extra_Shortcodes_Public
 {

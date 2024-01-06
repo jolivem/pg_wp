@@ -1214,7 +1214,7 @@ msgstr ""
 msgid "Save changes"
 msgstr ""
 
-msgid "Gallery - Photo Gallery"
+msgid "Geolocated Photo"
 msgstr ""
 
 msgid "One-time payment"
@@ -1378,10 +1378,10 @@ msgstr ""
 msgid "Select Gallery"
 msgstr ""
 
-msgid "The Best Gallery - Photo Gallery Ever"
+msgid "The Best Geolocated Photo Ever"
 msgstr ""
 
-msgid "Gallery - Photo Gallery by AYS"
+msgid "Geolocated Photo by AYS"
 msgstr ""
 
 msgid "Please select your gallery from dropdown"

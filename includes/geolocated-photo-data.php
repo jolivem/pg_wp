@@ -17,7 +17,7 @@
  *
  * @package    Geolocated_Photo
  * @subpackage Geolocated_Photo/includes
- * @author     AYS Pro LLC <info@glp-plugin.com>
+ * @author     GLP <info@glp-plugin.com>
  */
 class Photo_Gallery_Data {    
 

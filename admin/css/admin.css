@@ -2,8 +2,8 @@ ul.ays-wp-notice-answers{
     list-style-type: none;
 }
 
-.ays_fa_power_off_gpg-wrap .ays_fa_power_off_gpg::before,
-.ays_fa_power_off_gpg::before {
+.glp_fa_power_off_gpg-wrap .glp_fa_power_off_gpg::before,
+.glp_fa_power_off_gpg::before {
     content: "";
     background-image: url("../images/icons/gall_icon.png");
     height: 30px;

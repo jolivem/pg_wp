@@ -18,7 +18,7 @@
  * @since      1.0.0
  * @package    Geolocated_Photo
  * @subpackage Geolocated_Photo/includes
- * @author     AYS Pro LLC <info@glp-plugin.com>
+ * @author     GLP <info@glp-plugin.com>
  */
 class Geolocated_Photo_Deactivator {
 

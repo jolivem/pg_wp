@@ -21,8 +21,6 @@
         $this->gallery_obj->duplicate_galleries($id);
     }
 
-    $gallery_max_id = GLP_Admin::get_gallery_max_id('gallery');
-
     $plus_icon_svg = "<span class=''><img src='". GLP_ADMIN_URL ."/images/icons/plus=icon.svg'></span>";
 ?>
 
@@ -31,7 +29,7 @@
     <div class="glp-heading-box">
         <div class="glp-wordpress-user-manual-box">
             <a href="https://glp-plugin.com/wordpress-photo-gallery-user-manual" target="_blank" style="text-decoration: none;font-size: 13px;">
-                <i class="ays_fa ays_fa_file_text"></i>
+                <i class="ays_glp glp_fa_file_text"></i>
                 <span style="margin-left: 3px;text-decoration: underline;"><?php echo __("View Documentation", $this->plugin_name); ?></span>
             </a>
         </div>
@@ -66,30 +64,5 @@
         </div>
         <br class="clear">
     </div>
- 
-    <!-- <?php if($gallery_max_id <= 3): ?>
-        <div class="glp-create-gallery-video-box" style="margin: 80px auto 30px;">
-            <div class="glp-create-gallery-youtube-video-button-box">
-                <?php echo sprintf( '<a href="?page=%s&action=%s" class="glp-add-new-button-video glp-add-new-button-new-design"> %s ' . __('Add New', $this->plugin_name) . '</a>', esc_attr( $_REQUEST['page'] ), 'add', $plus_icon_svg); ?>
-            </div>
-            <div class="glp-create-gallery-title">
-                <h4><?php echo __( "Create Your First Gallery in Under One Minute", $this->plugin_name ); ?></h4>
-            </div>
-            <div class="glp-create-gallery-youtube-video">                
-                <iframe width="560" height="315" loading="lazy" src="https://www.youtube.com/embed/bRrrBEQVZk8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            </div>
-            <div class="glp-create-gallery-youtube-video-button-box">
-                <?php echo sprintf( '<a href="?page=%s&action=%s" class="glp-add-new-button-video glp-add-new-button-new-design"> %s ' . __('Add New', $this->plugin_name) . '</a>', esc_attr( $_REQUEST['page'] ), 'add', $plus_icon_svg); ?>
-            </div>
-        </div>
-    <?php else: ?>
-        <div class="glp-create-gallery-video-box" style="margin: auto;">
-            <div class="glp-create-gallery-youtube-video-button-box">
-                <?php echo sprintf( '<a href="?page=%s&action=%s" class="glp-add-new-button-video glp-add-new-button-new-design"> %s ' . __('Add New', $this->plugin_name) . '</a>', esc_attr( $_REQUEST['page'] ), 'add', $plus_icon_svg); ?>
-            </div>
-            <div class="glp-create-gallery-youtube-video">
-                <a href="https://www.youtube.com/watch?v=bRrrBEQVZk8" target="_blank" title="YouTube video player" >How to create a Gallery in Under One Minute</a>
-            </div>
-        </div>
-    <?php endif ?> -->
+
 </div>

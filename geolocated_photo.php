@@ -54,9 +54,9 @@ if( ! defined( 'GLP_BASENAME' ) )
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'AYS_GALLERY_VERSION', '1.0.1' );
-define( 'AYS_GALLERY_NAME_VERSION', '5.3.7' );
-define( 'AYS_GALLERY_NAME', 'geolocated-photo' );
+define( 'GLP_GALLERY_VERSION', '1.0.1' );
+define( 'GLP_GALLERY_NAME_VERSION', '5.3.7' );
+define( 'GLP_GALLERY_NAME', 'geolocated-photo' );
 
 /**
  * The code that runs during plugin activation.
@@ -126,7 +126,7 @@ function gpg_get_client_ip() {
 
 function gallery_p_gallery_activation_redirect_method( $plugin ) {
     if( $plugin == plugin_basename( __FILE__ ) ) {
-        exit( wp_redirect( admin_url( 'admin.php?page=' . AYS_GALLERY_NAME ) ) );
+        exit( wp_redirect( admin_url( 'admin.php?page=' . GLP_GALLERY_NAME ) ) );
     }
 }
 

@@ -18,7 +18,7 @@
  *
  * @package    Geolocated_Photo
  * @subpackage Geolocated_Photo/public
- * @author     AYS Pro LLC <info@glp-plugin.com>
+ * @author     GLP <info@glp-plugin.com>
  */
 // TODO le rendu du nomber de colonne ne tient pas compte de la bordure de l'image
 // TODO probleme de responsive sur les images
@@ -1282,7 +1282,7 @@ class Geolocated_Photo_Public {
             // if($image_urls[$key] == ""){
             //     $image_url = "";
             // }else{
-            //     $image_url = "<button type='button' data-url='".$image_urls[$key]."' class='ays_image_url'><i class='glp_fa ays_fa_for_gallery glp_fa_link'></i></button>";
+            //     $image_url = "<button type='button' data-url='".$image_urls[$key]."' class='ays_image_url'><i class='glp_fa glp_fa_for_gallery glp_fa_link'></i></button>";
             // }
             if($show_title_on == 'gallery_image'){
                 $hiconpos = ($show_title=='on')?" style='margin-bottom:40px;' ":"";
@@ -1384,52 +1384,52 @@ class Geolocated_Photo_Public {
                 $hover_icon = "";
                 break;
             case 'search_plus':
-                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_search_plus'></i>";
+                $hover_icon = "<i class='glp_fa glp_fa_for_gallery glp_fa_search_plus'></i>";
                 break;
             case 'search':
-                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_search'></i>";
+                $hover_icon = "<i class='glp_fa glp_fa_for_gallery glp_fa_search'></i>";
                 break;
             case 'plus':
-                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_plus'></i>";
+                $hover_icon = "<i class='glp_fa glp_fa_for_gallery glp_fa_plus'></i>";
                 break;
             case 'plus_circle':
-                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_plus_circle'></i>";
+                $hover_icon = "<i class='glp_fa glp_fa_for_gallery glp_fa_plus_circle'></i>";
                 break;
             case 'plus_square_fas': 
-                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_plus_square_fas'></i>";
+                $hover_icon = "<i class='glp_fa glp_fa_for_gallery glp_fa_plus_square_fas'></i>";
                 break;
             case 'plus_square_far':
-                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_plus_square_far'></i>";
+                $hover_icon = "<i class='glp_fa glp_fa_for_gallery glp_fa_plus_square_far'></i>";
                 break;
             case 'expand':
-                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_expand'></i>";
+                $hover_icon = "<i class='glp_fa glp_fa_for_gallery glp_fa_expand'></i>";
                 break;
             case 'image_fas':
-                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_image_fas'></i>";
+                $hover_icon = "<i class='glp_fa glp_fa_for_gallery glp_fa_image_fas'></i>";
                 break;
             case 'image_far':
-                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_image_far'></i>";
+                $hover_icon = "<i class='glp_fa glp_fa_for_gallery glp_fa_image_far'></i>";
                 break;
             case 'images_fas':
-                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_images_fas'></i>";
+                $hover_icon = "<i class='glp_fa glp_fa_for_gallery glp_fa_images_fas'></i>";
                 break;
             case 'images_far':
-                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_images_far'></i>";
+                $hover_icon = "<i class='glp_fa glp_fa_for_gallery glp_fa_images_far'></i>";
                 break;
             case 'eye_fas':
-                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_eye_fas'></i>";
+                $hover_icon = "<i class='glp_fa glp_fa_for_gallery glp_fa_eye_fas'></i>";
                 break;
             case 'eye_far':
-                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_eye_far'></i>";
+                $hover_icon = "<i class='glp_fa glp_fa_for_gallery glp_fa_eye_far'></i>";
                 break;
             case 'camera_retro':
-                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_camera_retro'></i>";
+                $hover_icon = "<i class='glp_fa glp_fa_for_gallery glp_fa_camera_retro'></i>";
                 break;
             case 'camera':
-                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_camera'></i>";
+                $hover_icon = "<i class='glp_fa glp_fa_for_gallery glp_fa_camera'></i>";
                 break;
             default:
-                $hover_icon = "<i class='glp_fa ays_fa_for_gallery glp_fa_search_plus'></i>";
+                $hover_icon = "<i class='glp_fa glp_fa_for_gallery glp_fa_search_plus'></i>";
                 break;
         }
         return $hover_icon;

@@ -1401,13 +1401,13 @@
             
             switch (state) {
                 case 'true':
-                    $(this).find('i.ays_fa_ellipsis_h').css({
+                    $(this).find('i.glp_fa_ellipsis_h').css({
                         transform: 'rotate(0deg)'
                     });
                     ddmenu.attr('data-expanded', 'false');
                     break;
                 case 'false':
-                    $(this).find('i.ays_fa_ellipsis_h').css({
+                    $(this).find('i.glp_fa_ellipsis_h').css({
                         transform: 'rotate(90deg)'
                     });
                     ddmenu.attr('data-expanded', 'true');

@@ -24,7 +24,7 @@
                 'glp-block-js',
                 GLP_BASE_URL ."/gallery/glp-new.js",
                 array( 'jquery', 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-components', 'wp-editor' ),
-                AYS_GALLERY_VERSION, true
+                GLP_GALLERY_VERSION, true
             );
         }
         else{
@@ -32,7 +32,7 @@
                 'glp-block-js',
                 GLP_BASE_URL ."/gallery/glp-block.js",
                 array( 'jquery', 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-components', 'wp-editor' ),
-                AYS_GALLERY_VERSION, true
+                GLP_GALLERY_VERSION, true
             );
         }
         
@@ -42,7 +42,7 @@
                 'glp-block-css',
                 GLP_BASE_URL ."/gallery/glp-block-new.css",
                 array(),
-                AYS_GALLERY_VERSION, 'all'
+                GLP_GALLERY_VERSION, 'all'
             );
         }
         else{            
@@ -50,7 +50,7 @@
                 'glp-block-css',
                 GLP_BASE_URL ."/gallery/glp-block.css",
                 array(),
-                AYS_GALLERY_VERSION, 'all'
+                GLP_GALLERY_VERSION, 'all'
             );
         }
     }
