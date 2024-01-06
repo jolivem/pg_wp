@@ -46,7 +46,7 @@ class Gallery_Settings_Actions {
                 if(isset($data['glp_tab'])){
                     $tab = "&glp_tab=".$data['glp_tab'];
                 }
-                $url = admin_url('admin.php') . "?page=gallery-photo-gallery-settings" . $tab . '&status=' . $message;
+                $url = admin_url('admin.php') . "?page=glp-settings" . $tab . '&status=' . $message;
                 wp_redirect( $url );
             }
         }

@@ -60,19 +60,19 @@ define( 'AYS_GALLERY_NAME', 'gallery-photo-gallery' );
 
 /**
  * The code that runs during plugin activation.
- * This action is documented in includes/class-gallery-photo-gallery-activator.php
+ * This action is documented in includes/geolocated-photo-activator.php
  */
 function activate_gallery_photo_gallery() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-gallery-photo-gallery-activator.php';
+	require_once plugin_dir_path( __FILE__ ) . 'includes/geolocated-photo-activator.php';
 	Gallery_Photo_Gallery_Activator::ays_gallery_db_check();
 }
 
 /**
  * The code that runs during plugin deactivation.
- * This action is documented in includes/class-gallery-photo-gallery-deactivator.php
+ * This action is documented in includes/geolocated-photo-categories-list-table-deactivator.php
  */
 function deactivate_gallery_photo_gallery() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-gallery-photo-gallery-deactivator.php';
+	require_once plugin_dir_path( __FILE__ ) . 'includes/geolocated-photo-deactivator.php';
 	Gallery_Photo_Gallery_Deactivator::deactivate();
 }
 
@@ -84,7 +84,7 @@ add_action( 'plugins_loaded', 'activate_gallery_photo_gallery' );
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path( __FILE__ ) . 'includes/class-gallery-photo-gallery.php';
+require plugin_dir_path( __FILE__ ) . 'includes/geolocated-photo.php';
 
 
 require plugin_dir_path( __FILE__ ) . 'gallery/glp-block.php';

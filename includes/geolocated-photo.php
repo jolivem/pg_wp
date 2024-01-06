@@ -105,19 +105,19 @@ class Gallery_Photo_Gallery {
         /**
 		 * The class responsible for defining all functions for getting all quiz data
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-gallery-photo-gallery-data.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/geolocated-photo-data.php';
 
 		/**
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-gallery-photo-gallery-loader.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/geolocated-photo-loader.php';
 
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-gallery-photo-gallery-i18n.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/geolocated-photo-i18n.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
@@ -128,23 +128,23 @@ class Gallery_Photo_Gallery {
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/class-gallery-photo-gallery-category-shortcode.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/geolocated-photo-category-shortcode.php';
 
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-gallery-photo-gallery-public.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/geolocated-photo-public.php';
 
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/class-gallery-photo-gallery-extra-shortcode.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/geolocated-photo-extra-shortcode.php';
 
 		/**
          * The class is responsible for showing gallery settings
          */
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/settings/gallery-photo-gallery-settings-actions.php';
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/settings/glp-settings-actions.php';
 
         /*
          * The class is responsible for showing galleries in wordpress default WP_LIST_TABLE style
          */
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/lists/class-gallery-photo-gallery-list-table.php';
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/lists/geolocated-photo-list-table.php';
         
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/lists/class-gallery-photo-gallery-categories-list-table.php';
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/lists/geolocated-photo-categories-list-table.php';
 
 		$this->loader = new Gallery_Photo_Gallery_Loader();
 

@@ -311,16 +311,6 @@ class GLP_Admin {
         //     array($this, 'display_plugin_gpg_featured_plugins_page')
         // );
 
-        // add_submenu_page(
-        //     $this->plugin_name,
-        //     __('PRO Features', $this->plugin_name),
-        //     __('PRO Features', $this->plugin_name),
-        //     'manage_options',
-        //     $this->plugin_name . '-pro-features',
-        //     array($this, 'display_plugin_gpg_features_page')
-        // );
-        
-
     }
 
     /**
@@ -393,22 +383,13 @@ class GLP_Admin {
     }
 
     public function display_plugin_gallery_settings_page(){
-        include_once('partials/settings/gallery-photo-gallery-settings.php');
+        include_once('partials/settings/glp-settings.php');
     }
 
-    // public function display_plugin_gpg_features_page()
-    // {
-    //     include_once('partials/features/gallery-photo-gallery-features-display.php');
-    // }
     public function display_plugin_how_to_use_page()
     {
-        include_once('partials/how-to-use/gallery-photo-gallery-how-to-use.php');
+        include_once('partials/how-to-use/glp-how-to-use.php');
     }
-    
-    // public function display_plugin_gpg_featured_plugins_page()
-    // {
-    //     include_once('partials/features/gallery-photo-gallery-featured-plugins.php');
-    // }
 
     public static function set_screen( $status, $option, $value ) {
         return $value;
