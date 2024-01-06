@@ -296,7 +296,7 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
 <div class="wrap">
     <div class="glp-heading-box">
         <div class="glp-wordpress-user-manual-box">
-            <a href="https://ays-pro.com/wordpress-photo-gallery-user-manual" target="_blank" style="text-decoration: none;font-size: 13px;">
+            <a href="https://glp-plugin.com/wordpress-photo-gallery-user-manual" target="_blank" style="text-decoration: none;font-size: 13px;">
                 <i class="ays_fa ays_fa_file_text"></i>
                 <span style="margin-left: 3px;text-decoration: underline;"><?php echo __("View Documentation", $this->plugin_name); ?></span>
             </a>
@@ -801,7 +801,7 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                         <p><?php //echo __('Create attractive photo galleries with our',$this->plugin_name) ; ?> <span>#1 </span><?php //echo __('WordPress Gallery plugin.',$this->plugin_name) ; ?></p>
                     </div>
                     <div>
-                        <a href="https://ays-pro.com/wordpress/photo-gallery" class="button button-primary ays-button" id="ays-button-top" target="_blank" style="height: 32px; align-items: center; font-weight: 500; ">Get Now!</a>
+                        <a href="https://glp-plugin.com/wordpress/photo-gallery" class="button button-primary ays-button" id="ays-button-top" target="_blank" style="height: 32px; align-items: center; font-weight: 500; ">Get Now!</a>
                     </div>
                 </div>
             </div> -->
@@ -2048,7 +2048,7 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                 <div class="col-sm-12 only_pro">
                     <div class="pro_features">
                         <div>                            
-                            <a href="https://ays-pro.com/wordpress/photo-gallery/" target="_blank" class="glp-new-upgrade-button-link">
+                            <a href="https://glp-plugin.com/wordpress/photo-gallery/" target="_blank" class="glp-new-upgrade-button-link">
                                 <div class="glp-new-upgrade-button-box">
                                     <div>
                                         <img src="<?php echo GLP_ADMIN_URL.'/images/icons/gpg_locked_24x24.svg'?>">
@@ -2059,7 +2059,7 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                             </a>
                             <div class="glp-center-big-main-button-box glp-new-big-button-flex">
                                 <div class="glp-center-big-upgrade-button-box">
-                                    <a href="https://ays-pro.com/wordpress/photo-gallery/" target="_blank" class="glp-new-upgrade-button-link">
+                                    <a href="https://glp-plugin.com/wordpress/photo-gallery/" target="_blank" class="glp-new-upgrade-button-link">
                                         <div class="glp-center-new-big-upgrade-button">
                                             <img src="<?php echo GLP_ADMIN_URL.'/images/icons/gpg_locked_24x24.svg'?>" class="glp-new-button-img-hide">
                                             <img src="<?php echo GLP_ADMIN_URL.'/images/icons/gpg_unlocked_24x24.svg'?>" class="glp-new-upgrade-button-hover">  
@@ -2077,7 +2077,7 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
         <!-- <div id="tab5" class="only_pro ays-gallery-tab-content <?php echo ($glp_tab == 'tab5') ? 'ays-gallery-tab-content-active' : ''; ?>" style="padding-top: 15px;">
             <div class="pro_features">
                 <div>                    
-                    <a href="https://ays-pro.com/wordpress/photo-gallery/" target="_blank" class="glp-new-upgrade-button-link">
+                    <a href="https://glp-plugin.com/wordpress/photo-gallery/" target="_blank" class="glp-new-upgrade-button-link">
                         <div class="glp-new-upgrade-button-box">
                             <div>
                                 <img src="<?php echo GLP_ADMIN_URL.'/images/icons/gpg_locked_24x24.svg'?>">
@@ -2088,7 +2088,7 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                     </a>
                     <div class="glp-center-big-main-button-box glp-new-big-button-flex">
                         <div class="glp-center-big-upgrade-button-box">
-                            <a href="https://ays-pro.com/wordpress/photo-gallery/" target="_blank" class="glp-new-upgrade-button-link">
+                            <a href="https://glp-plugin.com/wordpress/photo-gallery/" target="_blank" class="glp-new-upgrade-button-link">
                                 <div class="glp-center-new-big-upgrade-button">
                                     <img src="<?php echo GLP_ADMIN_URL.'/images/icons/gpg_locked_24x24.svg'?>" class="glp-new-button-img-hide">
                                     <img src="<?php echo GLP_ADMIN_URL.'/images/icons/gpg_unlocked_24x24.svg'?>" class="glp-new-upgrade-button-hover">  

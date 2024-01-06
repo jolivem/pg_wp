@@ -8,17 +8,17 @@ ob_start();
  * registers the activation and deactivation functions, and defines a function
  * that starts the plugin.
  *
- * @link              https://ays-pro.com/
+ * @link              https://glp-plugin.com/
  * @since             1.0.0
  * @package           GLI_Photo_Gallery
  *
  * @wordpress-plugin
  * Plugin Name:       GLP plugin
- * Plugin URI:        https://ays-pro.com/wordpress/photo-gallery
+ * Plugin URI:        https://glp-plugin.com/wordpress/photo-gallery
  * Description:       Display geolocation vignettes on photos.
  * Version:           5.4.1
  * Author:            Photo Gallery Team
- * Author URI:        https://ays-pro.com/
+ * Author URI:        https://glp-plugin.com/
  * License:           GPL-2.0+
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       geolocated-photo

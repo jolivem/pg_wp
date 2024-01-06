@@ -3,7 +3,7 @@
 /**
  * Register all actions and filters for the plugin
  *
- * @link       https://ays-pro.com/
+ * @link       https://glp-plugin.com/
  * @since      1.0.0
  *
  * @package    Gallery_Photo_Gallery
@@ -19,7 +19,7 @@
  *
  * @package    Gallery_Photo_Gallery
  * @subpackage Gallery_Photo_Gallery/includes
- * @author     AYS Pro LLC <info@ays-pro.com>
+ * @author     AYS Pro LLC <info@glp-plugin.com>
  */
 class Gallery_Photo_Gallery_Loader {
 

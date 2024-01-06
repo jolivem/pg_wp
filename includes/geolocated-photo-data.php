@@ -2,7 +2,7 @@
 /**
  * The public-facing functionality of the plugin.
  *
- * @link       http://ays-pro.com/
+ * @link       http://glp-plugin.com/
  * @since      1.0.0
  *
  * @package    Gallery_Photo_Gallery
@@ -17,7 +17,7 @@
  *
  * @package    Gallery_Photo_Gallery
  * @subpackage Gallery_Photo_Gallery/includes
- * @author     AYS Pro LLC <info@ays-pro.com>
+ * @author     AYS Pro LLC <info@glp-plugin.com>
  */
 class Photo_Gallery_Data {    
 

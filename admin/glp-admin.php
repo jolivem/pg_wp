@@ -3,7 +3,7 @@
 /**
  * The admin-specific functionality of the plugin.
  *
- * @link       https://ays-pro.com/
+ * @link       https://glp-plugin.com/
  * @since      1.0.0
  *
  * @package    Gallery_Photo_Gallery
@@ -18,7 +18,7 @@
  *
  * @package    Gallery_Photo_Gallery
  * @subpackage Gallery_Photo_Gallery/admin
- * @author     AYS Pro LLC <info@ays-pro.com>
+ * @author     AYS Pro LLC <info@glp-plugin.com>
  */
 class GLP_Admin {
 
@@ -284,14 +284,14 @@ class GLP_Admin {
 
         add_action("load-$hook_gallery_categories", array($this, 'screen_option_gallery_cats'));
 
-        $hook_settings = add_submenu_page( $this->plugin_name,
-            __('General Settings', $this->plugin_name),
-            __('General Settings', $this->plugin_name),
-            'manage_options',
-            $this->plugin_name . '-settings',
-            array($this, 'display_plugin_gallery_settings_page') 
-        );
-        add_action("load-$hook_settings", array($this, 'screen_option_settings'));        
+        // $hook_settings = add_submenu_page( $this->plugin_name,
+        //     __('General Settings', $this->plugin_name),
+        //     __('General Settings', $this->plugin_name),
+        //     'manage_options',
+        //     $this->plugin_name . '-settings',
+        //     array($this, 'display_plugin_gallery_settings_page') 
+        // );
+        // add_action("load-$hook_settings", array($this, 'screen_option_settings'));        
 
 
     }
@@ -309,7 +309,7 @@ class GLP_Admin {
         $settings_link = array(
             '<a href="' . admin_url( 'options-general.php?page=' . $this->plugin_name ) . '">' . __('Settings', $this->plugin_name) . '</a>'
             // '<a href="https://ays-demo.com/wordpress-photo-gallery-plugin-free-demo/" target="_blank">' . __('Demo', $this->plugin_name) . '</a>',
-            // '<a href="https://ays-pro.com/wordpress/photo-gallery?utm_source=dashboard-gallery&utm_medium=free-gallery&utm_campaign=buy-now-gallery" target="_blank" class="ays-admin-plugins-upgrade-link" style="font-weight:bold;">' . __('Upgrade 20% Sale', $this->plugin_name) . '</a>',
+            // '<a href="https://glp-plugin.com/wordpress/photo-gallery?utm_source=dashboard-gallery&utm_medium=free-gallery&utm_campaign=buy-now-gallery" target="_blank" class="ays-admin-plugins-upgrade-link" style="font-weight:bold;">' . __('Upgrade 20% Sale', $this->plugin_name) . '</a>',
         );
         return array_merge(  $settings_link, $links );
 
@@ -365,9 +365,9 @@ class GLP_Admin {
         $this->settings_obj = new Gallery_Settings_Actions($this->plugin_name);
     }
 
-    public function display_plugin_gallery_settings_page(){
-        include_once('partials/settings/glp-settings.php');
-    }
+    // public function display_plugin_gallery_settings_page(){
+    //     include_once('partials/settings/glp-settings.php');
+    // }
 
     public static function set_screen( $status, $option, $value ) {
         return $value;

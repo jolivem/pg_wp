@@ -3,7 +3,7 @@
 /**
  * The public-facing functionality of the plugin.
  *
- * @link       https://ays-pro.com/
+ * @link       https://glp-plugin.com/
  * @since      1.0.0
  *
  * @package    Gallery_Photo_Gallery
@@ -18,7 +18,7 @@
  *
  * @package    Gallery_Photo_Gallery
  * @subpackage Gallery_Photo_Gallery/public
- * @author     AYS Pro LLC <info@ays-pro.com>
+ * @author     AYS Pro LLC <info@glp-plugin.com>
  */
 // TODO le rendu du nomber de colonne ne tient pas compte de la bordure de l'image
 // TODO probleme de responsive sur les images

@@ -794,7 +794,7 @@ class Galleries_List_Table extends WP_List_Table{
         elseif ( "deleted" == $status )
             $updated_message = esc_html( __( "Gallery deleted.", $this->plugin_name ) );
         elseif ( "error" == $status )
-            $updated_message = __( "You're not allowed to add gallery for more galleries please checkout to ", $this->plugin_name )."<a href='http://ays-pro.com/wordpress/photo-gallery' target='_blank'>PRO ".__( "version", $this->plugin_name )."</a>.";
+            $updated_message = __( "You're not allowed to add gallery for more galleries please checkout to ", $this->plugin_name )."<a href='http://glp-plugin.com/wordpress/photo-gallery' target='_blank'>PRO ".__( "version", $this->plugin_name )."</a>.";
 
         if ( empty( $updated_message ) )
             return;

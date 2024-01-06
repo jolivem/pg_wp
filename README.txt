@@ -14,22 +14,22 @@ License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 ### Wordpress Photo Gallery plugin
 
-* [WordPress Photo Gallery pricing](https://ays-pro.com/wordpress/photo-gallery)
+* [WordPress Photo Gallery pricing](https://glp-plugin.com/wordpress/photo-gallery)
 * [Photo Gallery Free Demo](https://bit.ly/3rAtE0M)
 * [Photo Gallery Pro Demo](https://bit.ly/3mXcFSS)
-* [Photo Gallery Documentation](https://ays-pro.com/wordpress-photo-gallery-user-manual)
+* [Photo Gallery Documentation](https://glp-plugin.com/wordpress-photo-gallery-user-manual)
 
 
 https://www.youtube.com/watch?v=4-TU48pc0R4
 
 
-Our [Wordpress Photo Gallery](https://ays-pro.com/wordpress/photo-gallery) is a cool responsive image gallery plugin with awesome layout options, stunning gallery and album views, designed with features that allow you not to just show photos in a beautiful way but to deliver the message hidden in them.
+Our [Wordpress Photo Gallery](https://glp-plugin.com/wordpress/photo-gallery) is a cool responsive image gallery plugin with awesome layout options, stunning gallery and album views, designed with features that allow you not to just show photos in a beautiful way but to deliver the message hidden in them.
 
 Simple in use, mobile-friendly, and user-friendly - it gives you the opportunity to create unlimited image galleries and easily add unlimited images in each gallery. You can use the galleries in different posts and pages with a very simple shortcode. When creating a new gallery, you can set the name, add a description, specify gallery width in percents and gallery height in pixels. You can even set the **hover effect (more than 10 cool hover effects)** and pick images from the WordPress media library. Each image can have a title, a description, and even a URL to give the viewer a better understanding of what the photo is all about.
 
 == What's more? ==
 
-Ah, yes, you can choose between **grid, masonry and mosaic views** (30+ views in [Pro version](https://ays-pro.com/wordpress/photo-gallery) ). You can use the plugin for all sorts of different intentions, both professional and amateur. The Photo Gallery plugin allows creating awesome portfolios, albums and slideshows about works of **photographers, architects, make-up artists, programmers, designers**, etc. Find more about this amazing Wordpress Photo Gallery plugin features below ( be sure to check also the [documentation](https://ays-pro.com/wordpress-photo-gallery-user-manual) to find the feature you are looking for or ask to our support team), have a look at the plugin [Free](https://ays-demo.com/wordpress-photo-gallery-plugin-free-demo/) and [Pro](https://ays-demo.com/wordpress-photo-gallery-plugin-pro-demo/) demos and give it a try. We are sure you won't be disappointed!
+Ah, yes, you can choose between **grid, masonry and mosaic views** (30+ views in [Pro version](https://glp-plugin.com/wordpress/photo-gallery) ). You can use the plugin for all sorts of different intentions, both professional and amateur. The Photo Gallery plugin allows creating awesome portfolios, albums and slideshows about works of **photographers, architects, make-up artists, programmers, designers**, etc. Find more about this amazing Wordpress Photo Gallery plugin features below ( be sure to check also the [documentation](https://glp-plugin.com/wordpress-photo-gallery-user-manual) to find the feature you are looking for or ask to our support team), have a look at the plugin [Free](https://ays-demo.com/wordpress-photo-gallery-plugin-free-demo/) and [Pro](https://ays-demo.com/wordpress-photo-gallery-plugin-pro-demo/) demos and give it a try. We are sure you won't be disappointed!
 
 == Check out awesome Free layouts: ==
 
@@ -51,7 +51,7 @@ If random arrangement is selected, every time when you reload the page photo gal
 * **Images loading**: Global Loading and Lazy Loading.  Global loading is the load of the Gallery with images (when the loading finishes the Gallery and images open together) and Lazy loading is when the Gallery opens but the images are being loaded one by one. And this will not slow down your site.
 * **Gallery width**:  This parameter is useful because people use gadgets and different devices for the Internet (for 100%, leave blank).This is the fully responsive Picture Gallery.
 * **Column count**: You can choose the number of columns (only in grid view).
-* **Gallery type**: **Grid view**, **Mosaic view** and **Masonry view**. Mosaic and Masonry view will provide a beautiful effect to your Gallery. And the Grid view, of course, which is a default view. (there are 30+ awesome views in [Premium version](https://ays-pro.com/wordpress/photo-gallery))
+* **Gallery type**: **Grid view**, **Mosaic view** and **Masonry view**. Mosaic and Masonry view will provide a beautiful effect to your Gallery. And the Grid view, of course, which is a default view. (there are 30+ awesome views in [Premium version](https://glp-plugin.com/wordpress/photo-gallery))
 * **Hover effects**: You are free to choose between many parameters for hover - Hover animation, hover opacity and color, hover zoom effect, hover icon and icon size.  
 * **More features in the Premium version.**
 
@@ -101,7 +101,7 @@ https://www.youtube.com/watch?v=zbNyMsN81rU
 * Style settings
 * **Responsive design**
 
-**[PRO](https://ays-pro.com/wordpress/photo-gallery) Features**
+**[PRO](https://glp-plugin.com/wordpress/photo-gallery) Features**
 
 * Includes ALL Free version Features and
 * **30+ awesome views**
@@ -120,7 +120,7 @@ https://www.youtube.com/watch?v=zbNyMsN81rU
 * More on the way ...
 
 
-Don't forget, in case of any problems or upcoming questions feel free to contact us via e-mail **info@ays-pro.com** or via [FREE SUPPORT FORUM](https://wordpress.org/support/plugin/geolocated-photo/).
+Don't forget, in case of any problems or upcoming questions feel free to contact us via e-mail **info@glp-plugin.com** or via [FREE SUPPORT FORUM](https://wordpress.org/support/plugin/geolocated-photo/).
 
 
 == Screenshots ==
@@ -185,7 +185,7 @@ You can add and create an unlimited number of Galleries with our WordPress Photo
 
 = 6. What Gallery views are there? =
 
-The Photo Gallery has 30+ awesome views. In the Free version, you can find 3 types of gallery views - Grid, Mosaic and Masonry. The rest are available in the [Pro version](https://ays-pro.com/wordpress/photo-gallery).
+The Photo Gallery has 30+ awesome views. In the Free version, you can find 3 types of gallery views - Grid, Mosaic and Masonry. The rest are available in the [Pro version](https://glp-plugin.com/wordpress/photo-gallery).
 
 = 7. Will the speed of the page fall because of many images? =
 
