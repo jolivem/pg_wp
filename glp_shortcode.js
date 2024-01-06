@@ -15,7 +15,7 @@
   			ed.addCommand( 'glp_button_cmd', function() {
   				ed.windowManager.open(
   				{
-  					title : 'Gallery Photo Gallery',
+  					title : 'Geolocated Photos',
   					file : ajaxurl + '?action=gen_glp_shortcode',
   					width : 500,
   					height : 300,

@@ -256,22 +256,22 @@ class GLP_Admin {
         
         $hook_gallery = add_submenu_page(
             $this->plugin_name,
-            __('All Galleries', $this->plugin_name),
-            __('All Galleries', $this->plugin_name),
+            __('Galleries', $this->plugin_name),
+            __('Galleries', $this->plugin_name),
             'manage_options',
             $this->plugin_name,
             array($this, 'display_plugin_setup_page')
         );
         add_action( "load-$hook_gallery", array( $this, 'screen_option_gallery' ) );
 
-        add_submenu_page(
-            $this->plugin_name,
-            __('Add new', $this->plugin_name),
-            __('Add new', $this->plugin_name),
-            'manage_options',
-            $this->plugin_name . '-add-new',
-            array($this, 'display_plugin_add_new_gallery_page')
-        );
+        // add_submenu_page(
+        //     $this->plugin_name,
+        //     __('Add new', $this->plugin_name),
+        //     __('Add new', $this->plugin_name),
+        //     'manage_options',
+        //     $this->plugin_name . '-add-new',
+        //     array($this, 'display_plugin_add_new_gallery_page')
+        // );
 
         $hook_gallery_categories = add_submenu_page(
             $this->plugin_name,
@@ -528,7 +528,7 @@ class GLP_Admin {
     }
     
     public function vc_before_init_actions() {
-        require_once( GLP_DIR.'pb_templates/gallery_photo_gallery_wpbvc.php' );
+        require_once( GLP_DIR.'pb_templates/geolocated-photo-wpbvc.php' );
     }
 
     public function gpg_el_widgets_registered() {
@@ -542,10 +542,10 @@ class GLP_Admin {
                     $elementor = Elementor\Plugin::instance();
                     if ( isset( $elementor->widgets_manager ) ) {
                         if ( method_exists( $elementor->widgets_manager, 'register_widget_type' ) ) {
-                            $widget_file   = 'plugins/elementor/gallery_photo_gallery_elementor.php';
+                            $widget_file   = 'plugins/elementor/geolocated-photo-elementor.php';
                             $template_file = locate_template( $widget_file );
                             if ( !$template_file || !is_readable( $template_file ) ) {
-                                $template_file = GLP_DIR.'pb_templates/gallery_photo_gallery_elementor.php';
+                                $template_file = GLP_DIR.'pb_templates/geolocated-photo-elementor.php';
                             }
                             if ( $template_file && is_readable( $template_file ) ) {
                                 require_once $template_file;
@@ -802,10 +802,10 @@ class GLP_Admin {
         return $result;
     }
 
-    public function display_plugin_add_new_gallery_page() {
+/*    public function display_plugin_add_new_gallery_page() {
         $add_new_gpg_url = admin_url('admin.php?page=' . $this->plugin_name . '&action=add');
         wp_redirect($add_new_gpg_url);
-    }
+    }*/
 
     public function glp_dismiss_button(){
 

@@ -142,9 +142,9 @@ class Gallery_Photo_Gallery {
         /*
          * The class is responsible for showing galleries in wordpress default WP_LIST_TABLE style
          */
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/lists/geolocated-photo-list-table.php';
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/geolocated-photo-list-table.php';
         
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/lists/geolocated-photo-categories-list-table.php';
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/geolocated-photo-categories-list-table.php';
 
 		$this->loader = new Gallery_Photo_Gallery_Loader();
 

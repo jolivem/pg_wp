@@ -15,7 +15,7 @@ ob_start();
  * @wordpress-plugin
  * Plugin Name:       GLP plugin
  * Plugin URI:        https://ays-pro.com/wordpress/photo-gallery
- * Description:       If you want to be different and represent your photos in a cool way, then our Photo Gallery plugin is perfect for you.
+ * Description:       Display geolocation vignettes on photos.
  * Version:           5.4.1
  * Author:            Photo Gallery Team
  * Author URI:        https://ays-pro.com/
@@ -84,7 +84,7 @@ add_action( 'plugins_loaded', 'activate_gallery_photo_gallery' );
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path( __FILE__ ) . 'includes/geolocated-photo.php';
+require plugin_dir_path( __FILE__ ) . 'includes/geolocated-photo-core.php';
 
 
 require plugin_dir_path( __FILE__ ) . 'gallery/glp-block.php';
