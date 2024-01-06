@@ -195,17 +195,17 @@ var supports = {
     customClassName: false
 };
 
-registerBlockType( 'gallery-photo-gallery/gallery', {
-    title: __('Gallery - Photo Gallery'),
+registerBlockType( 'geolocated-photo/gallery', {
+    title: __('Geolocated Photos'),
     category: 'common',
     icon: iconEl,
     supports: supports,
     edit: withSelect( function( select ) {
-        if(select( 'core/blocks' ).getBlockType( 'gallery-photo-gallery/gallery' ).attributes.idner &&
-           (select( 'core/blocks' ).getBlockType( 'gallery-photo-gallery/gallery' ).attributes.idner != undefined ||
-            select( 'core/blocks' ).getBlockType( 'gallery-photo-gallery/gallery' ).attributes.idner != null ) ){
+        if(select( 'core/blocks' ).getBlockType( 'geolocated-photo/gallery' ).attributes.idner &&
+           (select( 'core/blocks' ).getBlockType( 'geolocated-photo/gallery' ).attributes.idner != undefined ||
+            select( 'core/blocks' ).getBlockType( 'geolocated-photo/gallery' ).attributes.idner != null ) ){
             return {
-                galleries: select( 'core/blocks' ).getBlockType( 'gallery-photo-gallery/gallery' ).attributes.idner
+                galleries: select( 'core/blocks' ).getBlockType( 'geolocated-photo/gallery' ).attributes.idner
             };
         }else{
             return {
@@ -301,7 +301,7 @@ registerBlockType( 'gallery-photo-gallery/gallery', {
             ),
             el(ServerSideRender, {
                 key: "editable",
-                block: "gallery-photo-gallery/gallery",
+                block: "geolocated-photo/gallery",
                 attributes:  props.attributes
             }),
             el(
@@ -338,7 +338,7 @@ registerBlockType( 'gallery-photo-gallery/gallery', {
             ),
             el(ServerSideRender, {
                 key: "editable",
-                block: "gallery-photo-gallery/gallery",
+                block: "geolocated-photo/gallery",
                 attributes:  props.attributes
             })
         );
@@ -366,7 +366,7 @@ function resolveBlocks(id){
 
     if ( Array.isArray(blocks) ) {
         blocks.map( function(block){
-            if(block.name == 'gallery-photo-gallery/gallery'){
+            if(block.name == 'geolocated-photo/gallery'){
                 if (!block.isValid) {
                     var newBlock = createBlock( block.name, block.attributes, block.innerblocks);
                     dispatch('core/block-editor').replaceBlock( block.clientId, newBlock );

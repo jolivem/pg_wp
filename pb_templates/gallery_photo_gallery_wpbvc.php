@@ -24,7 +24,7 @@ if( class_exists( 'WPBakeryShortCode' ) ) {
                     'base' => 'vc_galleryphotogallery',
                     'description' => __('The Best Gallery - Photo Gallery Ever', 'text-domain'),
                     'category' => __('Gallery - Photo Gallery by AYS', 'text-domain'),
-                    'icon' => AYS_GPG_ADMIN_URL . '/images/gall_icon.png',
+                    'icon' => GLP_ADMIN_URL . '/images/gall_icon.png',
                     'params' => array(
                         array(
                             'type' => 'dropdown',

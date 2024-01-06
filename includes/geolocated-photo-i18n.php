@@ -35,7 +35,7 @@ class Gallery_Photo_Gallery_i18n {
 	public function load_plugin_textdomain() {
 
 		load_plugin_textdomain(
-			'gallery-photo-gallery',
+			'geolocated-photo',
 			false,
 			dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages/'
 		);

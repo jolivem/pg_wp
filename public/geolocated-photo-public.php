@@ -118,7 +118,7 @@ class Gallery_Photo_Gallery_Public {
         wp_enqueue_script( $this->plugin_name.'-masonry.pkgd.min.js', plugin_dir_url( __FILE__ ) . 'js/masonry.pkgd.min.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-leaflet.js', 'https://unpkg.com/leaflet/dist/leaflet.js', array('jquery'),  $this->version, true);
         wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/glp-public.js', array( 'jquery' ), $this->version, true );
-        wp_localize_script($this->plugin_name, 'ays_vars', array('base_url' => AYS_GPG_BASE_URL));
+        wp_localize_script($this->plugin_name, 'ays_vars', array('base_url' => GLP_BASE_URL));
         // wp_localize_script($this->plugin_name, 'gal_ajax_public', array('ajax_url' => admin_url('admin-ajax.php')));
 
     }
@@ -385,12 +385,12 @@ class Gallery_Photo_Gallery_Public {
                         </div>";
                 }else{
                     $ays_images_all_loaded = "<div class='gpg_loader_".$id." glp_loader'>
-                        <img src='".AYS_GPG_PUBLIC_URL."images/flower.svg'>
+                        <img src='".GLP_PUBLIC_URL."images/flower.svg'>
                     </div>";
                 }
             }else{
                 $ays_images_all_loaded = "<div class='gpg_loader_".$id." glp_loader'>
-                        <img src='".AYS_GPG_PUBLIC_URL."images/$ays_gallery_loader.svg'>
+                        <img src='".GLP_PUBLIC_URL."images/$ays_gallery_loader.svg'>
                     </div>";
             }
             $ays_gal_loader_class = ".gpg_loader_".$id."";
@@ -904,7 +904,7 @@ class Gallery_Photo_Gallery_Public {
                                             'padding-top': 'calc(".(($view == 'grid')?100:50)."% - 25px)',
                                         });
                                         $(this).parent().find('.ays_image_loading_div').find('img').css('position', 'static');
-                                        $(this).parent().find('.ays_image_loading_div').find('img').attr('src', '".AYS_GPG_PUBLIC_URL."/images/error-404.png');
+                                        $(this).parent().find('.ays_image_loading_div').find('img').attr('src', '".GLP_PUBLIC_URL."/images/error-404.png');
                                         var ays_err_massage = $('<span>Image not found!</span>');
                                         var img_parent = $(this).parent().find('.ays_image_loading_div').eq(0);
                                         img_parent.append(ays_err_massage);
@@ -1170,7 +1170,7 @@ class Gallery_Photo_Gallery_Public {
             // Add None
             //$dict["None"] = "None";
 
-            $worldfile = AYS_GPG_DIR . 'assets/world.json';
+            $worldfile = GLP_DIR . 'assets/world.json';
 
             $json = file_get_contents($worldfile); 
             if ($json === false) {
@@ -1712,10 +1712,10 @@ class Gallery_Photo_Gallery_Public {
                 $ays_images_loader = "                
                     <img src='". $gallery_loader_custom_gif ."' style='". $gallery_loader_custom_gif_width_css ."'>";
             }else{
-                $ays_images_loader = "<img src='".AYS_GPG_PUBLIC_URL."images/flower.svg'>";                
+                $ays_images_loader = "<img src='".GLP_PUBLIC_URL."images/flower.svg'>";                
             }
         }else{
-            $ays_images_loader = "<img src='".AYS_GPG_PUBLIC_URL."images/$ays_gallery_loader.svg'>";
+            $ays_images_loader = "<img src='".GLP_PUBLIC_URL."images/$ays_gallery_loader.svg'>";
         }
 
         if ((array_search('', $image_dates) !== 0) && (count($images) != count($image_dates))) {

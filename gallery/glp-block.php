@@ -22,7 +22,7 @@
         if( $versionCompare ){
             wp_enqueue_script(
                 'glp-block-js',
-                AYS_GPG_BASE_URL ."/gallery/glp-new.js",
+                GLP_BASE_URL ."/gallery/glp-new.js",
                 array( 'jquery', 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-components', 'wp-editor' ),
                 AYS_GALLERY_VERSION, true
             );
@@ -30,7 +30,7 @@
         else{
             wp_enqueue_script(
                 'glp-block-js',
-                AYS_GPG_BASE_URL ."/gallery/glp-block.js",
+                GLP_BASE_URL ."/gallery/glp-block.js",
                 array( 'jquery', 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-components', 'wp-editor' ),
                 AYS_GALLERY_VERSION, true
             );
@@ -40,7 +40,7 @@
         if( $versionCompare ){            
             wp_enqueue_style(
                 'glp-block-css',
-                AYS_GPG_BASE_URL ."/gallery/glp-block-new.css",
+                GLP_BASE_URL ."/gallery/glp-block-new.css",
                 array(),
                 AYS_GALLERY_VERSION, 'all'
             );
@@ -48,7 +48,7 @@
         else{            
             wp_enqueue_style(
                 'glp-block-css',
-                AYS_GPG_BASE_URL ."/gallery/glp-block.css",
+                GLP_BASE_URL ."/gallery/glp-block.css",
                 array(),
                 AYS_GALLERY_VERSION, 'all'
             );
@@ -59,7 +59,7 @@
         
         global $wpdb;
         $block_name = 'gallery';
-        $block_namespace = 'gallery-photo-gallery/' . $block_name;
+        $block_namespace = 'geolocated-photo/' . $block_name;
         
         $sql = "SELECT * FROM ". $wpdb->prefix . "glp_gallery";
         $results = $wpdb->get_results($sql, "ARRAY_A");

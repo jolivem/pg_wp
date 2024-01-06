@@ -72,7 +72,7 @@ class Gallery_Photo_Gallery {
 		} else {
 			$this->version = '3.0.4';
 		}
-		$this->plugin_name = 'gallery-photo-gallery';
+		$this->plugin_name = 'geolocated-photo';
 
 		$this->load_dependencies();
 		$this->set_locale();

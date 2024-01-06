@@ -13,7 +13,7 @@ ob_start();
  * @package           GLI_Photo_Gallery
  *
  * @wordpress-plugin
- * Plugin Name:       Gallery - Photo Gallery
+ * Plugin Name:       GLP plugin
  * Plugin URI:        https://ays-pro.com/wordpress/photo-gallery
  * Description:       If you want to be different and represent your photos in a cool way, then our Photo Gallery plugin is perfect for you.
  * Version:           5.4.1
@@ -21,7 +21,7 @@ ob_start();
  * Author URI:        https://ays-pro.com/
  * License:           GPL-2.0+
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:       gallery-photo-gallery
+ * Text Domain:       geolocated-photo
  * Domain Path:       /languages
  */
 
@@ -30,24 +30,24 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-if( ! defined( 'AYS_GPG_BASE_URL' ) ) {
-    define( 'AYS_GPG_BASE_URL', plugin_dir_url(__FILE__ ) );
+if( ! defined( 'GLP_BASE_URL' ) ) {
+    define( 'GLP_BASE_URL', plugin_dir_url(__FILE__ ) );
 }
 
-if( ! defined( 'AYS_GPG_DIR' ) )
-    define( 'AYS_GPG_DIR', plugin_dir_path( __FILE__ ) );
+if( ! defined( 'GLP_DIR' ) )
+    define( 'GLP_DIR', plugin_dir_path( __FILE__ ) );
 
-if( ! defined( 'AYS_GPG_ADMIN_URL' ) ) {
-    define( 'AYS_GPG_ADMIN_URL', plugin_dir_url(__FILE__ ) . 'admin/' );
+if( ! defined( 'GLP_ADMIN_URL' ) ) {
+    define( 'GLP_ADMIN_URL', plugin_dir_url(__FILE__ ) . 'admin/' );
 }
 
 
-if( ! defined( 'AYS_GPG_PUBLIC_URL' ) ) {
-    define( 'AYS_GPG_PUBLIC_URL', plugin_dir_url(__FILE__ ) . 'public/' );
+if( ! defined( 'GLP_PUBLIC_URL' ) ) {
+    define( 'GLP_PUBLIC_URL', plugin_dir_url(__FILE__ ) . 'public/' );
 }
 
-if( ! defined( 'AYS_GPG_BASENAME' ) )
-    define( 'AYS_GPG_BASENAME', plugin_basename( __FILE__ ) );
+if( ! defined( 'GLP_BASENAME' ) )
+    define( 'GLP_BASENAME', plugin_basename( __FILE__ ) );
 
 /**
  * Currently plugin version.
@@ -56,7 +56,7 @@ if( ! defined( 'AYS_GPG_BASENAME' ) )
  */
 define( 'AYS_GALLERY_VERSION', '1.0.1' );
 define( 'AYS_GALLERY_NAME_VERSION', '5.3.7' );
-define( 'AYS_GALLERY_NAME', 'gallery-photo-gallery' );
+define( 'AYS_GALLERY_NAME', 'geolocated-photo' );
 
 /**
  * The code that runs during plugin activation.

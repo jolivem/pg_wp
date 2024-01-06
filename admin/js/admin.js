@@ -1,6 +1,6 @@
 (function($) {
     'use strict';   
-    $(document).on('click', '[data-slug="gallery-photo-gallery"] .deactivate a', function () {    
+    $(document).on('click', '[data-slug="geolocated-photo"] .deactivate a', function () {    
         swal({
             html:"<h2>Do you want to upgrade to Pro version or permanently delete the plugin?</h2><ul><li>Upgrade: Your data will be saved for upgrade.</li><li>Deactivate: Your data will be deleted completely.</li></ul>",
             footer: '<a href="javascript:void(0);" class="ays-gallery-photo-gallery-temporary-deactivation">Temporary deactivation</a>',
@@ -29,7 +29,7 @@
                 dataType: 'json',
                 data: data,
                 success:function () {
-                    window.location = $(document).find('[data-slug="gallery-photo-gallery"]').find('.deactivate').find('a').attr('href');
+                    window.location = $(document).find('[data-slug="geolocated-photo"]').find('.deactivate').find('a').attr('href');
                 }
             });
         });

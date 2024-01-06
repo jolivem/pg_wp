@@ -3,10 +3,10 @@ namespace Elementor;
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 class Widget_GPG_Custom_Elementor_Thing extends Widget_Base {
     public function get_name() {
-        return 'gallery-photo-gallery';
+        return 'geolocated-photo';
     }
     public function get_title() {
-        return __( 'Gallery - Photo Gallery', 'elementor-custom-element' );
+        return __( 'Geolocated Photos', 'elementor-custom-element' );
     }
     public function get_icon() {
         // Icon name from the Elementor font file, as per http://dtbaker.net/web-development/creating-your-own-custom-elementor-widgets/
@@ -16,7 +16,7 @@ class Widget_GPG_Custom_Elementor_Thing extends Widget_Base {
         $this->start_controls_section(
             'section_my_custom_gpg',
             array(
-                'label' => esc_html__( 'Gallery - Photo Gallery', 'elementor' ),
+                'label' => esc_html__( 'Geolocated Photos', 'elementor' ),
             )
         );
 

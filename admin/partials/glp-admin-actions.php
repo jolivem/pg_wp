@@ -213,7 +213,7 @@ $gallery_img_position = (isset($gal_options['gallery_img_position']) && $gal_opt
 $gallery_img_position = (isset($gal_options['gallery_img_position_l']) && isset($gal_options['gallery_img_position_r'])) ? $gal_options['gallery_img_position_l'].'-'.$gal_options['gallery_img_position_r'] : $gallery_img_position;
 
 $image_sizes = $this->ays_get_all_image_sizes();
-$image_no_photo = AYS_GPG_ADMIN_URL .'images/no-photo.png';
+$image_no_photo = GLP_ADMIN_URL .'images/no-photo.png';
 
 $gallery_categories = $this->ays_get_gallery_categories();
 
@@ -290,7 +290,7 @@ if( $change_gpg_create_author  && $change_gpg_create_author > 0 ){
 $query_categories = isset($gal_options['query_categories']) ? $gal_options['query_categories'] : '';
 //error_log( "CATEGORIES from options: ".$query_categories);
 
-$loader_iamge = "<span class='display_none glp_loader_box'><img src='". AYS_GPG_ADMIN_URL ."/images/loaders/loading.gif'></span>";
+$loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMIN_URL ."/images/loaders/loading.gif'></span>";
 ?>
 
 <div class="wrap">
@@ -346,7 +346,7 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". AYS_GPG_
                                 <input type="radio" class="ays-gallery-gpgs-each-data-checker" hidden id="ays_gallery_message_var_count_<?php echo $var_counter?>" name="ays_gallery_message_var_count">
                                 <div class="ays-gallery-gpgs-each-data">
                                     <input type="hidden" class="ays-gallery-gpgs-each-var" value="<?php echo $var; ?>">
-                                    <a href="?page=gallery-photo-gallery&action=edit&gallery=<?php echo $var_name['id']?>" target="_blank" class="ays-gallery-go-to-gpgs"><span><?php echo stripslashes(esc_attr($var_name['title'])); ?></span></a>
+                                    <a href="?page=geolocated-photo&action=edit&gallery=<?php echo $var_name['id']?>" target="_blank" class="ays-gallery-go-to-gpgs"><span><?php echo stripslashes(esc_attr($var_name['title'])); ?></span></a>
                                 </div>
                             </label>              
                         <?php endforeach ?>
@@ -373,7 +373,7 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". AYS_GPG_
                         display: block;
                         width: 100%;
                         height: 100%;
-                        background-image: url('".AYS_GPG_ADMIN_URL .'images/no-photo.png'."');
+                        background-image: url('".GLP_ADMIN_URL .'images/no-photo.png'."');
                         background-size: cover;
                         background-position: center center;
                     }
@@ -794,7 +794,7 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". AYS_GPG_
             <!-- <div class='form-group row gpg_pro_link_cont'>
                 <div class='gpg_pro_link'>
                     <div>
-                        <img src="<?php //echo AYS_GPG_ADMIN_URL . "images/gallery_img.png"; ?>" alt="">
+                        <img src="<?php //echo GLP_ADMIN_URL . "images/gallery_img.png"; ?>" alt="">
                     </div>
                     <div class='gpg_pro_link_prem'>
                         <h1><?php //echo __('Take the chance to get the Premium version.',$this->plugin_name) ; ?></h1>
@@ -1223,7 +1223,7 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". AYS_GPG_
                                 <span><?php echo __( ucfirst($key)." ", $this->plugin_name);?></span>
                             <?php endif; ?>
                             <?php if($key == "grid" || $key == "mosaic" || $key == "masonry"): ?>
-                                <img src="<?php echo AYS_GPG_ADMIN_URL . "images/" . $name; ?>">
+                                <img src="<?php echo GLP_ADMIN_URL . "images/" . $name; ?>">
                             <?php endif; ?>
                         </label>
                         <?php
@@ -1796,47 +1796,47 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". AYS_GPG_
                 <div class="col-sm-9 glp_toggle_loader_parent">
                     <label class="glp_image_hover_icon">
                         <input name="glp_loader" class="glp_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="flower" <?php echo ($ays_gallery_loader == 'flower') ? 'checked' : ''; ?>>
-                        <img style="width: 50px;" src="<?php echo AYS_GPG_PUBLIC_URL.'/images/flower.svg' ?>">
+                        <img style="width: 50px;" src="<?php echo GLP_PUBLIC_URL.'/images/flower.svg' ?>">
                     </label>
                     <label class="glp_image_hover_icon">
                         <input name="glp_loader" class="glp_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="ball" <?php echo ($ays_gallery_loader == 'ball') ? 'checked' : ''; ?> />
-                        <img style="width: 50px;" src="<?php echo AYS_GPG_PUBLIC_URL.'/images/ball.svg' ?>">
+                        <img style="width: 50px;" src="<?php echo GLP_PUBLIC_URL.'/images/ball.svg' ?>">
                     </label>
                     <label class="glp_image_hover_icon">
                         <input name="glp_loader" class="glp_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="bars" <?php echo ($ays_gallery_loader == 'bars') ? 'checked' : ''; ?> />
-                        <img style="width: 50px;" src="<?php echo AYS_GPG_PUBLIC_URL.'/images/bars.svg' ?>">
+                        <img style="width: 50px;" src="<?php echo GLP_PUBLIC_URL.'/images/bars.svg' ?>">
                     </label>
                     <label class="glp_image_hover_icon">
                         <input name="glp_loader" class="glp_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="curved_bar" <?php echo ($ays_gallery_loader == 'curved_bar') ? 'checked' : ''; ?>>
-                        <img style="width: 50px;" src="<?php echo AYS_GPG_PUBLIC_URL.'/images/curved_bar.svg' ?>">
+                        <img style="width: 50px;" src="<?php echo GLP_PUBLIC_URL.'/images/curved_bar.svg' ?>">
                     </label>
                     <label class="glp_image_hover_icon">
                         <input name="glp_loader" class="glp_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="react" <?php echo ($ays_gallery_loader == 'react') ? 'checked' : ''; ?>>
-                        <img style="width: 50px;" src="<?php echo AYS_GPG_PUBLIC_URL.'/images/react.svg' ?>">
+                        <img style="width: 50px;" src="<?php echo GLP_PUBLIC_URL.'/images/react.svg' ?>">
                     </label>
                     <label class="glp_image_hover_icon">
                         <input name="glp_loader" class="glp_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="gallery" <?php echo ($ays_gallery_loader == 'gallery') ? 'checked' : ''; ?>>
-                        <img style="width: 50px;" src="<?php echo AYS_GPG_PUBLIC_URL.'/images/gallery.svg' ?>">
+                        <img style="width: 50px;" src="<?php echo GLP_PUBLIC_URL.'/images/gallery.svg' ?>">
                     </label>
                     <label class="glp_image_hover_icon">
                         <input name="glp_loader" class="glp_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="fracox" <?php echo ($ays_gallery_loader == 'fracox') ? 'checked' : ''; ?>>
-                        <img style="width: 50px;" src="<?php echo AYS_GPG_PUBLIC_URL.'/images/fracox.svg' ?>">
+                        <img style="width: 50px;" src="<?php echo GLP_PUBLIC_URL.'/images/fracox.svg' ?>">
                     </label>
                     <label class="glp_image_hover_icon">
                         <input name="glp_loader" class="glp_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="fracoxner" <?php echo ($ays_gallery_loader == 'fracoxner') ? 'checked' : ''; ?>>
-                        <img style="width: 50px;" src="<?php echo AYS_GPG_PUBLIC_URL.'/images/fracoxner.svg' ?>">
+                        <img style="width: 50px;" src="<?php echo GLP_PUBLIC_URL.'/images/fracoxner.svg' ?>">
                     </label>
                     <label class="glp_image_hover_icon">
                         <input name="glp_loader" class="glp_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="frik" <?php echo ($ays_gallery_loader == 'frik') ? 'checked' : ''; ?>>
-                        <img style="width: 50px;" src="<?php echo AYS_GPG_PUBLIC_URL.'/images/frik.svg' ?>">
+                        <img style="width: 50px;" src="<?php echo GLP_PUBLIC_URL.'/images/frik.svg' ?>">
                     </label>
                     <label class="glp_image_hover_icon">
                         <input name="glp_loader" class="glp_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="clock_frik" <?php echo ($ays_gallery_loader == 'clock_frik') ? 'checked' : ''; ?>>
-                        <img style="width: 50px;" src="<?php echo AYS_GPG_PUBLIC_URL.'/images/clock_frik.svg' ?>">
+                        <img style="width: 50px;" src="<?php echo GLP_PUBLIC_URL.'/images/clock_frik.svg' ?>">
                     </label>
                     <label class="glp_image_hover_icon">
                         <input name="glp_loader" class="glp_toggle_loader_radio" data-flag="false" data-type="loader" type="radio" value="in_yan" <?php echo ($ays_gallery_loader == 'in_yan') ? 'checked' : ''; ?>>
-                        <img style="width: 50px;" src="<?php echo AYS_GPG_PUBLIC_URL.'/images/in_yan.svg' ?>">
+                        <img style="width: 50px;" src="<?php echo GLP_PUBLIC_URL.'/images/in_yan.svg' ?>">
                     </label>
                     <hr/>
                     <label class="glp_image_hover_icon">
@@ -2051,8 +2051,8 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". AYS_GPG_
                             <a href="https://ays-pro.com/wordpress/photo-gallery/" target="_blank" class="glp-new-upgrade-button-link">
                                 <div class="glp-new-upgrade-button-box">
                                     <div>
-                                        <img src="<?php echo AYS_GPG_ADMIN_URL.'/images/icons/gpg_locked_24x24.svg'?>">
-                                        <img src="<?php echo AYS_GPG_ADMIN_URL.'/images/icons/gpg_unlocked_24x24.svg'?>" class="glp-new-upgrade-button-hover">
+                                        <img src="<?php echo GLP_ADMIN_URL.'/images/icons/gpg_locked_24x24.svg'?>">
+                                        <img src="<?php echo GLP_ADMIN_URL.'/images/icons/gpg_unlocked_24x24.svg'?>" class="glp-new-upgrade-button-hover">
                                     </div>
                                     <div class="glp-new-upgrade-button"><?php echo __("Upgrade", $this->plugin_name); ?></div>
                                 </div>
@@ -2061,8 +2061,8 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". AYS_GPG_
                                 <div class="glp-center-big-upgrade-button-box">
                                     <a href="https://ays-pro.com/wordpress/photo-gallery/" target="_blank" class="glp-new-upgrade-button-link">
                                         <div class="glp-center-new-big-upgrade-button">
-                                            <img src="<?php echo AYS_GPG_ADMIN_URL.'/images/icons/gpg_locked_24x24.svg'?>" class="glp-new-button-img-hide">
-                                            <img src="<?php echo AYS_GPG_ADMIN_URL.'/images/icons/gpg_unlocked_24x24.svg'?>" class="glp-new-upgrade-button-hover">  
+                                            <img src="<?php echo GLP_ADMIN_URL.'/images/icons/gpg_locked_24x24.svg'?>" class="glp-new-button-img-hide">
+                                            <img src="<?php echo GLP_ADMIN_URL.'/images/icons/gpg_unlocked_24x24.svg'?>" class="glp-new-upgrade-button-hover">  
                                             <?php echo __("Upgrade", $this->plugin_name); ?>
                                         </div>
                                     </a>
@@ -2070,7 +2070,7 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". AYS_GPG_
                             </div>
                         </div>
                     </div>
-                    <img class="pro_img_style" src="<?php echo AYS_GPG_ADMIN_URL; ?>images/features/lighbox_settings.png">
+                    <img class="pro_img_style" src="<?php echo GLP_ADMIN_URL; ?>images/features/lighbox_settings.png">
                 </div>
             </div> -->
         </div>
@@ -2080,8 +2080,8 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". AYS_GPG_
                     <a href="https://ays-pro.com/wordpress/photo-gallery/" target="_blank" class="glp-new-upgrade-button-link">
                         <div class="glp-new-upgrade-button-box">
                             <div>
-                                <img src="<?php echo AYS_GPG_ADMIN_URL.'/images/icons/gpg_locked_24x24.svg'?>">
-                                <img src="<?php echo AYS_GPG_ADMIN_URL.'/images/icons/gpg_unlocked_24x24.svg'?>" class="glp-new-upgrade-button-hover">
+                                <img src="<?php echo GLP_ADMIN_URL.'/images/icons/gpg_locked_24x24.svg'?>">
+                                <img src="<?php echo GLP_ADMIN_URL.'/images/icons/gpg_unlocked_24x24.svg'?>" class="glp-new-upgrade-button-hover">
                             </div>
                             <div class="glp-new-upgrade-button"><?php echo __("Upgrade", $this->plugin_name); ?></div>
                         </div>
@@ -2090,8 +2090,8 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". AYS_GPG_
                         <div class="glp-center-big-upgrade-button-box">
                             <a href="https://ays-pro.com/wordpress/photo-gallery/" target="_blank" class="glp-new-upgrade-button-link">
                                 <div class="glp-center-new-big-upgrade-button">
-                                    <img src="<?php echo AYS_GPG_ADMIN_URL.'/images/icons/gpg_locked_24x24.svg'?>" class="glp-new-button-img-hide">
-                                    <img src="<?php echo AYS_GPG_ADMIN_URL.'/images/icons/gpg_unlocked_24x24.svg'?>" class="glp-new-upgrade-button-hover">  
+                                    <img src="<?php echo GLP_ADMIN_URL.'/images/icons/gpg_locked_24x24.svg'?>" class="glp-new-button-img-hide">
+                                    <img src="<?php echo GLP_ADMIN_URL.'/images/icons/gpg_unlocked_24x24.svg'?>" class="glp-new-upgrade-button-hover">  
                                     <?php echo __("Upgrade", $this->plugin_name); ?>
                                 </div>
                             </a>
@@ -2099,7 +2099,7 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". AYS_GPG_
                     </div>
                 </div>
             </div>
-            <img class="pro_img_style" src="<?php echo AYS_GPG_ADMIN_URL; ?>images/features/lighbox_effect.png">
+            <img class="pro_img_style" src="<?php echo GLP_ADMIN_URL; ?>images/features/lighbox_effect.png">
         </div>         -->
         <hr/>
         <div class="form-group row ays-galleries-button-box">
@@ -2151,7 +2151,7 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". AYS_GPG_
 		</div> -->        
         <button type="button" class="ays_gallery_live_preview" data-container="body" data-toggle="popover" data-placement="top" data-content="<?php echo __("View your gallery in live preview. In the preview you can’t see Thumbnail size and Image order changes.", $this->plugin_name);?>" data-original-title="<?php echo __("Gallery preview", $this->plugin_name);?>"><i class="fas fa-search-plus"></i></button>    
         <button class="ays_gallery_live_save" type="submit" name="ays-apply"><i class="far fa-save" gpg_submit_name="ays-apply"></i></button>
-        <input type="hidden" id="glp_admin_url" value="<?php echo AYS_GPG_ADMIN_URL; ?>"/>
+        <input type="hidden" id="glp_admin_url" value="<?php echo GLP_ADMIN_URL; ?>"/>
     </form>
     </div>
     

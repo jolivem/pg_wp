@@ -29,7 +29,7 @@ $gpg_categories_title_length = (isset($options['gpg_categories_title_length']) &
 $options['gpg_exclude_general_css'] = isset($options['gpg_exclude_general_css']) ? esc_attr( $options['gpg_exclude_general_css'] ) : 'off';
 $gpg_exclude_general_css = (isset($options['gpg_exclude_general_css']) && esc_attr( $options['gpg_exclude_general_css'] ) == "on") ? true : false;
 
-$loader_iamge = "<span class='display_none glp_loader_box'><img src='". AYS_GPG_ADMIN_URL ."/images/loaders/loading.gif'></span>";
+$loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMIN_URL ."/images/loaders/loading.gif'></span>";
 ?>
 <div class="wrap" style="position:relative;">
     <div class="glp-heading-box">

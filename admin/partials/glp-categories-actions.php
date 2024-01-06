@@ -39,7 +39,7 @@
         $next_gallery_cat_id = (isset( $next_gallery_cat['id'] ) && $next_gallery_cat['id'] != "") ? absint( $next_gallery_cat['id'] ) : null;
     }
 
-    $loader_iamge = "<span class='display_none glp_loader_box'><img src='". AYS_GPG_ADMIN_URL ."/images/loaders/loading.gif'></span>";
+    $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMIN_URL ."/images/loaders/loading.gif'></span>";
 ?>
 <div class="wrap">
     <div class="glp-heading-box">

@@ -1,5 +1,5 @@
 <?php
-    $plus_icon_svg = "<span class=''><img src='". AYS_GPG_ADMIN_URL ."/images/icons/plus=icon.svg'></span>";
+    $plus_icon_svg = "<span class=''><img src='". GLP_ADMIN_URL ."/images/icons/plus=icon.svg'></span>";
 ?>
 <div class="wrap glp-list-table">
     <div class="glp-heading-box">

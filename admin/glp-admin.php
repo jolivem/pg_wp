@@ -164,7 +164,7 @@ class GLP_Admin {
 
         // can be removed ?
         wp_enqueue_script( $this->plugin_name . "admin", plugin_dir_url( __FILE__ ) . 'js/glp-admin.js', array( 'jquery', 'wp-color-picker'), $this->version, true );
-        wp_localize_script($this->plugin_name . "admin",  'ays_vars', array('base_url' => AYS_GPG_BASE_URL));
+        wp_localize_script($this->plugin_name . "admin",  'ays_vars', array('base_url' => GLP_BASE_URL));
 
         wp_localize_script($this->plugin_name . "admin", 'gallery_ajax', array(
             'ajax_url'          => admin_url('admin-ajax.php'),            
@@ -247,11 +247,11 @@ class GLP_Admin {
     public function add_plugin_admin_menu() {
         
         $hook_gallery = add_menu_page( 
-            __('GPGM Gallery', $this->plugin_name), 
-            __('GPGM Gallery', $this->plugin_name), 
+            __('GLP Features', $this->plugin_name), 
+            __('GLP Features', $this->plugin_name), 
             'manage_options', 
             $this->plugin_name, 
-            array($this, 'display_plugin_setup_page'), AYS_GPG_ADMIN_URL . 'images/icons/icon-gpg-128x128.svg', 6);
+            array($this, 'display_plugin_setup_page'), GLP_ADMIN_URL . 'images/icons/icon-gpg-128x128.svg', 6);
         add_action( "load-$hook_gallery", array( $this, 'screen_option_gallery' ) );
         
         $hook_gallery = add_submenu_page(
@@ -293,23 +293,6 @@ class GLP_Admin {
         );
         add_action("load-$hook_settings", array($this, 'screen_option_settings'));        
 
-        $hook_quizes = add_submenu_page(
-            $this->plugin_name,
-            __('How to use', $this->plugin_name),
-            __('How to use', $this->plugin_name),
-            'manage_options',
-            $this->plugin_name . '-dashboard',
-            array($this, 'display_plugin_how_to_use_page')
-        );
-
-        // add_submenu_page(
-        //     $this->plugin_name,
-        //     __('Our products', $this->plugin_name),
-        //     __('Our products', $this->plugin_name),
-        //     'manage_options',
-        //     $this->plugin_name . '-featured-plugins',
-        //     array($this, 'display_plugin_gpg_featured_plugins_page')
-        // );
 
     }
 
@@ -334,8 +317,8 @@ class GLP_Admin {
 
     public function add_plugin_row_meta($meta, $file) {
 
-        if ($file == AYS_GPG_BASENAME) {
-            $meta[] = '<a href="https://wordpress.org/support/plugin/gallery-photo-gallery/" target="_blank">' . esc_html__( 'Free Support', $this->plugin_name ) . '</a>';
+        if ($file == GLP_BASENAME) {
+            $meta[] = '<a href="https://wordpress.org/support/plugin/geolocated-photo/" target="_blank">' . esc_html__( 'Free Support', $this->plugin_name ) . '</a>';
         }
 
         return $meta;
@@ -386,15 +369,9 @@ class GLP_Admin {
         include_once('partials/settings/glp-settings.php');
     }
 
-    public function display_plugin_how_to_use_page()
-    {
-        include_once('partials/how-to-use/glp-how-to-use.php');
-    }
-
     public static function set_screen( $status, $option, $value ) {
         return $value;
     }
-
 
     public function screen_option_gallery() {
         $option = 'per_page';
@@ -447,7 +424,7 @@ class GLP_Admin {
       }
     
     function glp_register_tinymce_plugin($plugin_array) {
-        $plugin_array['glp_button_mce'] = AYS_GPG_BASE_URL .'/glp_shortcode.js';
+        $plugin_array['glp_button_mce'] = GLP_BASE_URL .'/glp_shortcode.js';
         return $plugin_array;
     }
     
@@ -551,7 +528,7 @@ class GLP_Admin {
     }
     
     public function vc_before_init_actions() {
-        require_once( AYS_GPG_DIR.'pb_templates/gallery_photo_gallery_wpbvc.php' );
+        require_once( GLP_DIR.'pb_templates/gallery_photo_gallery_wpbvc.php' );
     }
 
     public function gpg_el_widgets_registered() {
@@ -568,7 +545,7 @@ class GLP_Admin {
                             $widget_file   = 'plugins/elementor/gallery_photo_gallery_elementor.php';
                             $template_file = locate_template( $widget_file );
                             if ( !$template_file || !is_readable( $template_file ) ) {
-                                $template_file = AYS_GPG_DIR.'pb_templates/gallery_photo_gallery_elementor.php';
+                                $template_file = GLP_DIR.'pb_templates/gallery_photo_gallery_elementor.php';
                             }
                             if ( $template_file && is_readable( $template_file ) ) {
                                 require_once $template_file;
@@ -600,7 +577,7 @@ class GLP_Admin {
                 <p style="font-size:13px;text-align:center;font-style:italic;">
                     <span style="margin-left:0px;margin-right:10px;" class="ays_heart_beat"><i class="far fa-heart animated"></i></span>
                     <span><?php echo __( "If you love our plugin, please do big favor and rate us on", $this->plugin_name); ?></span> 
-                    <a target="_blank" href='https://wordpress.org/support/plugin/gallery-photo-gallery/reviews/'>WordPress.org</a>
+                    <a target="_blank" href='https://wordpress.org/support/plugin/geolocated-photo/reviews/'>WordPress.org</a>
                     <span class="ays_heart_beat"><i class="far fa-heart animated"></i></span>
                 </p>
             <?php
@@ -884,13 +861,13 @@ class GLP_Admin {
 
         // Afficher le chemin
         // echo $directory_courant;
-        // echo AYS_GPG_DIR;
+        // echo GLP_DIR;
     
         $dict = array();
         // Add None
         $dict["None"] = "None";
 
-        $worldfile = AYS_GPG_DIR . 'assets/world.json';
+        $worldfile = GLP_DIR . 'assets/world.json';
         //echo $worldfile;
         // // Utiliser glob pour obtenir la liste des fichiers dans le dossier
         //$files = glob($directory . '/*');
@@ -923,13 +900,13 @@ class GLP_Admin {
 
     //     // Afficher le chemin
     //     // echo $directory_courant;
-    //     // echo AYS_GPG_DIR;
+    //     // echo GLP_DIR;
     
     //     $dict = array();
     //     // Add None
     //     $dict["None"] = "None";
 
-    //     $worldfile = AYS_GPG_DIR . 'assets/world.json';
+    //     $worldfile = GLP_DIR . 'assets/world.json';
     //     //echo $worldfile;
     //     // // Utiliser glob pour obtenir la liste des fichiers dans le dossier
     //     //$files = glob($directory . '/*');
@@ -961,10 +938,10 @@ class GLP_Admin {
 
         // Afficher le chemin
         // echo $directory_courant;
-        // echo AYS_GPG_DIR;
+        // echo GLP_DIR;
     
         $dict = array();
-        $directory = AYS_GPG_DIR . 'assets/geojson';
+        $directory = GLP_DIR . 'assets/geojson';
         // echo $directory;
         // // Utiliser glob pour obtenir la liste des fichiers dans le dossier
         $files = glob($directory . '/*');

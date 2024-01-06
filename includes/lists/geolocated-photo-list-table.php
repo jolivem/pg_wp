@@ -622,7 +622,7 @@ class Galleries_List_Table extends WP_List_Table{
         error_log("column_shortcode IN");
         return sprintf('<div class="glp-shortcode-container">
                     <div class="glp-copy-image" data-bs-toggle="tooltip" title="'. esc_html(__('Click to copy',$this->plugin_name)).'">
-                            <img src="'. esc_url(AYS_GPG_ADMIN_URL) . '/images/icons/copy-image.svg">
+                            <img src="'. esc_url(GLP_ADMIN_URL) . '/images/icons/copy-image.svg">
                     </div>                                            
                     <input type="text" class="glp-shortcode-input" readonly value="'. esc_attr('[gallery_p_gallery id="%s"]').'" />
                 </div>', $item["id"]);

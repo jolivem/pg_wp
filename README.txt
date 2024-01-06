@@ -120,7 +120,7 @@ https://www.youtube.com/watch?v=zbNyMsN81rU
 * More on the way ...
 
 
-Don't forget, in case of any problems or upcoming questions feel free to contact us via e-mail **info@ays-pro.com** or via [FREE SUPPORT FORUM](https://wordpress.org/support/plugin/gallery-photo-gallery/).
+Don't forget, in case of any problems or upcoming questions feel free to contact us via e-mail **info@ays-pro.com** or via [FREE SUPPORT FORUM](https://wordpress.org/support/plugin/geolocated-photo/).
 
 
 == Screenshots ==
@@ -152,10 +152,10 @@ There are two ways to install Photo Gallery: the easy way, when you install Phot
 * 1.2.2 Go to Plugins
 * 1.2.3 Add New
 * 1.2.4 Upload plugin
-* 1.2.5 Choose file ays gallery-photo-gallery.zip
+* 1.2.5 Choose file geolocated-photos.zip
 * 1.2.6	Click to install
 
-* 1.3 In order to install the Photo Gallery from Wordpress.org you must unzip the archive and copy the gallery-photo-gallery folder into your plugins folder (\wp-content\plugins).
+* 1.3 In order to install the Photo Gallery from Wordpress.org you must unzip the archive and copy the geolocated-photos folder into your plugins folder (\wp-content\plugins).
 After one ofthis steps you can activate the plugin from the Plugins menu.
 Once activated configure any options as desired and you can enjoy our Photo Gallery.
 

@@ -23,7 +23,7 @@
 
     $gallery_max_id = GLP_Admin::get_gallery_max_id('gallery');
 
-    $plus_icon_svg = "<span class=''><img src='". AYS_GPG_ADMIN_URL ."/images/icons/plus=icon.svg'></span>";
+    $plus_icon_svg = "<span class=''><img src='". GLP_ADMIN_URL ."/images/icons/plus=icon.svg'></span>";
 ?>
 
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
