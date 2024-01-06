@@ -6,8 +6,8 @@
  * @link       https://glp-plugin.com/
  * @since      1.0.0
  *
- * @package    Gallery_Photo_Gallery
- * @subpackage Gallery_Photo_Gallery/includes
+ * @package    Geolocated_Photo
+ * @subpackage Geolocated_Photo/includes
  */
 
 /**
@@ -17,11 +17,11 @@
  * the plugin, and register them with the WordPress API. Call the
  * run function to execute the list of actions and filters.
  *
- * @package    Gallery_Photo_Gallery
- * @subpackage Gallery_Photo_Gallery/includes
+ * @package    Geolocated_Photo
+ * @subpackage Geolocated_Photo/includes
  * @author     AYS Pro LLC <info@glp-plugin.com>
  */
-class Gallery_Photo_Gallery_Loader {
+class Geolocated_Photo_Loader {
 
 	/**
 	 * The array of actions registered with WordPress.

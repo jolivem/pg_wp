@@ -7,8 +7,8 @@ $glp_gallery_db_version = '3.3.6';
  * @link       https://glp-plugin.com/
  * @since      1.0.0
  *
- * @package    Gallery_Photo_Gallery
- * @subpackage Gallery_Photo_Gallery/includes
+ * @package    Geolocated_Photo
+ * @subpackage Geolocated_Photo/includes
  */
 
 /**
@@ -17,12 +17,12 @@ $glp_gallery_db_version = '3.3.6';
  * This class defines all code necessary to run during the plugin's activation.
  *
  * @since      1.0.0
- * @package    Gallery_Photo_Gallery
- * @subpackage Gallery_Photo_Gallery/includes
+ * @package    Geolocated_Photo
+ * @subpackage Geolocated_Photo/includes
  * @author     AYS Pro LLC <info@glp-plugin.com>
  */
 
-class Gallery_Photo_Gallery_Activator {
+class Geolocated_Photo_Activator {
 
 	/**
 	 * Short Description. (use period)

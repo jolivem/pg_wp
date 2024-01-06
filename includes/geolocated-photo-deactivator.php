@@ -6,8 +6,8 @@
  * @link       https://glp-plugin.com/
  * @since      1.0.0
  *
- * @package    Gallery_Photo_Gallery
- * @subpackage Gallery_Photo_Gallery/includes
+ * @package    Geolocated_Photo
+ * @subpackage Geolocated_Photo/includes
  */
 
 /**
@@ -16,11 +16,11 @@
  * This class defines all code necessary to run during the plugin's deactivation.
  *
  * @since      1.0.0
- * @package    Gallery_Photo_Gallery
- * @subpackage Gallery_Photo_Gallery/includes
+ * @package    Geolocated_Photo
+ * @subpackage Geolocated_Photo/includes
  * @author     AYS Pro LLC <info@glp-plugin.com>
  */
-class Gallery_Photo_Gallery_Deactivator {
+class Geolocated_Photo_Deactivator {
 
 	/**
 	 * Short Description. (use period)

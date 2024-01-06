@@ -6,8 +6,8 @@
  * @link       https://glp-plugin.com/
  * @since      1.0.0
  *
- * @package    Gallery_Photo_Gallery
- * @subpackage Gallery_Photo_Gallery/admin
+ * @package    Geolocated_Photo
+ * @subpackage Geolocated_Photo/admin
  */
 
 /**
@@ -16,8 +16,8 @@
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  *
- * @package    Gallery_Photo_Gallery
- * @subpackage Gallery_Photo_Gallery/admin
+ * @package    Geolocated_Photo
+ * @subpackage Geolocated_Photo/admin
  * @author     AYS Pro LLC <info@glp-plugin.com>
  */
 class GLP_Admin {
@@ -90,10 +90,10 @@ class GLP_Admin {
 		 * This function is provided for demonstration purposes only.
 		 *
 		 * An instance of this class should be passed to the run() function
-		 * defined in Gallery_Photo_Gallery_Loader as all of the hooks are defined
+		 * defined in Geolocated_Photo_Loader as all of the hooks are defined
 		 * in that particular class.
 		 *
-		 * The Gallery_Photo_Gallery_Loader will then create the relationship
+		 * The Geolocated_Photo_Loader will then create the relationship
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
@@ -142,10 +142,10 @@ class GLP_Admin {
 		 * This function is provided for demonstration purposes only.
 		 *
 		 * An instance of this class should be passed to the run() function
-		 * defined in Gallery_Photo_Gallery_Loader as all of the hooks are defined
+		 * defined in Geolocated_Photo_Loader as all of the hooks are defined
 		 * in that particular class.
 		 *
-		 * The Gallery_Photo_Gallery_Loader will then create the relationship
+		 * The Geolocated_Photo_Loader will then create the relationship
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */

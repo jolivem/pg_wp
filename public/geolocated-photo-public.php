@@ -6,8 +6,8 @@
  * @link       https://glp-plugin.com/
  * @since      1.0.0
  *
- * @package    Gallery_Photo_Gallery
- * @subpackage Gallery_Photo_Gallery/public
+ * @package    Geolocated_Photo
+ * @subpackage Geolocated_Photo/public
  */
 
 /**
@@ -16,14 +16,14 @@
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the public-facing stylesheet and JavaScript.
  *
- * @package    Gallery_Photo_Gallery
- * @subpackage Gallery_Photo_Gallery/public
+ * @package    Geolocated_Photo
+ * @subpackage Geolocated_Photo/public
  * @author     AYS Pro LLC <info@glp-plugin.com>
  */
 // TODO le rendu du nomber de colonne ne tient pas compte de la bordure de l'image
 // TODO probleme de responsive sur les images
 // TODO renommer les fichiers, les variables, les tables, etc..
-class Gallery_Photo_Gallery_Public {
+class Geolocated_Photo_Public {
 
     /**
      * The ID of this plugin.
@@ -73,10 +73,10 @@ class Gallery_Photo_Gallery_Public {
          * This function is provided for demonstration purposes only.
          *
          * An instance of this class should be passed to the run() function
-         * defined in Gallery_Photo_Gallery_Loader as all of the hooks are defined
+         * defined in Geolocated_Photo_Loader as all of the hooks are defined
          * in that particular class.
          *
-         * The Gallery_Photo_Gallery_Loader will then create the relationship
+         * The Geolocated_Photo_Loader will then create the relationship
          * between the defined hooks and the functions defined in this
          * class.
          */
@@ -100,10 +100,10 @@ class Gallery_Photo_Gallery_Public {
          * This function is provided for demonstration purposes only.
          *
          * An instance of this class should be passed to the run() function
-         * defined in Gallery_Photo_Gallery_Loader as all of the hooks are defined
+         * defined in Geolocated_Photo_Loader as all of the hooks are defined
          * in that particular class.
          *
-         * The Gallery_Photo_Gallery_Loader will then create the relationship
+         * The Geolocated_Photo_Loader will then create the relationship
          * between the defined hooks and the functions defined in this
          * class.
          */

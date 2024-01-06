@@ -6,8 +6,8 @@
  * @link       http://glp-plugin.com/
  * @since      1.0.0
  *
- * @package    Gallery_Photo_Gallery
- * @subpackage Gallery_Photo_Gallery/public
+ * @package    Geolocated_Photo
+ * @subpackage Geolocated_Photo/public
  */
 
 /**
@@ -16,8 +16,8 @@
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the public-facing stylesheet and JavaScript.
  *
- * @package    Gallery_Photo_Gallery
- * @subpackage Gallery_Photo_Gallery/public
+ * @package    Geolocated_Photo
+ * @subpackage Geolocated_Photo/public
  * @author     AYS Pro LLC <info@glp-plugin.com>
  */
 class Ays_Gallery_Extra_Shortcodes_Public

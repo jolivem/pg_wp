@@ -22,7 +22,7 @@
  * @link       https://glp-plugin.com/
  * @since      1.0.0
  *
- * @package    Gallery_Photo_Gallery
+ * @package    Geolocated_Photo
  */
 
 // If uninstall not called from WordPress, then exit.

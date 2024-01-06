@@ -9,8 +9,8 @@
  * @link       https://glp-plugin.com/
  * @since      1.0.0
  *
- * @package    Gallery_Photo_Gallery
- * @subpackage Gallery_Photo_Gallery/includes
+ * @package    Geolocated_Photo
+ * @subpackage Geolocated_Photo/includes
  */
 
 /**
@@ -20,11 +20,11 @@
  * so that it is ready for translation.
  *
  * @since      1.0.0
- * @package    Gallery_Photo_Gallery
- * @subpackage Gallery_Photo_Gallery/includes
+ * @package    Geolocated_Photo
+ * @subpackage Geolocated_Photo/includes
  * @author     AYS Pro LLC <info@glp-plugin.com>
  */
-class Gallery_Photo_Gallery_i18n {
+class Geolocated_Photo_i18n {
 
 
 	/**

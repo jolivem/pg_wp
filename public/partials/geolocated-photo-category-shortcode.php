@@ -5,8 +5,8 @@
  * @link       http://glp-plugin.com/
  * @since      1.0.0
  *
- * @package    Gallery_Photo_Gallery
- * @subpackage Gallery_Photo_Gallery/public
+ * @package    Geolocated_Photo
+ * @subpackage Geolocated_Photo/public
  */
 
 /**
@@ -15,11 +15,11 @@
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the public-facing stylesheet and JavaScript.
  *
- * @package    Gallery_Photo_Gallery
- * @subpackage Gallery_Photo_Gallery/public
+ * @package    Geolocated_Photo
+ * @subpackage Geolocated_Photo/public
  * @author     AYS Pro LLC <info@glp-plugin.com>
  */
-class Gallery_Photo_Gallery_Category
+class Geolocated_Photo_Category
 {
 
     /**
@@ -88,7 +88,7 @@ class Gallery_Photo_Gallery_Category
 
     public function ays_gallery_generate_cat_title_html( $id ) {
 
-        $results = Gallery_Photo_Gallery_Public::get_gallery_category_by_id($id);
+        $results = Geolocated_Photo_Public::get_gallery_category_by_id($id);
         
         $content_html = array();
         
@@ -145,7 +145,7 @@ class Gallery_Photo_Gallery_Category
 
     public function ays_generate_cat_description_html( $id ) {
 
-        $results = Gallery_Photo_Gallery_Public::get_gallery_category_by_id($id);
+        $results = Geolocated_Photo_Public::get_gallery_category_by_id($id);
 
         $content_html = array();
         
@@ -154,7 +154,7 @@ class Gallery_Photo_Gallery_Category
             return $content_html;
         }
 
-        $category_description = (isset($results['description']) && $results['description'] != '') ? Gallery_Photo_Gallery_Public::ays_gallery_autoembed($results['description']) : "";
+        $category_description = (isset($results['description']) && $results['description'] != '') ? Geolocated_Photo_Public::ays_gallery_autoembed($results['description']) : "";
 
         if ( $category_description == "" ) {
             $content_html = "";

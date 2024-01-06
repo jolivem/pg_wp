@@ -9,8 +9,8 @@
  * @link       https://glp-plugin.com/
  * @since      1.0.0
  *
- * @package    Gallery_Photo_Gallery
- * @subpackage Gallery_Photo_Gallery/includes
+ * @package    Geolocated_Photo
+ * @subpackage Geolocated_Photo/includes
  */
 
 /**
@@ -23,11 +23,11 @@
  * version of the plugin.
  *
  * @since      1.0.0
- * @package    Gallery_Photo_Gallery
- * @subpackage Gallery_Photo_Gallery/includes
+ * @package    Geolocated_Photo
+ * @subpackage Geolocated_Photo/includes
  * @author     AYS Pro LLC <info@glp-plugin.com>
  */
-class Gallery_Photo_Gallery {
+class Geolocated_Photo {
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -35,7 +35,7 @@ class Gallery_Photo_Gallery {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      Gallery_Photo_Gallery_Loader    $loader    Maintains and registers all hooks for the plugin.
+	 * @var      Geolocated_Photo_Loader    $loader    Maintains and registers all hooks for the plugin.
 	 */
 	protected $loader;
 
@@ -86,10 +86,10 @@ class Gallery_Photo_Gallery {
 	 *
 	 * Include the following files that make up the plugin:
 	 *
-	 * - Gallery_Photo_Gallery_Loader. Orchestrates the hooks of the plugin.
-	 * - Gallery_Photo_Gallery_i18n. Defines internationalization functionality.
+	 * - Geolocated_Photo_Loader. Orchestrates the hooks of the plugin.
+	 * - Geolocated_Photo_i18n. Defines internationalization functionality.
 	 * - GLP_Admin. Defines all hooks for the admin area.
-	 * - Gallery_Photo_Gallery_Public. Defines all hooks for the public side of the site.
+	 * - Geolocated_Photo_Public. Defines all hooks for the public side of the site.
 	 *
 	 * Create an instance of the loader which will be used to register the hooks
 	 * with WordPress.
@@ -146,14 +146,14 @@ class Gallery_Photo_Gallery {
         
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/geolocated-photo-categories-list-table.php';
 
-		$this->loader = new Gallery_Photo_Gallery_Loader();
+		$this->loader = new Geolocated_Photo_Loader();
 
 	}
 
 	/**
 	 * Define the locale for this plugin for internationalization.
 	 *
-	 * Uses the Gallery_Photo_Gallery_i18n class in order to set the domain and to register the hook
+	 * Uses the Geolocated_Photo_i18n class in order to set the domain and to register the hook
 	 * with WordPress.
 	 *
 	 * @since    1.0.0
@@ -161,7 +161,7 @@ class Gallery_Photo_Gallery {
 	 */
 	private function set_locale() {
 
-		$plugin_i18n = new Gallery_Photo_Gallery_i18n();
+		$plugin_i18n = new Geolocated_Photo_i18n();
 
 		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
 
@@ -232,8 +232,8 @@ class Gallery_Photo_Gallery {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new Gallery_Photo_Gallery_Public( $this->get_plugin_name(), $this->get_version() );
-		$plugin_public_gallery_category = new Gallery_Photo_Gallery_Category( $this->get_plugin_name(), $this->get_version() );
+		$plugin_public = new Geolocated_Photo_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_public_gallery_category = new Geolocated_Photo_Category( $this->get_plugin_name(), $this->get_version() );
 		$plugin_public_extra_shortcodes = new Ays_Gallery_Extra_Shortcodes_Public( $this->get_plugin_name(), $this->get_version() );
         $this->loader->add_action( 'init', $plugin_public, 'ays_initialize_gallery_shortcode');
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles_early' );
@@ -265,7 +265,7 @@ class Gallery_Photo_Gallery {
 	 * The reference to the class that orchestrates the hooks with the plugin.
 	 *
 	 * @since     1.0.0
-	 * @return    Gallery_Photo_Gallery_Loader    Orchestrates the hooks of the plugin.
+	 * @return    Geolocated_Photo_Loader    Orchestrates the hooks of the plugin.
 	 */
 	public function get_loader() {
 		return $this->loader;

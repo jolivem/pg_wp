@@ -8,8 +8,8 @@
  * @link       https://glp-plugin.com/
  * @since      1.0.0
  *
- * @package    Gallery_Photo_Gallery
- * @subpackage Gallery_Photo_Gallery/admin/partials
+ * @package    Geolocated_Photo
+ * @subpackage Geolocated_Photo/admin/partials
  */
 
 

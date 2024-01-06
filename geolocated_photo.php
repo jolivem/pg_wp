@@ -64,7 +64,7 @@ define( 'AYS_GALLERY_NAME', 'geolocated-photo' );
  */
 function activate_gallery_photo_gallery() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/geolocated-photo-activator.php';
-	Gallery_Photo_Gallery_Activator::ays_gallery_db_check();
+	Geolocated_Photo_Activator::ays_gallery_db_check();
 }
 
 /**
@@ -73,7 +73,7 @@ function activate_gallery_photo_gallery() {
  */
 function deactivate_gallery_photo_gallery() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/geolocated-photo-deactivator.php';
-	Gallery_Photo_Gallery_Deactivator::deactivate();
+	Geolocated_Photo_Deactivator::deactivate();
 }
 
 register_activation_hook( __FILE__, 'activate_gallery_photo_gallery' );
@@ -100,7 +100,7 @@ require plugin_dir_path( __FILE__ ) . 'gallery/glp-block.php';
 function run_gallery_photo_gallery() {
     // add_action( 'activated_plugin', 'gallery_p_gallery_activation_redirect_method' );
     //add_action( 'admin_notices', 'general_gpg_admin_notice' );
-	$plugin = new Gallery_Photo_Gallery();
+	$plugin = new Geolocated_Photo();
 	$plugin->run();
 
 }
