@@ -18,41 +18,37 @@
             return null;
         }
 
-        // wp_enqueue_script( AYS_GALLERY_NAME, AYS_GPG_PUBLIC_URL . '/js/gallery-photo-gallery-public.js', array('jquery'), AYS_GALLERY_VERSION, true);        
-
         // Enqueue the bundled block JS file
         if( $versionCompare ){
             wp_enqueue_script(
-                'gallery-photo-gallery-block-js',
-                AYS_GPG_BASE_URL ."/gallery/gallery-photo-gallery-block-new.js",
+                'glp-block-js',
+                AYS_GPG_BASE_URL ."/gallery/glp-new.js",
                 array( 'jquery', 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-components', 'wp-editor' ),
                 AYS_GALLERY_VERSION, true
             );
         }
         else{
             wp_enqueue_script(
-                'gallery-photo-gallery-block-js',
-                AYS_GPG_BASE_URL ."/gallery/gallery-photo-gallery-block.js",
+                'glp-block-js',
+                AYS_GPG_BASE_URL ."/gallery/glp-block.js",
                 array( 'jquery', 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-components', 'wp-editor' ),
                 AYS_GALLERY_VERSION, true
             );
         }
         
-        // wp_enqueue_style( AYS_GALLERY_NAME, AYS_GPG_PUBLIC_URL . '/css/gallery-photo-gallery-public.css', array(), AYS_GALLERY_VERSION, 'all');
-
         // Enqueue the bundled block CSS file
         if( $versionCompare ){            
             wp_enqueue_style(
-                'gallery-photo-gallery-block-css',
-                AYS_GPG_BASE_URL ."/gallery/gallery-photo-gallery-block-new.css",
+                'glp-block-css',
+                AYS_GPG_BASE_URL ."/gallery/glp-block-new.css",
                 array(),
                 AYS_GALLERY_VERSION, 'all'
             );
         }
         else{            
             wp_enqueue_style(
-                'gallery-photo-gallery-block-css',
-                AYS_GPG_BASE_URL ."/gallery/gallery-photo-gallery-block.css",
+                'glp-block-css',
+                AYS_GPG_BASE_URL ."/gallery/glp-block.css",
                 array(),
                 AYS_GALLERY_VERSION, 'all'
             );
@@ -72,8 +68,8 @@
             $block_namespace, 
             array(
                 'render_callback'   => 'gallery_p_gallery_render_callback',
-                'editor_script'     => 'gallery-photo-gallery-block-js',
-                'style'             => 'gallery-photo-gallery-block-css',
+                'editor_script'     => 'glp-block-js',
+                'style'             => 'glp-block-css',
                 'attributes'	    => array(
                     'idner' => $results,
                     'metaFieldValue' => array(

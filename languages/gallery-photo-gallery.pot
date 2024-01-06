@@ -1779,12 +1779,6 @@ msgstr ""
 msgid "Save changes"
 msgstr ""
 
-#: ../gallery-photo-gallery.php:141
-#: ../gallery/gallery-photo-gallery-block-new.js:202
-#: ../gallery/gallery-photo-gallery-block.js:202
-#: ../pb_templates/gallery_photo_gallery_elementor.php:9
-#: ../pb_templates/gallery_photo_gallery_wpbvc.php:23
-#: ../pb_templates/gallery_photo_gallery_wpbvc.php:33
 msgid "Gallery - Photo Gallery"
 msgstr ""
 
@@ -1793,23 +1787,15 @@ msgstr ""
 msgid "One-time payment"
 msgstr ""
 
-#: ../gallery/gallery-photo-gallery-block-new.js:215
-#: ../gallery/gallery-photo-gallery-block.js:215
 msgid "Something goes wrong please reload page"
 msgstr ""
 
-#: ../gallery/gallery-photo-gallery-block-new.js:221
-#: ../gallery/gallery-photo-gallery-block.js:221
 msgid "Loading..."
 msgstr ""
 
-#: ../gallery/gallery-photo-gallery-block-new.js:228
-#: ../gallery/gallery-photo-gallery-block.js:228
 msgid "There are no gallery yet"
 msgstr ""
 
-#: ../gallery/gallery-photo-gallery-block-new.js:235
-#: ../gallery/gallery-photo-gallery-block.js:235
 msgid "-Select Gallery-"
 msgstr ""
 

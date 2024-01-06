@@ -87,7 +87,7 @@ add_action( 'plugins_loaded', 'activate_gallery_photo_gallery' );
 require plugin_dir_path( __FILE__ ) . 'includes/class-gallery-photo-gallery.php';
 
 
-require plugin_dir_path( __FILE__ ) . 'gallery/gallery-photo-gallery-block.php';
+require plugin_dir_path( __FILE__ ) . 'gallery/glp-block.php';
 /**
  * Begins execution of the plugin.
  *

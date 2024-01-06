@@ -75,12 +75,13 @@ class GLP_Admin {
 	    wp_enqueue_style( $this->plugin_name . '-admin', plugin_dir_url( __FILE__ ) . 'css/admin.css', array(), $this->version, 'all' );
 		wp_enqueue_style( 'wp-color-picker' );
         
-        wp_enqueue_style( $this->plugin_name . "-banner", plugin_dir_url( __FILE__ ) . 'css/gallery-photo-gallery-banner.css', array(), $this->version, 'all' );
+        //TODO remove file glp-banner.css
+        // wp_enqueue_style( $this->plugin_name . "-banner", plugin_dir_url( __FILE__ ) . 'css/glp-banner.css', array(), $this->version, 'all' );
 
         wp_enqueue_style('leaflet.css', 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css');
 
         wp_enqueue_style( 'select2', '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css', array(), $this->version, 'all' );
-        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/gallery-photo-gallery-admin.css', array(), $this->version, 'all' );        
+        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/glp-admin.css', array(), $this->version, 'all' );        
 
         if(false === strpos($hook_suffix, $this->plugin_name))
             return;
@@ -123,7 +124,7 @@ class GLP_Admin {
             wp_enqueue_script( $this->plugin_name.'-wp-load-scripts', plugin_dir_url(__FILE__) . 'js/ays-wp-load-scripts.js', array(), $this->version, true);
         }
 
-        wp_enqueue_script( $this->plugin_name . "banner", plugin_dir_url( __FILE__ ) . 'js/gallery-photo-gallery-banner.js', array( 'jquery' ), $this->version, true );
+        wp_enqueue_script( $this->plugin_name . "banner", plugin_dir_url( __FILE__ ) . 'js/glp-banner.js', array( 'jquery' ), $this->version, true );
 
         if (false !== strpos($hook_suffix, "plugins.php")){
             wp_enqueue_script( 'sweetalert-js', '//cdn.jsdelivr.net/npm/sweetalert2@7.26.29/dist/sweetalert2.all.min.js', array('jquery'), $this->version, true );
@@ -162,7 +163,7 @@ class GLP_Admin {
 		wp_enqueue_script( $this->plugin_name."-cookie.js", plugin_dir_url( __FILE__ ) . 'js/cookie.js', array( 'jquery' ), $this->version, true );
 
         // can be removed ?
-        wp_enqueue_script( $this->plugin_name . "admin", plugin_dir_url( __FILE__ ) . 'js/gallery-photo-gallery-admin.js', array( 'jquery', 'wp-color-picker'), $this->version, true );
+        wp_enqueue_script( $this->plugin_name . "admin", plugin_dir_url( __FILE__ ) . 'js/glp-admin.js', array( 'jquery', 'wp-color-picker'), $this->version, true );
         wp_localize_script($this->plugin_name . "admin",  'ays_vars', array('base_url' => AYS_GPG_BASE_URL));
 
         wp_localize_script($this->plugin_name . "admin", 'gallery_ajax', array(
