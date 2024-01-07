@@ -1,6 +1,6 @@
 <?php
 ob_start();
-class Gpg_Categories_List_Table extends WP_List_Table{
+class Glp_Categories_List_Table extends WP_List_Table{
     private $plugin_name;
     private $title_length;
     /** Class constructor */

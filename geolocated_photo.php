@@ -16,7 +16,7 @@ ob_start();
  * Plugin Name:       GLP plugin
  * Plugin URI:        https://glp-plugin.com/wordpress/photo-gallery
  * Description:       Display geolocation vignettes on photos.
- * Version:           5.4.1
+ * Version:           1.0.1
  * Author:            Photo Gallery Team
  * Author URI:        https://glp-plugin.com/
  * License:           GPL-2.0+
@@ -69,7 +69,7 @@ function activate_gallery_photo_gallery() {
 
 /**
  * The code that runs during plugin deactivation.
- * This action is documented in includes/geolocated-photo-categories-list-table-deactivator.php
+ * This action is documented in includes/glp-categories-list-table-deactivator.php
  */
 function deactivate_gallery_photo_gallery() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/geolocated-photo-deactivator.php';

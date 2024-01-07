@@ -19,9 +19,9 @@
  * @subpackage Geolocated_Photo/includes
  * @author     GLP <info@glp-plugin.com>
  */
-class Photo_Gallery_Data {    
+class Glp_Gallery_Data {    
 
-    public static function ays_autoembed( $content ) {
+    public static function glp_autoembed( $content ) {
         global $wp_embed;
 
         if ( is_null( $content ) ) {

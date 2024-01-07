@@ -1,6 +1,6 @@
 <?php
 ob_start();
-class Galleries_List_Table extends WP_List_Table{
+class Glp_Galleries_List_Table extends WP_List_Table{
     private $plugin_name;
     private $title_length;
     /** Class constructor */
@@ -84,10 +84,7 @@ class Galleries_List_Table extends WP_List_Table{
     public function add_or_edit_gallery($data){
         global $wpdb;
         $gallery_table = $wpdb->prefix . "glp_gallery";
-        //error_log("add_or_edit_gallery() IN data: ".print_r($data, true));//TODO
         if( isset($data["ays_gallery_action"]) && wp_verify_nonce( $data["ays_gallery_action"],"ays_gallery_action" ) ) {
-            
-            //error_log("add_or_edit_gallery() IN data: ".print_r($data, true));//TODO    
             
             // List of images
             if ($data["ays-image-path"] != NULL) {

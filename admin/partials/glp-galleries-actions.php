@@ -19,7 +19,7 @@ $author = array(
     'id' => $user->ID,
     'name' => $user->data->display_name
 );
-$get_all_galleries = Photo_Gallery_Data::get_galleries();
+$get_all_galleries = Glp_Gallery_Data::get_galleries();
 $g_options = array(
     'columns_count'         => '3',
     'view_type'             => 'grid',

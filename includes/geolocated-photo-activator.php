@@ -1,6 +1,6 @@
 <?php
 global $glp_gallery_db_version;
-$glp_gallery_db_version = '3.3.6';
+$glp_gallery_db_version = '1.0.0';
 /**
  * Fired during plugin activation
  *
@@ -37,13 +37,14 @@ class Geolocated_Photo_Activator {
         global $glp_gallery_db_version;
         $installed_ver = get_option( "glp_gallery_db_version" );
 
-        $table = $wpdb->prefix . 'glp_gallery';
+        $table_gallery = $wpdb->prefix . 'glp_gallery';
+        $table_map = $wpdb->prefix . 'glp_map';
         $photo_categories_table  =   $wpdb->prefix . 'glp_gallery_categories';        
         $general_settings_table  =   $wpdb->prefix . 'glp_gallery_settings';        
         $charset_collate = $wpdb->get_charset_collate();
         if($installed_ver != $glp_gallery_db_version) {
             
-            $sql = "CREATE TABLE `" . $table . "` (
+            $sql = "CREATE TABLE `" . $table_gallery . "` (
                   `id` INT(16) UNSIGNED NOT NULL AUTO_INCREMENT,
                   `title` VARCHAR(256) NOT NULL,
                   `description` TEXT NOT NULL,
@@ -64,14 +65,25 @@ class Geolocated_Photo_Activator {
                 )$charset_collate;";
             dbDelta( $sql );
 
-            $sql = "CREATE TABLE `" . $general_settings_table . "` (
-                      `id` INT(11) NOT NULL AUTO_INCREMENT,
-                      `meta_key` TEXT NULL DEFAULT NULL,
-                      `meta_value` TEXT NULL DEFAULT NULL,
-                      `note` TEXT NULL DEFAULT NULL,
-                      `options` TEXT NULL DEFAULT NULL,
-                      PRIMARY KEY (`id`)
-                    )".$charset_collate.";";
+            $sql = "CREATE TABLE `" . $table_map . "` (
+                `id` INT(16) UNSIGNED NOT NULL AUTO_INCREMENT,
+                `title` VARCHAR(256) NOT NULL,
+                `options` TEXT NOT NULL,
+                `lightbox_options` TEXT NOT NULL,
+                `provider` TEXT NOT NULL,
+                `gallery_id` TEXT NOT NULL,
+                PRIMARY KEY (`id`)
+              )$charset_collate;";
+          dbDelta( $sql );
+
+          $sql = "CREATE TABLE `" . $general_settings_table . "` (
+                    `id` INT(11) NOT NULL AUTO_INCREMENT,
+                    `meta_key` TEXT NULL DEFAULT NULL,
+                    `meta_value` TEXT NULL DEFAULT NULL,
+                    `note` TEXT NULL DEFAULT NULL,
+                    `options` TEXT NULL DEFAULT NULL,
+                    PRIMARY KEY (`id`)
+                )".$charset_collate.";";
 
             $sql_schema = "SELECT * FROM INFORMATION_SCHEMA.TABLES
                            WHERE table_schema = '".DB_NAME."' AND 

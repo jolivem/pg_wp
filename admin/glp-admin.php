@@ -41,6 +41,7 @@ class GLP_Admin {
 	private $version;
 
 	private $gallery_obj;
+	private $map_obj;
     private $cats_obj;
     private $settings_obj;
 	/**
@@ -57,6 +58,7 @@ class GLP_Admin {
         add_filter( 'set-screen-option', array( __CLASS__, 'set_screen' ), 10, 3 );
         $per_page_array = array(
             'galleries_per_page',
+            'maps_per_page',
             'gallery_categories_per_page',
         );
         foreach($per_page_array as $option_name){
@@ -251,7 +253,7 @@ class GLP_Admin {
             __('GLP Features', $this->plugin_name), 
             'manage_options', 
             $this->plugin_name, 
-            array($this, 'display_plugin_setup_page'), GLP_ADMIN_URL . 'images/icons/icon-gpg-128x128.svg', 6);
+            array($this, 'display_galleries_page'), GLP_ADMIN_URL . 'images/icons/icon-gpg-128x128.svg', 6);
         add_action( "load-$hook_gallery", array( $this, 'screen_option_gallery' ) );
         
         $hook_gallery = add_submenu_page(
@@ -260,9 +262,19 @@ class GLP_Admin {
             __('Galleries', $this->plugin_name),
             'manage_options',
             $this->plugin_name,
-            array($this, 'display_plugin_setup_page')
+            array($this, 'display_galleries_page')
         );
         add_action( "load-$hook_gallery", array( $this, 'screen_option_gallery' ) );
+
+        $hook_gallery = add_submenu_page(
+            $this->plugin_name,
+            __('Maps', $this->plugin_name),
+            __('Maps', $this->plugin_name),
+            'manage_options',
+            $this->plugin_name . '-maps',
+            array($this, 'display_maps_page')
+        );
+        add_action( "load-$hook_gallery", array( $this, 'screen_option_map' ) );
 
         // add_submenu_page(
         //     $this->plugin_name,
@@ -279,10 +291,10 @@ class GLP_Admin {
             __('Categories', $this->plugin_name),
             'manage_options',
             $this->plugin_name . '-categories',
-            array($this, 'display_plugin_gpg_categories_page')
+            array($this, 'display_categories_page')
         );
 
-        add_action("load-$hook_gallery_categories", array($this, 'screen_option_gallery_cats'));
+        add_action("load-$hook_gallery_categories", array($this, 'screen_option_category'));
 
         // $hook_settings = add_submenu_page( $this->plugin_name,
         //     __('General Settings', $this->plugin_name),
@@ -331,22 +343,37 @@ class GLP_Admin {
      * @since    1.0.0
      */
 
-    public function display_plugin_setup_page() {
+    public function display_galleries_page() {
         $this->settings_obj = new Gallery_Settings_Actions($this->plugin_name);
         $action = (isset($_GET['action'])) ? sanitize_text_field( $_GET['action'] ) : '';
         switch ( $action ) {
             case 'add':
-                include_once( 'partials/glp-admin-actions.php' );
+                include_once( 'partials/glp-galleries-actions.php' );
                 break;
             case 'edit':
-                include_once( 'partials/glp-admin-actions.php' );
+                include_once( 'partials/glp-galleries-actions.php' );
                 break;
             default:
-                include_once( 'partials/glp-admin-display.php' );
+                include_once( 'partials/glp-galleries-display.php' );
         }
     }
 
-    public function display_plugin_gpg_categories_page(){
+    public function display_maps_page() {
+        $this->settings_obj = new Gallery_Settings_Actions($this->plugin_name);
+        $action = (isset($_GET['action'])) ? sanitize_text_field( $_GET['action'] ) : '';
+        switch ( $action ) {
+            case 'add':
+                include_once( 'partials/glp-maps-actions.php' );
+                break;
+            case 'edit':
+                include_once( 'partials/glp-maps-actions.php' );
+                break;
+            default:
+                include_once( 'partials/glp-maps-display.php' );
+        }
+    }
+
+    public function display_categories_page(){
         $action = (isset($_GET['action'])) ? sanitize_text_field($_GET['action']) : '';
 
         switch ($action) {
@@ -382,10 +409,22 @@ class GLP_Admin {
         ];
 
         add_screen_option( $option, $args );
-        $this->gallery_obj = new Galleries_List_Table($this->plugin_name);
+        $this->gallery_obj = new Glp_Galleries_List_Table($this->plugin_name);
     }
 
-    public function screen_option_gallery_cats() {
+    public function screen_option_map() {
+        $option = 'per_page';
+        $args   = [
+            'label'   => __('Maps', $this->plugin_name),
+            'default' => 20,
+            'option'  => 'maps_per_page'
+        ];
+
+        add_screen_option( $option, $args );
+        $this->map_obj = new Glp_Maps_List_Table($this->plugin_name);
+    }
+
+    public function screen_option_category() {
         $option = 'per_page';
         $args   = array(
             'label'   => __('Categories', $this->plugin_name),
@@ -394,7 +433,7 @@ class GLP_Admin {
         );
 
         add_screen_option($option, $args);
-        $this->cats_obj = new Gpg_Categories_List_Table($this->plugin_name);
+        $this->cats_obj = new Glp_Categories_List_Table($this->plugin_name);
     }
 
     public static function ays_get_gallery_categories(){
@@ -406,7 +445,7 @@ class GLP_Admin {
         return $result;
     }
 
-    public static function ays_get_gpg_options(){
+    public static function ays_get_gallery_options(){
         global $wpdb;
         $table_name = $wpdb->prefix . 'glp_gallery';
         $res = $wpdb->get_results("SELECT id, title, width, height FROM ".$table_name."");
@@ -434,7 +473,7 @@ class GLP_Admin {
     }
     
     function gen_glp_shortcode_callback() {
-        $shortcode_data = $this->ays_get_gpg_options();
+        $shortcode_data = $this->ays_get_gallery_options();
 
         ?>
         <html xmlns="http://www.w3.org/1999/xhtml">
@@ -675,6 +714,41 @@ class GLP_Admin {
 
     }
 
+    public function get_next_or_prev_map_by_id( $id, $type = "next" ) {
+        global $wpdb;
+
+        $gallery_table = esc_sql( $wpdb->prefix . "glp_map" );
+
+        $where = array();
+        $where_condition = "";
+
+        $id     = (isset( $id ) && $id != "" && absint($id) != 0) ? absint( sanitize_text_field( $id ) ) : null;
+        $type   = (isset( $type ) && $type != "") ? sanitize_text_field( $type ) : "next";
+
+        if ( is_null( $id ) || $id == 0 ) {
+            return null;
+        }
+
+        switch ( $type ) {            
+            case 'prev':
+                $where[] = ' `id` < ' . $id . ' ORDER BY `id` DESC ';;
+                break;
+            case 'next':
+            default:
+                $where[] = ' `id` > ' . $id;
+                break;
+        }
+
+        if( ! empty($where) ){
+            $where_condition = " WHERE " . implode( " AND ", $where );
+        }
+
+        $sql = "SELECT `id` FROM {$gallery_table} ". $where_condition ." LIMIT 1;";
+        $results = $wpdb->get_row( $sql, 'ARRAY_A' );
+
+        return $results;
+
+    }    
     public function get_next_or_prev_gallery_cat_by_id( $id, $type = "next" ) {
         global $wpdb;
 
@@ -756,6 +830,7 @@ class GLP_Admin {
         wp_die();
     }
 
+    //TODO check can be removed
     public function ays_gallery_generate_message_vars_html( $gallery_message_vars ) {
         $content = array();
         $var_counter = 0; 

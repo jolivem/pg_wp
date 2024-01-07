@@ -1455,7 +1455,7 @@ class Geolocated_Photo_Public {
         //$width = $gallery["width"];
         $title = $gallery["title"];
         // $description = $gallery["description"];
-        $description = Photo_Gallery_Data::ays_autoembed( $gallery["description"] );
+        $description = Glp_Gallery_Data::glp_autoembed( $gallery["description"] );
         $custom_css = ($gallery['custom_css'] == '' || $gallery['custom_css'] === false) ? '' : $gallery["custom_css"];
         $hover_opacity = ($gallery_options['hover_opacity'] == '' || $gallery_options['hover_opacity'] === false) ? '0.5' : $gallery_options['hover_opacity'];
         $image_sizes = ($gallery_options['image_sizes'] == '' || $gallery_options['image_sizes'] === false) ? 'full_size' : $gallery_options['image_sizes'];
@@ -1920,35 +1920,6 @@ class Geolocated_Photo_Public {
         $filter_thubnail_opt = 'none';
         $filter_lightbox_opt = (isset($gal_lightbox_options['filter_lightbox_opt'])) ? $gal_lightbox_options['filter_lightbox_opt'] : 'none';        
 
-        // switch ($filter_thubnail_opt) {
-        //     case 'blur':
-        //         $gpg_filter_image = 'blur(3px)';
-        //         break;
-        //     case 'brightness':
-        //         $gpg_filter_image = 'brightness(200%)';
-        //         break;
-        //     case 'contrast':
-        //         $gpg_filter_image = 'contrast(200%)';
-        //         break;
-        //     case 'grayscale':
-        //         $gpg_filter_image = 'grayscale(100%)';
-        //         break;
-        //     case 'hue_rotate':
-        //         $gpg_filter_image = 'hue-rotate(90deg)';
-        //         break;
-        //     case 'invert':
-        //         $gpg_filter_image = 'invert(100%)';
-        //         break;
-        //     case 'saturate':
-        //         $gpg_filter_image = 'saturate(8)';
-        //         break;
-        //     case 'sepia':
-        //         $gpg_filter_image = 'sepia(100%)';
-        //         break;                
-        //     default:
-        //         $gpg_filter_image = 'none';
-        //             break;
-        // }
         $gpg_filter_image = 'none';
 
         switch ($filter_lightbox_opt) {

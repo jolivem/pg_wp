@@ -105,7 +105,7 @@ class Geolocated_Photo {
         /**
 		 * The class responsible for defining all functions for getting all quiz data
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/geolocated-photo-data.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/geolocated-photo-gallery-data.php';
 
 		/**
 		 * The class responsible for orchestrating the actions and filters of the
@@ -142,9 +142,11 @@ class Geolocated_Photo {
         /*
          * The class is responsible for showing galleries in wordpress default WP_LIST_TABLE style
          */
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/geolocated-photo-list-table.php';
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/glp-galleries-list-table.php';
         
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/geolocated-photo-categories-list-table.php';
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/glp-categories-list-table.php';
+
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/glp-maps-list-table.php';
 
 		$this->loader = new Geolocated_Photo_Loader();
 
@@ -177,7 +179,7 @@ class Geolocated_Photo {
 	private function define_admin_hooks() {
 
 		$plugin_admin = new GLP_Admin( $this->get_plugin_name(), $this->get_version() );
-		$data_admin   = new Photo_Gallery_Data( $this->get_plugin_name(), $this->get_version() );
+		$data_admin   = new Glp_Gallery_Data( $this->get_plugin_name(), $this->get_version() );
 		
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );

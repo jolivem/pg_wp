@@ -806,7 +806,7 @@
                 for(let i=0; i<attachment.length; i++){
                     let accordion = $(document).find('ul.ays-accordion'),
                     accordion_el = $(document).find('ul.ays-accordion li'),
-                    ays_img_cat_tooltip = $(document).find("#ays_image_cat").val(),
+                    //ays_img_cat_tooltip = $(document).find("#ays_image_cat").val(),
                     accordion_el_length = accordion_el.length;
                     if(accordion.length > 1){
                         accordion = $(document).find('ul.ays-accordion.ays_accordion_active');
