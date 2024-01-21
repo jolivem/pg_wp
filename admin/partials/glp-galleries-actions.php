@@ -1256,9 +1256,6 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                 <div class="col-sm-3">
                     <label>
                         <?php echo __("Distance inter images", $this->plugin_name);?>
-                        <!-- <a class="ays_help" data-toggle="tooltip" title="<?php echo __("The distance among images with pixels", $this->plugin_name);?>">
-                           <i class="fas fa-info-circle"></i>
-                        </a> -->
                     </label>
                 </div>
                 <div class="col-sm-9 glp_display_flex_width">

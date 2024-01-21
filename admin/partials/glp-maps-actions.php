@@ -28,22 +28,12 @@ $m_options = array(
     'gpg_create_author'     => $user_id,
 );
 
-// lightbox options
-$m_lightbox_options = array(
-    "show_lightbox"         => "true",
-    "lightbox_autoplay"     => "true",
-    "lb_pause"              => "5000",
-    "lb_show_caption"       => "true",
-    "filter_lightbox_opt"   => "none",
-);
 
 // initiate new map
 $map = array(
     "id"                => "",
     "title"             => "Map title",
-    "options"           => json_encode($m_options,true),
-    "lightbox_options"  => json_encode($m_lightbox_options,true),
-    "custom_css"        => "",
+    "options"           => json_encode($m_options,true)
 );
 switch( $action ) {
     case 'add':
@@ -76,10 +66,13 @@ if ( isset( $id ) && !is_null( $id ) ) {
 
 $this_site_path         = trim(get_site_url(), "https:");
 $map_options            = json_decode($map['options'], true);
-$map_lightbox_options   = json_decode($map['lightbox_options'], true);
 
-$show_gal_title = (!isset($map_options['show_gal_title'])) ? 'off' : $map_options['show_gal_title'];
+//$show_gal_title = (!isset($map_options['show_gal_title'])) ? 'off' : $map_options['show_gal_title'];
 //$show_gal_desc = (!isset($map_options['show_gal_desc'])) ? 'on' : $map_options['show_gal_desc'];
+$map_slider_color    = (!isset($map_options['map_slider_color'])) ? '#000000' : esc_attr(stripslashes( $map_options['map_slider_color'] ));
+// Images distance
+$images_distance = (isset($map_options['map_images_distance']) && $map_options['map_images_distance'] != '') ? absint( intval( $map_options['map_images_distance'] ) ) : '5';
+
 
 ?>
 
@@ -147,6 +140,35 @@ $show_gal_title = (!isset($map_options['show_gal_title'])) ? 'off' : $map_option
             </div>
             <hr/>
 
+            <h6 class="ays-subtitle"><?php echo  __('Slider options', $this->plugin_name) ?></h6>         
+            <hr/>            
+            <div class="form-group row">
+                <div class="col-sm-3">
+                    <label>
+                        <?php echo __("Distance inter images", $this->plugin_name);?>
+                    </label>
+                </div>
+                <div class="col-sm-9 glp_display_flex_width">
+                    <div>
+                        <input name="map-images-distance" class="ays-text-input ays-text-input-short" type="number" value="<?php echo $map_images_distance; ?>">
+                    </div>
+                    <div class="glp_dropdown_max_width">
+                        <input type="text" value="px" class="glp-form-hint-for-size" disabled="">
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <div class="form-group row">
+                <div class="col-sm-3">
+                    <label for="map_slider_color">
+                        <?php echo __("Color", $this->plugin_name);?>
+                    </label>
+                </div>
+                <div class="col-sm-9">
+                    <input name="map_slider_color" id="map_slider_color" data-alpha="true" type="text" value="<?php echo $map_slider_color; ?>" data-default-color="rgba(0,0,0,0)">
+                </div>
+            </div>
+
             <div class="form-group row ays-galleries-button-box">
                 <div class="ays-question-button-first-row" style="padding: 0;">
                 <?php
@@ -174,7 +196,7 @@ $show_gal_title = (!isset($map_options['show_gal_title'])) ? 'off' : $map_option
 
                         $other_attributes = array(
                             'id' => 'ays-gallery-prev-button',
-                            'href' => sprintf( '?page=%s&action=%s&gallery=%d', esc_attr( $_REQUEST['page'] ), 'edit', absint( $prev_map_id ) )
+                            'href' => sprintf( '?page=%s&action=%s&map=%d', esc_attr( $_REQUEST['page'] ), 'edit', absint( $prev_map_id ) )
                         );
                         submit_button(__('Previous Gallery', $this->plugin_name), 'button button-primary ays-button ays-gallery-loader-banner', 'ays_gallery_prev_button', false, $other_attributes);
                     }
@@ -182,7 +204,7 @@ $show_gal_title = (!isset($map_options['show_gal_title'])) ? 'off' : $map_option
 
                         $other_attributes = array(
                             'id' => 'ays-gallery-next-button',
-                            'href' => sprintf( '?page=%s&action=%s&gallery=%d', esc_attr( $_REQUEST['page'] ), 'edit', absint( $next_map_id ) )
+                            'href' => sprintf( '?page=%s&action=%s&map=%d', esc_attr( $_REQUEST['page'] ), 'edit', absint( $next_map_id ) )
                         );
                         submit_button(__('Next Gallery', $this->plugin_name), 'button button-primary ays-button ays-gallery-loader-banner', 'ays_gallery_next_button', false, $other_attributes);
                     }
@@ -190,7 +212,6 @@ $show_gal_title = (!isset($map_options['show_gal_title'])) ? 'off' : $map_option
                 </div>
             </div>
             
-            <button type="button" class="ays_gallery_live_preview" data-container="body" data-toggle="popover" data-placement="top" data-content="<?php echo __("View your gallery in live preview. In the preview you can’t see Thumbnail size and Image order changes.", $this->plugin_name);?>" data-original-title="<?php echo __("Gallery preview", $this->plugin_name);?>"><i class="fas fa-search-plus"></i></button>    
             <button class="ays_gallery_live_save" type="submit" name="ays-apply"><i class="far fa-save" gpg_submit_name="ays-apply"></i></button>
             <input type="hidden" id="glp_admin_url" value="<?php echo GLP_ADMIN_URL; ?>"/>
         </form>

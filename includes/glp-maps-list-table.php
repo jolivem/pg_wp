@@ -92,19 +92,18 @@ class Glp_Maps_List_Table extends WP_List_Table{
             
             // Gallery settings
             //error_log("TODO gallery id:".$id);
-            $title                  = (isset($data["gallery_title"]) && $data["gallery_title"] != '') ? stripslashes(sanitize_text_field( $data["gallery_title"] )) : '';
-            $description            = !isset($data['gallery_description']) ? '' : wp_kses_post( $data['gallery_description'] );
-            $width                  = (isset($data['gallery_width']) && $data['gallery_width'] != '') ? wp_unslash(sanitize_text_field( $data['gallery_width'] )) : '';
-            $height                 = 0;
-            $view_type              = isset($data['ays-view-type']) && $data['ays-view-type'] != '' ? sanitize_text_field( $data['ays-view-type'] ) : '';
+            $title                  = (isset($data["map_title"]) && $data["map_title"] != '') ? stripslashes(sanitize_text_field( $data["map_title"] )) : '';
+            $map_images_distance        = (isset($data['map-images-distance']) && $data['map-images-distance'] != '') ? absint( intval( $data['map-images-distance'] ) ) : '5';
+            $map_slider_color = (isset($data['map_slider_color']) && $data['map_slider_color'] != '') ? wp_unslash(sanitize_text_field( $data['map_slider_color'] )) : '#ffffff';
+
 
             $options = array(
 
-                "images_request"            => $title
+                "images_request"            => $title,
+                "map_images_distance"       => $map_images_distance,
+                "map_slider_color"          => $map_slider_color
             );
-            $lightbox_options = array(
-                "lightbox_counter"          => $title,
-            );
+
             $submit_type = (isset($data['submit_type'])) ?  $data['submit_type'] : '';
             if( $id == null ){
                 $sql_result = $wpdb->insert(
@@ -112,10 +111,9 @@ class Glp_Maps_List_Table extends WP_List_Table{
                     array(
                         "title"             => $title,
                         "provider"          => 'provider',
-                        "options"           => json_encode($options),
-                        "lightbox_options"  => json_encode($lightbox_options)
+                        "options"           => json_encode($options)
                     ),
-                    array( "%s", "%s", "%s", "%s" )
+                    array( "%s", "%s", "%s" )
                 );
                 $message = "created";
             }else{
@@ -124,11 +122,10 @@ class Glp_Maps_List_Table extends WP_List_Table{
                     array(
                         "title"             => $title,
                         "provider"          => 'provider',
-                        "options"           => json_encode($options),
-                        "lightbox_options"  => json_encode($lightbox_options)
+                        "options"           => json_encode($options)
                     ),
                     array( "id" => $id ),
-                    array( "%s", "%s", "%s", "%s" ),
+                    array( "%s", "%s", "%s" ),
                     array( "%d" )
                 );
                 $message = "updated";
@@ -163,7 +160,7 @@ class Glp_Maps_List_Table extends WP_List_Table{
      *
      * @param int $id customer ID
      */
-    public static function delete_galleries( $id ) {
+    public static function delete_maps( $id ) {
         global $wpdb;
         $wpdb->delete(
             "{$wpdb->prefix}glp_map",
@@ -290,7 +287,6 @@ class Glp_Maps_List_Table extends WP_List_Table{
     public function column_default( $item, $column_name ) {
         switch ( $column_name ) {
             case "title":
-            case "image":
             case "description":
                 return wp_unslash($item[ $column_name ]);
                 break;
@@ -320,70 +316,30 @@ class Glp_Maps_List_Table extends WP_List_Table{
 
 
     /**
-     * Method for name column
+     * Render the title column
      *
-     * @param array $item an array of DB data
+     * @param array $item
      *
      * @return string
      */
-    function column_image( $item ) {
-        error_log("column_image IN");
-        global $wpdb;
-        $gallery_images = isset($item['images']) && $item['images'] != "" ? explode('***', $item['images']) : array();
-        $gallery_image  = "";
-
-        $image_html     = array();
-        $edit_page_url  = '';
-
-        if(!empty($gallery_images)){
-            $gallery_image = isset($gallery_images[0]) && $gallery_images[0] != "" ? $gallery_images[0] : "";
-
-            if ( isset( $item['id'] ) && absint( $item['id'] ) > 0 ) {
-                $edit_page_url = sprintf( 'href="?page=%s&action=%s&gallery=%d"', esc_attr( $_REQUEST['page'] ), 'edit', absint( $item['id'] ) );
-            }
-
-            $gallery_image_url = $gallery_image;
-            $this_site_path = trim( get_site_url(), "https:" );
-            if( strpos( trim( $gallery_image_url, "https:" ), $this_site_path ) !== false ){ 
-                $query = "SELECT * FROM `" . $wpdb->prefix . "posts` WHERE `post_type` = 'attachment' AND `guid` = '" . $gallery_image_url . "'";
-                $result_img =  $wpdb->get_results( $query, "ARRAY_A" );
-                if( ! empty( $result_img ) ){
-                    $url_img = wp_get_attachment_image_src( $result_img[0]['ID'], 'thumbnail' );
-                    if( $url_img !== false ){
-                        $gallery_image_url = $url_img[0];
-                    }
-                }
-            }
-
-            $image_html[] = '<div class="ays-gallery-image-list-table-column">';
-                $image_html[] = '<a '. $edit_page_url .' class="ays-gallery-image-list-table-link-column">';
-                    $image_html[] = '<img src="'. $gallery_image_url .'" class="ays-gallery-list-table-main-image">';
-                $image_html[] = '</a>';
-            $image_html[] = '</div>';
-        }
-        
-        $image_html = implode('', $image_html);
-
-        return $image_html;
-    }    
 
     function column_title( $item ) {
         //error_log("column_title IN");
-        $delete_nonce = wp_create_nonce( $this->plugin_name . "-delete-gallery" );
-        $duplicate_nonce = wp_create_nonce( $this->plugin_name . "-duplicate-gallery" );
-        $gallery_title = esc_attr(stripcslashes($item['title']));
+        $delete_nonce = wp_create_nonce( $this->plugin_name . "-delete-map" );
+        $duplicate_nonce = wp_create_nonce( $this->plugin_name . "-duplicate-map" );
+        $map_title = esc_attr(stripcslashes($item['title']));
 
-        $q = esc_attr($gallery_title);
-        $gallery_title_length = intval( $this->title_length );
+        $q = esc_attr($map_title);
+        $map_title_length = intval( $this->title_length );
 
-        $restitle = GLP_Admin::glp_restriction_string("word", $gallery_title, $gallery_title_length);
+        $restitle = GLP_Admin::glp_restriction_string("word", $map_title, $map_title_length);
 
-        $title = sprintf( '<a href="?page=%s&action=%s&gallery=%d" title="%s">%s</a>', esc_attr( $_REQUEST['page'] ), 'edit', absint( $item['id'] ), $q, $restitle);
+        $title = sprintf( '<a href="?page=%s&action=%s&map=%d" title="%s">%s</a>', esc_attr( $_REQUEST['page'] ), 'edit', absint( $item['id'] ), $q, $restitle);
 
         $actions = array(
-            "edit" => sprintf( "<a href='?page=%s&action=%s&gallery=%d'>". __('Edit', $this->plugin_name) ."</a>", esc_attr( $_REQUEST["page"] ), "edit", absint( $item["id"] ) ),
-            'duplicate' => sprintf( '<a href="?page=%s&action=%s&gallery=%d&_wpnonce=%s">'. __('Duplicate', $this->plugin_name) .'</a>', esc_attr( $_REQUEST['page'] ), 'duplicate', absint( $item['id'] ), $duplicate_nonce ),
-            "delete" => sprintf( "<a href='?page=%s&action=%s&gallery=%s&_wpnonce=%s'>". __('Delete', $this->plugin_name) ."</a>", esc_attr( $_REQUEST["page"] ), "delete", absint( $item["id"] ), $delete_nonce )
+            "edit" => sprintf( "<a href='?page=%s&action=%s&map=%d'>". __('Edit', $this->plugin_name) ."</a>", esc_attr( $_REQUEST["page"] ), "edit", absint( $item["id"] ) ),
+            'duplicate' => sprintf( '<a href="?page=%s&action=%s&map=%d&_wpnonce=%s">'. __('Duplicate', $this->plugin_name) .'</a>', esc_attr( $_REQUEST['page'] ), 'duplicate', absint( $item['id'] ), $duplicate_nonce ),
+            "delete" => sprintf( "<a href='?page=%s&action=%s&map=%s&_wpnonce=%s'>". __('Delete', $this->plugin_name) ."</a>", esc_attr( $_REQUEST["page"] ), "delete", absint( $item["id"] ), $delete_nonce )
         );
 
         return $title . $this->row_actions( $actions );
@@ -509,16 +465,16 @@ class Glp_Maps_List_Table extends WP_List_Table{
             // In our file that handles the request, verify the nonce.
             $nonce = esc_attr( $_REQUEST["_wpnonce"] );
 
-            if ( ! wp_verify_nonce( $nonce, $this->plugin_name . "-delete-gallery" ) ) {
+            if ( ! wp_verify_nonce( $nonce, $this->plugin_name . "-delete-map" ) ) {
                 die( "Go get a life script kiddies" );
             }
             else {
-                self::delete_galleries( absint( $_GET["gallery"] ) );
+                self::delete_maps( absint( $_GET["map"] ) );
 
                 // esc_url_raw() is used to prevent converting ampersand in url to "#038;"
                 // add_query_arg() return the current url
 
-                $url = esc_url_raw( remove_query_arg(array("action", "gallery", "_wpnonce")  ) ) . "&status=" . $message . "&type=success";
+                $url = esc_url_raw( remove_query_arg(array("action", "map", "_wpnonce")  ) ) . "&status=" . $message . "&type=success";
                 wp_redirect( $url );
                 exit();
             }
@@ -534,14 +490,14 @@ class Glp_Maps_List_Table extends WP_List_Table{
 
             // loop over the array of record IDs and delete them
             foreach ( $delete_ids as $id ) {
-                self::delete_galleries( $id );
+                self::delete_maps( $id );
 
             }
 
             // esc_url_raw() is used to prevent converting ampersand in url to "#038;"
             // add_query_arg() return the current url
 
-            $url = esc_url_raw( remove_query_arg(array("action", "gallery", "_wpnonce")  ) ) . "&status=" . $message . "&type=success";
+            $url = esc_url_raw( remove_query_arg(array("action", "map", "_wpnonce")  ) ) . "&status=" . $message . "&type=success";
             wp_redirect( $url );
             exit();
         }

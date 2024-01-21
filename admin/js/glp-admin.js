@@ -115,6 +115,7 @@
         $(document).find('#ays_gallery_title_color').wpColorPicker();
         $(document).find('#ays_gallery_desc_color').wpColorPicker();
         $(document).find('#glp_thumbnail_title_color').wpColorPicker();
+        $(document).find('#map_slider_color').wpColorPicker();
         $(document).find('.glp_hover_color').wpColorPicker();
         $(document).find('.glp_border_color').wpColorPicker();
         $(document).find('.ays_gallery_live_preview').hover(function () {
@@ -122,9 +123,9 @@
         }, function () {
             $('.ays_gallery_live_preview').popover('hide');
         });
-		let current_fs, next_fs, previous_fs; //fieldsets
-		let left, opacity, scale; //fieldset properties which we will animate
-		let animating; //flag to prevent quick multi-click glitches
+		// let current_fs, next_fs, previous_fs; //fieldsets
+		// let left, opacity, scale; //fieldset properties which we will animate
+		// let animating; //flag to prevent quick multi-click glitches
 
         $(document).find('.gpg_opacity_demo').css('opacity', $(document).find('.gpg_opacity_demo_val').val())
         $(document).on('input', '.gpg_opacity_demo_val', function(){
