@@ -248,12 +248,12 @@
         });
 
         // Images loading effect --AV--
-        if($(document).find('input#glp_images_lazy_loading:checked').val() == "current_loaded" ){
+        if($(document).find('input#glp_images_lazy_loading:checked').val() == "lazy_load" ){
             $(document).find('.show_load_effect').show();
             $(document).find('.ays_hide_hr').show();
         }
         
-        if($(document).find('input#glp_images_global_loading:checked').val() == "all_loaded" ){
+        if($(document).find('input#glp_images_global_loading:checked').val() == "load_all" ){
             $(document).find('.show_load_effect').hide();
             $(document).find('.ays_hide_hr').hide();
         }
@@ -1022,7 +1022,7 @@
                 column_count = 3;
             }
             $columns = 100 / column_count;
-            if($images_loading == 'all_loaded'){
+            if($images_loading == 'load_all'){
                 let $ays_images_all_loaded;                
                 $ays_images_all_loaded = "<div class='gpg_loader'>"+$glp_loader.next()[0].outerHTML+"</div>";
                 $(document).find('.ays_gallery_live_preview_popup').prepend($ays_images_all_loaded);
@@ -1336,7 +1336,7 @@
             $(document).find('.ays_hover_mask').css('background-color', 'rgba(0,0,0,'+$hover_opacity+')');
             
             $(document).find('.gpg_loader').css({'display': 'flex', 'animation-name': 'fadeIn'});
-            if($images_loading == 'all_loaded'){
+            if($images_loading == 'load_all'){
                 $(document).find('.gpg_loader').css({'display': 'flex', 'animation-name': 'fadeIn'});
                 $('.ays_gallery_container').css({'display': 'none'});
                 var ays_duration = Math.floor(Math.random()*1000)+700;
@@ -1349,7 +1349,7 @@
                     aysgrid.masonry('layout');
                 },ays_duration);
             }
-            if($images_loading == 'current_loaded'){
+            if($images_loading == 'lazy_load'){
                 $(document).find('.ays_gallery_container a > img').each( function( instance, image ) {
                     var ays_duration = Math.floor(Math.random()*2000)+700;
                     setTimeout(function(){

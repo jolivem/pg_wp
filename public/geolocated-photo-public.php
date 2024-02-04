@@ -177,10 +177,12 @@ class Geolocated_Photo_Public {
         /*
          * Gallery global settings
          */
+        error_log("glp_gallery-actions gallery: ".print_r($gallery, true));
+
         $gallery_options = json_decode($gallery['options'],true);
+        error_log("glp_gallery-actions options: ".print_r($gallery_options, true));
         $gal_lightbox_options = json_decode($gallery['lightbox_options'],true);
         
-        $images_loading = ($gallery_options['images_loading'] == '' || $gallery_options['images_loading'] == false) ? 'all_loaded' : $gallery_options['images_loading'];
         $gallery_options['gallery_loader']  = (!isset($gallery_options['gallery_loader'])) ? "flower" : $gallery_options['gallery_loader'];
         $ays_gallery_loader = (isset($gallery_options['gallery_loader']) && $gallery_options['gallery_loader'] == 'default') ? "flower" : $gallery_options['gallery_loader'];
 
@@ -230,7 +232,7 @@ class Geolocated_Photo_Public {
 
         //Hover zoom animation Speed
         $hover_zoom_animation_speed = (isset($gallery_options['hover_zoom_animation_speed']) && $gallery_options['hover_zoom_animation_speed'] !== '') ? abs($gallery_options['hover_zoom_animation_speed']) : 0.5;
-        $images_loading = ($gallery_options['images_loading'] == '' || $gallery_options['images_loading'] == false) ? 'all_loaded' : $gallery_options['images_loading'];
+        $images_loading = ($gallery_options['images_loading'] == '' || $gallery_options['images_loading'] == false) ? 'load_all' : $gallery_options['images_loading'];
         $images_request = ($gallery_options['images_request'] == '' || $gallery_options['images_request'] == false) ? 'selection' : $gallery_options['images_request'];
         $gallery_options['enable_light_box'] = isset($gallery_options['enable_light_box']) ? $gallery_options['enable_light_box'] : "off";
 
@@ -373,7 +375,7 @@ class Geolocated_Photo_Public {
         }
 
         $ays_images_all_loaded = '';
-        if($images_loading == 'all_loaded'){        
+        if($images_loading == 'load_all'){        
             $ays_gal_loader_display = "display: block";
             if ($ays_gallery_loader == 'text') {
                 $ays_images_all_loaded = "<div class='gpg_loader_".$id." glp_loader'>
@@ -408,12 +410,13 @@ class Geolocated_Photo_Public {
              $srch_show_lightbox = "";
         }
         
-        if($images_loading == 'current_loaded'){
-            $glp_lazy_load = "
+        // if lazy_loading, set animation
+        if($images_loading == 'lazy_load'){ // TODO lazy_load
+            $glp_lazy_load_animation = "
             var this_image_load_counter = 0;
             $(document).find('.ays_gallery_container_".$id." .$gallery_lightbox_selector > img').each(function(e, img){
                 var this_image = $(this);
-                this_image.attr('src', aysGalleryImages_".$id."[e]);
+
                 if(img.complete){
                     this_image.parent().find('.ays_image_loading_div').css({
                         'opacity': '1',
@@ -546,9 +549,9 @@ class Geolocated_Photo_Public {
                                              .ays_mosaic_column_item_".$id." a div.ays_hover_mask {
                                                 display: none;
                                              }";
-        // end if($images_loading == 'current_loaded'){
-        }else{        
-            $glp_lazy_load = '';
+        // end if($images_loading == 'lazy_load'){
+        }else{     // no lazy loading    
+            $glp_lazy_load_animation = '';
             $glp_container_display_none_js = "$(document).find('.ays_gallery_container_".$id."').css({'display': 'none'});";
             
             $ays_gal_loader_display_js = "$(document).find('".$ays_gal_loader_class."').css({'display': 'flex', 'animation-name': 'fadeIn'});";
@@ -633,8 +636,37 @@ class Geolocated_Photo_Public {
                                 ". $ays_hover_dir_aware_js ."
                                 
                             }
-                            
-                        });                        
+                        });
+                        var lazyloadImages = document.querySelectorAll('img.lazy');    
+                        var lazyloadThrottleTimeout;
+                        
+                        function lazyload () {
+                            console.log('lazyload in');
+                          if(lazyloadThrottleTimeout) {
+                            clearTimeout(lazyloadThrottleTimeout);
+                          }    
+                          
+                          lazyloadThrottleTimeout = setTimeout(function() {
+                              var scrollTop = window.pageYOffset;
+                              lazyloadImages.forEach(function(img) {
+                                let parent = img.parentNode;
+                                if(parent.offsetTop < (window.innerHeight + scrollTop)) {
+                                    img.src = img.dataset.src;
+                                    img.classList.remove('lazy');
+                                }
+                              });
+                              if(lazyloadImages.length == 0) { 
+                                document.removeEventListener('scroll', lazyload);
+                                window.removeEventListener('resize', lazyload);
+                                window.removeEventListener('orientationChange', lazyload);
+                              }
+                          }, 20);
+                        }
+                        
+                        document.addEventListener('scroll', lazyload);
+                        window.addEventListener('resize', lazyload);
+                        window.addEventListener('orientationChange', lazyload);
+
                     });
                 })(jQuery);
         </script>
@@ -672,13 +704,13 @@ class Geolocated_Photo_Public {
         }
         $custom_class = isset($gallery_options['custom_class']) && $gallery_options['custom_class'] != "" ? $gallery_options['custom_class'] : "";
         $gallery_view .= "<div class='ays_gallery_body_".$id." ".$custom_class."'>";
-        if($images_loading == 'current_loaded'){
+        if($images_loading == 'lazy_load'){
             $gallery_view .= $this->ays_get_gallery_content($gallery, $gallery_options, $gal_lightbox_options, $id);
         }
         
         $responsive_width_height = "";
         // if ($gpg_resp_width) {
-        //      if($images_loading == 'all_loaded'){
+        //      if($images_loading == 'load_all'){
         //         $responsive_width_height = "
         //         $('#ays_grid_row_".$id." img.ays_gallery_image').each(function(){
         //                 var realWidth = this.width;                    
@@ -689,7 +721,7 @@ class Geolocated_Photo_Public {
 
         //             });
         //        ";
-        //     }elseif($images_loading == 'current_loaded'){
+        //     }elseif($images_loading == 'lazy_load'){
         //         $responsive_width_height = "
         //             $('#ays_grid_row_".$id." img.ays_gallery_image').each(function(){
         //                 var realWidth = $(this).parents('.ays_grid_column_".$id."').width();                    
@@ -702,7 +734,8 @@ class Geolocated_Photo_Public {
         $gallery_view .= "</div>
         <script>
         (function($){";
-            if($images_loading == 'all_loaded'){
+            // if no lazy loading
+            if($images_loading == 'load_all'){
                 $gallery_cont = $this->ays_get_gallery_content($gallery, $gallery_options, $gal_lightbox_options, $id);
                 $gallery_cont = addslashes($gallery_cont);
                 $gallery_view .= '
@@ -747,7 +780,7 @@ class Geolocated_Photo_Public {
                             gutter: '.$images_distance.',
                             
                         }); 
-                        '.$glp_lazy_load.'
+                        '.$glp_lazy_load_animation.'
                         '.$glp_lazy_load_mosaic.'
 
                         setTimeout(function(){
@@ -921,10 +954,14 @@ class Geolocated_Photo_Public {
                             });
                         },1000);
                     });";
-            }else{
+            }
+            // else lazy_load TODO lazy loading
+            else{
+
                 $gallery_view .= "
                 ".$responsive_width_height." 
                 window.addEventListener('load', function(e){
+                    console.log('XA image loading', e);
                     setTimeout(function(){
                     var aysGalleryImages_".$id." = JSON.parse(window.atob(window.aysGalleryOptions.galleryImages[".$id."]));
                     $( window ).resize(function() {
@@ -964,7 +1001,7 @@ class Geolocated_Photo_Public {
 
                     });
                     ".$ays_gal_loader_display_js." 
-                    ".$glp_lazy_load." 
+                    ".$glp_lazy_load_animation." 
                     ".$glp_lazy_load_mosaic." ";
 
                     $gallery_view .='var gpgSearchLightboxOptions = {
@@ -1191,7 +1228,7 @@ class Geolocated_Photo_Public {
     // return null if on is wrong
     // return country options if correct
     private function checkGeolocation($latitude, $longitude, $country) {
-        error_log("checkGeolocation IN");
+        //error_log("checkGeolocation IN");
         
         if (!is_numeric($latitude)) {
             return null;
@@ -1253,16 +1290,20 @@ class Geolocated_Photo_Public {
                 $images_cat_data_id = "";
             }
 
-            if($images_loading == 'current_loaded'){
+            if($images_loading == 'lazy_load'){
                 $current_image = '';
+                $image_class = 'ays_gallery_image lazy';
+                $src_attribute = 'data-src';
             }else{
                 $current_image = $image;
+                $image_class = 'ays_gallery_image';
+                $src_attribute = 'src';
             }
 
             $img_tag = "";
             $vignette_div = "";
             if ($image_countries[$key] == null) {
-                $img_tag ="<img class='ays_gallery_image' src='". $current_image ."' alt='" . wp_unslash($image_alts[$key]) . "'>";
+                $img_tag ="<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "'>";
             }
             else {
                 $lat = $image_latitudes[$key];
@@ -1273,7 +1314,7 @@ class Geolocated_Photo_Public {
                 $zoom = $image_countries[$key]['zoom'];
                 $lmapId = "lmap-".$image_ids[$key]."";
                 //$imgId = "img-".$image_ids[$key]."";
-                $img_tag ="<img class='ays_gallery_image' src='". $current_image ."' alt='" . wp_unslash($image_alts[$key]) 
+                $img_tag ="<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) 
                           ."' onload='ays_add_vignette_to_image(\"".esc_attr("$lmapId")."\",\"".esc_attr($file)."\",".$lat.",".$lon.",".$zoom.")'>";
                               
                 $vignette_div ="<div id='".$lmapId."' class='overlay-image' style='width: ".$geo_width."; height: ".$geo_height.";'></div>";
@@ -1351,7 +1392,6 @@ class Geolocated_Photo_Public {
 
             $gallery_view .= "<div id='lmap-".$id."' class='ays_vignette_div' style='width: 50px; height: 50px;'></div>
                         $ays_caption
-                        <div class='ays_image_loading_div'>$ays_images_loader</div>
                         $show_title_in_hover
                         <a href='javascript:void(0);'></a>
                     </div>";
@@ -1363,7 +1403,8 @@ class Geolocated_Photo_Public {
             $gallery_view .= "</div>";
         }
 
-        if($images_loading == 'current_loaded'){
+        // if lazy loading
+        if($images_loading == 'lazy_load'){ // TODO lazy_load
             $gallery_view .= "<script>
                 if(typeof aysGalleryOptions === 'undefined'){
                     var aysGalleryOptions = {};
@@ -1468,7 +1509,7 @@ class Geolocated_Photo_Public {
         $show_with_date = ($gallery_options['show_with_date'] == '' || $gallery_options['show_with_date'] == false) ? '' : $gallery_options['show_with_date'];
         $images_distance = (isset($gallery_options['images_distance']) && $gallery_options['images_distance'] != '') ? absint( intval( $gallery_options['images_distance'] ) ) : '5';
         
-        $images_loading = ($gallery_options['images_loading'] == '' || $gallery_options['images_loading'] == false) ? 'all_loaded' : $gallery_options['images_loading'];
+        $images_loading = ($gallery_options['images_loading'] == '' || $gallery_options['images_loading'] == false) ? 'load_all' : $gallery_options['images_loading'];
         
         $gallery_options['gallery_loader']  = (!isset($gallery_options['gallery_loader'])) ? "flower" : $gallery_options['gallery_loader'];        
         $ays_gallery_loader = (isset($gallery_options['gallery_loader']) && $gallery_options['gallery_loader'] == 'default') ? "flower" : $gallery_options['gallery_loader'];
@@ -1622,9 +1663,9 @@ class Geolocated_Photo_Public {
         $image_countries = array();
 
         for( $iid = 0; $iid < count($image_ids); $iid++ ){
-            error_log("image_ids[iid]: ".$image_ids[$iid]);
+            //error_log("image_ids[iid]: ".$image_ids[$iid]);
             $query = "SELECT meta_key, meta_value FROM `".$wpdb->prefix."postmeta` WHERE `post_id` = '".$image_ids[$iid]."'";
-            error_log("query: ".$query);
+            //error_log("query: ".$query);
             $result =  $wpdb->get_results( $query, "ARRAY_A" );
             $options = null;
             $longitude = 0;
@@ -1891,7 +1932,7 @@ class Geolocated_Photo_Public {
             $show_title_on, $hover_icon, $ays_show_caption, $ays_images_loader, $images,
             $image_countries, $image_latitudes, $image_longitudes, $images_categories, $images_distance,
             $column_width, $vignette_display);
-        error_log("gallery_view=".$gallery_view);
+        //error_log("gallery_view=".$gallery_view);
         
         ///////////////////////////////
 

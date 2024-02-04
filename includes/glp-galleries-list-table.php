@@ -136,7 +136,7 @@ class Glp_Galleries_List_Table extends WP_List_Table{
             $show_title_on          = (isset($data['glp_show_title_on']) && $data['glp_show_title_on'] != '') ? wp_unslash(sanitize_text_field( $data['glp_show_title_on'] )) : '';
             $title_position         = (isset($data['image_title_position']) && $data['image_title_position'] != '')? wp_unslash(sanitize_text_field( $data['image_title_position'] )) : '';
             $show_with_date         = wp_unslash(sanitize_text_field( isset($data['glp_show_with_date']) ? $data['glp_show_with_date'] : '' ));
-            $ays_images_loading     = (isset($data['ays_images_loading']) && $data['ays_images_loading'] != '') ? sanitize_text_field( $data['ays_images_loading'] ) : 'all_loaded';
+            $ays_images_loading     = (isset($data['ays_images_loading']) && $data['ays_images_loading'] != '') ? sanitize_text_field( $data['ays_images_loading'] ) : 'load_all';
             $ays_images_request     = (isset($data['ays_images_request']) && $data['ays_images_request'] != '') ? sanitize_text_field( $data['ays_images_request'] ) : 'selection';
             $query_categories       = (isset($data['ays_query_category']) && $data['ays_query_category'] != '') ? sanitize_text_field( implode('***', $data['ays_query_category']) ) : '';
             $gpg_redirect_url_tab   = (isset($data['gpg_redirect_url_tab']) && $data['gpg_redirect_url_tab'] != '') ? sanitize_text_field( $data['gpg_redirect_url_tab'] ) : '_blank';

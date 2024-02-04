@@ -46,7 +46,7 @@ $g_options = array(
     "title_position"        => "bottom",
     "show_with_date"        => "",
     "images_distance"       => "5",
-    "images_loading"        => "all_loaded",
+    "images_loading"        => "load_all",
     "images_request"        => "selection",
     "gallery_loader"        => "flower",
     "hover_icon_size"       => "20",
@@ -97,6 +97,8 @@ switch( $action ) {
         $gallery = $this->gallery_obj->get_gallery_by_id($id);
         break;
 }
+
+error_log("glp_gallery-actions gallery: ".print_r($gallery, true));
 
 $gallery_message_vars = array(  
     '%%user_first_name%%'       => __("User's First Name", $this->plugin_name),
@@ -227,7 +229,7 @@ $responsive_width = (!isset($gal_options['resp_width'])) ? 'on' : $gal_options['
 
 $enable_rtl_direction = (isset($gal_options['enable_rtl_direction']) && $gal_options['enable_rtl_direction'] == 'on') ? $gal_options['enable_rtl_direction'] : 'off';
 
-$loading_type = (isset($gal_options['images_loading']) && $gal_options['images_loading'] != '') ? $gal_options['images_loading'] : "all_loaded"; 
+$loading_type = (isset($gal_options['images_loading']) && $gal_options['images_loading'] != '') ? $gal_options['images_loading'] : "load_all"; 
 $image_request_type = (isset($gal_options['images_request']) && $gal_options['images_request'] != '') ? $gal_options['images_request'] : "selection"; 
 
 //$redirect_type = (isset($gal_options['redirect_url_tab']) && $gal_options['redirect_url_tab'] != '') ? $gal_options['redirect_url_tab'] : "_blank"; 
@@ -518,7 +520,7 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
 
                         // query from table postmeta
                         $query = "SELECT meta_key, meta_value FROM `".$wpdb->prefix."postmeta` WHERE `post_id` = '".$image_ids[$key]."'";
-                        error_log("query: ".$query);
+                        //error_log("query: ".$query);
                         $result_meta =  $wpdb->get_results( $query, "ARRAY_A" );
                         $category_id = -1;
                         $category = '';
@@ -632,7 +634,7 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                         
                         // query from table postmeta
                         $query = "SELECT meta_key, meta_value FROM `".$wpdb->prefix."postmeta` WHERE `post_id` = '".$id."'";
-                        error_log("query: ".$query);
+                        //error_log("query: ".$query);
                         $result_meta =  $wpdb->get_results( $query, "ARRAY_A" );
                         $category_id = -1;
                         $category = '';
@@ -931,12 +933,12 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                 <div class="col-sm-9">
                     <div>
                         <label class="glp_image_hover_icon" id="gpg_image_global_loading"><?php echo __("Global loading ", $this->plugin_name);?>
-                            <input type="radio" id="glp_images_global_loading" name="ays_images_loading" value="all_loaded"
-                            <?php echo ($loading_type == "all_loaded") ? "checked" : ""; ?> />
+                            <input type="radio" id="glp_images_global_loading" name="ays_images_loading" value="load_all"
+                            <?php echo ($loading_type == "load_all") ? "checked" : ""; ?> />
                         </label>
                         <label class="glp_image_hover_icon" id="gpg_image_lazy_loading"><?php echo __("Lazy loading ", $this->plugin_name);?>
-                            <input type="radio" id="glp_images_lazy_loading" name="ays_images_loading" value="current_loaded" 
-                            <?php echo ($loading_type == "current_loaded") ? "checked" : ""; ?>/>
+                            <input type="radio" id="glp_images_lazy_loading" name="ays_images_loading" value="lazy_load" 
+                            <?php echo ($loading_type == "lazy_load") ? "checked" : ""; ?>/>
                         </label>
                     </div>
                 </div>
