@@ -242,8 +242,9 @@ class Geolocated_Photo_Public {
         $disable_lightbox = (isset($gallery_options['enable_light_box']) && $gallery_options['enable_light_box'] == "off" || $gallery_options['enable_light_box'] == "") ? true : false;
 
         $hover_effect = (!isset($gallery_options['hover_effect']) || $gallery_options['hover_effect'] == null) ? "fadeIn" : $gallery_options['hover_effect'];
+        
+        // TODO remove img_load_effect
         $img_load_effect = (!isset($gallery_options['img_load_effect']) || $gallery_options['img_load_effect'] == null) ? "fadeIn" : $gallery_options['img_load_effect'];
-
 
         $redircet_url_tab   = (isset($gallery_options['redirect_url_tab']) && $gallery_options['redirect_url_tab'] != '') ? $gallery_options['redirect_url_tab'] : "_blank";
 
@@ -261,7 +262,7 @@ class Geolocated_Photo_Public {
         if($columns == null || $columns == 0){
             $columns = 3;
         }
-        error_log("columns=".$columns);
+        //error_log("columns=".$columns);
         if($images_hover_zoom == "yes"){
             $hover_zoom_In = "$(this).find('img').css({'transform': 'scale(1.15)', 'transition': '.5s ease-in-out', 'transition-duration':'". $hover_zoom_animation_speed ."s'});";
             $hover_zoom_Out = "$(this).find('img').css({'transform': 'scale(1)', 'transition': '.5s ease-in-out', 'transition-duration':'". $hover_zoom_animation_speed ."s'});";
@@ -413,117 +414,9 @@ class Geolocated_Photo_Public {
         // if lazy_loading, set animation
         if($images_loading == 'lazy_load'){ // TODO lazy_load
             $glp_lazy_load_animation = "
-            var this_image_load_counter = 0;
             $(document).find('.ays_gallery_container_".$id." .$gallery_lightbox_selector > img').each(function(e, img){
-                var this_image = $(this);
-
-                if(img.complete){
-                    this_image.parent().find('.ays_image_loading_div').css({
-                        'opacity': '1',
-                        'animation-name': 'fadeOutDown',
-                        'animation-duration': '1.2s',
-                    });
-                    setTimeout(function(){
-                        this_image.parent().find('.ays_image_loading_div').css({
-                            'display': 'none'
-                        });                                  
-                        this_image.parent().find('div.ays_hover_mask').css({
-                            'display': 'flex'
-                        });
-                        this_image.css({
-                            'opacity': '1',
-                            'display': 'block',
-                            'animation': '".$img_load_effect." .5s',
-                            'z-index': 10000,
-                        });
-                        if(e === this_image_load_counter){
-                            setTimeout(function(){
-                                $(document).find('.ays_gallery_container_".$id." .mosaic_".$id."').Mosaic({
-                                    innerGap: {$images_distance},
-                                    refitOnResize: true,
-                                    showTailWhenNotEnoughItemsForEvenOneRow: true,
-                                    maxRowHeight: 250,
-                                    maxRowHeightPolicy: 'tail'
-                                });
-                                aysgrid_".$id.".masonry('layout');
-                                $(window).trigger('resize');
-                            },400);
-                        }
-                        this_image_load_counter++;
-                    }, 400);
-                
-                    if(e === this_image_load_counter){
-                        setTimeout(function(){
-                            $(document).find('.ays_gallery_container_".$id." .mosaic_".$id."').Mosaic({
-                                innerGap: {$images_distance},
-                                refitOnResize: true,
-                                showTailWhenNotEnoughItemsForEvenOneRow: true,
-                                maxRowHeight: 250,
-                                maxRowHeightPolicy: 'tail'
-                            });
-                            aysgrid_".$id.".masonry('layout');
-                            $(window).trigger('resize');
-                        },400);
-                    }
-                }else{                        
-                    img.onload = function(e){
-                        console.log('YYYYY image loaded', e);
-                        this_image.parent().find('.ays_image_loading_div').css({
-                            'opacity': '1',
-                            'animation-name': 'fadeOutDown',
-                            'animation-duration': '1.2s',
-                        });
-                        setTimeout(function(){
-                            this_image.parent().find('.ays_image_loading_div').css({
-                                'display': 'none'
-                            });                                  
-                            this_image.parent().find('div.ays_hover_mask').css({
-                                'display': 'flex'
-                            });
-                            this_image.css({
-                                'opacity': '1',
-                                'display': 'block',
-                                'animation': '".$img_load_effect." .5s',
-                                'z-index': 10000,
-                            });
-                            if(e === this_image_load_counter){
-                                setTimeout(function(){
-                                    $(document).find('.ays_gallery_container_".$id." .mosaic_".$id."').Mosaic({
-                                        innerGap: {$images_distance},
-                                        refitOnResize: true,
-                                        showTailWhenNotEnoughItemsForEvenOneRow: true,
-                                        maxRowHeight: 250,
-                                        maxRowHeightPolicy: 'tail'
-                                    });
-                                    aysgrid_".$id.".masonry('layout');
-                                    $(window).trigger('resize');
-                                    var ays_gallery_containers = $(document).find('.ays_gallery_container_".$id."');
-                                    ays_gallery_containers.css({
-                                       position: 'static'
-                                    });
-                                    ays_gallery_containers.parents().each(function(){
-                                        if($(this).css('position') == 'relative'){
-                                            $(this).css({
-                                                position: 'static'
-                                            });
-                                        }
-                                    });
-                                },400);
-                                setTimeout(function(){
-                                    $(document).find('.ays_gallery_container_".$id." .mosaic_".$id."').Mosaic({
-                                        innerGap: {$images_distance},
-                                        refitOnResize: true,
-                                        showTailWhenNotEnoughItemsForEvenOneRow: true,
-                                        maxRowHeight: 250,
-                                        maxRowHeightPolicy: 'tail'
-                                    });
-                                    $(window).trigger('resize');
-                                },2000);
-                            }
-                            this_image_load_counter++;
-                        }, 400);
-                
-                    }
+                img.onload = function(e){
+                    img.classList.add('lazyloaded');
                 }
             });";
             $glp_container_display_none_js = "";
@@ -637,11 +530,11 @@ class Geolocated_Photo_Public {
                                 
                             }
                         });
+
                         var lazyloadImages = document.querySelectorAll('img.lazy');    
                         var lazyloadThrottleTimeout;
                         
                         function lazyload () {
-                            console.log('lazyload in');
                           if(lazyloadThrottleTimeout) {
                             clearTimeout(lazyloadThrottleTimeout);
                           }    
@@ -649,10 +542,12 @@ class Geolocated_Photo_Public {
                           lazyloadThrottleTimeout = setTimeout(function() {
                               var scrollTop = window.pageYOffset;
                               lazyloadImages.forEach(function(img) {
-                                let parent = img.parentNode;
-                                if(parent.offsetTop < (window.innerHeight + scrollTop)) {
-                                    img.src = img.dataset.src;
-                                    img.classList.remove('lazy');
+                                if (img.src == '') {
+                                    let parent = img.parentNode;
+                                    if(parent.offsetTop < (window.innerHeight + scrollTop)) {
+                                        img.src = img.dataset.src;
+                                        console.log('lazyload ', img.src);
+                                    }
                                 }
                               });
                               if(lazyloadImages.length == 0) { 
@@ -666,6 +561,37 @@ class Geolocated_Photo_Public {
                         document.addEventListener('scroll', lazyload);
                         window.addEventListener('resize', lazyload);
                         window.addEventListener('orientationChange', lazyload);
+
+                        function lazyload2 () {
+                            console.log('lazyload2 in');
+                            console.log('lazyload2 lenght', lazyloadImages.length);
+                            if(lazyloadThrottleTimeout) {
+                              clearTimeout(lazyloadThrottleTimeout);
+                            }    
+                            
+                            var scrollTop = window.pageYOffset;
+                            console.log('lazyload2 in1');
+                            lazyloadImages.forEach(function(img) {
+                                if (img.src == '') {
+                                    let parent = img.parentNode;
+                                    console.log('lazyload2 offsetTop', parent.offsetTop);
+                                    console.log('lazyload2 innerHeight', window.innerHeight);
+                                    console.log('lazyload2 scrollTop', scrollTop);
+                                    if(parent.offsetTop < (window.innerHeight + scrollTop)) {
+                                        img.classList.remove('lazy');
+                                        img.src = img.dataset.src;
+                                        console.log('lazyload2 scrollTop', scrollTop);
+                                    }
+                                }
+                            });
+                            if(lazyloadImages.length == 0) { 
+                                document.removeEventListener('scroll', lazyload);
+                                window.removeEventListener('resize', lazyload);
+                                window.removeEventListener('orientationChange', lazyload);
+                            }
+                        }
+  
+                        lazyload2();
 
                     });
                 })(jQuery);
@@ -1303,6 +1229,7 @@ class Geolocated_Photo_Public {
             $img_tag = "";
             $vignette_div = "";
             if ($image_countries[$key] == null) {
+                //$img_tag ="<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "' onload='console.log(\"ID=".$image_ids[$key]."\")'>";
                 $img_tag ="<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "'>";
             }
             else {
@@ -1368,17 +1295,18 @@ class Geolocated_Photo_Public {
                 $wh_attr = " width='".$img_attr[0]."' height='".$img_attr[1]."' ";
             }
          
-            //MJO TODO remove console.log
+            
             if ($view == "mosaic") {
                 $gallery_view .= "<div class='item withImage ays_mosaic_column_item_".$id." ays_count_views' ".$wh_attr." data-src='" . $images[$key] . "' data-desc='" . $image_titles[$key] ." ". $image_alts[$key] ." ". $image_descs[$key] ."' ".$ays_data_sub_html.">";
                 $gallery_view .= "<img src='" . $current_image . "' alt='" . wp_unslash($image_alts[$key]) . "' />";
             }
             elseif ($view == "masonry") {
+                //MJO TODO remove console.log in onload
                 $gallery_view .= "<div class='ays_masonry_grid-item ays_masonry_item_".$id." ays_count_views' data-src='" . $images[$key] . "' data-desc='" . $image_titles[$key] ." ". $image_alts[$key] ." ". $image_descs[$key] ."' ".$ays_data_sub_html.">";
                 $gallery_view .= "<img src='". $current_image ."' alt='".$image_alts[$key]."' style='box-shadow: none;' onload='console.log(\"ID=".$image_ids[$key]."\")'>";
             }
             elseif ($view == "grid") {
-
+                //MJO TODO remove data-src ?
                 $gallery_view .="<div class='ays_grid_column_".$id." ays_count_views' style='width: calc(".($column_width)."% - ".($images_distance)."px);' ".$images_cat_data_id." data-src='" . $images[$key] . "' data-desc='" . $image_titles[$key] ." ". $image_alts[$key] ." ". $image_descs[$key] ."' ".$ays_data_sub_html.">";
                 $gallery_view .=$img_tag;
             }
@@ -1395,7 +1323,8 @@ class Geolocated_Photo_Public {
                         $show_title_in_hover
                         <a href='javascript:void(0);'></a>
                     </div>";
-        }
+        } // end foreach image
+        
         if ($view == "mosaic") {
             $gallery_view .= "</div><div style='clear:both;'></div>";
         }
@@ -2119,7 +2048,13 @@ class Geolocated_Photo_Public {
                     perspective: 200px;
                     line-height: 0;
                 }
-
+                .lazy {
+                    transform: scale(0);
+                    transition: all 1s;
+                }
+                .lazyloaded {
+                    transform: scale(1);
+                }
                 .ays_gallery_body_".$id." .ays_gallery_image, .ays_masonry_grid-item img, 
                 .ays_mosaic_column_item_".$id." img, 
                 .ays_masonry_item_".$id." img{
