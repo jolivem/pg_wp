@@ -614,11 +614,10 @@ class GLP_Admin {
         if(isset($_REQUEST['page'])){
             if(false !== strpos( sanitize_text_field( $_REQUEST['page'] ), $this->plugin_name)){
                 ?>
-                <p style="font-size:13px;text-align:center;font-style:italic;">
-                    <span style="margin-left:0px;margin-right:10px;" class="ays_heart_beat"><i class="far fa-heart animated"></i></span>
-                    <span><?php echo __( "If you love our plugin, please do big favor and rate us on", $this->plugin_name); ?></span> 
-                    <a target="_blank" href='https://wordpress.org/support/plugin/geolocated-photo/reviews/'>WordPress.org</a>
-                    <span class="ays_heart_beat"><i class="far fa-heart animated"></i></span>
+                <hr/>
+                <p style="font-size:13px;text-align:left;font-style:italic;">
+                    <input type="submit" name="ays-submit-top" class="ays-submit button action-button button-primary glp-save-comp" value="<?php echo __("Save and close", $this->plugin_name);?>" gpg_submit_name="ays-submit" />        
+                    <input type="submit" name="ays-apply-top" class="ays-submit action-button button glp-save-comp" id="ays-button-top-apply" title="Ctrl + s" data-toggle="tooltip" data-delay='{"show":"1000"}' value="<?php echo __("Save", $this->plugin_name);?>" gpg_submit_name="ays-apply"/>
                 </p>
             <?php
             }

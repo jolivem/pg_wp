@@ -867,39 +867,6 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                     </div>
                 </div>
             </div>
-            <hr class="ays_hide_hr" />
-            <div class="form-group row show_load_effect">
-                <div class="col-sm-3">
-                    <label for="gallery_img_loading_effect">
-                        <?php echo __("Images loading effect", $this->plugin_name);?>
-                    </label>
-                </div>
-                <div class="col-sm-9">
-                    <select id="gallery_img_loading_effect" class="ays-text-input ays-text-input-short" name="ays_img_load_effect">
-                        <optgroup label="Fading Entrances">
-                            <option <?php echo 'fadeIn' == $img_load_effect ? 'selected' : ''; ?> value="fadeIn">Fade In</option>
-                            <option <?php echo 'fadeInDown' == $img_load_effect ? 'selected' : ''; ?> value="fadeInDown">Fade In Down</option>
-                            <option <?php echo 'fadeInLeft' == $img_load_effect ? 'selected' : ''; ?> value="fadeInLeft">Fade In Left</option>
-                            <option <?php echo 'fadeInRight' == $img_load_effect ? 'selected' : ''; ?> value="fadeInRight">Fade In Right</option>
-                            <option <?php echo 'fadeInUp' == $img_load_effect ? 'selected' : ''; ?> value="fadeInUp">Fade In Up</option>
-                        </optgroup>
-                        <optgroup label="Sliding Entrances">
-                            <option <?php echo ($img_load_effect == "slideInUp") ? "selected" : ""; ?> value="slideInUp"><?php echo __("Slide Up", $this->plugin_name);?></option>
-                            <option <?php echo ($img_load_effect == "slideInDown") ? "selected" : ""; ?> value="slideInDown"><?php echo __("Slide Down", $this->plugin_name);?></option>
-                            <option <?php echo ($img_load_effect == "slideInLeft") ? "selected" : ""; ?> value="slideInLeft"><?php echo __("Slide Left", $this->plugin_name);?></option>
-                            <option <?php echo ($img_load_effect == "slideInRight") ? "selected" : ""; ?> value="slideInRight"><?php echo __("Slide Right", $this->plugin_name);?></option>
-                        </optgroup>                                
-                        <optgroup label="Zoom Entrances">
-                            <option <?php echo 'zoomIn' == $img_load_effect ? 'selected' : ''; ?> value="zoomIn">Zoom In</option> 
-                            <option <?php echo 'zoomInDown' == $img_load_effect ? 'selected' : ''; ?> value="zoomInDown">Zoom In Down</option> 
-                            <option <?php echo 'zoomInLeft' == $img_load_effect ? 'selected' : ''; ?> value="zoomInLeft">Zoom In Left</option> 
-                            <option <?php echo 'zoomInRight' == $img_load_effect ? 'selected' : ''; ?> value="zoomInRight">Zoom In Right</option> 
-                            <option <?php echo 'zoomInUp' == $img_load_effect ? 'selected' : ''; ?> value="zoomInUp">Zoom In Up</option> 
-                        </optgroup>
-                    </select>
-                </div>
-            </div>
-            <hr/>
            
             <?php
                 $bacel = $gal_options['view_type'] == 'grid' ? "style='display: flex;'" : "style='display: none;'";
@@ -978,7 +945,7 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
             <div class="form-group row">
                 <div class="col-sm-3">
                     <label for="ays_galery_enable_rtl_direction">
-                        <?php echo __('Use RTL Direction',$this->plugin_name)?>
+                        <?php echo __('Right To Left text direction',$this->plugin_name)?>
                     </label>
                 </div>
                 <div class="col-sm-9">

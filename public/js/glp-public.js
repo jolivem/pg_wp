@@ -100,6 +100,7 @@ function lazyload_single () {
     };
 }
 
+// for grid 
 function lazyload_max () {
     console.log('lazyload_max in');
     var lazyloadImages = document.querySelectorAll('img.lazy');    

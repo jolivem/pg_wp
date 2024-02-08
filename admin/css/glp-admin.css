@@ -2946,14 +2946,6 @@ a.ays_animation_preview {
     border: 0;
 }
 
-.show_load_effect_load_more {
-    flex-direction: column;
-}
-
-.show_load_effect_load_more>div {
-    max-height: 100px;
-}
-
 .gpg_images_border_style + span.select2-container{
     width: 200px !important;
 }

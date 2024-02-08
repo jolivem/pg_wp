@@ -125,7 +125,6 @@ class Glp_Galleries_List_Table extends WP_List_Table{
             $images_distance        = (isset($data['glp-images-distance']) && $data['glp-images-distance'] != '') ? absint( intval( $data['glp-images-distance'] ) ) : '5';
             $mosaic_row_size        = (isset($data['glp-mosaic-row-size']) && $data['glp-mosaic-row-size'] != '') ? absint( intval( $data['glp-mosaic-row-size'] ) ) : '500';
             $hover_effect           = (isset($data['ays_hover_simple']) && $data['ays_hover_simple'] != '') ? sanitize_text_field( $data['ays_hover_simple'] ) : '';
-            $img_load_effect        = (isset($data['ays_img_load_effect']) && $data['ays_img_load_effect'] != '') ? sanitize_text_field( $data['ays_img_load_effect'] ) : '';
             $hover_opacity          = (isset($data['glp-image-hover-opacity']) && $data['glp-image-hover-opacity'] != '') ? sanitize_text_field( $data['glp-image-hover-opacity'] ) : '';
             $hover_color            = (isset($data['glp-hover-color']) && $data['glp-hover-color'] != '') ? sanitize_text_field( $data['glp-hover-color'] ) : '';
             $hover_icon             = (isset($data['glp-image-hover-icon']) && $data['glp-image-hover-icon'] != '') ? sanitize_text_field( $data['glp-image-hover-icon'] ) : '';
