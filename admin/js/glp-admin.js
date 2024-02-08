@@ -849,12 +849,20 @@
             return;
 
         }
+
         if($(document).find('input.ays-view-type:checked').val() == "grid" || 
            $(document).find('input.ays-view-type:checked').val() == "masonry"){
-            $(document).find('#ays-columns-count').css({'display': 'flex', 'animation-name': 'fadeIn', 'animation-duration': '.5s'});
+            // display columns
+            $(document).find('#glp-columns-count').css({'display': 'flex'});
+            
+            // hide row size
+            $(document).find('#glp-mosaic-row-size').css({'display': 'none'});
         }else{
-            $(document).find('#ays-columns-count').css({ 'animation-name': 'fadeOut', 'animation-duration': '.5s'});
-            setTimeout(function(){ $(document).find('#ays-columns-count').css({'display': 'none'}); }, 480);
+            // hide columns
+            $(document).find('#glp-columns-count').css({'display': 'none'});
+
+            // display row size
+            $(document).find('#glp-mosaic-row-size').css({'display': 'flex'});
 
         }
 
@@ -886,17 +894,24 @@
         $(document).find('a[data-tab="tab2"]').on('click', function(){
             if($(this).find('span.badge').length > 0){
                 $(this).find('span.badge').remove();
-                $(document).find('#ays-columns-count')[0].scrollIntoView({block: "center", behavior: "smooth"});
+                $(document).find('#glp-columns-count')[0].scrollIntoView({block: "center", behavior: "smooth"});
             }
         });
         
         $(document).find('input.ays-view-type').on('click', function(){
             if($(document).find('input.ays-view-type:checked').val() == "grid" || 
                $(document).find('input.ays-view-type:checked').val() == "masonry"){
-                $(document).find('#ays-columns-count').css({'display': 'flex', 'animation-name': 'fadeIn', 'animation-duration': '.5s'});                
+                // display columns
+                $(document).find('#glp-columns-count').css({'display': 'flex', 'animation-name': 'fadeIn', 'animation-duration': '.5s'});
+                
+                // hide row size
+                $(document).find('#glp-mosaic-row-size').css({'display': 'none'});
             }else{
-                $(document).find('#ays-columns-count').css({ 'animation-name': 'fadeOut', 'animation-duration': '.5s'});
-                setTimeout(function(){ $(document).find('#ays-columns-count').css({'display': 'none'}); }, 480);
+                // hide columns
+                $(document).find('#glp-columns-count').css({'display': 'none'});
+
+                // display row size
+                $(document).find('#glp-mosaic-row-size').css({'display': 'flex', 'animation-name': 'fadeIn', 'animation-duration': '.5s'});
             }
 
             if($(document).find('input.ays-view-type:checked').val() == "grid" ){
@@ -906,7 +921,6 @@
                     $(document).find('#ays-thumb-height').css({'display': 'flex', 'animation-name': 'fadeIn', 'animation-duration': '.5s'});
                 }
                 $(document).find('#glp_resp_width').css({'display': 'flex', 'animation-name': 'fadeIn', 'animation-duration': '.5s'});
-                // $(document).find('#ays-columns-count + hr').css({'display': 'block'});
                 $(document).find('.hr_pakel').css({'display': 'block'});
             }else{
                 $(document).find('#ays-thumb-height').css({ 'animation-name': 'fadeOut', 'animation-duration': '.5s'});
@@ -918,13 +932,13 @@
                 $(document).find('.hr_pakel').css({'display': 'none'});
             }
 
-            if($(document).find('input.ays-view-type:checked').val() == "mosaic"){
-                $(document).find('#ays-columns-count + hr').css({'display': 'none'});
-                $(document).find('.pakel').css({'display': 'none'});
-            }else{
-                $(document).find('#ays-columns-count + hr').css({'display': 'block'});
-                $(document).find('.pakel').css({'display': 'block'});            
-            }
+            // if($(document).find('input.ays-view-type:checked').val() == "mosaic"){
+            //     $(document).find('#glp-columns-count + hr').css({'display': 'none'});
+            //     $(document).find('.pakel').css({'display': 'none'});
+            // }else{
+            //     $(document).find('#glp-columns-count + hr').css({'display': 'block'});
+            //     $(document).find('.pakel').css({'display': 'block'});            
+            // }
             
             if($(document).find('input.ays-view-type:checked').val() == "masonry" ){
                 $(document).find('.ays_hover_effect_radio_simple').prop('checked', true);
@@ -933,7 +947,7 @@
                 $(document).find('.ays_effect_dir_aware').hide(150);
                 $(document).find('.ays_hover_effect_radio_dir_aware').prop('disabled', true);
                 $(document).find('.ays_hover_effect_radio_dir_aware').parent().css('color', '#ccc');
-                // $(document).find('#ays-columns-count + hr').css({'display': 'none'});
+                // $(document).find('#glp-columns-count + hr').css({'display': 'none'});
             }else{
                 $(document).find('.ays_hover_effect_radio_dir_aware').prop("disabled", false);
                 $(document).find('.ays_hover_effect_radio_dir_aware').parent().css('color', '#000');
@@ -953,447 +967,6 @@
                 });
             },450);
         });
-
-        /////////////////////
-        // LIVE PREVIEW
-        /////////////////////
-
-        $(document).on('click', '.ays_gallery_live_preview', function(){
-            
-            $(document.body).css('overflow', 'hidden');
-            var ays_gallery_containers = document.getElementsByClassName('ays_gallery_container');
-            var ays_gallery_container;
-            
-            for(var ays_i = 0; ays_i < ays_gallery_containers.length; ays_i++){
-               do{
-                    ays_gallery_container = ays_gallery_containers[ays_i].parentElement.parentElement;
-                   if(ays_gallery_container.style.position === 'relative'){
-                       ays_gallery_container.style.position = 'static';
-                   }
-                }
-                while(ays_gallery_container.tagName == 'body');
-                
-            }
-            
-            let popup_view = $(document).find('div.ays_gallery_live_preview_popup .ays_gallery_container'),
-                accordion_el = $(document).find('ul.ays-accordion li.ays-accordion_li'),
-                accordion_el_length = accordion_el.length,
-                ays_admin_url = $(document).find('#glp_admin_url').val(),
-                noimage_path = $(document).find('#noimage_path').val(),
-                gallery_title = $(document).find('#gallery_title').val(),
-                gallery_desc = $(document).find('#gallery_description').val(),
-                gallery_title_show = $(document).find('input[name="glp_title_show"]').prop('checked'),
-                gallery_desc_show = $(document).find('input[name="glp_desc_show"]').prop('checked');
-            let view_type = $(document).find('input.ays-view-type:checked').val(),
-                column_count = $(document).find('input[name="ays-columns-count"]').val(),
-                type_class, type_column_class, type_mosaic_class, type_masonry_class, $hover_icon, $glp_lazy_load, $columns, 
-                $show_with_date = $(document).find("#show_with_date").prop('checked'), $show_title_in_hover, $ays_show_title,
-                $ays_show_with_date, $show_title_on = $(document).find('.glp_show_title_on:checked').first().val(),
-                $show_title = $(document).find('#show_title').prop('checked'),
-                $ays_hover_icon = $(document).find('input[name="glp-image-hover-icon"]:checked').first().val(),
-                $images_loading = $(document).find('input[name="ays_images_loading"]:checked').first().val(),
-                $images_request_type = $(document).find('input[name="ays_images_request"]:checked').first().val(),
-                $images_path = $(document).find('input[name="ays-image-path[]"]'),
-                $images_id = $(document).find('input[name="ays-image-id[]"]'),
-                $images_title = $(document).find('input[name="ays-image-title[]"]'),
-                //$images_desc = $(document).find('input[name="ays-image-description[]"]'),
-                //$images_alt = $(document).find('input[name="ays-image-alt[]"]'),
-                //$images_url = "",$(document).find('input[name="ays-image-url[]"]'), TODO remove
-                $hover_effect = 'pulse_gpg',//$(document).find('#gallery_img_hover_simple').val(),
-                $hover_out_effect, $image_dates = $(document).find('.ays_img_date'),
-                $images_distance = $(document).find('input[name="glp-images-distance"]').val(),
-                $hover_zoom = $(document).find('input[name="glp_hover_zoom"]:checked').first().val(),
-                $vignette_display = $(document).find('input[name="glp_vignette_display"]:checked').first().val(),
-                $hover_opacity = $(document).find('.gpg_opacity_demo_val').val(),
-                $images_border_radius = $(document).find('input[name="glp-images-border-radius"]').val(),
-                $ays_images_hover_dir_aware = $(document).find('#gallery_img_hover_dir_aware').val(),
-                $ays_images_hover_effect = $(document).find('input[name="ays_images_hover_effect"]:checked').val(),
-                $glp_loader = $(document).find('input[name="glp_loader"]:checked'),
-                $gallery_width = $(document).find('#gallery_width').val();
-                if($gallery_width == 0 || $gallery_width == NaN || $gallery_width == null || $gallery_width == false){
-                    $gallery_width = "90%";
-                }
-                popup_view.css('width',$gallery_width);
-            
-                $hover_out_effect = $hover_effect.split('');
-                $hover_out_effect.splice($hover_out_effect.indexOf('I'),2,"O",'u','t');
-                $hover_out_effect = $hover_out_effect.join('');
-            if (column_count == 0) {
-                column_count = 3;
-            }
-            $columns = 100 / column_count;
-            if($images_loading == 'load_all'){
-                let $ays_images_all_loaded;                
-                $ays_images_all_loaded = "<div class='gpg_loader'>"+$glp_loader.next()[0].outerHTML+"</div>";
-                $(document).find('.ays_gallery_live_preview_popup').prepend($ays_images_all_loaded);
-            }
-            switch(view_type){
-                case 'grid':
-                    type_class = 'ays_grid_row';
-                    type_column_class = 'ays_grid_column';
-                    break;
-                case 'mosaic':                        
-                    type_class = 'mosaic';
-                    type_mosaic_class = 'item withImage ';
-                    type_column_class = 'ays_mosaic_column_item';
-                    break;
-                case 'masonry':                        
-                    type_class = 'ays_masonry_grid';
-                    type_masonry_class = 'ays_masonry_grid-item ';
-                    type_column_class = 'ays_masonry_item';
-                    break;
-            }            
-            switch($ays_hover_icon){
-                case 'none':
-                    $hover_icon = "";
-                    break;
-                case 'search_plus':
-                    $hover_icon = "<i class='fas fa-search-plus'></i>";
-                    break;
-                case 'search':
-                    $hover_icon = "<i class='fas fa-search'></i>";
-                    break;
-                case 'plus':
-                    $hover_icon = "<i class='fas fa-plus'></i>";
-                    break;
-                case 'plus_circle':
-                    $hover_icon = "<i class='fas fa-plus-circle'></i>";
-                    break;
-                case 'plus_square_fas': 
-                    $hover_icon = "<i class='fas fa-plus-square'></i>";
-                    break;
-                case 'plus_square_far':
-                    $hover_icon = "<i class='far fa-plus-square'></i>";
-                    break;
-                case 'expand':
-                    $hover_icon = "<i class='fas fa-expand'></i>";
-                    break;
-                case 'image_fas':
-                    $hover_icon = "<i class='fas fa-image'></i>";
-                    break;
-                case 'image_far':
-                    $hover_icon = "<i class='far fa-image'></i>";
-                    break;
-                case 'images_fas':
-                    $hover_icon = "<i class='fas fa-images'></i>";
-                    break;
-                case 'images_far':
-                    $hover_icon = "<i class='far fa-images'></i>";
-                    break;
-                case 'eye_fas':
-                    $hover_icon = "<i class='fas fa-eye'></i>";
-                    break;
-                case 'eye_far':
-                    $hover_icon = "<i class='far fa-eye'></i>";
-                    break;
-                case 'camera_retro':
-                    $hover_icon = "<i class='fas fa-camera-retro'></i>";
-                    break;
-                case 'camera':
-                    $hover_icon = "<i class='fas fa-camera'></i>";
-                    break;
-                default:
-                    $hover_icon = "<i class='fas fa-search-plus'></i>";
-                    break;
-            }
-            if(view_type == 'mosaic'){
-                var mosaic_clear = "style='clear:both;'";
-            }else{
-                var mosaic_clear = "";
-            }
-            let ays_popup_view = "<div class='"+type_class+"' "+mosaic_clear+">";
-            for(let i = 0; i < accordion_el_length; i++){
-                if($show_title){
-                    if($show_with_date){
-                        let iamgeDate = new Date(null);
-                        iamgeDate.setTime(parseInt($image_dates[i].value)*1000);
-                        $ays_show_with_date = "<span>"+iamgeDate.toLocaleString()+"</span>";
-                    }else{
-                        $ays_show_with_date = "";
-                    }
-                    $ays_show_title = "<div class='ays_image_title'><span>"+$images_title[i].value+"</span>"+$ays_show_with_date+"</div>";
-                }else{
-                    $ays_show_title = '';
-                }
-                var $images_url_i = "";
-                // if($images_url[i].value == ""){
-                //     var $images_url_i = "";
-                // }else{
-                //     var $images_url_i = "<button type='button' class='ays_image_url'><i class='fas fa-link'></i></button>";
-                // }
-                
-                
-                if($show_title_on == 'gallery_image'){
-                    $show_title_in_hover = "<div class='ays_hover_mask animated'><div>"+$hover_icon+$images_url_i+"</div></div>"+$ays_show_title;
-                }else{
-                    if($show_title_on == 'image_hover'){
-                        $show_title_in_hover = "<div class='ays_hover_mask animated'><div>"+$hover_icon+$images_url_i+"</div> "+$ays_show_title+"</div>";
-                    }
-                }
-                
-                if(view_type == 'grid' || view_type == 'masonry'){
-                    var grid_column_width = "width: "+($columns-2)+"%;";
-                    var masonry_column_margin = "margin-bottom: "+(parseInt($images_distance))+"px;";
-                }else{
-                    var grid_column_width = "";
-                    var masonry_column_margin = "";
-                }
-                //TODO add alt and title values
-                let newColumn = "<div class='"+type_mosaic_class+" "+type_masonry_class+" "+type_column_class+"' style='border-radius:"+$images_border_radius+"px; "+grid_column_width+"; "+masonry_column_margin+"'><a href='javascript:void(0);'><div class='ays_image_loading_div'><img src='"+ays_admin_url+"images/flower.svg'></div><img src='"+$images_path[i].value+"' alt='+$images_alt[i].value+' title='+$images_title[i].value+'/>"+$show_title_in_hover+"</a></div>";
-                ays_popup_view += newColumn;
-            }
-            ays_popup_view += "</div>";
-            if(gallery_title_show){
-                var show_gallery_title = "<h2 class='ays_gallery_title'>"+gallery_title+"</h2>";
-            }else{
-                var show_gallery_title = '';
-            }
-            if(gallery_desc_show){
-                var show_gallery_desc = "<h4 class='ays_gallery_description'>"+gallery_desc+"</h4>";
-            }else{
-                var show_gallery_desc = '';
-            }
-            let ays_gallery_header = "<div class='ays_gallery_header'>"+show_gallery_title+" "+show_gallery_desc+"</div>";
-            popup_view.html(ays_gallery_header);
-            popup_view.append(ays_popup_view);
-            
-            if($ays_images_hover_effect == "simple"){
-                $(document).find('.'+type_column_class).hover(function(){
-                    $(this).find('.ays_hover_mask').css('animation-name', $hover_effect);
-                    $(this).find('.ays_hover_mask').css('animation-duration', '.5s');
-                    if($hover_zoom == 'yes'){
-                        $(this).find('a > img').css('transform', 'scale(1.15)');
-                    }
-                }, 
-                function(){
-                    $(this).find('.ays_hover_mask').css('animation-name', $hover_out_effect);
-                    $(this).find('.ays_hover_mask').css('animation-duration', '.5s');                
-                    if($hover_zoom == 'yes'){
-                        $(this).find('a > img').css('transform', 'scale(1)');
-                    }
-                });
-            }else{
-            if($ays_images_hover_effect == "dir_aware"){
-                if($ays_images_hover_dir_aware == "slide"){
-                    $(document).find('.'+type_column_class).hover(function(e){
-                        var ays_overlay = $(this).find('.ays_hover_mask');
-                        let ays_hover_dir = ays_getDirectionKey(e, e.currentTarget);
-                        switch(parseInt(ays_hover_dir)) {
-                             case 0:
-                                ays_overlay.css('display', 'flex');
-                                ays_overlay.css('animation', 'slideInDown .3s');
-                                if($hover_zoom == 'yes'){
-                                    $(this).find('a > img').css('transform', 'scale(1.15)');
-                                }
-                             break;
-                             case 1:
-                                ays_overlay.css('display', 'flex')
-                                ays_overlay.css('animation', 'slideInRight .3s');
-                                if($hover_zoom == 'yes'){
-                                    $(this).find('a > img').css('transform', 'scale(1.15)');
-                                }
-                             break;
-                             case 2:
-                                ays_overlay.css('display', 'flex')
-                                ays_overlay.css('animation', 'slideInUp .3s');
-                                if($hover_zoom == 'yes'){
-                                    $(this).find('a > img').css('transform', 'scale(1.15)');
-                                }
-                             break;
-                             case 3:
-                                ays_overlay.css('display', 'flex')
-                                ays_overlay.css('animation', 'slideInLeft .3s');
-                                if($hover_zoom == 'yes'){
-                                    $(this).find('a > img').css('transform', 'scale(1.15)');
-                                }
-                             break;
-                        }
-
-                    },
-                   function(e){
-                        var ays_overlay = $(this).find('.ays_hover_mask');
-                        let ays_hover_dir = ays_getDirectionKey(e, e.currentTarget);
-                        switch(parseInt(ays_hover_dir)) {
-                             case 0:
-                                ays_overlay.css('animation', 'slideOutUp .3s');
-                                setTimeout( function(){ ays_overlay.css('display', 'none');}, 250);
-                                if($hover_zoom == 'yes'){
-                                    $(this).find('a > img').css('transform', 'scale(1)');
-                                }
-                             break;
-                             case 1:
-                                ays_overlay.css('animation', 'slideOutRight .3s');
-                                setTimeout( function(){ ays_overlay.css('display', 'none');}, 250);
-                                if($hover_zoom == 'yes'){
-                                    $(this).find('a > img').css('transform', 'scale(1)');
-                                }
-                             break;
-                             case 2:
-                                ays_overlay.css('animation', 'slideOutDown .3s');
-                                setTimeout( function(){ ays_overlay.css('display', 'none');}, 250);
-                                if($hover_zoom == 'yes'){
-                                    $(this).find('a > img').css('transform', 'scale(1)');
-                                }
-                             break;
-                             case 3:
-                                ays_overlay.css('animation', 'slideOutLeft .3s');
-                                setTimeout( function(){ ays_overlay.css('display', 'none'); }, 250)
-                                if($hover_zoom == 'yes'){
-                                    $(this).find('a > img').css('transform', 'scale(1)');
-                                }
-                             break;
-                        }
-                    });
-                }else{
-                    if($ays_images_hover_dir_aware == "rotate3d"){
-                        $(document).find('.'+type_column_class).hover(function(e){
-                            let ays_overlay = $(this).find('div.ays_hover_mask');
-                            let ays_hover_dir = ays_getDirectionKey(e, e.currentTarget);
-                            switch(parseInt(ays_hover_dir)) {
-                                 case 0:
-                                    ays_overlay.css('display', 'flex');
-                                    ays_overlay.attr('class', 'ays_hover_mask animated in-top');
-                                    if($hover_zoom == 'yes'){
-                                        $(this).find('a > img').css('transform', 'scale(1.15)');
-                                    }
-                                 break;
-                                 case 1:
-                                    ays_overlay.css('display', 'flex')
-                                    ays_overlay.attr('class', 'ays_hover_mask animated in-right');
-                                    if($hover_zoom == 'yes'){
-                                        $(this).find('a > img').css('transform', 'scale(1.15)');
-                                    }
-                                 break;
-                                 case 2:
-                                    ays_overlay.css('display', 'flex')
-                                    ays_overlay.attr('class', 'ays_hover_mask animated in-bottom');
-                                    if($hover_zoom == 'yes'){
-                                        $(this).find('a > img').css('transform', 'scale(1.15)');
-                                    }
-                                 break;
-                                 case 3:
-                                    ays_overlay.css('display', 'flex')
-                                    ays_overlay.attr('class', 'ays_hover_mask animated in-left');
-                                    if($hover_zoom == 'yes'){
-                                        $(this).find('a > img').css('transform', 'scale(1.15)');
-                                    }
-                                 break;
-                            }
-
-                        },
-                       function(e){
-                            let ays_overlay = $(this).find('div.ays_hover_mask');
-                            let ays_hover_dir = ays_getDirectionKey(e, e.currentTarget);
-                            switch(parseInt(ays_hover_dir)) {
-                                 case 0:
-                                    ays_overlay.attr('class', 'ays_hover_mask animated out-top');
-                                    setTimeout( function(){ ays_overlay.css('opacity', '0');}, 350);
-                                    if($hover_zoom == 'yes'){
-                                        $(this).find('a > img').css('transform', 'scale(1)');
-                                    }
-                                 break;
-                                 case 1:
-                                    ays_overlay.attr('class', 'ays_hover_mask animated out-right');
-                                    setTimeout( function(){ ays_overlay.css('opacity', '0');}, 350);
-                                    if($hover_zoom == 'yes'){
-                                        $(this).find('a > img').css('transform', 'scale(1)');
-                                    }
-                                 break;
-                                 case 2:
-                                    ays_overlay.attr('class', 'ays_hover_mask animated out-bottom');
-                                    setTimeout( function(){ ays_overlay.css('opacity', '0');}, 350);
-                                    if($hover_zoom == 'yes'){
-                                        $(this).find('a > img').css('transform', 'scale(1)');
-                                    }
-                                 break;
-                                 case 3:
-                                    ays_overlay.attr('class', 'ays_hover_mask animated out-left');
-                                    setTimeout( function(){ ays_overlay.css('opacity', '0'); }, 570);
-                                    if($hover_zoom == 'yes'){
-                                        $(this).find('a > img').css('transform', 'scale(1)');
-                                    }
-                                 break;
-                            }
-                        });
-                    }
-                }
-            }
-            }
-            
-            $(document).find('.ays_gallery_container .mosaic').Mosaic({
-                innerGap: parseInt($images_distance)
-            });
-            
-            var aysgrid = $(document).find('.ays_masonry_grid').masonry({
-                percentPosition: false,
-                itemSelector: '.ays_masonry_grid-item',
-                columnWidth: '.ays_masonry_item',
-                transitionDuration: '1s',
-                gutter: parseInt($images_distance)
-
-            });
-            
-            $(document).find('.ays_hover_mask').css('background-color', 'rgba(0,0,0,'+$hover_opacity+')');
-            
-            $(document).find('.gpg_loader').css({'display': 'flex', 'animation-name': 'fadeIn'});
-            if($images_loading == 'load_all'){
-                $(document).find('.gpg_loader').css({'display': 'flex', 'animation-name': 'fadeIn'});
-                $('.ays_gallery_container').css({'display': 'none'});
-                var ays_duration = Math.floor(Math.random()*1000)+700;
-                setTimeout(function(){
-                    $('.ays_gallery_container').css({'display': 'block', 'animation-name': 'fadeIn'});
-                    $(document).find('.gpg_loader').css({'display': 'none', 'animation-name': 'fadeOut'});
-                    $(document).find('.ays_gallery_container .mosaic').Mosaic({
-                        innerGap: parseInt($images_distance)
-                    });
-                    aysgrid.masonry('layout');
-                },ays_duration);
-            }
-            if($images_loading == 'lazy_load'){
-                $(document).find('.ays_gallery_container a > img').each( function( instance, image ) {
-                    var ays_duration = Math.floor(Math.random()*2000)+700;
-                    setTimeout(function(){
-                        $(image).parent().find('.ays_image_loading_div').css({
-                            'opacity': '1',
-                            'animation-name': 'fadeOut',
-                            'animation-duration': '1.2s',
-                        });
-                        setTimeout(function(){                                    
-                            $(image).parent().find('.ays_image_loading_div').css({
-                                'display': 'none'
-                            });                                  
-                            $(image).parent().find('div.ays_hover_mask').css({
-                                'display': 'flex'
-                            });
-                            $(image).css({
-                                'opacity': '1',
-                                'display': 'block',
-                                'animation': 'fadeInUp .5s',
-                                'z-index': 10000,
-                            });
-                        },400);
-                        
-                        $(document).find('.ays_gallery_container .mosaic').Mosaic({
-                            innerGap: parseInt($images_distance)
-                        });
-                        aysgrid.masonry('layout');
-                    }, ays_duration);
-                });
-            }else{
-                $(document).find('.ays_image_loading_div').css({
-                    'display': 'none',
-                });
-            }
-            
-            $(document).find('div.ays_gallery_live_preview_popup').css({
-                display: 'block',
-                animation: 'fadeIn .5s'
-            });
-            $(document).find('.ays_gallery_container .mosaic').Mosaic({
-                innerGap: parseInt($images_distance)
-            });
-        
-        }); // end preview
 
         var toggle_ddmenu = $(document).find('.toggle_ddmenu');
         toggle_ddmenu.on('click', function () {

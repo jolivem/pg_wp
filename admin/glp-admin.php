@@ -514,7 +514,7 @@ class GLP_Admin {
                 </div>
             <script type="text/javascript">
                 function gpg_insert_shortcode() {
-                    var tagtext = '[gallery_p_gallery id="' + document.getElementById('ays_gpg')[document.getElementById('ays_gpg').selectedIndex].id + '"]';
+                    var tagtext = '[glp_gallery id="' + document.getElementById('ays_gpg')[document.getElementById('ays_gpg').selectedIndex].id + '"]';
                     window.tinyMCE.execCommand('mceInsertContent', false, tagtext);
                     tinyMCEPopup.close();
                 }
@@ -667,9 +667,10 @@ class GLP_Admin {
                 case 'galleries':
                     $listtable_title_length = (isset($options['galleries_title_length']) && intval($options['galleries_title_length']) != 0) ? absint(intval($options['galleries_title_length'])) : 5;
                     break;
-                 case 'gallery_categories':
+                case 'gallery_categories':
                     $listtable_title_length = (isset($options['gpg_categories_title_length']) && intval($options['gpg_categories_title_length']) != 0) ? absint(sanitize_text_field($options['gpg_categories_title_length'])) : 5;
                     break;               
+                // TODO add maps here
                 default:
                     $listtable_title_length = 5;
                     break;

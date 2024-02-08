@@ -98,7 +98,7 @@ require plugin_dir_path( __FILE__ ) . 'gallery/glp-block.php';
  * @since    1.0.0
  */
 function run_gallery_photo_gallery() {
-    // add_action( 'activated_plugin', 'gallery_p_gallery_activation_redirect_method' );
+    // add_action( 'activated_plugin', 'glp_gallery_activation_redirect_method' );
     //add_action( 'admin_notices', 'general_gpg_admin_notice' );
 	$plugin = new Geolocated_Photo();
 	$plugin->run();
@@ -124,7 +124,7 @@ function gpg_get_client_ip() {
     return $ipaddress;
 }
 
-function gallery_p_gallery_activation_redirect_method( $plugin ) {
+function glp_gallery_activation_redirect_method( $plugin ) {
     if( $plugin == plugin_basename( __FILE__ ) ) {
         exit( wp_redirect( admin_url( 'admin.php?page=' . GLP_GALLERY_NAME ) ) );
     }

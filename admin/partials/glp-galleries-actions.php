@@ -62,6 +62,7 @@ $g_options = array(
     "create_date"           => current_time( 'mysql' ),
     "author"                => $author,
     'gpg_create_author'     => $user_id,
+    "mosaic_row_size"       => "500",
 );
 $g_l_options = array(
     "lightbox_counter"      => "true",
@@ -95,10 +96,11 @@ switch( $action ) {
     case 'edit':
         $heading = __('Edit gallery', $this->plugin_name);
         $gallery = $this->gallery_obj->get_gallery_by_id($id);
+        error_log("glp_gallery-actions gallery admin: ".print_r($gallery, true));
         break;
 }
 
-error_log("glp_gallery-actions gallery: ".print_r($gallery, true));
+
 
 $gallery_message_vars = array(  
     '%%user_first_name%%'       => __("User's First Name", $this->plugin_name),
@@ -274,6 +276,9 @@ $change_gpg_create_author = (isset($gal_options['gpg_create_author']) && $gal_op
 // Images distance
 $images_distance = (isset($gal_options['images_distance']) && $gal_options['images_distance'] != '') ? absint( intval( $gal_options['images_distance'] ) ) : '5';
 
+// mosaic row size
+$mosaic_row_size = (isset($gal_options['mosaic_row_size']) && $gal_options['mosaic_row_size'] != '') ? absint( intval( $gal_options['mosaic_row_size'] ) ) : '500';
+error_log("from DB: mosaic_row_size=".$mosaic_row_size);
 if( $change_gpg_create_author  && $change_gpg_create_author > 0 ){
     global $wpdb;
     $users_table = esc_sql( $wpdb->prefix . 'users' );
@@ -337,7 +342,7 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                 </div>
                 <div class="col-sm-9">
                     <p style="font-size:14px; font-style:italic;">
-                        <strong class="ays-gallery-shortcode-box" onClick="selectElementContents(this)" data-toggle="tooltip" title="<?php echo __('Click for copy.', $this->plugin_name);?>" style="font-size:16px; font-style:normal;"><?php echo "[gallery_p_gallery id=".$id."]"; ?></strong>
+                        <strong class="ays-gallery-shortcode-box" onClick="selectElementContents(this)" data-toggle="tooltip" title="<?php echo __('Click for copy.', $this->plugin_name);?>" style="font-size:16px; font-style:normal;"><?php echo "[glp_gallery id=".$id."]"; ?></strong>
                     </p>
                 </div>
             </div>
@@ -970,27 +975,10 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                 </div>
             </div>
             <hr/>
-            <div id="ays-columns-count" class="form-group row">
-                <div class="col-sm-3">
-                    <label for="ays_columns_count">
-                        <?php echo __("Columns count. Default: 3", $this->plugin_name);?>
-                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __("The counts of the columns of the Gallery", $this->plugin_name);?>">
-                           <i class="fas fa-info-circle"></i>
-                        </a>
-                    </label>
-                </div>
-                <div class="col-sm-9">
-                    <input type="number" id="ays_columns_count" name="ays-columns-count" class="ays-text-input ays-text-input-short" placeholder="<?php echo __("Default", $this->plugin_name);?>: 3" value="<?php echo isset($gal_options['columns_count']) ? $gal_options['columns_count'] : 3; ?>"/>
-                </div>
-            </div>
-            <hr style="display: <?php echo $gal_options['view_type'] == 'mosaic' ? 'none' : 'block'; ?>;">
             <div class="form-group row">
                 <div class="col-sm-3">
                     <label for="ays_galery_enable_rtl_direction">
                         <?php echo __('Use RTL Direction',$this->plugin_name)?>
-                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Enable Right to Left direction for the text. This option is intended for the Arabic language.',$this->plugin_name)?>">
-                            <i class="fas fa-info-circle"></i>
-                        </a>
                     </label>
                 </div>
                 <div class="col-sm-9">
@@ -1062,6 +1050,32 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                     </div>
                 </div>
             </div>
+            <div id="glp-columns-count" class="form-group row">
+                <div class="col-sm-3">
+                    <label>
+                        <?php echo __("Columns count", $this->plugin_name);?>
+                    </label>
+                </div>
+                <div class="col-sm-9">
+                    <input type="number" name="glp-columns-count" class="ays-text-input ays-text-input-short" placeholder="<?php echo __("Default", $this->plugin_name);?>: 3" value="<?php echo isset($gal_options['columns_count']) ? $gal_options['columns_count'] : 3; ?>"/>
+                </div>
+            </div>
+            <div id="glp-mosaic-row-size" class="form-group row">
+                <div class="col-sm-3">
+                    <label>
+                        <?php echo __("Row height", $this->plugin_name);?>
+                    </label>
+                </div>
+                <div class="col-sm-9 glp_display_flex_width">
+                    <div>
+                        <input name="glp-mosaic-row-size" class="ays-text-input ays-text-input-short" type="number" value="<?php echo $mosaic_row_size; ?>">
+                    </div>
+                    <div class="glp_dropdown_max_width">
+                        <input type="text" value="px" class="glp-form-hint-for-size" disabled="">
+                    </div>
+                </div>
+            </div>
+
             <hr/>
             <div class="form-group row">
                 <div class="col-sm-3">

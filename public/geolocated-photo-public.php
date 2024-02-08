@@ -59,7 +59,7 @@ class Geolocated_Photo_Public {
         $this->plugin_name = $plugin_name;
         $this->version = $version;
         // $this->settings = new Gallery_Settings_Actions($this->plugin_name);
-        add_shortcode( 'gallery_p_gallery', array($this, 'ays_generate_gallery') );
+        add_shortcode( 'glp_gallery', array($this, 'ays_generate_gallery') );
     }
 
     /**
@@ -169,7 +169,7 @@ class Geolocated_Photo_Public {
         
         $gallery = $this->ays_get_gallery_by_id($id);
         if(!$gallery){
-            return "[gallery_p_gallery id='".$id."']";
+            return "[glp_gallery id='".$id."']";
         }
         //echo "options galery = ".$gallery['options'];
         //echo "urls galery = ".$gallery['images_urls'];
@@ -177,7 +177,7 @@ class Geolocated_Photo_Public {
         /*
          * Gallery global settings
          */
-        error_log("glp_gallery-actions gallery: ".print_r($gallery, true));
+        error_log("glp_gallery-actions gallery public: ".print_r($gallery, true));
 
         $gallery_options = json_decode($gallery['options'],true);
         error_log("glp_gallery-actions options: ".print_r($gallery_options, true));
@@ -226,6 +226,7 @@ class Geolocated_Photo_Public {
         $glp_lg_keypress                = (!isset($gal_lightbox_options["lb_keypress"])) ? "true" : $gal_lightbox_options["lb_keypress"];
         $glp_lg_esckey                  = (!isset($gal_lightbox_options["lb_esckey"])) ? "true" : $gal_lightbox_options["lb_esckey"];
 
+        $mosaic_row_size = (isset($gallery_options['mosaic_row_size']) && $gallery_options['mosaic_row_size'] != '') ? absint( intval( $gallery_options['mosaic_row_size'] ) ) : '500';
         $images_hover_zoom = (!isset($gallery_options['hover_zoom']) ||
                               $gallery_options['hover_zoom'] == '' ||
                               $gallery_options['hover_zoom'] == false) ? 'no' : $gallery_options['hover_zoom'];
@@ -412,11 +413,15 @@ class Geolocated_Photo_Public {
         }
         
         // if lazy_loading, set animation
+        //TODO add maxRowHeight to Mosaic settings
+        $glp_lazy_load_masonry = "";
         if($images_loading == 'lazy_load'){ // TODO lazy_load
             $glp_lazy_load_animation = "
             $(document).find('.ays_gallery_container_".$id." .$gallery_lightbox_selector > img').each(function(e, img){
                 img.onload = function(e){
+                    console.log('img onloaf IN');
                     img.classList.add('lazyloaded');
+                    aysgrid_".$id.".masonry('layout');
                 }
             });";
             $glp_container_display_none_js = "";
@@ -428,12 +433,11 @@ class Geolocated_Photo_Public {
             $ays_images_lazy_loader_css = ".ays_gallery_container_".$id." .ays_image_loading_div {
                                                 display: flex;
                                             }";
-            $glp_lazy_load_masonry = "aysgrid.masonry('layout');";
             $glp_lazy_load_mosaic = "$(document).find('.ays_gallery_container_".$id." .mosaic_".$id."').Mosaic({
                                             innerGap: {$images_distance},
                                             refitOnResize: true,
                                             showTailWhenNotEnoughItemsForEvenOneRow: true,
-                                            maxRowHeight: 250,
+                                            maxRowHeight: {$mosaic_row_size},
                                             maxRowHeightPolicy: 'tail'
                                         });";
             $glp_lazy_load_mosaic_css = ".ays_mosaic_column_item_".$id." a>img {
@@ -455,7 +459,6 @@ class Geolocated_Photo_Public {
             $ays_images_lazy_loader_css = ".ays_gallery_container_".$id." .ays_image_loading_div {
                                                 display: none;
                                             }";
-            $glp_lazy_load_masonry = "";
             $glp_lazy_load_mosaic = "";
             $glp_lazy_load_mosaic_css = "";
         }        
@@ -531,68 +534,11 @@ class Geolocated_Photo_Public {
                             }
                         });
 
-                        var lazyloadImages = document.querySelectorAll('img.lazy');    
-                        var lazyloadThrottleTimeout;
+                        document.addEventListener('scroll', lazyload_max);
+                        window.addEventListener('resize', lazyload_max);
+                        window.addEventListener('orientationChange', lazyload_max);
                         
-                        function lazyload () {
-                          if(lazyloadThrottleTimeout) {
-                            clearTimeout(lazyloadThrottleTimeout);
-                          }    
-                          
-                          lazyloadThrottleTimeout = setTimeout(function() {
-                              var scrollTop = window.pageYOffset;
-                              lazyloadImages.forEach(function(img) {
-                                if (img.src == '') {
-                                    let parent = img.parentNode;
-                                    if(parent.offsetTop < (window.innerHeight + scrollTop)) {
-                                        img.src = img.dataset.src;
-                                        console.log('lazyload ', img.src);
-                                    }
-                                }
-                              });
-                              if(lazyloadImages.length == 0) { 
-                                document.removeEventListener('scroll', lazyload);
-                                window.removeEventListener('resize', lazyload);
-                                window.removeEventListener('orientationChange', lazyload);
-                              }
-                          }, 20);
-                        }
-                        
-                        document.addEventListener('scroll', lazyload);
-                        window.addEventListener('resize', lazyload);
-                        window.addEventListener('orientationChange', lazyload);
-
-                        function lazyload2 () {
-                            console.log('lazyload2 in');
-                            console.log('lazyload2 lenght', lazyloadImages.length);
-                            if(lazyloadThrottleTimeout) {
-                              clearTimeout(lazyloadThrottleTimeout);
-                            }    
-                            
-                            var scrollTop = window.pageYOffset;
-                            console.log('lazyload2 in1');
-                            lazyloadImages.forEach(function(img) {
-                                if (img.src == '') {
-                                    let parent = img.parentNode;
-                                    console.log('lazyload2 offsetTop', parent.offsetTop);
-                                    console.log('lazyload2 innerHeight', window.innerHeight);
-                                    console.log('lazyload2 scrollTop', scrollTop);
-                                    if(parent.offsetTop < (window.innerHeight + scrollTop)) {
-                                        img.classList.remove('lazy');
-                                        img.src = img.dataset.src;
-                                        console.log('lazyload2 scrollTop', scrollTop);
-                                    }
-                                }
-                            });
-                            if(lazyloadImages.length == 0) { 
-                                document.removeEventListener('scroll', lazyload);
-                                window.removeEventListener('resize', lazyload);
-                                window.removeEventListener('orientationChange', lazyload);
-                            }
-                        }
-  
-                        lazyload2();
-
+                        lazyload_max();
                     });
                 })(jQuery);
         </script>
@@ -674,7 +620,7 @@ class Geolocated_Photo_Public {
                                 innerGap: '.$images_distance.',
                                 refitOnResize: true,
                                 showTailWhenNotEnoughItemsForEvenOneRow: true,
-                                maxRowHeight: 250,
+                                maxRowHeight: '.$mosaic_row_size.',
                                 maxRowHeightPolicy: "tail"
                             });
                         });
@@ -714,7 +660,7 @@ class Geolocated_Photo_Public {
                                 innerGap: '.$images_distance.',
                                 refitOnResize: true,
                                 showTailWhenNotEnoughItemsForEvenOneRow: true,
-                                maxRowHeight: 250,
+                                maxRowHeight: '.$mosaic_row_size.',
                                 maxRowHeightPolicy: "tail"
                             });
                             aysgrid_'.$id.'.masonry("layout");
@@ -738,70 +684,7 @@ class Geolocated_Photo_Public {
                             showThumbByDefault: false,
                             getCaptionFromTitleOrAlt: false,
                             subHtmlSelectorRelative: true
-                        };
-
-                        /*AV Search Image*/
-                        $(document).on("input", "#inp_search_img_'.$id.'", function(e) {
-                            
-                            var ays_for_srch_cont = $(document).find("'.$gallery_view_selector.' .'.$gallery_lightbox_selector.'");
-                            var this_val = $(this).val().toLowerCase();
-                            
-                            for(var srch_i = 0; srch_i < ays_for_srch_cont.length; srch_i++){
-                                var srch_desc = ays_for_srch_cont.eq(srch_i).data("desc").toLowerCase();
-                                var srch_img_div = ays_for_srch_cont.eq(srch_i);
-                                srch_img_div.removeClass("gpgSearchContainer");
-                                if(srch_desc.indexOf(this_val) == -1){
-                                    srch_img_div.fadeOut(400);
-                                    setTimeout(function(){
-                                        aysgrid_'.$id.'.masonry("layout");
-                                    }, 400);
-                                }else{
-                                    if(this_val == ""){
-                                        srch_img_div.removeClass("gpgSearchContainer");
-                                    }else{
-                                        srch_img_div.addClass("gpgSearchContainer");
-                                    }
-                                    if($(this).parents("[class^=\"ays_gallery_container\"]").find(".ays_grid_row").length > 0){
-                                        if(parseInt(srch_img_div.css("margin-right")) == 0){
-                                            srch_img_div.css("margin-right","'.($images_distance/2).'px");
-                                        }
-                                    }
-                                    srch_img_div.fadeIn(400);
-                                    setTimeout(function(){
-                                        aysgrid_'.$id.'.masonry("layout");
-                                    }, 400);
-                                }
-                            }';
-                            if($disable_lightbox){
-                                $gallery_view .= '
-                                    if(this_val != ""){
-                                        $(document).find("'.$gallery_view_selector.'").data("lightGallery").destroy(true);
-                                        '.$srch_show_lightbox.'
-                                    }else{
-                                        $(document).find("'.$gallery_view_selector.'").data("lightGallery").destroy(true);
-                                        $(document).find("'.$gallery_view_selector.'").lightGallery({
-                                            selector: ".'.$gallery_lightbox_selector.'",
-                                            share: false,
-                                            hash: false,
-                                            addClass:"glp_lightbox_'.$id.'",
-                                            fullScreen: false,
-                                            autoplay: false,
-                                            pause: '.$glp_lightbox_pause.',
-                                            mousewheel: false,
-                                            keyPress: false,
-                                            actualSize: false,
-                                            pager: false,
-                                            download: false,
-                                            autoplayControls: '.$glp_lightbox_autoplay.',
-                                            counter: '.$glp_lightbox_counter.',
-                                            showThumbByDefault: false,
-                                            getCaptionFromTitleOrAlt: false,
-                                            subHtmlSelectorRelative: true
-                                        });
-                                    }';
-                            }
-                        $gallery_view .='                        
-                        });';
+                        };';
 
                         if($disable_lightbox){
                            $gallery_view .= "$(document).find('$gallery_view_selector').lightGallery({
@@ -834,7 +717,7 @@ class Geolocated_Photo_Public {
                                     innerGap: {$images_distance},
                                     refitOnResize: true,
                                     showTailWhenNotEnoughItemsForEvenOneRow: true,
-                                    maxRowHeight: 250,
+                                    maxRowHeight: {$mosaic_row_size},
                                     maxRowHeightPolicy: 'tail'
                                 });
                                 setTimeout(function(){
@@ -883,159 +766,107 @@ class Geolocated_Photo_Public {
             }
             // else lazy_load TODO lazy loading
             else{
-
+                // when page is loaded
                 $gallery_view .= "
                 ".$responsive_width_height." 
                 window.addEventListener('load', function(e){
-                    console.log('XA image loading', e);
+                    console.log('XA page loaded', e);
+                    console.log('window.aysGalleryOptions', window.aysGalleryOptions);
                     setTimeout(function(){
-                    var aysGalleryImages_".$id." = JSON.parse(window.atob(window.aysGalleryOptions.galleryImages[".$id."]));
-                    $( window ).resize(function() {
-                        $(document).find('.mosaic_".$id."').Mosaic({
-                            innerGap: {$images_distance},
-                            refitOnResize: true,
-                            showTailWhenNotEnoughItemsForEvenOneRow: true,
-                            maxRowHeight: 250,
-                            maxRowHeightPolicy: 'tail'
+                        console.log('timeout in');
+                        var aysGalleryImages_".$id." = JSON.parse(window.atob(window.aysGalleryOptions.galleryImages[".$id."]));
+                        $(window).resize(function() {
+                            $(document).find('.mosaic_".$id."').Mosaic({
+                                innerGap: {$images_distance},
+                                refitOnResize: true,
+                                showTailWhenNotEnoughItemsForEvenOneRow: true,
+                                maxRowHeight: {$mosaic_row_size},
+                                maxRowHeightPolicy: 'tail'
+                            });
                         });
-                    });
-                    $hover_effect__simple_js
-                    $ays_hover_dir_aware_js
-                    $(document).find('.$gallery_lightbox_selector').on('mouseover', function(){
-                        if($(this).find('.ays_hover_mask .ays_image_title').length != 0){
-                            $(this).find('.ays_hover_mask>div:first-child').css('margin-bottom', '40px');
-                        }
-                    });
-                    $(document).find('.$gallery_lightbox_selector div.ays_hover_mask').find('.ays_image_url').on('click', function(e){
-                        setTimeout(function(){
-                            $(document).find('.lg-close.lg-icon').trigger('click');
-                        },450);                        
-                        window.open($(this).attr('data-url'),'".$redircet_url_tab."');
-                    });
-                    $(document).find('.$gallery_lightbox_selector div.ays_link_whole_image_url').on('click', function(e){
-                        setTimeout(function(){
-                            $(document).find('.lg-close.lg-icon').trigger('click');
-                        },450);
-                        window.open($(this).attr('data-url'),'".$redircet_url_tab."');
-                    });
-                    var aysgrid_".$id." = $('#ays_masonry_grid_".$id."').masonry({
-                        percentPosition: false,
-                        itemSelector: '.ays_masonry_grid-item',
-                        columnWidth: '.ays_masonry_item_".$id."',
-                        transitionDuration: '.8s',
-                        gutter: {$images_distance},
-
-                    });
-                    ".$ays_gal_loader_display_js." 
-                    ".$glp_lazy_load_animation." 
-                    ".$glp_lazy_load_mosaic." ";
-
-                    $gallery_view .='var gpgSearchLightboxOptions = {
-                        selector: ".gpgSearchContainer",
-                        share: false,
-                        hash: false,
-                        addClass:"glp_lightbox_'.$id.'",
-                        fullScreen: false,
-                        autoplay: false,
-                        pause: '.$glp_lightbox_pause.',
-                        mousewheel: false,
-                        keyPress: false,
-                        actualSize: false,
-                        pager: false,
-                        download: false,
-                        autoplayControls: '.$glp_lightbox_autoplay.',
-                        counter: '.$glp_lightbox_counter.',
-                        showThumbByDefault: false,
-                        getCaptionFromTitleOrAlt: false,
-                        subHtmlSelectorRelative: true
-                    };
-
-                    /*AV Search Image*/
-                     $(document).on("input", "#inp_search_img_'.$id.'", function(e) {
-                        
-                        var ays_for_srch_cont = $(document).find("'.$gallery_view_selector.' .'.$gallery_lightbox_selector.'");
-                        var this_val = $(this).val();
-                        
-                        for(var srch_i = 0; srch_i < ays_for_srch_cont.length; srch_i++){
-                            var srch_desc = ays_for_srch_cont.eq(srch_i).data("desc").toLowerCase();
-                            var srch_img_div = ays_for_srch_cont.eq(srch_i);
-                            srch_img_div.removeClass("gpgSearchContainer");
-                            if(srch_desc.indexOf(this_val) == -1){
-                                srch_img_div.fadeOut(400);
-                                setTimeout(function(){
-                                    aysgrid_'.$id.'.masonry("layout");
-                                }, 400);
-                            }else{
-                                if(this_val == ""){
-                                    srch_img_div.removeClass("gpgSearchContainer");
-                                }else{
-                                    srch_img_div.addClass("gpgSearchContainer");
-                                }
-                                if($(this).parents("[class^=\"ays_gallery_container\"]").find(".ays_grid_row").length > 0){
-                                    if(parseInt(srch_img_div.css("margin-right")) == 0){
-                                        srch_img_div.css("margin-right","'.($images_distance/2).'px");
-                                    }
-                                }
-                                srch_img_div.fadeIn(400);
-                                setTimeout(function(){
-                                    aysgrid_'.$id.'.masonry("layout");
-                                }, 400);
+                        $hover_effect__simple_js
+                        $ays_hover_dir_aware_js
+                        $(document).find('.$gallery_lightbox_selector').on('mouseover', function(){
+                            if($(this).find('.ays_hover_mask .ays_image_title').length != 0){
+                                $(this).find('.ays_hover_mask>div:first-child').css('margin-bottom', '40px');
                             }
-                        }';
-                        if($disable_lightbox){
-                            $gallery_view .= '
-                                if(this_val != ""){
-                                    $(document).find("'.$gallery_view_selector.'").data("lightGallery").destroy(true);
-                                    '.$srch_show_lightbox.'
-                                }else{
-                                    $(document).find("'.$gallery_view_selector.'").data("lightGallery").destroy(true);
-                                    $(document).find("'.$gallery_view_selector.'").lightGallery({
-                                        selector: ".'.$gallery_lightbox_selector.'",
-                                        share: false,
-                                        hash: false,
-                                        addClass:"glp_lightbox_'.$id.'",
-                                        fullScreen: false,
-                                        autoplay: false,
-                                        pause: '.$glp_lightbox_pause.',
-                                        mousewheel: false,
-                                        keyPress: false,
-                                        actualSize: false,
-                                        pager: false,
-                                        download: false,
-                                        autoplayControls: '.$glp_lightbox_autoplay.',
-                                        counter: '.$glp_lightbox_counter.',
-                                        showThumbByDefault: false,
-                                        getCaptionFromTitleOrAlt: false,
-                                        subHtmlSelectorRelative: true
-                                    });
-                                }';
-                        }
-                    $gallery_view .='
-                    });';  
-                   if($disable_lightbox){
-                       $gallery_view .= "$(document).find('$gallery_view_selector').lightGallery({
-                            selector: '.$gallery_lightbox_selector',
+                        });
+                        $(document).find('.$gallery_lightbox_selector div.ays_hover_mask').find('.ays_image_url').on('click', function(e){
+                            setTimeout(function(){
+                                $(document).find('.lg-close.lg-icon').trigger('click');
+                            },450);                        
+                            window.open($(this).attr('data-url'),'".$redircet_url_tab."');
+                        });
+                        $(document).find('.$gallery_lightbox_selector div.ays_link_whole_image_url').on('click', function(e){
+                            setTimeout(function(){
+                                $(document).find('.lg-close.lg-icon').trigger('click');
+                            },450);
+                            window.open($(this).attr('data-url'),'".$redircet_url_tab."');
+                        });
+                        var aysgrid_".$id." = $('#ays_masonry_grid_".$id."').masonry({
+                            percentPosition: false,
+                            itemSelector: '.ays_masonry_grid-item',
+                            columnWidth: '.ays_masonry_item_".$id."',
+                            transitionDuration: '.8s',
+                            gutter: {$images_distance},
+
+                        });
+                        console.log('XA before masonry layout');
+                        aysgrid_".$id.".masonry('layout');
+                        aysgrid_".$id.".on( 'layoutComplete', function() {
+                            console.log('layout done, just this one time');
+                            lazyload_single();
+                        });
+                      
+                        ".$ays_gal_loader_display_js." 
+                        ".$glp_lazy_load_animation." 
+                        ".$glp_lazy_load_mosaic." ";
+
+                        $gallery_view .='var gpgSearchLightboxOptions = {
+                            selector: ".gpgSearchContainer",
                             share: false,
                             hash: false,
-                            addClass:'glp_lightbox_".$id."',
+                            addClass:"glp_lightbox_'.$id.'",
                             fullScreen: false,
                             autoplay: false,
-                            pause: $glp_lightbox_pause,
+                            pause: '.$glp_lightbox_pause.',
                             mousewheel: false,
-                            keyPress: $glp_lg_keypress,
-                            escKey: $glp_lg_esckey,
+                            keyPress: false,
                             actualSize: false,
                             pager: false,
                             download: false,
-                            autoplayControls: $glp_lightbox_autoplay,
-                            counter: $glp_lightbox_counter,
+                            autoplayControls: '.$glp_lightbox_autoplay.',
+                            counter: '.$glp_lightbox_counter.',
                             showThumbByDefault: false,
                             getCaptionFromTitleOrAlt: false,
                             subHtmlSelectorRelative: true
-                        });";
+                        };';
 
-                   }
-                $gallery_view .= "},1000);
+                        if($disable_lightbox){
+                        $gallery_view .= "$(document).find('$gallery_view_selector').lightGallery({
+                                selector: '.$gallery_lightbox_selector',
+                                share: false,
+                                hash: false,
+                                addClass:'glp_lightbox_".$id."',
+                                fullScreen: false,
+                                autoplay: false,
+                                pause: $glp_lightbox_pause,
+                                mousewheel: false,
+                                keyPress: $glp_lg_keypress,
+                                escKey: $glp_lg_esckey,
+                                actualSize: false,
+                                pager: false,
+                                download: false,
+                                autoplayControls: $glp_lightbox_autoplay,
+                                counter: $glp_lightbox_counter,
+                                showThumbByDefault: false,
+                                getCaptionFromTitleOrAlt: false,
+                                subHtmlSelectorRelative: true
+                            });";
+
+                    }
+                    $gallery_view .= "console.log('timeout out'); 
+                },1000);
                 }, false);";
             }
         $gallery_view .= "
@@ -1190,6 +1021,7 @@ class Geolocated_Photo_Public {
         }
 
         foreach($images_new as $key=>$image){
+            error_log("foreach image ->".$images_new);
             if($show_title == 'on' && $image_titles[$key] != ''){
                 if($show_with_date == 'on'){
                     $ays_show_with_date = "<span>".date( "F d, Y", intval($image_dates[$key]))."</span>";
@@ -1297,13 +1129,16 @@ class Geolocated_Photo_Public {
          
             
             if ($view == "mosaic") {
-                $gallery_view .= "<div class='item withImage ays_mosaic_column_item_".$id." ays_count_views' ".$wh_attr." data-src='" . $images[$key] . "' data-desc='" . $image_titles[$key] ." ". $image_alts[$key] ." ". $image_descs[$key] ."' ".$ays_data_sub_html.">";
+                $gallery_view .= "<div class='item withImage ays_mosaic_column_item_".$id." ays_count_views' ".$wh_attr." data-desc='" . $image_titles[$key] ." ". $image_alts[$key] ." ". $image_descs[$key] ."' ".$ays_data_sub_html.">";
                 $gallery_view .= "<img src='" . $current_image . "' alt='" . wp_unslash($image_alts[$key]) . "' />";
+                //$gallery_view ="<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "'>";
+
             }
             elseif ($view == "masonry") {
                 //MJO TODO remove console.log in onload
-                $gallery_view .= "<div class='ays_masonry_grid-item ays_masonry_item_".$id." ays_count_views' data-src='" . $images[$key] . "' data-desc='" . $image_titles[$key] ." ". $image_alts[$key] ." ". $image_descs[$key] ."' ".$ays_data_sub_html.">";
-                $gallery_view .= "<img src='". $current_image ."' alt='".$image_alts[$key]."' style='box-shadow: none;' onload='console.log(\"ID=".$image_ids[$key]."\")'>";
+                $gallery_view .= "<div class='ays_masonry_grid-item ays_masonry_item_".$id." ays_count_views' data-desc='" . $image_titles[$key] ." ". $image_alts[$key] ." ". $image_descs[$key] ."' ".$ays_data_sub_html.">";
+                //$gallery_view .= "<img src='". $current_image ."' alt='".$image_alts[$key]."' style='box-shadow: none;'>";
+                $gallery_view .="<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "'>";
             }
             elseif ($view == "grid") {
                 //MJO TODO remove data-src ?
@@ -1341,6 +1176,7 @@ class Geolocated_Photo_Public {
                 if(typeof aysGalleryOptions.galleryImages === 'undefined'){
                     aysGalleryOptions.galleryImages = [];
                 }
+                console.log('aysGalleryOptions.galleryImages', aysGalleryOptions.galleryImages);
                 aysGalleryOptions.galleryImages[".$id."] = '" . base64_encode( json_encode( $images_new ) ) . "';
             </script>";
         }       
@@ -1945,7 +1781,7 @@ class Geolocated_Photo_Public {
         $enable_rtl_direction  = (isset($gallery_options['enable_rtl_direction']) && $gallery_options['enable_rtl_direction'] == 'on' ) ? true : false;
 
         $rtl_style = '';
-        $search_img = '';
+        $search_img = ''; // TODO remove all search
         if($enable_rtl_direction){
             $rtl_style = '
                 text-align: right;

@@ -67,7 +67,7 @@
         register_block_type(
             $block_namespace, 
             array(
-                'render_callback'   => 'gallery_p_gallery_render_callback',
+                'render_callback'   => 'glp_gallery_render_callback',
                 'editor_script'     => 'glp-block-js',
                 'style'             => 'glp-block-css',
                 'attributes'	    => array(
@@ -89,7 +89,7 @@
         );       
     }    
     
-    function gallery_p_gallery_render_callback( $attributes ) { 
+    function glp_gallery_render_callback( $attributes ) { 
 
         $ays_html = "<div class='ays-gallery-render-callback-box'></div>";
 

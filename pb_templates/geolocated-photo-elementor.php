@@ -73,9 +73,9 @@ class Widget_GPG_Custom_Elementor_Thing extends Widget_Base {
         $settings = $this->get_settings_for_display();
         echo ( isset( $settings['gallery_title'] ) && ! empty( $settings['gallery_title'] ) ) ? "<h2 style='text-align: {$settings['gallery_title_alignment']}'>{$settings['gallery_title']}</h2>" : "";
         
-        // echo do_shortcode("[gallery_p_gallery id={$settings['gallery_selector']}]");
+        // echo do_shortcode("[glp_gallery id={$settings['gallery_selector']}]");
 
-        echo ("[gallery_p_gallery id={$settings['gallery_selector']}]");
+        echo ("[glp_gallery id={$settings['gallery_selector']}]");
     }
 
     public function get_active_galleries(){

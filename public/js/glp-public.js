@@ -76,6 +76,49 @@ function ays_closestEdge(x,y,w,h) {
     }
 }
 
+function lazyload_single () {
+    console.log('lazyload_single in');
+    
+    var scrollTop = window.pageYOffset;
+    console.log('lazyload_single in1');
+    var lazyloadImages = document.querySelectorAll('img.lazy');
+    if(lazyloadImages.length != 0) { 
+        let img = lazyloadImages[0];
+        if (img.src == '') {
+            let parent = img.parentNode;
+            console.log('lazyload_single offsetTop', parent.offsetTop);
+            console.log('lazyload_single innerHeight', window.innerHeight);
+            console.log('lazyload_single scrollTop', scrollTop);
+            console.log('lazyload_single sum', window.innerHeight + scrollTop);
+            if(parent.offsetTop < (window.innerHeight + scrollTop)) {
+                //img.classList.remove('lazy');
+                img.classList.add('lazyloaded');
+                img.src = img.dataset.src;
+                console.log('lazyload_single img', img);
+            }
+        }
+    };
+}
+
+function lazyload_max () {
+    console.log('lazyload_max in');
+    var lazyloadImages = document.querySelectorAll('img.lazy');    
+    console.log('lazyload_max lenght', lazyloadImages.length);
+    
+    var scrollTop = window.pageYOffset;
+    console.log('lazyload_max in1');
+    lazyloadImages.forEach(function(img) {
+        if (img.src == '') {
+            let parent = img.parentNode;
+            if(parent.offsetTop < (window.innerHeight + scrollTop)) {
+                img.classList.add('lazyloaded');
+                img.src = img.dataset.src;
+                //
+                console.log('lazyload_max img', img);
+            }
+        }
+    });
+}
 
 
 var geojson={};

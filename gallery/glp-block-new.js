@@ -249,7 +249,7 @@ registerBlockType( 'geolocated-photo/gallery', {
                     }
                     status = 1;
                     wp.data.dispatch( 'core/block-editor' ).updateBlockAttributes( props.clientId, {
-                        shortcode: "[gallery_p_gallery  id="+c+"]",
+                        shortcode: "[glp_gallery  id="+c+"]",
                         metaFieldValue: parseInt(c)
                     } );
                 },
@@ -268,7 +268,7 @@ registerBlockType( 'geolocated-photo/gallery', {
                         c = '';
                     }
                     wp.data.dispatch( 'core/block-editor' ).updateBlockAttributes( props.clientId, {
-                        shortcode: "[gallery_p_gallery id="+c+"]",
+                        shortcode: "[glp_gallery id="+c+"]",
                         metaFieldValue: parseInt(c)
                     } );
 
@@ -355,7 +355,7 @@ registerBlockType( 'geolocated-photo/gallery', {
 
         resolveBlocks();
 
-        return n ? el("div", null, '[gallery_p_gallery id="'+n+'"]') : null
+        return n ? el("div", null, '[glp_gallery id="'+n+'"]') : null
     }
 } );
 

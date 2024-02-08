@@ -66,7 +66,7 @@ class Glp_Galleries_List_Table extends WP_List_Table{
         return $result;
     }
 
-    public function get_gallery_by_id( $id ){
+    static public function get_gallery_by_id( $id ){
         global $wpdb;
 
         $gallery_table = esc_sql($wpdb->prefix . "glp_gallery");
@@ -121,8 +121,9 @@ class Glp_Galleries_List_Table extends WP_List_Table{
             $width                  = (isset($data['gallery_width']) && $data['gallery_width'] != '') ? wp_unslash(sanitize_text_field( $data['gallery_width'] )) : '';
             $height                 = 0;
             $view_type              = isset($data['ays-view-type']) && $data['ays-view-type'] != '' ? sanitize_text_field( $data['ays-view-type'] ) : '';
-            $columns_count          = (isset($data['ays-columns-count']) && $data['ays-columns-count'] != '') ? absint( intval( $data['ays-columns-count'] ) ) : '';
+            $columns_count          = (isset($data['glp-columns-count']) && $data['glp-columns-count'] != '') ? absint( intval( $data['glp-columns-count'] ) ) : '';
             $images_distance        = (isset($data['glp-images-distance']) && $data['glp-images-distance'] != '') ? absint( intval( $data['glp-images-distance'] ) ) : '5';
+            $mosaic_row_size        = (isset($data['glp-mosaic-row-size']) && $data['glp-mosaic-row-size'] != '') ? absint( intval( $data['glp-mosaic-row-size'] ) ) : '500';
             $hover_effect           = (isset($data['ays_hover_simple']) && $data['ays_hover_simple'] != '') ? sanitize_text_field( $data['ays_hover_simple'] ) : '';
             $img_load_effect        = (isset($data['ays_img_load_effect']) && $data['ays_img_load_effect'] != '') ? sanitize_text_field( $data['ays_img_load_effect'] ) : '';
             $hover_opacity          = (isset($data['glp-image-hover-opacity']) && $data['glp-image-hover-opacity'] != '') ? sanitize_text_field( $data['glp-image-hover-opacity'] ) : '';
@@ -298,7 +299,10 @@ class Glp_Galleries_List_Table extends WP_List_Table{
                 "gallery_loader_custom_gif_width" => $gallery_loader_custom_gif_width,
                 "images_request"            => $ays_images_request,
                 "query_categories"          => $query_categories,
+                "mosaic_row_size"           => $mosaic_row_size,
             );
+
+            error_log("Write options=".print_r($options, true));
             $lightbox_options = array(
                 "lightbox_counter"          => $ays_lightbox_counter,
                 "lightbox_autoplay"         => $ays_lightbox_autoplay,
@@ -307,8 +311,8 @@ class Glp_Galleries_List_Table extends WP_List_Table{
                 "filter_lightbox_opt"       => $glp_filter_lightbox_opt,
                 "lb_keypress"               => $glp_lg_keypress,
                 "lb_esckey"                 => $glp_lg_esckey,
-                
             );
+
             $submit_type = (isset($data['submit_type'])) ?  $data['submit_type'] : '';
             if( $id == null ){
                 $gallery_result = $wpdb->insert(
@@ -621,9 +625,9 @@ class Glp_Galleries_List_Table extends WP_List_Table{
                     <div class="glp-copy-image" data-bs-toggle="tooltip" title="'. esc_html(__('Click to copy',$this->plugin_name)).'">
                             <img src="'. esc_url(GLP_ADMIN_URL) . '/images/icons/copy-image.svg">
                     </div>                                            
-                    <input type="text" class="glp-shortcode-input" readonly value="'. esc_attr('[gallery_p_gallery id="%s"]').'" />
+                    <input type="text" class="glp-shortcode-input" readonly value="'. esc_attr('[glp_gallery id="%s"]').'" />
                 </div>', $item["id"]);
-        // return sprintf("<input type='text' onClick='this.setSelectionRange(0, this.value.length)' readonly value='[gallery_p_gallery id=%s]'  />", $item["id"]);        
+        // return sprintf("<input type='text' onClick='this.setSelectionRange(0, this.value.length)' readonly value='[glp_gallery id=%s]'  />", $item["id"]);        
     }
 
     function column_items( $item ) {

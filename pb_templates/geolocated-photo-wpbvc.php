@@ -8,10 +8,10 @@ if( class_exists( 'WPBakeryShortCode' ) ) {
 
         function __construct() {
             add_action( 'init', array( $this, 'vc_galleryphotogallery_mapping' ) );
-            add_shortcode( 'vc_gallery_p_gallery', array( $this, 'vc_galleryphotogallery_html' ) );
+            add_shortcode( 'vc_glp_gallery', array( $this, 'vc_galleryphotogallery_html' ) );
         }
 
-        public function vc_gallery_p_gallery_mapping() {
+        public function vc_glp_gallery_mapping() {
             // Stop all if VC is not enabled
             if ( !defined( 'WPB_VC_VERSION' ) ) {
                 return;
@@ -42,7 +42,7 @@ if( class_exists( 'WPBakeryShortCode' ) ) {
             );
         }
 
-        public function vc_gallery_p_gallery_html( $atts ) {
+        public function vc_glp_gallery_html( $atts ) {
             // Params extraction
             extract(
                 shortcode_atts(
@@ -55,7 +55,7 @@ if( class_exists( 'WPBakeryShortCode' ) ) {
             // Fill $html var with data
 
             // Fill $html var with data
-            $html = do_shortcode("[gallery_p_gallery id={$gallery}]");
+            $html = do_shortcode("[glp_gallery id={$gallery}]");
 
             return $html;
         }

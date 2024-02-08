@@ -74,10 +74,10 @@ class Glp_Maps_List_Table extends WP_List_Table{
         $id = absint( sanitize_text_field( $id ));
         $sql = "SELECT * FROM ".$gallery_table." WHERE id = %d";
 
-        $result = $wpdb->get_row(
-                    $wpdb->prepare( $sql, $id)
-                  , "ARRAY_A");
+        $result = $wpdb->get_row($wpdb->prepare( $sql, $id), "ARRAY_A");
 
+        error_log("get_map_by_id result: ".print_r($result, true));
+        
         return $result;
     }
 
@@ -86,22 +86,22 @@ class Glp_Maps_List_Table extends WP_List_Table{
         error_log("add_or_edit_map data: ".print_r($data, true));
         $gallery_table = $wpdb->prefix . "glp_map";
         if( isset($data["ays_gallery_action"]) && wp_verify_nonce( $data["ays_gallery_action"],"ays_gallery_action" ) ) {
-            
 
             $id                     = ( $data["id"] != NULL ) ? absint( intval( $data["id"] ) ) : null;
             
             // Gallery settings
             //error_log("TODO gallery id:".$id);
-            $title                  = (isset($data["map_title"]) && $data["map_title"] != '') ? stripslashes(sanitize_text_field( $data["map_title"] )) : '';
-            $map_images_distance        = (isset($data['map-images-distance']) && $data['map-images-distance'] != '') ? absint( intval( $data['map-images-distance'] ) ) : '5';
-            $map_slider_color = (isset($data['map_slider_color']) && $data['map_slider_color'] != '') ? wp_unslash(sanitize_text_field( $data['map_slider_color'] )) : '#ffffff';
-
-
+            $title                      = (isset($data["map_title"]) && $data["map_title"] != '') ? stripslashes(sanitize_text_field( $data["map_title"] )) : '';
+            $map_images_distance        = (isset($data['map_images_distance']) && $data['map_images_distance'] != '') ? absint( intval( $data['map_images_distance'] ) ) : '5';
+            $map_slider_color           = (isset($data['map_slider_color']) && $data['map_slider_color'] != '') ? wp_unslash(sanitize_text_field( $data['map_slider_color'] )) : '#ffffff';
+            $map_gallery_id             = (isset($data['map_gallery_id']) && $data['map_gallery_id'] != '') ? absint( intval( $data['map_gallery_id'] ) ) : '-1';
+            $map_provider_id            = (isset($data['map_provider_id']) && $data['map_provider_id'] != '') ? $data['map_gallery_id'] : 'OSM';
             $options = array(
 
                 "images_request"            => $title,
                 "map_images_distance"       => $map_images_distance,
-                "map_slider_color"          => $map_slider_color
+                "map_slider_color"          => $map_slider_color,
+                "map_provider_id"           => $map_provider_id
             );
 
             $submit_type = (isset($data['submit_type'])) ?  $data['submit_type'] : '';
@@ -111,9 +111,10 @@ class Glp_Maps_List_Table extends WP_List_Table{
                     array(
                         "title"             => $title,
                         "provider"          => 'provider',
+                        "gallery_id"        => $map_gallery_id,
                         "options"           => json_encode($options)
                     ),
-                    array( "%s", "%s", "%s" )
+                    array( "%s", "%s", "%s", "%s" )
                 );
                 $message = "created";
             }else{
@@ -122,10 +123,11 @@ class Glp_Maps_List_Table extends WP_List_Table{
                     array(
                         "title"             => $title,
                         "provider"          => 'provider',
+                        "gallery_id"        => $map_gallery_id,
                         "options"           => json_encode($options)
                     ),
                     array( "id" => $id ),
-                    array( "%s", "%s", "%s" ),
+                    array( "%s", "%s", "%s", "%s" ),
                     array( "%d" )
                 );
                 $message = "updated";
@@ -203,8 +205,8 @@ class Glp_Maps_List_Table extends WP_List_Table{
     //TODO test duplicate
     public function duplicate_maps( $id ){
         global $wpdb;
-        $galleries_table = $wpdb->prefix."glp_map";
-        $gallery = $this->get_map_by_id($id);
+        $map_table = $wpdb->prefix."glp_map";
+        $map = $this->get_map_by_id($id);
        
         $user_id = get_current_user_id();
         $user = get_userdata($user_id);
@@ -217,28 +219,28 @@ class Glp_Maps_List_Table extends WP_List_Table{
         $max_id = $this->get_max_id();
         $ordering = ( $max_id != NULL ) ? ( $max_id + 1 ) : 1;
         
-        $options = json_decode($gallery['options'], true);
+        $options = json_decode($map['options'], true);
         
         $options['create_date'] =  current_time( 'mysql' );
         $options['author'] = $author;
         
         $result = $wpdb->insert(
-            $galleries_table,
+            $map_table,
             array(
-                'title'             => "Copy - ".sanitize_text_field($gallery['title']),
-                'description'       => sanitize_text_field($gallery['description']),
+                'title'             => "Copy - ".sanitize_text_field($map['title']),
+                'description'       => sanitize_text_field($map['description']),
                 'images'            => '',
                 'images_titles'     => '',
                 'images_descs'      => '',
                 'images_alts'       => '',
                 'images_urls'       => '',
                 'images_dates'      => '',
-                'width'             => sanitize_text_field($gallery['width']),
-                'height'            => sanitize_text_field($gallery['height']),
+                'width'             => sanitize_text_field($map['width']),
+                'height'            => sanitize_text_field($map['height']),
                 'options'           => json_encode($options),
-                'lightbox_options'  => sanitize_text_field($gallery['lightbox_options']),
-                'categories_id'     => sanitize_text_field($gallery['categories_id']),
-                'custom_css'        => $gallery['custom_css']
+                'lightbox_options'  => sanitize_text_field($map['lightbox_options']),
+                'categories_id'     => sanitize_text_field($map['categories_id']),
+                'custom_css'        => $map['custom_css']
             ),
             array(
                 '%s',
@@ -309,9 +311,7 @@ class Glp_Maps_List_Table extends WP_List_Table{
      * @return string
      */
     function column_cb( $item ) {
-        return sprintf(
-            "<input type='checkbox' name='bulk-delete[]' value='%s' />", $item["id"]
-        );
+        return sprintf("<input type='checkbox' name='bulk-delete[]' value='%s' />", $item["id"]);
     }
 
 
@@ -346,13 +346,33 @@ class Glp_Maps_List_Table extends WP_List_Table{
     }
 
     function column_shortcode( $item ) {
-        error_log("column_shortcode IN");
+        error_log("column_shortcode IN item=".print_r($item, true));
         return sprintf('<div class="glp-shortcode-container">
                     <div class="glp-copy-image" data-bs-toggle="tooltip" title="'. esc_html(__('Click to copy',$this->plugin_name)).'">
                             <img src="'. esc_url(GLP_ADMIN_URL) . '/images/icons/copy-image.svg">
                     </div>                                            
                     <input type="text" class="glp-shortcode-input" readonly value="'. esc_attr('[glp_map id="%s"]').'" />
                 </div>', $item["id"]);
+    }
+
+    function column_gallery( $item ) {
+        error_log("column_shortcode IN item=".print_r($item, true));
+        $gallery_id = (isset($item['gallery_id']) && $item['gallery_id'] != '') ? absint( intval( $item['gallery_id'] ) ) : '';
+
+        if ($gallery_id != '') {
+            // get gallery title
+            // http://localhost:8000/wp-admin/admin.php?page=geolocated-photo&action=edit&gallery=2
+
+            $gallery = Glp_Galleries_List_Table::get_gallery_by_id($gallery_id);
+            error_log("gallery title = ".$gallery["title"]);
+            $gallery_title = $gallery["title"];
+            $q = esc_attr($gallery_title);
+            $restitle = GLP_Admin::glp_restriction_string("word", $gallery_title, 5); // TODO test with more than 5 words
+
+            $title_html = sprintf( '<a href="?page=%s&action=%s&gallery=%d" title="%s">%s</a>', esc_attr( $_REQUEST['page'] ), 'edit', $gallery_id, $q, $restitle);
+            return $title_html;
+        }
+        return '';
     }
 
     function column_items( $item ) {
@@ -395,6 +415,7 @@ class Glp_Maps_List_Table extends WP_List_Table{
             // "image"             => __( "Image", $this->plugin_name ),
             // "description"       => __( "Description", $this->plugin_name ),
             "shortcode"         => __( "Shortcode", $this->plugin_name ),
+            "gallery"         => __( "Gallery", $this->plugin_name ),
             "create_date"       => __( 'Created', $this->plugin_name ),
             //"id"                => __( "ID", $this->plugin_name ),
         );
@@ -520,7 +541,7 @@ class Glp_Maps_List_Table extends WP_List_Table{
             $updated_message = esc_html( __( "Map deleted.", $this->plugin_name ) );
         elseif ( "error" == $status )
             // TODO check this limitation
-            $updated_message = __( "You're not allowed to add more maps. Please checkout to ", $this->plugin_name )."<a href='http://glp-plugin.com/wordpress/photo-gallery' target='_blank'>PRO ".__( "version", $this->plugin_name )."</a>.";
+            $updated_message = __( "You're not allowed to add more maps. Please checkout to ", $this->plugin_name )."<a href='http://glp-plugin.com/wordpress/photo-map' target='_blank'>PRO ".__( "version", $this->plugin_name )."</a>.";
 
         if ( empty( $updated_message ) )
             return;

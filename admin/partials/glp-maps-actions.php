@@ -66,13 +66,13 @@ if ( isset( $id ) && !is_null( $id ) ) {
 
 $this_site_path         = trim(get_site_url(), "https:");
 $map_options            = json_decode($map['options'], true);
+$map_gallery_id         = (isset($map['gallery_id']) && $map['gallery_id'] != '') ? absint( intval( $map['gallery_id'] ) ) : '-1';
 
-//$show_gal_title = (!isset($map_options['show_gal_title'])) ? 'off' : $map_options['show_gal_title'];
-//$show_gal_desc = (!isset($map_options['show_gal_desc'])) ? 'on' : $map_options['show_gal_desc'];
-$map_slider_color    = (!isset($map_options['map_slider_color'])) ? '#000000' : esc_attr(stripslashes( $map_options['map_slider_color'] ));
-// Images distance
-$images_distance = (isset($map_options['map_images_distance']) && $map_options['map_images_distance'] != '') ? absint( intval( $map_options['map_images_distance'] ) ) : '5';
+$get_all_galleries      = Glp_Gallery_Data::get_galleries();
 
+$map_slider_color       = (!isset($map_options['map_slider_color'])) ? '#000000' : esc_attr(stripslashes( $map_options['map_slider_color'] ));
+$map_images_distance    = (isset($map_options['map_images_distance']) && $map_options['map_images_distance'] != '') ? absint( intval( $map_options['map_images_distance'] ) ) : '5';
+$map_provider_id        = (isset($map_options['map_provider_id']) && $map_options['map_provider_id'] != 'OSM') ? $map_options['map_provider_id'] : 'OSM';
 
 ?>
 
@@ -124,24 +124,57 @@ $images_distance = (isset($map_options['map_images_distance']) && $map_options['
                 </div>
                 <?php endif;?>
             </div>
-            <hr>
-
-            <h6 class="ays-subtitle"><?php echo  __('General options', $this->plugin_name) ?></h6>
-            <hr/>
             <div class="form-group row">
                 <div class="col-sm-3">
-                    <label>
-                        <?php echo __("TODO", $this->plugin_name);?>
+                    <label for="map_gallery_id">
+                        <?php echo __("Associated gallery", $this->plugin_name);?>
                     </label>
                 </div>
+
                 <div class="col-sm-9">
-                    <input type="checkbox" class="" name="glp_title_show" <?php echo (isset($map_options['show_gal_title']) && $map_options['show_gal_title'] == "on") ? "checked" : ""; ?> />
+                    <select name="map_gallery_id" id="map_gallery_id">
+                        <?php foreach($get_all_galleries as $var => $var_name):?>
+                            <option <?php echo $map_gallery_id == $var_name['id'] ? 'selected' : ''; ?> value="<?php echo $var_name['id']; ?>">
+                                <?php echo $var_name['title']; ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+            <hr/>
+            <h6 class="ays-subtitle"><?php echo  __('Map provider', $this->plugin_name) ?></h6>
+            <div class="form-group row">
+                <div class="col-sm-3">
+                    <label for="map_provider_id">
+                        <?php echo __("Map source", $this->plugin_name);?>
+                    </label>
+                </div>
+
+                <div class="col-sm-9">
+                    <select name="map_provider_id" id="map_provider_id">
+                        <option <?php echo 'OSM' == $map_provider_id ? 'selected' : ''; ?> value="OSM"><?php echo  __('OpenStreetMap', $this->plugin_name) ?></option> 
+                    </select>
+
+
+                    <div id="map_provider_option_api">
+
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <label >
+                                    <?php echo __("API key", $this->plugin_name); ?>
+                                </label>
+                            </div>
+                            <div class="col-sm-5">
+                                <input type="text" required name="map_provider_apikey" id="map_provider_apikey" class="ays-text-input" placeholder="<?php echo __("999000999888", $this->plugin_name);?>" value="<?php echo stripslashes(htmlentities($map["title"])); ?>"/>                                
+                            </div>
+                        </div>
+                        
+                    </div>
                 </div>
             </div>
             <hr/>
 
             <h6 class="ays-subtitle"><?php echo  __('Slider options', $this->plugin_name) ?></h6>         
-            <hr/>            
             <div class="form-group row">
                 <div class="col-sm-3">
                     <label>
@@ -150,14 +183,13 @@ $images_distance = (isset($map_options['map_images_distance']) && $map_options['
                 </div>
                 <div class="col-sm-9 glp_display_flex_width">
                     <div>
-                        <input name="map-images-distance" class="ays-text-input ays-text-input-short" type="number" value="<?php echo $map_images_distance; ?>">
+                        <input name="map_images_distance" id="map_images_distance" class="ays-text-input ays-text-input-short" type="number" value="<?php echo $map_images_distance; ?>">
                     </div>
                     <div class="glp_dropdown_max_width">
                         <input type="text" value="px" class="glp-form-hint-for-size" disabled="">
                     </div>
                 </div>
             </div>
-            <hr/>
             <div class="form-group row">
                 <div class="col-sm-3">
                     <label for="map_slider_color">
@@ -168,6 +200,7 @@ $images_distance = (isset($map_options['map_images_distance']) && $map_options['
                     <input name="map_slider_color" id="map_slider_color" data-alpha="true" type="text" value="<?php echo $map_slider_color; ?>" data-default-color="rgba(0,0,0,0)">
                 </div>
             </div>
+            <hr/>
 
             <div class="form-group row ays-galleries-button-box">
                 <div class="ays-question-button-first-row" style="padding: 0;">
