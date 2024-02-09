@@ -237,9 +237,6 @@ class Geolocated_Photo_Public {
         $images_request = ($gallery_options['images_request'] == '' || $gallery_options['images_request'] == false) ? 'selection' : $gallery_options['images_request'];
         $gallery_options['enable_light_box'] = isset($gallery_options['enable_light_box']) ? $gallery_options['enable_light_box'] : "off";
 
-        // $gallery_options['enable_search_img'] = isset($gallery_options['enable_search_img']) ? $gallery_options['enable_search_img'] : "off";
-        // $enable_search_img = ($gallery_options['enable_search_img'] != "off") ? true : false;
-
         $disable_lightbox = (isset($gallery_options['enable_light_box']) && $gallery_options['enable_light_box'] == "off" || $gallery_options['enable_light_box'] == "") ? true : false;
 
         $hover_effect = (!isset($gallery_options['hover_effect']) || $gallery_options['hover_effect'] == null) ? "fadeIn" : $gallery_options['hover_effect'];
@@ -458,7 +455,6 @@ class Geolocated_Photo_Public {
                                             innerGap: {$images_distance},
                                             refitOnResize: true,
                                             showTailWhenNotEnoughItemsForEvenOneRow: true,
-                                            maxRows:1,
                                             maxRowHeight: {$mosaic_row_size},
                                             maxRowHeightPolicy: 'tail'
                                         });";
@@ -636,7 +632,6 @@ class Geolocated_Photo_Public {
                                 innerGap: '.$images_distance.',
                                 refitOnResize: true,
                                 showTailWhenNotEnoughItemsForEvenOneRow: true,
-                                maxRows:1,
                                 maxRowHeight: '.$mosaic_row_size.',
                                 maxRowHeightPolicy: "tail"
                             });
@@ -677,7 +672,6 @@ class Geolocated_Photo_Public {
                                 innerGap: '.$images_distance.',
                                 refitOnResize: true,
                                 showTailWhenNotEnoughItemsForEvenOneRow: true,
-                                maxRows:1,
                                 maxRowHeight: '.$mosaic_row_size.',
                                 maxRowHeightPolicy: "tail"
                             });
@@ -735,7 +729,6 @@ class Geolocated_Photo_Public {
                                     innerGap: {$images_distance},
                                     refitOnResize: true,
                                     showTailWhenNotEnoughItemsForEvenOneRow: true,
-                                    maxRows:1,
                                     maxRowHeight: {$mosaic_row_size},
                                     maxRowHeightPolicy: 'tail'
                                 });
@@ -799,7 +792,6 @@ class Geolocated_Photo_Public {
                                 innerGap: {$images_distance},
                                 refitOnResize: true,
                                 showTailWhenNotEnoughItemsForEvenOneRow: true,
-                                maxRows:1,
                                 maxRowHeight: {$mosaic_row_size},
                                 maxRowHeightPolicy: 'tail'
                             });
@@ -1067,7 +1059,7 @@ class Geolocated_Photo_Public {
             }else{
                 $images_cat_data_id = "";
             }
-
+            // TODO test lightbox when lazy loading
             if($images_loading == 'lazy_load'){
                 $current_image = '';
                 $image_class = 'ays_gallery_image lazy';
@@ -1080,6 +1072,7 @@ class Geolocated_Photo_Public {
 
             $img_tag = "";
             $vignette_div = "";
+            // if no vignette
             if ($image_countries[$key] == null) {
                 //$img_tag ="<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "' onload='console.log(\"ID=".$image_ids[$key]."\")'>";
                 $img_tag ="<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "'>";
@@ -1149,20 +1142,21 @@ class Geolocated_Photo_Public {
          
             
             if ($view == "mosaic") {
-                $gallery_view .= "<div class='item withImage ays_mosaic_column_item_".$id." ays_count_views' ".$wh_attr." data-desc='" . $image_titles[$key] ." ". $image_alts[$key] ." ". $image_descs[$key] ."' ".$ays_data_sub_html.">";
-                $gallery_view .= "<img src='" . $current_image . "' alt='" . wp_unslash($image_alts[$key]) . "' />";
-                //$gallery_view ="<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "'>";
+                $gallery_view .= "<div class='item withImage ays_mosaic_column_item_".$id." ays_count_views' ".$wh_attr.
+                    " data-desc='" . $image_titles[$key] ." ". $image_alts[$key] ." ". $image_descs[$key] ."' ".$ays_data_sub_html.">".
+                    "<img src='" . $current_image . "' alt='" . wp_unslash($image_alts[$key]) . "' />";
 
             }
             elseif ($view == "masonry") {
                 //MJO TODO remove console.log in onload
-                $gallery_view .= "<div class='ays_masonry_grid-item ays_masonry_item_".$id." ays_count_views' data-desc='" . $image_titles[$key] ." ". $image_alts[$key] ." ". $image_descs[$key] ."' ".$ays_data_sub_html.">";
-                //$gallery_view .= "<img src='". $current_image ."' alt='".$image_alts[$key]."' style='box-shadow: none;'>";
-                $gallery_view .="<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "'>";
+                $gallery_view .= "<div class='ays_masonry_grid-item ays_masonry_item_".$id." ays_count_views'".
+                    " data-desc='" . $image_titles[$key] ." ". $image_alts[$key] ." ". $image_descs[$key] ."' ".$ays_data_sub_html.">".
+                    "<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "'>";
             }
             elseif ($view == "grid") {
                 //MJO TODO remove data-src ?
-                $gallery_view .="<div class='ays_grid_column_".$id." ays_count_views' style='width: calc(".($column_width)."% - ".($images_distance)."px);' ".$images_cat_data_id." data-src='" . $images[$key] . "' data-desc='" . $image_titles[$key] ." ". $image_alts[$key] ." ". $image_descs[$key] ."' ".$ays_data_sub_html.">";
+                $gallery_view .="<div class='ays_grid_column_".$id." ays_count_views' style='width: calc(".($column_width)."% - ".($images_distance)."px);' ".
+                    $images_cat_data_id." data-src='" . $images[$key] . "' data-desc='" . $image_titles[$key] ." ". $image_alts[$key] ." ". $image_descs[$key] ."' ".$ays_data_sub_html.">";
                 $gallery_view .=$img_tag;
             }
 
@@ -1365,8 +1359,6 @@ class Geolocated_Photo_Public {
 
         $ays_ordering_asc_desc = (isset($gallery_options['ordering_asc_desc']) && $gallery_options['ordering_asc_desc'] != '') ? $gallery_options['ordering_asc_desc'] : 'ascending';
         
-        $glp_filter_by_cat_effect = (!isset($gallery_options['glp_filter_cat_anim']) || $gallery_options['glp_filter_cat_anim'] == null) ? "fadeIn" : $gallery_options['glp_filter_cat_anim'];
-
         $ays_show_caption = true;
         if(isset($gal_lightbox_options['lb_show_caption'])){
             switch($gal_lightbox_options['lb_show_caption']){
@@ -1382,7 +1374,7 @@ class Geolocated_Photo_Public {
         // All images text
         $gpg_all_images_text = (isset($settings_options['gpg_all_images_text']) && $settings_options['gpg_all_images_text'] != '') ?  stripslashes( esc_attr($settings_options['gpg_all_images_text'])) : 'All';        
         
-        $show_filter_cat = (!isset($gallery_options['ays_filter_cat'])) ? 'off' : $gallery_options['ays_filter_cat'];
+        //$show_filter_cat = (!isset($gallery_options['ays_filter_cat'])) ? 'off' : $gallery_options['ays_filter_cat'];
 
         $show_gal_title = (!isset($gallery_options['show_gal_title'])) ? 'off' : $gallery_options['show_gal_title'];
         //$show_gal_desc = (!isset($gallery_options['show_gal_desc'])) ? 'off' : $gallery_options['show_gal_desc'];
@@ -1490,9 +1482,6 @@ class Geolocated_Photo_Public {
 
         //$link_on_whole_img = (isset($gallery_options['link_on_whole_img']) && $gallery_options['link_on_whole_img'] == "on") ? true : false;
 
-        // $gallery_options['enable_search_img'] = isset($gallery_options['enable_search_img']) ? $gallery_options['enable_search_img'] : "off";
-        // $enable_search_img = ($gallery_options['enable_search_img'] != "off") ? true : false;
-
         //$ays_width = $width == 0 ? '100%' : $width.'px'; 
         $ays_width = '100%';
 
@@ -1583,11 +1572,8 @@ class Geolocated_Photo_Public {
         $img_cat_id     = array();
         $imgs_cat_id     = array();
         $this_site_path = trim(get_site_url(), "https:");
+        error_log("public image_sizes=".$image_sizes);
         foreach($images as $i => $img){
-            if($show_filter_cat == "on" && $view == "grid"){
-                $img_cat_id = explode(',', $images_categories[$i]);
-                $imgs_cat_id = array_merge($img_cat_id, $imgs_cat_id);
-            }
             if(strpos(trim($img, "https:"), $this_site_path) !== false){ 
                 $query = "SELECT * FROM `".$wpdb->prefix."posts` WHERE `post_type` = 'attachment' AND `guid` = '".$img."'";
                 $result_img =  $wpdb->get_results( $query, "ARRAY_A" );
@@ -1606,35 +1592,6 @@ class Geolocated_Photo_Public {
             }
         }
         $images_count = count($images);
-        
-        $ayg_gpg_cat_anim = '';
-        if($show_filter_cat == "on" && $view == "grid"){
-            $imgs_cat_id = array_unique($imgs_cat_id);
-            $ayg_gpg_cat_anim = $glp_filter_by_cat_effect; 
-            $show_gallery_filter_cat = "<div class='ays_gallery_filter_cat' data-anim='".$ayg_gpg_cat_anim."'>
-                                        <a href='javascript:void(0);' class='glp_category_filter' data-cat='all'>".$gpg_all_images_text."</a>
-                                    ";                                   
-            foreach ($gal_cat_id as $gal_cat_key => $gal_cat_value) {
-                if (in_array($gal_cat_value, $imgs_cat_id)) {
-                    $show_gallery_filter_cat .="<a href='javascript:void(0);' class='glp_category_filter' data-cat='".$gal_cat_value."'>".$gal_cat_title[$gal_cat_key]."</a>";                                    
-                }
-            }
-             $show_gallery_filter_cat .=" </div>";
-        }else{
-            $show_gallery_filter_cat = "";
-            $ayg_gpg_cat_anim = "";
-        }
-
-        // if ($enable_search_img && $view != 'mosaic') {
-        //     $show_search_img = "<div class='ays_gallery_search_img'>
-        //                             <label>Search
-        //                                 <input type='text' class='inp_search_img' id='inp_search_img_".$id."' placeholder='by title, description'>
-        //                             </label>
-        //                         </div>";            
-        // } else {
-        //     $show_search_img = "";
-        // }
-        $show_search_img = "";
         
         $user_first_name        = '';
         $user_last_name         = '';
@@ -1706,8 +1663,7 @@ class Geolocated_Photo_Public {
         }else{
             $show_images_with_border = "border: none";
         }
-        $gallery_view = "<div class='ays_gallery_container_".$id."' style='width: ".$ays_width."'>".$show_gallery_head.
-            $show_gallery_filter_cat.$show_search_img;
+        $gallery_view = "<div class='ays_gallery_container_".$id."' style='width: ".$ays_width."'>".$show_gallery_head;
   
         
         //BUILD HTML for all images

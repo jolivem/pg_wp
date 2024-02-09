@@ -427,19 +427,12 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                             <option <?php echo $admin_pagination == "25" ? "selected" : ""; ?> value="25"><?php echo __( "25", $this->plugin_name ); ?></option>
                             <option <?php echo $admin_pagination == "30" ? "selected" : ""; ?> value="30"><?php echo __( "30", $this->plugin_name ); ?></option>
                         </select>            
-                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __("This field is for the creation of pagination", $this->plugin_name ); ?>">
-                        <i class="fas fa-info-circle"></i>
-                        </a>
-                        <span class="glp_image_hover_icon_text"><?php echo __( "Image pagination", $this->plugin_name ); ?></span>
+                        <span class="glp_image_hover_icon_text"><?php echo __( "Pagination", $this->plugin_name ); ?></span>
                     </div>
                     <div id="glp_sort_cont">    
-                    <a class="ays_help" data-toggle="tooltip" title="<?php echo __("Change the ordering", $this->plugin_name ); ?>">
-                        <i class="fas fa-info-circle"></i>
-                        </a>            
                         <button class="glp_sort">
-                        <i class="fas fa-exchange-alt"></i>
-                    </button>
-                                    
+                            <i class="fas fa-exchange-alt"></i>
+                        </button>
                     </div>
                 </div>
                 <hr/>
@@ -696,7 +689,6 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
             </div> <!-- end image_selection -->
             <div id="image_query">
 
-
                 <h6 class="ays-subtitle"><?php echo  __('Query options', $this->plugin_name) ?></h6>
                 <hr/>
                 <div class="form-group row">
@@ -704,7 +696,7 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                         <label for="ays_filter_cat">
                             <?php echo __("Select categories", $this->plugin_name);?>
                             <span class="ays_option_note">
-                                <?php echo __("Leave empty to disable query by category", $this->plugin_name);?>
+                                <?php echo __("Leave empty will display zero photos", $this->plugin_name);?>
                             </span>
                         </label>
                     </div>
@@ -745,56 +737,6 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
 		</div>
 		<div id="tab2" class="ays-gallery-tab-content <?php echo ($glp_tab == 'tab2') ? 'ays-gallery-tab-content-active' : ''; ?>">
             <h6 class="ays-subtitle"><?php echo  __('General options', $this->plugin_name) ?></h6>
-            <hr/>
-            <div class="form-group row">
-                <div class="col-sm-3">
-                    <label for="ays_filter_cat">
-                        <?php echo __("Enable filter by categories", $this->plugin_name);?>
-                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __("You can decide whether to show the filter by category of the gallery or not. This option is compatible only with the Grid layout.", $this->plugin_name);?>">
-                           <i class="fas fa-info-circle"></i>
-                        </a>
-                    </label>
-                </div>
-                <div class="col-sm-9">
-                    <input type="checkbox" id="ays_filter_cat" class="" name="ays_filter_cat" <?php echo (isset($gal_options['ays_filter_cat']) && $gal_options['ays_filter_cat'] == "on") ? "checked" : ""; ?> />
-                </div>
-            </div>
-            <hr class="glp_show_hide_anim_hr" style="<?php echo (isset($gal_options['ays_filter_cat']) && $gal_options['ays_filter_cat'] == "on") ? 'display:block' : 'display:none' ; ?>"/>
-            <div class="form-group row" id="glp_dilter_cat_animation" style="<?php echo (isset($gal_options['ays_filter_cat']) && $gal_options['ays_filter_cat'] == "on") ? 'display:flex' : 'display:none' ; ?>">
-                <div class="col-sm-3">
-                    <label for="ays_filter_cat_animation">
-                        <?php echo __("Categories filter animation", $this->plugin_name);?>
-                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __("Choose the animation of the images displaying while filtering them by categories.", $this->plugin_name);?>">
-                           <i class="fas fa-info-circle"></i>
-                        </a>
-                    </label>
-                </div>
-                <div class="col-sm-9">
-                    <select id="ays_filter_cat_animation" class="ays-text-input ays-text-input-short" name="ays_filter_cat_animation">
-                        <optgroup label="Fading Entrances">
-                            <option <?php echo 'fadeIn' == $glp_filter_cat_anim ? 'selected' : ''; ?> value="fadeIn">Fade In</option>
-                            <option <?php echo 'fadeInDown' == $glp_filter_cat_anim ? 'selected' : ''; ?> value="fadeInDown">Fade In Down</option>
-                            <option <?php echo 'fadeInLeft' == $glp_filter_cat_anim ? 'selected' : ''; ?> value="fadeInLeft">Fade In Left</option>
-                            <option <?php echo 'fadeInRight' == $glp_filter_cat_anim ? 'selected' : ''; ?> value="fadeInRight">Fade In Right</option>
-                            <option <?php echo 'fadeInUp' == $glp_filter_cat_anim ? 'selected' : ''; ?> value="fadeInUp">Fade In Up</option>
-                        </optgroup>
-                        <optgroup label="Sliding Entrances">
-                            <option <?php echo ($glp_filter_cat_anim == "slideInUp") ? "selected" : ""; ?> value="slideInUp"><?php echo __("Slide Up", $this->plugin_name);?></option>
-                            <option <?php echo ($glp_filter_cat_anim == "slideInDown") ? "selected" : ""; ?> value="slideInDown"><?php echo __("Slide Down", $this->plugin_name);?></option>
-                            <option <?php echo ($glp_filter_cat_anim == "slideInLeft") ? "selected" : ""; ?> value="slideInLeft"><?php echo __("Slide Left", $this->plugin_name);?></option>
-                            <option <?php echo ($glp_filter_cat_anim == "slideInRight") ? "selected" : ""; ?> value="slideInRight"><?php echo __("Slide Right", $this->plugin_name);?></option>
-                        </optgroup>                                
-                        <optgroup label="Zoom Entrances">
-                            <option <?php echo 'zoomIn' == $glp_filter_cat_anim ? 'selected' : ''; ?> value="zoomIn">Zoom In</option> 
-                            <option <?php echo 'zoomInDown' == $glp_filter_cat_anim ? 'selected' : ''; ?> value="zoomInDown">Zoom In Down</option> 
-                            <option <?php echo 'zoomInLeft' == $glp_filter_cat_anim ? 'selected' : ''; ?> value="zoomInLeft">Zoom In Left</option> 
-                            <option <?php echo 'zoomInRight' == $glp_filter_cat_anim ? 'selected' : ''; ?> value="zoomInRight">Zoom In Right</option> 
-                            <option <?php echo 'zoomInUp' == $glp_filter_cat_anim ? 'selected' : ''; ?> value="zoomInUp">Zoom In Up</option> 
-                        </optgroup>
-                    </select>
-                </div>
-            </div>
-            <hr/>
             <div class="form-group row">
                 <div class="col-sm-3">
                     <label for="ays_image_sizes">
@@ -824,9 +766,6 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                 <div class="col-sm-3">
                     <label for="ays_images_ordering">
                         <?php echo __("Images order by", $this->plugin_name);?>
-                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __("This field arranges the images by parameters of title, date, random", $this->plugin_name);?>">
-                           <i class="fas fa-info-circle"></i>
-                        </a>
                     </label>
                 </div>
                 <div class="col-sm-3">				
@@ -849,9 +788,6 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                 <div class="col-sm-3">
                     <label>
                         <?php echo __("Images loading", $this->plugin_name);?>
-                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __("The images are loaded according to two principles: already loaded gallery with images and at first opens gallery after then the images", $this->plugin_name);?>">
-                           <i class="fas fa-info-circle"></i>
-                        </a>
                     </label>
                 </div>
                 <div class="col-sm-9">
@@ -903,9 +839,6 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                 <div class="col-sm-3">
                     <label>
                         <?php echo __("Thumbnails height", $this->plugin_name);?>
-                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __("The height of the thumbnails of the Gallery", $this->plugin_name);?>">
-                           <i class="fas fa-info-circle"></i>
-                        </a>
                     </label>
                 </div>
                 <div class="col-sm-9" style="border-left:1px solid #ccc;">                   
@@ -959,9 +892,6 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                 <div class="col-sm-3">
                     <label for="ays_gallery_create_author">
                         <?php echo __('Change the author of the current gallery',$this->plugin_name); ?>
-                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __('You can change the author who created the current gallery to your preferred one. You need to write the User ID here. Please note, that in case you write an ID, by which there are no users found, the changes will not be applied and the previous author will remain the same.',$this->plugin_name); ?>">
-                            <i class="fas fa-info-circle"></i>
-                        </a>
                     </label>
                 </div>
                 <div class="col-sm-9">                    
@@ -989,9 +919,6 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                 <div class="col-sm-3">
                     <label>
                         <?php echo __("Gallery view type", $this->plugin_name);?>
-                        <!-- <a class="ays_help" data-toggle="tooltip" title="<?php echo  __('This section notes the type of the Gallery that is in what sequence should the pictures be', $this->plugin_name) ?>">
-                           <i class="fas fa-info-circle"></i>
-                        </a> -->
                     </label>
                 </div>
                 <div class="col-sm-9">
@@ -1120,9 +1047,6 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                 <div class="col-sm-3">
                     <label>
                         <?php echo __("Border radius", $this->plugin_name);?>
-                        <!-- <a class="ays_help" data-toggle="tooltip" title="<?php echo __("The degree of borders curvature of images", $this->plugin_name);?>">
-                           <i class="fas fa-info-circle"></i>
-                        </a> -->
                     </label>
                 </div>                
                 <div class="col-sm-9 glp_display_flex_width">
@@ -1152,9 +1076,6 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                                 <div class="col-sm-4">
                                     <label >
                                         <?php echo __("Show on", $this->plugin_name); ?>
-                                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __("If you choose the case of Thumbnail hover the title will appear when the mouse cursor stops on the image, otherwise the title by default will appear at the bottom of the image.", $this->plugin_name);?>">
-                                           <i class="fas fa-info-circle"></i>
-                                        </a>
                                     </label>
                                 </div>
                                 <div class="col-sm-8">
@@ -1166,9 +1087,6 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                                 <div class="col-sm-4">
                                     <label >
                                         <?php echo __("Image title position", $this->plugin_name);?>
-                                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __("Show title: in the bottom or on top", $this->plugin_name);?>">
-                                           <i class="fas fa-info-circle"></i>
-                                        </a>
                                     </label>
                                 </div>
                                 <div class="col-sm-8">
@@ -1179,9 +1097,6 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                             <div class="form-group row">
                                 <div class="col-sm-4">
                                     <label><?php echo __( "Show with date ", $this->plugin_name); ?>
-                                    <a class="ays_help" data-toggle="tooltip" title="<?php echo __("If you choose the Show with a date of adding the image to the gallery will appear on the date with the title.", $this->plugin_name);?>">
-                                               <i class="fas fa-info-circle"></i>
-                                            </a>
                                     </label>
                                 </div>    
                                 <div class="col-sm-8">
@@ -1215,9 +1130,6 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                 <div class="col-sm-3">
                     <label>
                         <?php echo __("Title background color", $this->plugin_name);?>
-                        <!-- <a class="ays_help" data-toggle="tooltip" title="<?php echo __("The color of the background of the Gallery Thumbnail title", $this->plugin_name);?>">
-                           <i class="fas fa-info-circle"></i>
-                        </a> -->
                     </label>
                 </div>
                 <div class="col-sm-9">
@@ -1229,9 +1141,6 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                 <div class="col-sm-3">
                     <label for='glp_thumbnail_title_color'>
                         <?php echo __("Title text color", $this->plugin_name);?>
-                        <!-- <a class="ays_help" data-toggle="tooltip" title="<?php echo __("Choose the color of the title text on the thumbnail. Make it transparent if you want.", $this->plugin_name);?>">
-                           <i class="fas fa-info-circle"></i>
-                        </a> -->
                     </label>
                 </div>
                 <div class="col-sm-9">
@@ -1292,9 +1201,6 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                     <div class="col-sm-3">
                         <label for="gallery_img_hover_dir_aware">
                             <?php echo __("Hover animation", $this->plugin_name);?>
-                            <!-- <a class="ays_help" data-toggle="tooltip" title="<?php echo __("Hover appearing animation of the images of Gallery", $this->plugin_name);?>">
-                               <i class="fas fa-info-circle"></i>
-                            </a> -->
                         </label>
                     </div>
                     <div class="col-sm-3">
@@ -1349,9 +1255,6 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                 <div class="col-sm-3">
                     <label>
                         <?php echo __("Hover color", $this->plugin_name);?>
-                        <!-- <a class="ays_help" data-toggle="tooltip" title="<?php echo __("The color of the image hover", $this->plugin_name);?>">
-                           <i class="fas fa-info-circle"></i>
-                        </a> -->
                     </label>
                 </div>
                 <div class="col-sm-9">
@@ -1467,9 +1370,6 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                 <div class="col-sm-3">
                     <label for="light_box">
                         <?php echo __("Disable lightbox", $this->plugin_name);?>
-                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __("By checking this option it will disable lightbox on image click", $this->plugin_name);?>">
-                           <i class="fas fa-info-circle"></i>
-                        </a>
                     </label>
                 </div>
                 <div class="col-sm-9">

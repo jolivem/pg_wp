@@ -1000,17 +1000,6 @@
         $(document).find('.ays_heart_beat i.far').toggleClass('pulse');
     }, 1000);
 
-    $(document).find('#ays_filter_cat').on('click',function(){
-        var cat_filter_checked = $(document).find('#ays_filter_cat').prop('checked');
-        if(cat_filter_checked){
-            $(document).find('#glp_dilter_cat_animation').css({'display':'flex'});
-            $(document).find('.glp_show_hide_anim_hr').css({'display':'block'});
-        }else{
-            $(document).find('#glp_dilter_cat_animation').css({'display':'none'});
-            $(document).find('.glp_show_hide_anim_hr').css({'display':'none'});
-        }
-    });
-
     $(document).find('strong.ays-gallery-shortcode-box').on('mouseleave', function(){
         var _this = $(this);
 

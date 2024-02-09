@@ -58,9 +58,6 @@
                 <div class="col-sm-2">
                     <label for='ays-title'>
                         <?php echo __('Title', $this->plugin_name); ?>
-                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Title of the category',$this->plugin_name)?>">
-                            <i class="ays_glp glp_fa_info_circle"></i>
-                        </a>
                     </label>
                 </div>
                 <div class="col-sm-10">
@@ -72,9 +69,6 @@
             <div class='ays-field'>
                 <label for='ays-description'>
                     <?php echo __('Description', $this->plugin_name); ?>
-                    <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Provide more information about the gallery category',$this->plugin_name)?>">
-                        <i class="ays_glp glp_fa_info_circle"></i>
-                    </a>
                 </label>
                 <?php
                 $content = (stripslashes(htmlentities($gallery_category['description'])));

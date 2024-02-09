@@ -189,9 +189,6 @@ class Glp_Galleries_List_Table extends WP_List_Table{
 
             $enable_light_box       = isset($data['av_light_box']) && $data['av_light_box'] == "on" ? "on" :"off";
             $enable_search_img      = isset($data['gpg_search_img']) && $data['gpg_search_img'] == "on" ? "on" :"off";
-            $ays_filter_cat         = isset($data['ays_filter_cat']) && $data['ays_filter_cat'] == "on" ? "on" :"off";
-            $glp_filter_thubnail_opt = isset($data['glp_filter_thubnail_opt']) ? $data['glp_filter_thubnail_opt'] : "";
-            $glp_filter_lightbox_opt = isset($data['glp_filter_lightbox_opt']) ? $data['glp_filter_lightbox_opt'] : "";
             $custom_class = (isset($data['ays_custom_class']) && $data['ays_custom_class'] != "") ? $data['ays_custom_class'] : '';
 
             $glp_ordering_asc_desc = (isset($data['glp_ordering_asc_desc']) && $data['glp_ordering_asc_desc'] != '') ? $data['glp_ordering_asc_desc'] : "ascending";
@@ -210,7 +207,6 @@ class Glp_Galleries_List_Table extends WP_List_Table{
             //Thubnail title color 
             $glp_title_color = (isset($data['glp_thumbnail_title_color']) && $data['glp_thumbnail_title_color'] != '') ? wp_unslash(sanitize_text_field( $data['glp_thumbnail_title_color'] )) : '#ffffff';
             
-            $glp_filter_cat_anim = (isset($data['ays_filter_cat_animation']) && $data['ays_filter_cat_animation'] != '') ? sanitize_text_field( $data['ays_filter_cat_animation'] ) : 'fadeIn';
             $glp_lg_keypress    = (isset($data['glp_lg_keypress']) && $data['glp_lg_keypress'] != '') ? wp_unslash(sanitize_text_field( $data['glp_lg_keypress'] )) : '';
             $glp_lg_esckey    = (isset($data['glp_lg_esckey']) && $data['glp_lg_esckey'] != '') ? wp_unslash(sanitize_text_field( $data['glp_lg_esckey'] )) : '';
 
@@ -278,9 +274,9 @@ class Glp_Galleries_List_Table extends WP_List_Table{
                 "thumb_height_mobile"       => $thumb_height_mobile,
                 "thumb_height_desktop"      => $thumb_height_desktop,
                 "enable_light_box"          => $enable_light_box,
-                "enable_search_img"         => $enable_search_img,
-                "ays_filter_cat"            => $ays_filter_cat,
-                "filter_thubnail_opt"       => $glp_filter_thubnail_opt,
+                "enable_search_img"         => "",
+                "ays_filter_cat"            => "",
+                "filter_thubnail_opt"       => "",
                 "ordering_asc_desc"         => $glp_ordering_asc_desc,
                 "custom_class"              => $custom_class,
                 "resp_width"                => $gpg_resp_width,
@@ -288,8 +284,8 @@ class Glp_Galleries_List_Table extends WP_List_Table{
                 "enable_rtl_direction"      => $gpg_enable_rtl,
                 "ays_gallery_title_color"   => $ays_gallery_title_color,
                 "ays_gallery_desc_color"    => $ays_gallery_desc_color,
-                "glp_title_color"       => $glp_title_color,
-                "glp_filter_cat_anim"   => $glp_filter_cat_anim,
+                "glp_title_color"           => $glp_title_color,
+                "glp_filter_cat_anim"       => "",
                 //"link_on_whole_img"         => $link_on_whole_img,
                 "create_date"               => $gpg_create_date,
                 "author"                    => $author,
@@ -307,7 +303,7 @@ class Glp_Galleries_List_Table extends WP_List_Table{
                 "lightbox_autoplay"         => $ays_lightbox_autoplay,
                 "lb_pause"                  => $ays_lg_pause,
                 "lb_show_caption"           => $ays_lg_show_caption,
-                "filter_lightbox_opt"       => $glp_filter_lightbox_opt,
+                "filter_lightbox_opt"       => '',
                 "lb_keypress"               => $glp_lg_keypress,
                 "lb_esckey"                 => $glp_lg_esckey,
             );
