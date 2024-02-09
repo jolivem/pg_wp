@@ -143,6 +143,20 @@
     margin-bottom: 3px;
 }
 
+
+.ays_title_note {
+    text-align: left;
+    display: block;
+    font-size: 14px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.ays_option_separation {
+    height: 1px;
+    background: #8c8f94;
+}
+
 #ays-gallery-form .ays_image_attr_item input {
     padding: 5px 5px;
     margin-bottom: 0; 
@@ -898,7 +912,7 @@ textarea.ays-textarea{
 
 .ays-subtitle{
     margin-top: 20px;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 500;
     min-height: 30px;
     word-break: break-word;
@@ -1061,8 +1075,8 @@ div.gpg_animation_demo_dAware:hover > div.ays_hover_mask {
 }
 .gpg_animation_demo_dAware,
 .gpg_animation_demo {
-    max-width: 188px;
-    height: 188px;
+    max-width: 120px;
+    height: 120px;
     color: white;
     position: relative;
     overflow: hidden;
@@ -1070,8 +1084,8 @@ div.gpg_animation_demo_dAware:hover > div.ays_hover_mask {
 .gpg_animation_demo_text {
     text-align: center;
     animation-duration: 0.5s; 
-    max-width: 188px;
-    height: 188px;
+    max-width: 120px;
+    height: 120px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1331,7 +1345,7 @@ ul.ays_accordion.ays_accordion_active {
     height: 50px;
     border-radius: 50%;
     bottom: 116px;
-    right: 65px;
+    right: 15px;
     border: none;
     display: block;
     cursor: pointer;

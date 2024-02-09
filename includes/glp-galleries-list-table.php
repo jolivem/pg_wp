@@ -128,7 +128,7 @@ class Glp_Galleries_List_Table extends WP_List_Table{
             $hover_opacity          = (isset($data['glp-image-hover-opacity']) && $data['glp-image-hover-opacity'] != '') ? sanitize_text_field( $data['glp-image-hover-opacity'] ) : '';
             $hover_color            = (isset($data['glp-hover-color']) && $data['glp-hover-color'] != '') ? sanitize_text_field( $data['glp-hover-color'] ) : '';
             $hover_icon             = (isset($data['glp-image-hover-icon']) && $data['glp-image-hover-icon'] != '') ? sanitize_text_field( $data['glp-image-hover-icon'] ) : '';
-            $image_sizes            = (isset($data['ays_image_sizes']) && $data['ays_image_sizes'] != '') ? sanitize_text_field( $data['ays_image_sizes'] ) : '';
+            error_log("add_or_edit_gallery() hover_icon=".$hover_icon);
             $custom_css             = isset($data['gallery_custom_css']) && $data['gallery_custom_css'] != '' ? stripslashes( esc_attr($data['gallery_custom_css'])) : '';
             $lightbox_color         = (isset($data['glp-lightbox-color']) && $data['glp-lightbox-color'] != '') ? wp_unslash(sanitize_text_field( $data['glp-lightbox-color'] )) : '';
             $images_orderby         = (isset($data['ays_images_ordering']) && $data['ays_images_ordering'] != '') ? wp_unslash(sanitize_text_field( $data['ays_images_ordering'] )) : '';
@@ -256,7 +256,7 @@ class Glp_Galleries_List_Table extends WP_List_Table{
                 "gallery_img_position"      => $gallery_img_position,
                 "hover_opacity"             => $hover_opacity,
                 "hover_color"               => $hover_color,
-                "image_sizes"               => $image_sizes,
+                "image_sizes"               => "",
                 "lightbox_color"            => $lightbox_color,
                 "images_orderby"            => $images_orderby,
                 "hover_icon"                => $hover_icon,

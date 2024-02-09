@@ -45,7 +45,7 @@ class Glp_Gallery_Data {
 
         $galleries = $wpdb->get_results( $sql , "ARRAY_A" );
 
-        error_log("galleries OUT".print_r($galleries, true));
+        //error_log("galleries OUT ".print_r($galleries, true));
 
         return $galleries;
     }

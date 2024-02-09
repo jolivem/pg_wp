@@ -526,24 +526,6 @@ class GLP_Admin {
           die();
       }
     
-    
-    public function ays_get_all_image_sizes() {
-        $image_sizes = array();
-        global $_wp_additional_image_sizes;
-        $default_image_sizes = array( 'thumbnail', 'medium', 'medium_large', 'large' );
-
-        foreach ( $default_image_sizes as $size ) {
-            $image_sizes[$size]['width']	= intval( get_option( "{$size}_size_w") );
-            $image_sizes[$size]['height'] = intval( get_option( "{$size}_size_h") );
-            $image_sizes[$size]['crop']	= get_option( "{$size}_crop" ) ? get_option( "{$size}_crop" ) : false;
-        }
-
-        if ( isset( $_wp_additional_image_sizes ) && count( $_wp_additional_image_sizes ) )
-            $image_sizes = array_merge( $image_sizes, $_wp_additional_image_sizes );
-
-        return $image_sizes;
-    }
-
     public static function ays_restriction_string($type, $x, $length){
         $output = "";
         switch($type){
@@ -613,13 +595,7 @@ class GLP_Admin {
     public function gallery_admin_footer($a){
         if(isset($_REQUEST['page'])){
             if(false !== strpos( sanitize_text_field( $_REQUEST['page'] ), $this->plugin_name)){
-                ?>
-                <hr/>
-                <p style="font-size:13px;text-align:left;font-style:italic;">
-                    <input type="submit" name="ays-submit-top" class="ays-submit button action-button button-primary glp-save-comp" value="<?php echo __("Save and close", $this->plugin_name);?>" gpg_submit_name="ays-submit" />        
-                    <input type="submit" name="ays-apply-top" class="ays-submit action-button button glp-save-comp" id="ays-button-top-apply" title="Ctrl + s" data-toggle="tooltip" data-delay='{"show":"1000"}' value="<?php echo __("Save", $this->plugin_name);?>" gpg_submit_name="ays-apply"/>
-                </p>
-            <?php
+                ?><hr/><?php
             }
         }
     }
