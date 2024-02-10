@@ -59,7 +59,7 @@ class GLP_Admin {
         $per_page_array = array(
             'galleries_per_page',
             'maps_per_page',
-            'gallery_categories_per_page',
+            //'gallery_categories_per_page',
         );
         foreach($per_page_array as $option_name){
             add_filter('set_screen_option_'.$option_name, array(__CLASS__, 'set_screen'), 10, 3);
@@ -186,12 +186,12 @@ class GLP_Admin {
             'errorMsg'           => __( "Error", $this->plugin_name )
         ) );
         
-        $cats = $this->ays_get_gallery_categories();
-        wp_localize_script($this->plugin_name . "admin",  'glp_admin', array(
-            'categories' => $cats,
-            'nextGalleryPage' => __( 'Are you sure you want to go to the next gallery page?', $this->plugin_name),
-            'prevGalleryPage' => __( 'Are you sure you want to go to the previous gallery page?', $this->plugin_name),
-        ));
+        // $cats = $this->ays_get_gallery_categories();
+        // wp_localize_script($this->plugin_name . "admin",  'glp_admin', array(
+        //     'categories' => $cats,
+        //     'nextGalleryPage' => __( 'Are you sure you want to go to the next gallery page?', $this->plugin_name),
+        //     'prevGalleryPage' => __( 'Are you sure you want to go to the previous gallery page?', $this->plugin_name),
+        // ));
         wp_enqueue_script( $this->plugin_name.'-wp-color-picker-alpha', plugin_dir_url( __FILE__ ) . 'js/wp-color-picker-alpha.min.js',array( 'wp-color-picker' ),$this->version, true );
 
         $color_picker_strings = array(
@@ -286,16 +286,16 @@ class GLP_Admin {
         //     array($this, 'display_plugin_add_new_gallery_page')
         // );
 
-        $hook_gallery_categories = add_submenu_page(
-            $this->plugin_name,
-            __('Categories', $this->plugin_name),
-            __('Categories', $this->plugin_name),
-            'manage_options',
-            $this->plugin_name . '-categories',
-            array($this, 'display_categories_page')
-        );
+        // $hook_gallery_categories = add_submenu_page(
+        //     $this->plugin_name,
+        //     __('Categories', $this->plugin_name),
+        //     __('Categories', $this->plugin_name),
+        //     'manage_options',
+        //     $this->plugin_name . '-categories',
+        //     array($this, 'display_categories_page')
+        // );
 
-        add_action("load-$hook_gallery_categories", array($this, 'screen_option_category'));
+        // add_action("load-$hook_gallery_categories", array($this, 'screen_option_category'));
 
         // $hook_settings = add_submenu_page( $this->plugin_name,
         //     __('General Settings', $this->plugin_name),
@@ -374,24 +374,24 @@ class GLP_Admin {
         }
     }
 
-    public function display_categories_page(){
-        $action = (isset($_GET['action'])) ? sanitize_text_field($_GET['action']) : '';
+    // public function display_categories_page(){
+    //     $action = (isset($_GET['action'])) ? sanitize_text_field($_GET['action']) : '';
 
-        switch ($action) {
-            case 'add':
-                include_once('partials/glp-categories-actions.php');
-                break;
-            case 'edit':
-                include_once('partials/glp-categories-actions.php');
-                break;
-            default:
-                include_once('partials/glp-categories-display.php');
-        }
-    }    
+    //     switch ($action) {
+    //         case 'add':
+    //             include_once('partials/glp-categories-actions.php');
+    //             break;
+    //         case 'edit':
+    //             include_once('partials/glp-categories-actions.php');
+    //             break;
+    //         default:
+    //             include_once('partials/glp-categories-display.php');
+    //     }
+    // }    
 
-    public function screen_option_settings() {
-        $this->settings_obj = new Gallery_Settings_Actions($this->plugin_name);
-    }
+    // public function screen_option_settings() {
+    //     $this->settings_obj = new Gallery_Settings_Actions($this->plugin_name);
+    // }
 
     // public function display_plugin_gallery_settings_page(){
     //     include_once('partials/settings/glp-settings.php');
@@ -425,25 +425,38 @@ class GLP_Admin {
         $this->map_obj = new Glp_Maps_List_Table($this->plugin_name);
     }
 
-    public function screen_option_category() {
-        $option = 'per_page';
-        $args   = array(
-            'label'   => __('Categories', $this->plugin_name),
-            'default' => 5,
-            'option'  => 'gallery_categories_per_page',
-        );
+    // public function screen_option_category() {
+    //     $option = 'per_page';
+    //     $args   = array(
+    //         'label'   => __('Categories', $this->plugin_name),
+    //         'default' => 5,
+    //         'option'  => 'gallery_categories_per_page',
+    //     );
 
-        add_screen_option($option, $args);
-        $this->cats_obj = new Glp_Categories_List_Table($this->plugin_name);
-    }
+    //     add_screen_option($option, $args);
+    //     $this->cats_obj = new Glp_Categories_List_Table($this->plugin_name);
+    // }
 
-    public static function ays_get_gallery_categories(){
-        global $wpdb;
+    public static function ays_get_categories(){
 
-        $sql = "SELECT * FROM {$wpdb->prefix}glp_gallery_categories";
-        $result = $wpdb->get_results($sql, 'ARRAY_A');
-
-        return $result;
+        $taxonomy = 'category'; // Change 'your_taxonomy' to the name of your taxonomy
+        $terms = get_terms( array(
+            'taxonomy' => $taxonomy,
+            'hide_empty' => false, // Set to true if you want to hide empty terms
+        ) );
+        //error_log("terms ".print_r($terms, true));
+        // Initialize an empty array to store term names
+        // $categories = array();
+        
+        // // Check if any terms were returned
+        // if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
+        //     // Iterate through each term
+        //     foreach ( $terms as $term ) {
+        //         // Add the term name to the array
+        //         $categories[] = $term->name;
+        //     }
+        // } 
+        return $terms;
     }
 
     public static function ays_get_gallery_options(){
@@ -642,9 +655,9 @@ class GLP_Admin {
                 case 'galleries':
                     $listtable_title_length = (isset($options['galleries_title_length']) && intval($options['galleries_title_length']) != 0) ? absint(intval($options['galleries_title_length'])) : 5;
                     break;
-                case 'gallery_categories':
-                    $listtable_title_length = (isset($options['gpg_categories_title_length']) && intval($options['gpg_categories_title_length']) != 0) ? absint(sanitize_text_field($options['gpg_categories_title_length'])) : 5;
-                    break;               
+                // case 'gallery_categories':
+                //     $listtable_title_length = (isset($options['gpg_categories_title_length']) && intval($options['gpg_categories_title_length']) != 0) ? absint(sanitize_text_field($options['gpg_categories_title_length'])) : 5;
+                //     break;               
                 // TODO add maps here
                 default:
                     $listtable_title_length = 5;
@@ -726,41 +739,41 @@ class GLP_Admin {
         return $results;
 
     }    
-    public function get_next_or_prev_gallery_cat_by_id( $id, $type = "next" ) {
-        global $wpdb;
+    // public function get_next_or_prev_gallery_cat_by_id( $id, $type = "next" ) {
+    //     global $wpdb;
 
-        $gallery_cat_table = esc_sql( $wpdb->prefix . "glp_gallery_categories" );
+    //     $gallery_cat_table = esc_sql( $wpdb->prefix . "glp_gallery_categories" );
 
-        $where = array();
-        $where_condition = "";
+    //     $where = array();
+    //     $where_condition = "";
 
-        $id     = (isset( $id ) && $id != "" && absint($id) != 0) ? absint( sanitize_text_field( $id ) ) : null;
-        $type   = (isset( $type ) && $type != "") ? sanitize_text_field( $type ) : "next";
+    //     $id     = (isset( $id ) && $id != "" && absint($id) != 0) ? absint( sanitize_text_field( $id ) ) : null;
+    //     $type   = (isset( $type ) && $type != "") ? sanitize_text_field( $type ) : "next";
 
-        if ( is_null( $id ) || $id == 0 ) {
-            return null;
-        }
+    //     if ( is_null( $id ) || $id == 0 ) {
+    //         return null;
+    //     }
 
-        switch ( $type ) {            
-            case 'prev':
-                $where[] = ' `id` < ' . $id . ' ORDER BY `id` DESC ';
-                break;
-            case 'next':
-            default:
-                $where[] = ' `id` > ' . $id;
-                break;
-        }
+    //     switch ( $type ) {            
+    //         case 'prev':
+    //             $where[] = ' `id` < ' . $id . ' ORDER BY `id` DESC ';
+    //             break;
+    //         case 'next':
+    //         default:
+    //             $where[] = ' `id` > ' . $id;
+    //             break;
+    //     }
 
-        if( ! empty($where) ){
-            $where_condition = " WHERE " . implode( " AND ", $where );
-        }
+    //     if( ! empty($where) ){
+    //         $where_condition = " WHERE " . implode( " AND ", $where );
+    //     }
 
-        $sql = "SELECT `id` FROM {$gallery_cat_table} ". $where_condition ." LIMIT 1;";
-        $results = $wpdb->get_row( $sql, 'ARRAY_A' );
+    //     $sql = "SELECT `id` FROM {$gallery_cat_table} ". $where_condition ." LIMIT 1;";
+    //     $results = $wpdb->get_row( $sql, 'ARRAY_A' );
 
-        return $results;
+    //     return $results;
 
-    }
+    // }
 
     public function glp_author_user_search() {
         $search = isset($_REQUEST['search']) && $_REQUEST['search'] != '' ? sanitize_text_field( $_REQUEST['search'] ) : null;
@@ -1059,14 +1072,17 @@ class GLP_Admin {
         );
 
         // display categories selection
-        $gallery_categories = $this->ays_get_gallery_categories();
+        $listterms = $this->ays_get_categories();
+        //error_log("gallery_categories ".print_r($listterms, true));
+
         $categories_dropdown = '<select id="select-categories" name="attachments[' . $post->ID . '][category]">';
 
         $gal_cats_ids = $category_value;
         //$gal_cats_ids = array();
-        foreach ( $gallery_categories as $gallery_category ) {
-            $checked = $gallery_category['id'] == $category_value ? "selected" : "";
-            $categories_dropdown .= "<option value='".$gallery_category['id']."' ".$checked.">".$gallery_category['title']."</option>";
+        foreach ( $listterms as $term ) {
+            //error_log("term ".$term);
+            $checked = $term->term_id == $category_value ? "selected" : "";
+            $categories_dropdown .= "<option value='".$term->term_id."' ".$checked.">".$term->name."</option>";
         }  
         $categories_dropdown .= '</select>';
         

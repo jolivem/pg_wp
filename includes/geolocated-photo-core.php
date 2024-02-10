@@ -144,7 +144,7 @@ class Geolocated_Photo {
          */
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/glp-galleries-list-table.php';
         
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/glp-categories-list-table.php';
+        //require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/glp-categories-list-table.php';
 
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/glp-maps-list-table.php';
 

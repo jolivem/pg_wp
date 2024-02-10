@@ -61,7 +61,7 @@ class Ays_Gallery_Extra_Shortcodes_Public
         add_shortcode('ays_gallery_creation_date', array($this, 'ays_generate_gallery_creation_date_method'));
         add_shortcode('ays_gallery_current_author', array($this, 'ays_generate_current_gallery_author_method'));
         add_shortcode('ays_gallery_images_count', array($this, 'ays_generate_images_count_method'));
-        add_shortcode('ays_gallery_images_count_by_category', array($this, 'ays_generate_images_count_by_category_method'));
+        //add_shortcode('ays_gallery_images_count_by_category', array($this, 'ays_generate_images_count_by_category_method'));
         add_shortcode('ays_gallery_user_first_name', array($this, 'ays_generate_user_first_name_method'));
         add_shortcode('ays_gallery_user_last_name', array($this, 'ays_generate_user_last_name_method'));
         add_shortcode('ays_gallery_user_display_name', array($this, 'ays_generate_user_display_name_method'));

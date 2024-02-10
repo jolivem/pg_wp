@@ -218,7 +218,7 @@ $gallery_img_position = (isset($gal_options['gallery_img_position_l']) && isset(
 
 $image_no_photo = GLP_ADMIN_URL .'images/no-photo.png';
 
-$gallery_categories = $this->ays_get_gallery_categories();
+$gallery_categories = $this->ays_get_categories();
 
 $img_load_effect = isset($gal_options['img_load_effect']) ? $gal_options['img_load_effect'] : 'fadeIn';
 
@@ -473,10 +473,6 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                 <ul class="ays-accordion ays_accordion <?php echo $accordion_active; ?>" id="page_<?php echo $i; ?>">
                 
                 <?php
-
-                    $sql = "SELECT * FROM {$wpdb->prefix}glp_gallery_categories";
-                    $result_categories = $wpdb->get_results($sql, 'ARRAY_A');
-
                     //error_log("admin_pagination=".$admin_pagination);//TODO
                     for ($key = $qanak, $j = 0; $key < count($images_ids); $key++, $j++ ) {
                         if($j >= $admin_pagination){
@@ -496,11 +492,10 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                                     $category_id = $item['meta_value'];
                                 }
                             }
-
-                            if (count($result_categories) > 0 && $category_id > 0) {
+                            if (count($gallery_categories) > 0 && $category_id > 0) {
                                 foreach ($result_categories as $item) {
-                                    if ($item['id'] === $category_id) {
-                                        $category = $item['title'];
+                                    if ($item->term_id === $category_id) {
+                                        $category = $item->name;
                                     }
                                 }
                             }
@@ -576,9 +571,6 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                 <ul class="ays-accordion">
                 <?php
 
-                    $sql = "SELECT * FROM {$wpdb->prefix}glp_gallery_categories";
-                    $result_categories = $wpdb->get_results($sql, 'ARRAY_A');
-
                     //echo "images=".$images[0];
                     // loop for all image ids
                     foreach ( $images_ids as $key => $id ) {
@@ -596,11 +588,10 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                                     $category_id = $item['meta_value'];
                                 }
                             }
-
-                            if (count($result_categories) > 0 && $category_id > 0) {
-                                foreach ($result_categories as $item) {
-                                    if ($item['id'] === $category_id) {
-                                        $category = $item['title'];
+                            if (count($gallery_categories) > 0 && $category_id > 0) {
+                                foreach ($gallery_categories as $item) {
+                                    if ($item->term_id === $category_id) {
+                                        $category = $item->name;
                                     }
                                 }
                             }
@@ -696,9 +687,10 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                         <select class="ays-category form-control" multiple="multiple">
                             <?php
                             $gal_cats_ids = $query_categories != '' ? explode( ",", $query_categories) : array();
-                            foreach ( $gallery_categories as $gallery_category ) {
-                                $checked = (in_array($gallery_category['id'], $gal_cats_ids)) ? "selected" : "";
-                                echo "<option value='".$gallery_category['id']."' ".$checked.">".$gallery_category['title']."</option>";
+                            
+                            foreach ( $gallery_categories as $term ) {
+                                $checked = (in_array($term->term_id, $gal_cats_ids)) ? "selected" : "";
+                                echo "<option value='".$term->term_id."' ".$checked.">".$term->name."</option>";
                             }                                            
                             ?>
                         </select>

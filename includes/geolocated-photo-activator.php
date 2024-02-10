@@ -96,24 +96,24 @@ class Geolocated_Photo_Activator {
                 dbDelta( $sql );
             }
             
-            $sql = "CREATE TABLE `".$photo_categories_table."` (
-                `id` INT(16) UNSIGNED NOT NULL AUTO_INCREMENT,
-                `title` VARCHAR(256) NOT NULL,
-                `description` TEXT NOT NULL,
-                PRIMARY KEY (`id`)
-            )$charset_collate;";
+            // $sql = "CREATE TABLE `".$photo_categories_table."` (
+            //     `id` INT(16) UNSIGNED NOT NULL AUTO_INCREMENT,
+            //     `title` VARCHAR(256) NOT NULL,
+            //     `description` TEXT NOT NULL,
+            //     PRIMARY KEY (`id`)
+            // )$charset_collate;";
 
-            $sql_schema = "SELECT * 
-                    FROM INFORMATION_SCHEMA.TABLES
-                    WHERE table_schema = '".DB_NAME."' 
-                        AND table_name = '".$photo_categories_table."' ";
-            $res = $wpdb->get_results($sql_schema);
+            // $sql_schema = "SELECT * 
+            //         FROM INFORMATION_SCHEMA.TABLES
+            //         WHERE table_schema = '".DB_NAME."' 
+            //             AND table_name = '".$photo_categories_table."' ";
+            // $res = $wpdb->get_results($sql_schema);
 
-            if(empty($res)){
-                $wpdb->query( $sql );
-            }else{
-                dbDelta( $sql );
-            }
+            // if(empty($res)){
+            //     $wpdb->query( $sql );
+            // }else{
+            //     dbDelta( $sql );
+            // }
             update_option('glp_gallery_db_version', $glp_gallery_db_version);
         }
 	}

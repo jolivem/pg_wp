@@ -904,14 +904,14 @@ class Geolocated_Photo_Public {
         return $result;
     }
 
-    public function ays_get_gallery_category() {
-        global $wpdb;
-
-        $sql = "SELECT * FROM {$wpdb->prefix}glp_gallery_categories";
-
-        $result = $wpdb->get_results( $sql, "ARRAY_A" );
-
-        return $result;
+    public function ays_get_gallery_categories() {
+        $taxonomy = 'category'; // Change 'your_taxonomy' to the name of your taxonomy
+        $terms = get_terms( array(
+            'taxonomy' => $taxonomy,
+            'hide_empty' => false, // Set to true if you want to hide empty terms
+        ) );
+        error_log("terms ".print_r($terms, true));
+        return $terms;
     }
 
     public static function get_gallery_category_by_id($id){
@@ -1272,12 +1272,14 @@ class Geolocated_Photo_Public {
             $settings_options = array();
         }
 
-        $gal_categories = $this->ays_get_gallery_category();
+        $gal_categories = $this->ays_get_gallery_categories();
         $gal_cat_id = array();
         $gal_cat_title = array();
         foreach ($gal_categories as $cat_key => $cat_value) {
-            $gal_cat_id[$cat_key] = $cat_value['id'];
-            $gal_cat_title[$cat_key] = $cat_value['title'];
+            error_log("cat_key: ".$cat_key);
+            error_log("cat_value: ".$cat_value->name);
+            $gal_cat_id[$cat_key] = $cat_value->term_id;
+            $gal_cat_title[$cat_key] = $cat_value->name;
         }
         //$width = $gallery["width"];
         $title = $gallery["title"];
@@ -1382,7 +1384,7 @@ class Geolocated_Photo_Public {
         // All images text
         $gpg_all_images_text = (isset($settings_options['gpg_all_images_text']) && $settings_options['gpg_all_images_text'] != '') ?  stripslashes( esc_attr($settings_options['gpg_all_images_text'])) : 'All';        
         
-        //$show_filter_cat = (!isset($gallery_options['ays_filter_cat'])) ? 'off' : $gallery_options['ays_filter_cat'];
+        $show_filter_cat = (!isset($gallery_options['ays_filter_cat'])) ? 'off' : $gallery_options['ays_filter_cat'];
 
         $show_gal_title = (!isset($gallery_options['show_gal_title'])) ? 'off' : $gallery_options['show_gal_title'];
         //$show_gal_desc = (!isset($gallery_options['show_gal_desc'])) ? 'off' : $gallery_options['show_gal_desc'];
