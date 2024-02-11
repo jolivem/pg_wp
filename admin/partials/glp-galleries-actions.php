@@ -220,7 +220,7 @@ $image_no_photo = GLP_ADMIN_URL .'images/no-photo.png';
 
 $gallery_categories = $this->ays_get_categories();
 
-$img_load_effect = isset($gal_options['img_load_effect']) ? $gal_options['img_load_effect'] : 'fadeIn';
+//$img_load_effect = isset($gal_options['img_load_effect']) ? $gal_options['img_load_effect'] : 'fadeIn';
 
 $ordering_asc_desc = (isset($gal_options['ordering_asc_desc']) && $gal_options['ordering_asc_desc'] != '') ? $gal_options['ordering_asc_desc'] : 'ascending';
 $custom_class = (isset($gal_options['custom_class']) && $gal_options['custom_class'] != "") ? $gal_options['custom_class'] : '';
@@ -294,7 +294,7 @@ error_log("from DB: mosaic_row_size=".$mosaic_row_size);
 // }
 
 $query_categories = isset($gal_options['query_categories']) ? $gal_options['query_categories'] : '';
-//error_log( "CATEGORIES from options: ".$query_categories);
+error_log( "CATEGORIES from options: ".$query_categories);
 
 $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMIN_URL ."/images/loaders/loading.gif'></span>";
 ?>

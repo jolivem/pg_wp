@@ -252,7 +252,7 @@ class Glp_Galleries_List_Table extends WP_List_Table{
                 "images_border_style"       => $ays_images_b_style,
                 "images_border_color"       => $ays_images_b_color,
                 "hover_effect"              => $hover_effect,
-                "img_load_effect"           => $img_load_effect,
+                "img_load_effect"           => "",
                 "gallery_img_position"      => $gallery_img_position,
                 "hover_opacity"             => $hover_opacity,
                 "hover_color"               => $hover_color,
@@ -320,7 +320,7 @@ class Glp_Galleries_List_Table extends WP_List_Table{
                         "images_descs"      => '',
                         "images_alts"       => '', //TODO remove
                         "images_urls"       => '', //TODO remove
-                        "categories_id"     => $image_categories,
+                        "categories_id"     => '',
                         "width"             => $width,
                         "height"            => $height,
                         "options"           => json_encode($options),
@@ -338,12 +338,12 @@ class Glp_Galleries_List_Table extends WP_List_Table{
                     array(
                         "title"             => $title,
                         "description"       => $description,
-                        "images"            => $image_paths,
+                        "images"            => '',
                         "images_titles"     => '',
                         "images_descs"      => '',
                         "images_alts"       => '', //TODO remove
                         "images_urls"       => '', //TODO remove
-                        "categories_id"     => $image_categories,
+                        "categories_id"     => '',
                         "width"             => $width,
                         "height"            => $height,
                         "options"           => json_encode($options),

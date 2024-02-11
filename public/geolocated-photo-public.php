@@ -234,7 +234,7 @@ class Geolocated_Photo_Public {
         //Hover zoom animation Speed
         $hover_zoom_animation_speed = (isset($gallery_options['hover_zoom_animation_speed']) && $gallery_options['hover_zoom_animation_speed'] !== '') ? abs($gallery_options['hover_zoom_animation_speed']) : 0.5;
         $images_loading = ($gallery_options['images_loading'] == '' || $gallery_options['images_loading'] == false) ? 'load_all' : $gallery_options['images_loading'];
-        $images_request = ($gallery_options['images_request'] == '' || $gallery_options['images_request'] == false) ? 'selection' : $gallery_options['images_request'];
+        //$images_request = ($gallery_options['images_request'] == '' || $gallery_options['images_request'] == false) ? 'selection' : $gallery_options['images_request'];
         $gallery_options['enable_light_box'] = isset($gallery_options['enable_light_box']) ? $gallery_options['enable_light_box'] : "off";
 
         $disable_lightbox = (isset($gallery_options['enable_light_box']) && $gallery_options['enable_light_box'] == "off" || $gallery_options['enable_light_box'] == "") ? true : false;
@@ -242,7 +242,7 @@ class Geolocated_Photo_Public {
         $hover_effect = (!isset($gallery_options['hover_effect']) || $gallery_options['hover_effect'] == null) ? "fadeIn" : $gallery_options['hover_effect'];
         
         // TODO remove img_load_effect
-        $img_load_effect = (!isset($gallery_options['img_load_effect']) || $gallery_options['img_load_effect'] == null) ? "fadeIn" : $gallery_options['img_load_effect'];
+        //$img_load_effect = (!isset($gallery_options['img_load_effect']) || $gallery_options['img_load_effect'] == null) ? "fadeIn" : $gallery_options['img_load_effect'];
 
         $redircet_url_tab   = (isset($gallery_options['redirect_url_tab']) && $gallery_options['redirect_url_tab'] != '') ? $gallery_options['redirect_url_tab'] : "_blank";
 
@@ -910,7 +910,7 @@ class Geolocated_Photo_Public {
             'taxonomy' => $taxonomy,
             'hide_empty' => false, // Set to true if you want to hide empty terms
         ) );
-        error_log("terms ".print_r($terms, true));
+        //error_log("terms ".print_r($terms, true));
         return $terms;
     }
 
@@ -1276,8 +1276,8 @@ class Geolocated_Photo_Public {
         $gal_cat_id = array();
         $gal_cat_title = array();
         foreach ($gal_categories as $cat_key => $cat_value) {
-            error_log("cat_key: ".$cat_key);
-            error_log("cat_value: ".$cat_value->name);
+            //error_log("cat_key: ".$cat_key);
+            //error_log("cat_value: ".$cat_value->name);
             $gal_cat_id[$cat_key] = $cat_value->term_id;
             $gal_cat_title[$cat_key] = $cat_value->name;
         }
@@ -1290,13 +1290,13 @@ class Geolocated_Photo_Public {
         $lightbox_color = ($gallery_options['lightbox_color'] == '' || $gallery_options['lightbox_color'] === false) ? '#27AE60' : $gallery_options['lightbox_color'];
         $images_orderby = ($gallery_options['images_orderby'] == '' || $gallery_options['images_orderby'] === false) ? 'noordering' : $gallery_options['images_orderby'];
         $ays_hover_icon = ($gallery_options['hover_icon'] == '' || $gallery_options['hover_icon'] == false) ? 'search_plus' : $gallery_options['hover_icon'];
-        error_log("hover_icon hover_icon".$gallery_options['hover_icon']);
-        error_log("hover_icon ays_hover_icon".$ays_hover_icon);
+        //error_log("hover_icon hover_icon".$gallery_options['hover_icon']);
+        //error_log("hover_icon ays_hover_icon".$ays_hover_icon);
         $show_title = ($gallery_options['show_title'] == '' || $gallery_options['show_title'] == false) ? '' : $gallery_options['show_title'];
         $show_title_on = ($gallery_options['show_title_on'] == '' || $gallery_options['show_title_on'] == false) ? 'gallery_image' : $gallery_options['show_title_on'];
         $show_with_date = ($gallery_options['show_with_date'] == '' || $gallery_options['show_with_date'] == false) ? '' : $gallery_options['show_with_date'];
         $images_distance = (isset($gallery_options['images_distance']) && $gallery_options['images_distance'] != '') ? absint( intval( $gallery_options['images_distance'] ) ) : '5';
-        
+        $images_request = ($gallery_options['images_request'] == '' || $gallery_options['images_request'] == false) ? 'selection' : $gallery_options['images_request'];
         $images_loading = ($gallery_options['images_loading'] == '' || $gallery_options['images_loading'] == false) ? 'load_all' : $gallery_options['images_loading'];
         
         $gallery_options['gallery_loader']  = (!isset($gallery_options['gallery_loader'])) ? "flower" : $gallery_options['gallery_loader'];        
@@ -1326,6 +1326,9 @@ class Geolocated_Photo_Public {
 
         $gallery_desc_color = (isset($gallery_options['ays_gallery_desc_color']) && $gallery_options['ays_gallery_desc_color'] != '') ? $gallery_options['ays_gallery_desc_color'] : '#000'; 
         
+        //error_log("YYYY query_categories");
+        //error_log("YYZZ query_categories ". $gallery_options['query_categories']);
+
         $images_b_radius = (!isset($gallery_options['border_radius']) ||
                             $gallery_options['border_radius'] == '' ||
                             $gallery_options['border_radius'] == false) ? '0' : $gallery_options['border_radius'];
@@ -1345,19 +1348,17 @@ class Geolocated_Photo_Public {
         $ays_images_border_color    = (!isset($gallery_options['images_border_color']) ||
                                         $gallery_options['images_border_color'] == false) ? '#000000' : $gallery_options['images_border_color'];
         
-        $glp_lightbox_counter = (!isset($gal_lightbox_options['lightbox_counter']) ||
-                                    $gal_lightbox_options['lightbox_counter'] == false) ? "true" : $gal_lightbox_options['lightbox_counter'];
-        $glp_lightbox_autoplay = (!isset($gal_lightbox_options['lightbox_autoplay']) ||
-                                    $gal_lightbox_options['lightbox_autoplay'] == false) ? "true" : $gal_lightbox_options['lightbox_autoplay'];
-        $glp_lightbox_pause  = (!isset($gal_lightbox_options['lb_pause']) ||
-                                    $gal_lightbox_options['lb_pause'] == '') ? "5000" : $gal_lightbox_options['lb_pause'];
-
+        // $glp_lightbox_counter = (!isset($gal_lightbox_options['lightbox_counter']) ||
+        //                             $gal_lightbox_options['lightbox_counter'] == false) ? "true" : $gal_lightbox_options['lightbox_counter'];
+        // $glp_lightbox_autoplay = (!isset($gal_lightbox_options['lightbox_autoplay']) ||
+        //                             $gal_lightbox_options['lightbox_autoplay'] == false) ? "true" : $gal_lightbox_options['lightbox_autoplay'];
+        // $glp_lightbox_pause  = (!isset($gal_lightbox_options['lb_pause']) ||
+        //                             $gal_lightbox_options['lb_pause'] == '') ? "5000" : $gal_lightbox_options['lb_pause'];
 
         $vignette_display = (!isset($gallery_options['vignette_display']) ||
             $gallery_options['vignette_display'] == '' ||
             $gallery_options['vignette_display'] == false) ? 'permanent' : $gallery_options['vignette_display'];
         error_log("XX vignette_display=".$vignette_display);
-      
       
         //Gallery image position
         $gallery_img_positions = (!isset($gallery_options['gallery_img_position']) ||
@@ -1397,12 +1398,27 @@ class Geolocated_Photo_Public {
         // $image_descs        = explode( "***", $gallery["images_descs"]  );
         // $image_alts         = explode( "***", $gallery["images_alts"]   );
         //$image_urls         = explode( "***", $gallery["images_urls"]   );
-        $image_ids          = explode( "***", $gallery["images_ids"]    );
+        $image_ids = array();
         // error_log("images: ".print_r($images, true));
         // error_log("image_descs: ".print_r($image_descs, true));
         // error_log("image_alts: ".print_r($image_alts, true));
         //error_log("image_ids: ".print_r($image_ids, true));
         
+        // get the images knowing the categories
+        if ($images_request == "query" ) {
+        
+            //error_log("query_categories: ".$gallery_options['query_categories
+            $query = "SELECT post_id FROM `".$wpdb->prefix."postmeta` WHERE `meta_key` = '_category' AND `meta_value` = '".$gallery_options['query_categories']."'";
+            $result =  $wpdb->get_results( $query, "ARRAY_A" );
+            //error_log("Image ids for the given category: ".print_r($result, true));
+            foreach ($result as $item) {
+                array_push($image_ids, $item['post_id']);
+            }
+        }
+        else {
+            $image_ids = explode( "***", $gallery["images_ids"]);
+        }
+        error_log("Image ids : ".print_r($image_ids, true));
         $images = array();
         $image_titles = array();
         $image_descs = array();
@@ -1461,7 +1477,6 @@ class Geolocated_Photo_Public {
             $latitude = 0;
             $vignette = '';
             if (count($result) > 0) {
-
                 //error_log("result : ".print_r($result , true));
                 $longitude = $this->findValueByKey($result, '_longitude');
                 $latitude = $this->findValueByKey($result, '_latitude');

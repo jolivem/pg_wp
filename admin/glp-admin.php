@@ -444,18 +444,7 @@ class GLP_Admin {
             'taxonomy' => $taxonomy,
             'hide_empty' => false, // Set to true if you want to hide empty terms
         ) );
-        //error_log("terms ".print_r($terms, true));
-        // Initialize an empty array to store term names
-        // $categories = array();
-        
-        // // Check if any terms were returned
-        // if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
-        //     // Iterate through each term
-        //     foreach ( $terms as $term ) {
-        //         // Add the term name to the array
-        //         $categories[] = $term->name;
-        //     }
-        // } 
+        //error_log("terms XX ".print_r($terms, true));
         return $terms;
     }
 
@@ -997,36 +986,36 @@ class GLP_Admin {
     //     return $dict;
     // }
 
-    function other_way_to_get_countries() {
+    // function other_way_to_get_countries() {
     
-        $directory_courant = ABSPATH;
+    //     $directory_courant = ABSPATH;
 
-        // Afficher le chemin
-        // echo $directory_courant;
-        // echo GLP_DIR;
+    //     // Afficher le chemin
+    //     // echo $directory_courant;
+    //     // echo GLP_DIR;
     
-        $dict = array();
-        $directory = GLP_DIR . 'assets/geojson';
-        // echo $directory;
-        // // Utiliser glob pour obtenir la liste des fichiers dans le dossier
-        $files = glob($directory . '/*');
+    //     $dict = array();
+    //     $directory = GLP_DIR . 'assets/geojson';
+    //     // echo $directory;
+    //     // // Utiliser glob pour obtenir la liste des fichiers dans le dossier
+    //     $files = glob($directory . '/*');
 
-        // Add None
-        $dict["None"] = "None";
+    //     // Add None
+    //     $dict["None"] = "None";
 
-        // Get file list
-        foreach ($files as $file) {
-            //echo $file;
-            if (is_file($file)) {
-                $option = str_replace('_', ' ', $file);
-                $option = str_replace('.geojson', '', $option);
-                $option = str_replace($directory . '/', '', $option);
-                $dict[$file] = $option;
-            }
-        }
+    //     // Get file list
+    //     foreach ($files as $file) {
+    //         //echo $file;
+    //         if (is_file($file)) {
+    //             $option = str_replace('_', ' ', $file);
+    //             $option = str_replace('.geojson', '', $option);
+    //             $option = str_replace($directory . '/', '', $option);
+    //             $dict[$file] = $option;
+    //         }
+    //     }
 
-        return $dict;
-    }
+    //     return $dict;
+    // }
 
     // Add custom field to media edit screen
     public function add_custom_fields_to_media_edit_screen($form_fields, $post) {
@@ -1037,7 +1026,7 @@ class GLP_Admin {
         $category_value = get_post_meta($post->ID, '_category', true);
 
         // echo $vignette_value;
-        // echo $latitude_value;
+        echo "vignette value=". $vignette_value;
         // echo $longitude_value;
         
         $form_fields['latitude'] = array(
@@ -1077,10 +1066,14 @@ class GLP_Admin {
 
         $categories_dropdown = '<select id="select-categories" name="attachments[' . $post->ID . '][category]">';
 
-        $gal_cats_ids = $category_value;
+        //$gal_cats_ids = $category_value;
         //$gal_cats_ids = array();
+        if (!isset($category_value) || $category_value == '') {
+            $category_value = "1";
+        }
+        error_log("add_custom_fields_to_media_edit_screen: IN category actual value ".$category_value);
         foreach ( $listterms as $term ) {
-            //error_log("term ".$term);
+            error_log("add_custom_fields_to_media_edit_screen term id=".$term->term_id." name=".$term->name);
             $checked = $term->term_id == $category_value ? "selected" : "";
             $categories_dropdown .= "<option value='".$term->term_id."' ".$checked.">".$term->name."</option>";
         }  
@@ -1117,5 +1110,106 @@ class GLP_Admin {
 
         return $post;
     }
-     
+
+    /**
+     * Convert GPS longitude from EXIF data to decimal longitude.
+     *
+     * @param array $gps_longitude
+     * @param string $longitude_ref
+     * @return float|false Decimal longitude or false on failure
+     */
+    function convert_gps_longitude_to_decimal($gps_longitude, $longitude_ref) {
+        if (!is_array($gps_longitude) || empty($longitude_ref)) {
+            return false;
+        }
+        
+        // Calculate the decimal longitude
+        $degrees = $this->make_division($gps_longitude[0]);
+        $minutes = $this->make_division($gps_longitude[1]);
+        $seconds = $this->make_division($gps_longitude[2]);
+
+        $decimal_longitude = $degrees + ($minutes / 60) + ($seconds / 3600);
+
+        // Check the hemisphere (east or west)
+        $longitude_ref = strtoupper($longitude_ref);
+        if ($longitude_ref == 'W') {
+            $decimal_longitude *= -1;
+        }
+
+        return $decimal_longitude;
+    }
+
+    /**
+     * Convert GPS latitude from EXIF data to decimal latitude.
+     *
+     * @param array $gps_latitude
+     * @param string $latitude_ref
+     * @return float|false Decimal latitude or false on failure
+     */
+    function convert_gps_latitude_to_decimal($gps_latitude, $latitude_ref) {
+        if (!is_array($gps_latitude) || empty($latitude_ref)) {
+            return false;
+        }
+        
+        // Calculate the decimal latitude
+        $degrees = $this->make_division($gps_latitude[0]);
+        $minutes = $this->make_division($gps_latitude[1]);
+        $seconds = $this->make_division($gps_latitude[2]);
+
+        $decimal_latitude = $degrees + ($minutes / 60) + ($seconds / 3600);
+
+        // Check the hemisphere (north or south)
+        $latitude_ref = strtoupper($latitude_ref);
+        if ($latitude_ref == 'S') {
+            $decimal_latitude *= -1;
+        }
+
+        return $decimal_latitude;
+    }    
+    
+    function make_division($fraction){
+
+        // Split the fraction into numerator and denominator
+        list($numerator, $denominator) = explode('/', $fraction);
+        
+        // Convert numerator and denominator to integers
+        $numerator = (int)$numerator;
+        $denominator = (int)$denominator;
+        
+        // Perform the division to get the decimal value
+        $decimal_value = $numerator / $denominator;
+        
+        return $decimal_value; // Output: 20.705519        
+    }
+
+    public function extract_exif_data($attachment_id) {
+        $file = get_attached_file($attachment_id);
+        
+        // Check if the file exists and is an image
+        if (file_exists($file) && wp_attachment_is_image($attachment_id)) {
+            // Read EXIF data
+            $exif_data = exif_read_data($file);
+            
+            // You can now access EXIF data and do whatever you want with it
+            if ($exif_data !== false) {
+                // Example: Print out all EXIF data
+                //error_log("extract_exif_data: ".print_r($exif_data, true));
+                // Example: Get specific EXIF data
+                // $camera_model = $exif_data['Model'];
+                // $image_size = $exif_data['COMPUTED']['Width'] . 'x' . $exif_data['COMPUTED']['Height'];
+                // error_log("extract_exif_data: camera_model=".$camera_model." image_size=".$image_size);
+                // Example: Save specific EXIF data to post meta
+                //update_post_meta($attachment_id, 'camera_model', $camera_model);
+                //update_post_meta($attachment_id, 'image_size', $image_size);
+                $lat = $this->convert_gps_latitude_to_decimal($exif_data['GPSLatitude'], $exif_data['GPSLatitudeRef']);
+                $lon = $this->convert_gps_longitude_to_decimal($exif_data['GPSLongitude'], $exif_data['GPSLongitudeRef']);
+                update_post_meta($attachment_id, '_latitude', $lat);
+                update_post_meta($attachment_id, '_longitude', $lon);
+                error_log("extract_exif_data: lat=".$lat." lon=".$lon);
+            } else {
+                // No EXIF data found or error occurred
+                echo 'No EXIF data found for the uploaded image.';
+            }
+        }
+    }
 }
