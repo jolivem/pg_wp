@@ -43,6 +43,7 @@ class Glp_Map_Public {
      */
     private $version;
 
+    private $images_new;
 
     // list of al lpossible countries and their options (file, width, height)
     private $countries = array();
@@ -273,6 +274,13 @@ class Glp_Map_Public {
             // get map content
             // TODO handle resize, see gallery
             $map_cont = $this->ays_get_map_content($gallery, $gallery_options, $id);
+
+            $images_js = $this->ays_add_makers();
+            error_log("images_js 1=[".$images_js."]");
+            $images_js = trim(str_replace(array("\n", "\r"), '', $images_js));
+            $images_js = trim(preg_replace('/\s+/', ' ', $images_js));
+            error_log("images_js 2=[".$images_js."]");
+
             $map_cont = addslashes($map_cont);
             error_log("map_cont=[".$map_cont."]");
             $map_view .= '
@@ -328,6 +336,8 @@ class Glp_Map_Public {
                         return iicoon;
                     }
                 });
+
+                '.$images_js.'
 
             });';
 
@@ -481,7 +491,7 @@ class Glp_Map_Public {
     }
    
     // $type = "masonry" or "grid" or mosaic
-    private function ays_add_images_html($images_new, $show_title, $image_titles, $image_dates, 
+    private function ays_add_images_html($show_title, $image_titles, $image_dates, 
         $show_with_date, $image_descs, $image_alts, $image_ids, $id, $images_loading, $disable_lightbox, 
         $show_title_on, $html_hover_icon, $ays_show_caption, $ays_images_loader, $images,
         $image_countries, $image_latitudes, $image_longitudes, $images_categories, $images_distance,
@@ -492,7 +502,7 @@ class Glp_Map_Public {
         // HTML part
         $leaf_view .= "<div class='slider' id='imageSlider'>";
 
-        foreach($images_new as $key=>$image){
+        foreach($this->images_new as $key=>$image){
             
             // if no vignette
                 //$img_tag ="<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "' onload='console.log(\"ID=".$image_ids[$key]."\")'>";
@@ -505,20 +515,15 @@ class Glp_Map_Public {
     
     }// end ays_add_images_html()
 
-    private function ays_add_images_js($images_new) {
+    private function ays_add_makers() {
 
         // Javascript part
         $map_view = "";
-        
-        $map_view .= "<script>
-            (function($){
-                'use strict';
-                $(document).ready(function(){";
         $map_view .= "let icon;";
         
         $lon = 51.51;
         $lat = 0.01;
-        foreach($images_new as $key=>$image){
+        foreach($this->images_new as $key=>$image){
             
             //$img_tag ="<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "' onload='console.log(\"ID=".$image_ids[$key]."\")'>";
             $map_view .= "icon = new LeafIcon({iconUrl: '". $image ."'});";
@@ -527,14 +532,11 @@ class Glp_Map_Public {
             $map_view .= "markers.addLayer(L.marker([".strval($lon).", ".strval($lat)."], {icon: icon}).addTo(map).bindPopup('I am a green leaf.'));";
         } // end foreach image
 
-        $map_view .= "});
-            })(jQuery);
-        </script>";
         //$map_view .= "";
-        error_log("ays_add_images_js = [".$map_view."]");
+        error_log("ays_add_makers = [".$map_view."]");
         return $map_view;
     
-    }// end ays_add_images_js()    
+    }// end ays_add_makers()    
 
     protected function ays_get_map_content($gallery, $gallery_options, $id){
         global $wpdb;
@@ -669,7 +671,7 @@ class Glp_Map_Public {
             unset($image_ids[$dates_key]);
         }   
 
-        $images_new     = array();
+        $this->images_new     = array();
         $this_site_path = trim(get_site_url(), "https:");
         // TODO get small size for leaflet
         $image_sizes = "medium_large"; // medium_large for gallery
@@ -682,9 +684,9 @@ class Glp_Map_Public {
                     // find the given size
                     $url_img = wp_get_attachment_image_src($result_img[0]['ID'], $image_sizes);
                     if($url_img === false){
-                       $images_new[] = $img;
+                       $this->images_new[] = $img;
                     }else{
-                       $images_new[] = $url_img[0];
+                       $this->images_new[] = $url_img[0];
                     }
 
                     // TODO test content of metada
@@ -692,20 +694,17 @@ class Glp_Map_Public {
                     // error_log("image metadata=".print_r($metadata, true));
 
                 }else{
-                    $images_new[] = $img;
+                    $this->images_new[] = $img;
                 }                
             }else{
-                $images_new[] = $img;
+                $this->images_new[] = $img;
             }
         }
         $images_count = count($images);
 
-        //BUILD Javascript for all images
-        //$map_content = $this->ays_add_images_js($images_new);
-        
         //BUILD HTML for all images
-        $map_content = "<div class='ays_map_container_".$id."'>";
-        $map_content .= $this->ays_add_images_html($images_new, $show_title, $image_titles, $image_dates, 
+        $map_content .= "<div class='ays_map_container_".$id."'>";
+        $map_content .= $this->ays_add_images_html($show_title, $image_titles, $image_dates, 
             $show_with_date, $image_descs, $image_alts, $image_ids, $id, $images_loading, $disable_lightbox, 
             $show_title_on, $html_hover_icon, $ays_show_caption, $ays_images_loader, $images,
             $image_countries, $image_latitudes, $image_longitudes, $images_categories, $images_distance,
