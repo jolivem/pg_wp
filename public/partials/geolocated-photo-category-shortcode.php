@@ -88,7 +88,7 @@ class Geolocated_Photo_Category
 
     public function ays_gallery_generate_cat_title_html( $id ) {
 
-        $results = Geolocated_Photo_Public::get_gallery_category_by_id($id);
+        $results = Glp_Gallery_Public::get_gallery_category_by_id($id);
         
         $content_html = array();
         
@@ -145,7 +145,7 @@ class Geolocated_Photo_Category
 
     public function ays_generate_cat_description_html( $id ) {
 
-        $results = Geolocated_Photo_Public::get_gallery_category_by_id($id);
+        $results = Glp_Gallery_Public::get_gallery_category_by_id($id);
 
         $content_html = array();
         
@@ -154,7 +154,7 @@ class Geolocated_Photo_Category
             return $content_html;
         }
 
-        $category_description = (isset($results['description']) && $results['description'] != '') ? Geolocated_Photo_Public::ays_gallery_autoembed($results['description']) : "";
+        $category_description = (isset($results['description']) && $results['description'] != '') ? Glp_Gallery_Public::ays_gallery_autoembed($results['description']) : "";
 
         if ( $category_description == "" ) {
             $content_html = "";

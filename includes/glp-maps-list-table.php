@@ -85,23 +85,20 @@ class Glp_Maps_List_Table extends WP_List_Table{
         global $wpdb;
         error_log("add_or_edit_map data: ".print_r($data, true));
         $gallery_table = $wpdb->prefix . "glp_map";
-        if( isset($data["ays_gallery_action"]) && wp_verify_nonce( $data["ays_gallery_action"],"ays_gallery_action" ) ) {
+        if( isset($data["ays_map_action"]) && wp_verify_nonce( $data["ays_map_action"],"ays_map_action" ) ) {
 
             $id                     = ( $data["id"] != NULL ) ? absint( intval( $data["id"] ) ) : null;
             
             // Gallery settings
             //error_log("TODO gallery id:".$id);
-            $title                      = (isset($data["map_title"]) && $data["map_title"] != '') ? stripslashes(sanitize_text_field( $data["map_title"] )) : '';
-            $map_images_distance        = (isset($data['map_images_distance']) && $data['map_images_distance'] != '') ? absint( intval( $data['map_images_distance'] ) ) : '5';
-            $map_slider_color           = (isset($data['map_slider_color']) && $data['map_slider_color'] != '') ? wp_unslash(sanitize_text_field( $data['map_slider_color'] )) : '#ffffff';
-            $map_gallery_id             = (isset($data['map_gallery_id']) && $data['map_gallery_id'] != '') ? absint( intval( $data['map_gallery_id'] ) ) : '-1';
-            $map_provider_id            = (isset($data['map_provider_id']) && $data['map_provider_id'] != '') ? $data['map_gallery_id'] : 'OSM';
+            $title                  = (isset($data["map_title"]) && $data["map_title"] != '') ? stripslashes(sanitize_text_field( $data["map_title"] )) : '';
+            $images_distance    = (isset($data['map_images_distance']) && $data['map_images_distance'] != '') ? absint( intval( $data['map_images_distance'] ) ) : '5';
+            $slider_color       = (isset($data['map_slider_color']) && $data['map_slider_color'] != '') ? wp_unslash(sanitize_text_field( $data['map_slider_color'] )) : '#ffffff';
+            $gallery_id             = (isset($data['map_gallery_id']) && $data['map_gallery_id'] != '') ? absint( intval( $data['map_gallery_id'] ) ) : '-1';
+            $map_provider           = (isset($data['map_provider_id']) && $data['map_provider_id'] != '') ? $data['map_provider_id'] : 'OSM';
             $options = array(
-
-                "images_request"            => $title,
-                "map_images_distance"       => $map_images_distance,
-                "map_slider_color"          => $map_slider_color,
-                "map_provider_id"           => $map_provider_id
+                "images_distance"       => $images_distance,
+                "slider_color"          => $slider_color
             );
 
             $submit_type = (isset($data['submit_type'])) ?  $data['submit_type'] : '';
@@ -110,8 +107,8 @@ class Glp_Maps_List_Table extends WP_List_Table{
                     $gallery_table,
                     array(
                         "title"             => $title,
-                        "provider"          => 'provider',
-                        "gallery_id"        => $map_gallery_id,
+                        "provider"          => $map_provider,
+                        "gallery_id"        => $gallery_id,
                         "options"           => json_encode($options)
                     ),
                     array( "%s", "%s", "%s", "%s" )
@@ -122,8 +119,8 @@ class Glp_Maps_List_Table extends WP_List_Table{
                     $gallery_table,
                     array(
                         "title"             => $title,
-                        "provider"          => 'provider',
-                        "gallery_id"        => $map_gallery_id,
+                        "provider"          => $map_provider,
+                        "gallery_id"        => $gallery_id,
                         "options"           => json_encode($options)
                     ),
                     array( "id" => $id ),
@@ -132,7 +129,6 @@ class Glp_Maps_List_Table extends WP_List_Table{
                 );
                 $message = "updated";
             }
-            $glp_tab = isset($data['glp_settings_tab']) ? $data['glp_settings_tab'] : 'tab1';
             if( $sql_result >= 0 ){
                 if($submit_type == ''){
                     $url = esc_url_raw( remove_query_arg(["action", "map"]  ) ) . "&status=" . $message . "&type=success";
@@ -143,11 +139,10 @@ class Glp_Maps_List_Table extends WP_List_Table{
                         $url = esc_url_raw( add_query_arg( array(
                             "action"                => "edit",
                             "gallery"               => $wpdb->insert_id,
-                            "glp_settings_tab"      => $glp_tab,
                             "status"                => $message
                         ) ) );
                     }else{
-                        $url = esc_url_raw( remove_query_arg(false) ) . '&glp_settings_tab='.$glp_tab.'&status=' . $message;
+                        $url = esc_url_raw( remove_query_arg(false) ) . '&status=' . $message;
                     }
 
                     wp_redirect( $url );

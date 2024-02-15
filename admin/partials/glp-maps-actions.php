@@ -4,11 +4,7 @@ global $wpdb;
 if (!isset($_COOKIE['glp_page_tab_free'])) {
     setcookie('glp_page_tab_free', 'tab_0', time() + 3600);
 }
-if(isset($_GET['glp_settings_tab'])){
-    $glp_tab = sanitize_key( $_GET['glp_settings_tab'] );
-}else{
-    $glp_tab = 'tab1';
-}
+
 $action = (isset($_GET['action'])) ? sanitize_text_field( $_GET['action'] ) : '';
 $heading = '';
 $id = ( isset( $_GET['map'] ) ) ? absint( sanitize_text_field( $_GET['map'] ) ) : null;
@@ -70,9 +66,9 @@ $map_gallery_id         = (isset($map['gallery_id']) && $map['gallery_id'] != ''
 
 $get_all_galleries      = Glp_Gallery_Data::get_galleries();
 
-$map_slider_color       = (!isset($map_options['map_slider_color'])) ? '#000000' : esc_attr(stripslashes( $map_options['map_slider_color'] ));
-$map_images_distance    = (isset($map_options['map_images_distance']) && $map_options['map_images_distance'] != '') ? absint( intval( $map_options['map_images_distance'] ) ) : '5';
-$map_provider_id        = (isset($map_options['map_provider_id']) && $map_options['map_provider_id'] != 'OSM') ? $map_options['map_provider_id'] : 'OSM';
+$map_slider_color       = (!isset($map_options['slider_color'])) ? '#000000' : esc_attr(stripslashes( $map_options['map_slider_color'] ));
+$map_images_distance    = (isset($map_options['images_distance']) && $map_options['images_distance'] != '') ? absint( intval( $map_options['images_distance'] ) ) : '5';
+$map_provider_id        = (isset($map_options['provider_id']) && $map_options['provider_id'] != 'OSM') ? $map_options['provider_id'] : 'OSM';
 
 ?>
 
@@ -88,7 +84,6 @@ $map_provider_id        = (isset($map_options['map_provider_id']) && $map_option
     <div class="container-fluid">
         <form id="glp-form" method="post">
             <input type="hidden" id="ays_submit_name">
-            <input type="hidden" name="glp_settings_tab" value="<?php echo esc_attr($glp_tab); ?>">
             <input type="hidden" name="glp_create_date" value="<?php echo $gpg_create_date; ?>">    
             <input type="hidden" name="glp_author" value="<?php echo esc_attr(json_encode($gpg_author, JSON_UNESCAPED_SLASHES)); ?>">
             <h1 class="wp-heading-inline">
@@ -205,7 +200,7 @@ $map_provider_id        = (isset($map_options['map_provider_id']) && $map_option
             <div class="form-group row ays-galleries-button-box">
                 <div class="ays-question-button-first-row" style="padding: 0;">
                 <?php
-                    wp_nonce_field('ays_gallery_action', 'ays_gallery_action');
+                    wp_nonce_field('ays_map_action', 'ays_map_action');
                     $other_attributes = array();
                     $buttons_html = '';
                     $buttons_html .= '<div class="ays_save_buttons_content">';

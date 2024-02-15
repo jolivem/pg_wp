@@ -23,7 +23,7 @@
 // TODO le rendu du nomber de colonne ne tient pas compte de la bordure de l'image
 // TODO probleme de responsive sur les images
 // TODO renommer les fichiers, les variables, les tables, etc..
-class Geolocated_Photo_Public {
+class Glp_Gallery_Public {
 
     /**
      * The ID of this plugin.
@@ -1613,6 +1613,11 @@ class Geolocated_Photo_Public {
                     }else{
                        $images_new[] = $url_img[0];
                     }
+
+                    // TODO test content of metada
+                    // $metadata = wp_get_attachment_metadata($result_img[0]['ID']);
+                    // error_log("image metadata=".print_r($metadata, true));
+
                 }else{
                     $images_new[] = $img;
                 }                
