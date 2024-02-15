@@ -198,6 +198,15 @@ class Glp_Map_Public {
                 })(jQuery);
         </script>
         <style>
+            .lg-outer, .lg-backdrop {
+                z-index: 999999999999 !important;
+            }
+            .ays_map_container_".$id." {
+                max-width: 100%;
+                transition: .5s ease-in-out;
+                animation-duration: .5s;
+                position: static!important;
+            }
             .ays_map_container_".$id." {
                 $glp_container_css
             }
@@ -263,15 +272,14 @@ class Glp_Map_Public {
         (function($){";
 
             // get map content
-            $gallery_cont = $this->ays_get_map_content($gallery, $gallery_options, $gal_lightbox_options, $id);
+            // TODO handle resize, see gallery
+            $gallery_cont = $this->ays_get_map_content($gallery, $gallery_options, $id);
             $gallery_cont = addslashes($gallery_cont);
             $gallery_view .= '
             $(document).ready(function(){
                 setTimeout(function(ev){
                     var aysGalleryContent_'.$id.' = $("'.$gallery_cont.'");
                     $(document).find(".ays_map_body_'.$id.'").append(aysGalleryContent_'.$id.'); 
-                    $( window ).resize(function() {
-                    });
                 },1000);
                 var map = L.map("map").setView([51.505, -0.09], 13);
             
@@ -425,57 +433,109 @@ class Glp_Map_Public {
     }
    
     // $type = "masonry" or "grid" or mosaic
-    private function ays_add_images($view, $images_new, $show_title, $image_titles, $image_dates, 
+    private function ays_add_images_html($view, $images_new, $show_title, $image_titles, $image_dates, 
         $show_with_date, $image_descs, $image_alts, $image_ids, $id, $images_loading, $disable_lightbox, 
         $show_title_on, $html_hover_icon, $ays_show_caption, $ays_images_loader, $images,
         $image_countries, $image_latitudes, $image_longitudes, $images_categories, $images_distance,
         $column_width, $vignette_display) {
 
-        $gallery_view = "";
-        $gallery_view .= "<div class='ays_grid_row' id='ays_grid_row_".$id."'>";
+        $leaf_view = "";
+        
+        // HTML part
+        $leaf_view .= "<div class='slider' id='imageSlider'>";
 
         foreach($images_new as $key=>$image){
             
-            $img_tag = "";
-            $vignette_div = "";
             // if no vignette
                 //$img_tag ="<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "' onload='console.log(\"ID=".$image_ids[$key]."\")'>";
-                $img_tag ="<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "'>";
-
-            
-            $image_url = "";
-
-            $ays_caption = "";
-            $ays_data_sub_html = "";
-            if($ays_show_caption){
-                $ays_caption = "<div class='ays_caption_wrap'>
-                            <div class='ays_caption'>
-                                <h4>".$image_titles[$key]."</h4>
-                                <p>" . wp_unslash($image_descs[$key]) . "</p>
-                            </div>
-                        </div>";
-                $ays_data_sub_html = " data-sub-html='.ays_caption_wrap' ";
-            }
-     
-            //$gallery_view .=$img_tag;
-            if ($image_countries[$key] != null && $vignette_display == 'permanent' ) {
-                // add the vignette div beside the image
-                $gallery_view .=$vignette_div;
-            }
-
-            $gallery_view .= "<div id='lmap-".$id."' class='ays_vignette_div' style='width: 50px; height: 50px;'></div>
-                        $ays_caption
-                        $show_title_in_hover
-                        <a href='javascript:void(0);'></a>
-                    </div>";
+            $leaf_view .= "<img class='imgNotSelected' src='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "'>";
         } // end foreach image
         
+        $leaf_view .= "</div>";
 
-        return $gallery_view;
+        return $leaf_view;
     
-    }// end ays_add_images()
+    }// end ays_add_images_html()
 
-    protected function ays_get_map_content($gallery, $gallery_options, $gal_lightbox_options, $id){
+    private function ays_add_images_js($view, $images_new, $show_title, $image_titles, $image_dates, 
+        $show_with_date, $image_descs, $image_alts, $image_ids, $id, $images_loading, $disable_lightbox, 
+        $show_title_on, $html_hover_icon, $ays_show_caption, $ays_images_loader, $images,
+        $image_countries, $image_latitudes, $image_longitudes, $images_categories, $images_distance,
+        $column_width, $vignette_display) {
+
+
+        // Javascript part
+        $leaf_js = "<script>";
+        $leaf_js .= "
+        var LeafIcon = L.Icon.extend({
+            options: {
+                //shadowUrl: 'leaf-shadow.png',
+                iconSize:     [60, 60],
+                shadowSize:   [50, 64],
+                //iconAnchor:   [22, 94],
+                shadowAnchor: [4, 62],
+                popupAnchor:  [-3, -76],
+                className: 'mydivicon'
+            }
+        });
+        
+        var markers = L.markerClusterGroup({
+            zoomToBoundsOnClick: true,
+            iconCreateFunction: function(cluster) {
+                console.log('iconCreateFunction cluster:', cluster);
+
+                var children = cluster.getAllChildMarkers()[0];
+
+                console.log('icon', children.options.icon);
+                var iicoon = new L.Icon(children.options.icon.options);
+                var count = cluster.getChildCount();
+                if (count < 6) {
+                    iicoon.options.className = 'mydivmarker6';    
+                }
+                else if (count < 20) {
+                    iicoon.options.className = 'mydivmarker9';    
+                }
+                else {
+                    iicoon.options.className = 'mydivmarker12';    
+                }
+                if (imageSelected != null) {
+                    iicoon.options.iconSize = [100,100];
+                    iicoon.options.iconUrl = imageSelected;
+                    imageSelected = null;
+                    console.log( 'imageSelected = null');
+                    setTimeout(function(){
+                        cluster.refreshIconOptions({
+                            //shadowUrl: 'leaf-shadow.png',
+                            iconSize:     [60, 60],
+                        }, true); 
+                    }, 400);                        
+                }
+
+                //iicoon.options.className = 'mydivmarker';
+                console.log('iicoon', iicoon);
+                //return L.divIcon({ html: '<b>' + cluster.getChildCount() + '</b>' });
+                return iicoon;
+            }
+        });";
+
+        $lon = 51.51;
+        $lat = 0.01;
+        foreach($images_new as $key=>$image){
+            
+            //$img_tag ="<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "' onload='console.log(\"ID=".$image_ids[$key]."\")'>";
+            $leaf_js .= "let icon = new LeafIcon({iconUrl: '". $image ."'});'";
+            $lon += 0.01;
+            $lat -= 0.01;
+            $leaf_js .= "markers.addLayer(L.marker([".strval($lon).", ".strval($lat)."], {icon: icon}).addTo(map).bindPopup('I am a green leaf.'));";
+        } // end foreach image
+
+        $leaf_js .= "</script>";
+
+        return $leaf_js;
+    
+    }// end ays_add_images_js()    
+
+    protected function ays_get_map_content($gallery, $gallery_options, $id){
         global $wpdb;
         error_log("ays_get_map_content IN");
         $settings_options = Gallery_Settings_Actions::ays_get_setting('options');
@@ -639,38 +699,31 @@ class Glp_Map_Public {
         }
         $images_count = count($images);
 
-        $map_view = "<div class='ays_map_container_".$id."' style='width: ".$ays_width."'>".$show_gallery_head;
+        $map_content = "<div class='ays_map_container_".$id."'>";
   
         
         //BUILD HTML for all images
         ///////////////////////////////
-        $map_view .= $this->ays_add_images($view, $images_new, $show_title, $image_titles, $image_dates, 
+        $map_content .= $this->ays_add_images_html($view, $images_new, $show_title, $image_titles, $image_dates, 
             $show_with_date, $image_descs, $image_alts, $image_ids, $id, $images_loading, $disable_lightbox, 
             $show_title_on, $html_hover_icon, $ays_show_caption, $ays_images_loader, $images,
             $image_countries, $image_latitudes, $image_longitudes, $images_categories, $images_distance,
             $column_width, $vignette_display);
-        //error_log("gallery_view=".$map_view);
+        //error_log("gallery_view=".$map_content);
         
         ///////////////////////////////
-        // Add style
-        $map_view .= "
-        <style>                
-            .lg-outer, .lg-backdrop {
-                z-index: 999999999999 !important;
-            }
-            .ays_map_container_".$id." {
-                max-width: 100%;
-                transition: .5s ease-in-out;
-                animation-duration: .5s;
-                position: static!important;
-                ".$rtl_style.";
-            }
+        $map_content .= "</div>";
 
+        // $map_content .= $this->ays_add_images_js($view, $images_new, $show_title, $image_titles, $image_dates, 
+        //     $show_with_date, $image_descs, $image_alts, $image_ids, $id, $images_loading, $disable_lightbox, 
+        //     $show_title_on, $html_hover_icon, $ays_show_caption, $ays_images_loader, $images,
+        //     $image_countries, $image_latitudes, $image_longitudes, $images_categories, $images_distance,
+        //     $column_width, $vignette_display);
 
-        </style>";
-        $map_view = trim(str_replace(array("\n", "\r"), '', $map_view));
-        $map_view = trim(preg_replace('/\s+/', ' ', $map_view));
-        return $map_view;
+        $map_content = trim(str_replace(array("\n", "\r"), '', $map_content));
+        $map_content = trim(preg_replace('/\s+/', ' ', $map_content));
+        error_log("get_map_content=[".$map_content."]");
+        return $map_content;
     
     } // end ays_get_map_content()
 
