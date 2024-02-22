@@ -3,11 +3,11 @@
 /**
  * The admin-specific functionality of the plugin.
  *
- * @link       https://ays-pro.com/
+ * @link       https://glp-plugin.com/
  * @since      1.0.0
  *
- * @package    Gallery_Photo_Gallery
- * @subpackage Gallery_Photo_Gallery/admin
+ * @package    Geolocated_Photo
+ * @subpackage Geolocated_Photo/admin
  */
 
 /**
@@ -16,9 +16,9 @@
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  *
- * @package    Gallery_Photo_Gallery
- * @subpackage Gallery_Photo_Gallery/admin
- * @author     AYS Pro LLC <info@ays-pro.com>
+ * @package    Geolocated_Photo
+ * @subpackage Geolocated_Photo/admin
+ * @author     GLP <info@glp-plugin.com>
  */
 class GLP_Admin {
 
@@ -41,6 +41,7 @@ class GLP_Admin {
 	private $version;
 
 	private $gallery_obj;
+	private $map_obj;
     private $cats_obj;
     private $settings_obj;
 	/**
@@ -57,7 +58,8 @@ class GLP_Admin {
         add_filter( 'set-screen-option', array( __CLASS__, 'set_screen' ), 10, 3 );
         $per_page_array = array(
             'galleries_per_page',
-            'gallery_categories_per_page',
+            'maps_per_page',
+            //'gallery_categories_per_page',
         );
         foreach($per_page_array as $option_name){
             add_filter('set_screen_option_'.$option_name, array(__CLASS__, 'set_screen'), 10, 3);
@@ -75,12 +77,13 @@ class GLP_Admin {
 	    wp_enqueue_style( $this->plugin_name . '-admin', plugin_dir_url( __FILE__ ) . 'css/admin.css', array(), $this->version, 'all' );
 		wp_enqueue_style( 'wp-color-picker' );
         
-        wp_enqueue_style( $this->plugin_name . "-banner", plugin_dir_url( __FILE__ ) . 'css/gallery-photo-gallery-banner.css', array(), $this->version, 'all' );
+        //TODO remove file glp-banner.css
+        // wp_enqueue_style( $this->plugin_name . "-banner", plugin_dir_url( __FILE__ ) . 'css/glp-banner.css', array(), $this->version, 'all' );
 
         wp_enqueue_style('leaflet.css', 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css');
 
         wp_enqueue_style( 'select2', '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css', array(), $this->version, 'all' );
-        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/gallery-photo-gallery-admin.css', array(), $this->version, 'all' );        
+        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/glp-admin.css', array(), $this->version, 'all' );        
 
         if(false === strpos($hook_suffix, $this->plugin_name))
             return;
@@ -89,16 +92,17 @@ class GLP_Admin {
 		 * This function is provided for demonstration purposes only.
 		 *
 		 * An instance of this class should be passed to the run() function
-		 * defined in Gallery_Photo_Gallery_Loader as all of the hooks are defined
+		 * defined in Geolocated_Photo_Loader as all of the hooks are defined
 		 * in that particular class.
 		 *
-		 * The Gallery_Photo_Gallery_Loader will then create the relationship
+		 * The Geolocated_Photo_Loader will then create the relationship
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
         wp_enqueue_style( 'font-awesome', 'https://use.fontawesome.com/releases/v5.4.1/css/all.css', array(), $this->version, 'all');
         wp_enqueue_style('glp_font_awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css', array(), $this->version, 'all');
-		wp_enqueue_style( 'ays_pb_bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css', array(), $this->version, 'all' );
+		// TODO mettre à jour bootstrap
+        wp_enqueue_style( 'ays_pb_bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css', array(), $this->version, 'all' );
         wp_enqueue_style( $this->plugin_name."-mosaic.css", plugin_dir_url( __FILE__ ) . 'css/jquery.mosaic.min.css', array(), $this->version, 'all' );
         wp_enqueue_style( $this->plugin_name."-masonry.css", plugin_dir_url( __FILE__ ) . 'css/masonry.pkgd.css', array(), $this->version, 'all' );
 
@@ -123,7 +127,7 @@ class GLP_Admin {
             wp_enqueue_script( $this->plugin_name.'-wp-load-scripts', plugin_dir_url(__FILE__) . 'js/ays-wp-load-scripts.js', array(), $this->version, true);
         }
 
-        wp_enqueue_script( $this->plugin_name . "banner", plugin_dir_url( __FILE__ ) . 'js/gallery-photo-gallery-banner.js', array( 'jquery' ), $this->version, true );
+        wp_enqueue_script( $this->plugin_name . "banner", plugin_dir_url( __FILE__ ) . 'js/glp-banner.js', array( 'jquery' ), $this->version, true );
 
         if (false !== strpos($hook_suffix, "plugins.php")){
             wp_enqueue_script( 'sweetalert-js', '//cdn.jsdelivr.net/npm/sweetalert2@7.26.29/dist/sweetalert2.all.min.js', array('jquery'), $this->version, true );
@@ -141,10 +145,10 @@ class GLP_Admin {
 		 * This function is provided for demonstration purposes only.
 		 *
 		 * An instance of this class should be passed to the run() function
-		 * defined in Gallery_Photo_Gallery_Loader as all of the hooks are defined
+		 * defined in Geolocated_Photo_Loader as all of the hooks are defined
 		 * in that particular class.
 		 *
-		 * The Gallery_Photo_Gallery_Loader will then create the relationship
+		 * The Geolocated_Photo_Loader will then create the relationship
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
@@ -162,8 +166,8 @@ class GLP_Admin {
 		wp_enqueue_script( $this->plugin_name."-cookie.js", plugin_dir_url( __FILE__ ) . 'js/cookie.js', array( 'jquery' ), $this->version, true );
 
         // can be removed ?
-        wp_enqueue_script( $this->plugin_name . "admin", plugin_dir_url( __FILE__ ) . 'js/gallery-photo-gallery-admin.js', array( 'jquery', 'wp-color-picker'), $this->version, true );
-        wp_localize_script($this->plugin_name . "admin",  'ays_vars', array('base_url' => AYS_GPG_BASE_URL));
+        wp_enqueue_script( $this->plugin_name . "admin", plugin_dir_url( __FILE__ ) . 'js/glp-admin.js', array( 'jquery', 'wp-color-picker'), $this->version, true );
+        wp_localize_script($this->plugin_name . "admin",  'ays_vars', array('base_url' => GLP_BASE_URL));
 
         wp_localize_script($this->plugin_name . "admin", 'gallery_ajax', array(
             'ajax_url'          => admin_url('admin-ajax.php'),            
@@ -182,12 +186,12 @@ class GLP_Admin {
             'errorMsg'           => __( "Error", $this->plugin_name )
         ) );
         
-        $cats = $this->ays_get_gallery_categories();
-        wp_localize_script($this->plugin_name . "admin",  'glp_admin', array(
-            'categories' => $cats,
-            'nextGalleryPage' => __( 'Are you sure you want to go to the next gallery page?', $this->plugin_name),
-            'prevGalleryPage' => __( 'Are you sure you want to go to the previous gallery page?', $this->plugin_name),
-        ));
+        // $cats = $this->ays_get_gallery_categories();
+        // wp_localize_script($this->plugin_name . "admin",  'glp_admin', array(
+        //     'categories' => $cats,
+        //     'nextGalleryPage' => __( 'Are you sure you want to go to the next gallery page?', $this->plugin_name),
+        //     'prevGalleryPage' => __( 'Are you sure you want to go to the previous gallery page?', $this->plugin_name),
+        // ));
         wp_enqueue_script( $this->plugin_name.'-wp-color-picker-alpha', plugin_dir_url( __FILE__ ) . 'js/wp-color-picker-alpha.min.js',array( 'wp-color-picker' ),$this->version, true );
 
         $color_picker_strings = array(
@@ -246,79 +250,62 @@ class GLP_Admin {
     public function add_plugin_admin_menu() {
         
         $hook_gallery = add_menu_page( 
-            __('GPGM Gallery', $this->plugin_name), 
-            __('GPGM Gallery', $this->plugin_name), 
+            __('GLP Features', $this->plugin_name), 
+            __('GLP Features', $this->plugin_name), 
             'manage_options', 
             $this->plugin_name, 
-            array($this, 'display_plugin_setup_page'), AYS_GPG_ADMIN_URL . 'images/icons/icon-gpg-128x128.svg', 6);
+            array($this, 'display_galleries_page'), GLP_ADMIN_URL . 'images/icons/icon-gpg-128x128.svg', 6);
         add_action( "load-$hook_gallery", array( $this, 'screen_option_gallery' ) );
         
         $hook_gallery = add_submenu_page(
             $this->plugin_name,
-            __('All Galleries', $this->plugin_name),
-            __('All Galleries', $this->plugin_name),
+            __('Galleries', $this->plugin_name),
+            __('Galleries', $this->plugin_name),
             'manage_options',
             $this->plugin_name,
-            array($this, 'display_plugin_setup_page')
+            array($this, 'display_galleries_page')
         );
         add_action( "load-$hook_gallery", array( $this, 'screen_option_gallery' ) );
 
-        add_submenu_page(
+        $hook_gallery = add_submenu_page(
             $this->plugin_name,
-            __('Add new', $this->plugin_name),
-            __('Add new', $this->plugin_name),
+            __('Maps', $this->plugin_name),
+            __('Maps', $this->plugin_name),
             'manage_options',
-            $this->plugin_name . '-add-new',
-            array($this, 'display_plugin_add_new_gallery_page')
+            $this->plugin_name . '-maps',
+            array($this, 'display_maps_page')
         );
-
-        $hook_gallery_categories = add_submenu_page(
-            $this->plugin_name,
-            __('Categories', $this->plugin_name),
-            __('Categories', $this->plugin_name),
-            'manage_options',
-            $this->plugin_name . '-categories',
-            array($this, 'display_plugin_gpg_categories_page')
-        );
-
-        add_action("load-$hook_gallery_categories", array($this, 'screen_option_gallery_cats'));
-
-        $hook_settings = add_submenu_page( $this->plugin_name,
-            __('General Settings', $this->plugin_name),
-            __('General Settings', $this->plugin_name),
-            'manage_options',
-            $this->plugin_name . '-settings',
-            array($this, 'display_plugin_gallery_settings_page') 
-        );
-        add_action("load-$hook_settings", array($this, 'screen_option_settings'));        
-
-        $hook_quizes = add_submenu_page(
-            $this->plugin_name,
-            __('How to use', $this->plugin_name),
-            __('How to use', $this->plugin_name),
-            'manage_options',
-            $this->plugin_name . '-dashboard',
-            array($this, 'display_plugin_how_to_use_page')
-        );
+        add_action( "load-$hook_gallery", array( $this, 'screen_option_map' ) );
 
         // add_submenu_page(
         //     $this->plugin_name,
-        //     __('Our products', $this->plugin_name),
-        //     __('Our products', $this->plugin_name),
+        //     __('Add new', $this->plugin_name),
+        //     __('Add new', $this->plugin_name),
         //     'manage_options',
-        //     $this->plugin_name . '-featured-plugins',
-        //     array($this, 'display_plugin_gpg_featured_plugins_page')
+        //     $this->plugin_name . '-add-new',
+        //     array($this, 'display_plugin_add_new_gallery_page')
         // );
 
-        // add_submenu_page(
+        // $hook_gallery_categories = add_submenu_page(
         //     $this->plugin_name,
-        //     __('PRO Features', $this->plugin_name),
-        //     __('PRO Features', $this->plugin_name),
+        //     __('Categories', $this->plugin_name),
+        //     __('Categories', $this->plugin_name),
         //     'manage_options',
-        //     $this->plugin_name . '-pro-features',
-        //     array($this, 'display_plugin_gpg_features_page')
+        //     $this->plugin_name . '-categories',
+        //     array($this, 'display_categories_page')
         // );
-        
+
+        // add_action("load-$hook_gallery_categories", array($this, 'screen_option_category'));
+
+        // $hook_settings = add_submenu_page( $this->plugin_name,
+        //     __('General Settings', $this->plugin_name),
+        //     __('General Settings', $this->plugin_name),
+        //     'manage_options',
+        //     $this->plugin_name . '-settings',
+        //     array($this, 'display_plugin_gallery_settings_page') 
+        // );
+        // add_action("load-$hook_settings", array($this, 'screen_option_settings'));        
+
 
     }
 
@@ -335,7 +322,7 @@ class GLP_Admin {
         $settings_link = array(
             '<a href="' . admin_url( 'options-general.php?page=' . $this->plugin_name ) . '">' . __('Settings', $this->plugin_name) . '</a>'
             // '<a href="https://ays-demo.com/wordpress-photo-gallery-plugin-free-demo/" target="_blank">' . __('Demo', $this->plugin_name) . '</a>',
-            // '<a href="https://ays-pro.com/wordpress/photo-gallery?utm_source=dashboard-gallery&utm_medium=free-gallery&utm_campaign=buy-now-gallery" target="_blank" class="ays-admin-plugins-upgrade-link" style="font-weight:bold;">' . __('Upgrade 20% Sale', $this->plugin_name) . '</a>',
+            // '<a href="https://glp-plugin.com/wordpress/photo-gallery?utm_source=dashboard-gallery&utm_medium=free-gallery&utm_campaign=buy-now-gallery" target="_blank" class="ays-admin-plugins-upgrade-link" style="font-weight:bold;">' . __('Upgrade 20% Sale', $this->plugin_name) . '</a>',
         );
         return array_merge(  $settings_link, $links );
 
@@ -343,8 +330,8 @@ class GLP_Admin {
 
     public function add_plugin_row_meta($meta, $file) {
 
-        if ($file == AYS_GPG_BASENAME) {
-            $meta[] = '<a href="https://wordpress.org/support/plugin/gallery-photo-gallery/" target="_blank">' . esc_html__( 'Free Support', $this->plugin_name ) . '</a>';
+        if ($file == GLP_BASENAME) {
+            $meta[] = '<a href="https://wordpress.org/support/plugin/geolocated-photo/" target="_blank">' . esc_html__( 'Free Support', $this->plugin_name ) . '</a>';
         }
 
         return $meta;
@@ -357,62 +344,62 @@ class GLP_Admin {
      * @since    1.0.0
      */
 
-    public function display_plugin_setup_page() {
+    public function display_galleries_page() {
         $this->settings_obj = new Gallery_Settings_Actions($this->plugin_name);
         $action = (isset($_GET['action'])) ? sanitize_text_field( $_GET['action'] ) : '';
         switch ( $action ) {
             case 'add':
-                include_once( 'partials/glp-admin-actions.php' );
+                include_once( 'partials/glp-galleries-actions.php' );
                 break;
             case 'edit':
-                include_once( 'partials/glp-admin-actions.php' );
+                include_once( 'partials/glp-galleries-actions.php' );
                 break;
             default:
-                include_once( 'partials/glp-admin-display.php' );
+                include_once( 'partials/glp-galleries-display.php' );
         }
     }
 
-    public function display_plugin_gpg_categories_page(){
-        $action = (isset($_GET['action'])) ? sanitize_text_field($_GET['action']) : '';
-
-        switch ($action) {
-            case 'add':
-                include_once('partials/glp-categories-actions.php');
-                break;
-            case 'edit':
-                include_once('partials/glp-categories-actions.php');
-                break;
-            default:
-                include_once('partials/glp-categories-display.php');
-        }
-    }    
-
-    public function screen_option_settings() {
+    public function display_maps_page() {
         $this->settings_obj = new Gallery_Settings_Actions($this->plugin_name);
+        $action = (isset($_GET['action'])) ? sanitize_text_field( $_GET['action'] ) : '';
+        switch ( $action ) {
+            case 'add':
+                include_once( 'partials/glp-maps-actions.php' );
+                break;
+            case 'edit':
+                include_once( 'partials/glp-maps-actions.php' );
+                break;
+            default:
+                include_once( 'partials/glp-maps-display.php' );
+        }
     }
 
-    public function display_plugin_gallery_settings_page(){
-        include_once('partials/settings/gallery-photo-gallery-settings.php');
-    }
+    // public function display_categories_page(){
+    //     $action = (isset($_GET['action'])) ? sanitize_text_field($_GET['action']) : '';
 
-    // public function display_plugin_gpg_features_page()
-    // {
-    //     include_once('partials/features/gallery-photo-gallery-features-display.php');
+    //     switch ($action) {
+    //         case 'add':
+    //             include_once('partials/glp-categories-actions.php');
+    //             break;
+    //         case 'edit':
+    //             include_once('partials/glp-categories-actions.php');
+    //             break;
+    //         default:
+    //             include_once('partials/glp-categories-display.php');
+    //     }
+    // }    
+
+    // public function screen_option_settings() {
+    //     $this->settings_obj = new Gallery_Settings_Actions($this->plugin_name);
     // }
-    public function display_plugin_how_to_use_page()
-    {
-        include_once('partials/how-to-use/gallery-photo-gallery-how-to-use.php');
-    }
-    
-    // public function display_plugin_gpg_featured_plugins_page()
-    // {
-    //     include_once('partials/features/gallery-photo-gallery-featured-plugins.php');
+
+    // public function display_plugin_gallery_settings_page(){
+    //     include_once('partials/settings/glp-settings.php');
     // }
 
     public static function set_screen( $status, $option, $value ) {
         return $value;
     }
-
 
     public function screen_option_gallery() {
         $option = 'per_page';
@@ -423,31 +410,45 @@ class GLP_Admin {
         ];
 
         add_screen_option( $option, $args );
-        $this->gallery_obj = new Galleries_List_Table($this->plugin_name);
+        $this->gallery_obj = new Glp_Galleries_List_Table($this->plugin_name);
     }
 
-    public function screen_option_gallery_cats() {
+    public function screen_option_map() {
         $option = 'per_page';
-        $args   = array(
-            'label'   => __('Categories', $this->plugin_name),
-            'default' => 5,
-            'option'  => 'gallery_categories_per_page',
-        );
+        $args   = [
+            'label'   => __('Maps', $this->plugin_name),
+            'default' => 20,
+            'option'  => 'maps_per_page'
+        ];
 
-        add_screen_option($option, $args);
-        $this->cats_obj = new Gpg_Categories_List_Table($this->plugin_name);
+        add_screen_option( $option, $args );
+        $this->map_obj = new Glp_Maps_List_Table($this->plugin_name);
     }
 
-    public static function ays_get_gallery_categories(){
-        global $wpdb;
+    // public function screen_option_category() {
+    //     $option = 'per_page';
+    //     $args   = array(
+    //         'label'   => __('Categories', $this->plugin_name),
+    //         'default' => 5,
+    //         'option'  => 'gallery_categories_per_page',
+    //     );
 
-        $sql = "SELECT * FROM {$wpdb->prefix}glp_gallery_categories";
-        $result = $wpdb->get_results($sql, 'ARRAY_A');
+    //     add_screen_option($option, $args);
+    //     $this->cats_obj = new Glp_Categories_List_Table($this->plugin_name);
+    // }
 
-        return $result;
+    public static function ays_get_categories(){
+
+        $taxonomy = 'category'; // Change 'your_taxonomy' to the name of your taxonomy
+        $terms = get_terms( array(
+            'taxonomy' => $taxonomy,
+            'hide_empty' => false, // Set to true if you want to hide empty terms
+        ) );
+        //error_log("terms XX ".print_r($terms, true));
+        return $terms;
     }
 
-    public static function ays_get_gpg_options(){
+    public static function ays_get_gallery_options(){
         global $wpdb;
         $table_name = $wpdb->prefix . 'glp_gallery';
         $res = $wpdb->get_results("SELECT id, title, width, height FROM ".$table_name."");
@@ -465,7 +466,7 @@ class GLP_Admin {
       }
     
     function glp_register_tinymce_plugin($plugin_array) {
-        $plugin_array['glp_button_mce'] = AYS_GPG_BASE_URL .'/glp_shortcode.js';
+        $plugin_array['glp_button_mce'] = GLP_BASE_URL .'/glp_shortcode.js';
         return $plugin_array;
     }
     
@@ -475,7 +476,7 @@ class GLP_Admin {
     }
     
     function gen_glp_shortcode_callback() {
-        $shortcode_data = $this->ays_get_gpg_options();
+        $shortcode_data = $this->ays_get_gallery_options();
 
         ?>
         <html xmlns="http://www.w3.org/1999/xhtml">
@@ -515,7 +516,7 @@ class GLP_Admin {
                 </div>
             <script type="text/javascript">
                 function gpg_insert_shortcode() {
-                    var tagtext = '[gallery_p_gallery id="' + document.getElementById('ays_gpg')[document.getElementById('ays_gpg').selectedIndex].id + '"]';
+                    var tagtext = '[glp_gallery id="' + document.getElementById('ays_gpg')[document.getElementById('ays_gpg').selectedIndex].id + '"]';
                     window.tinyMCE.execCommand('mceInsertContent', false, tagtext);
                     tinyMCEPopup.close();
                 }
@@ -527,24 +528,6 @@ class GLP_Admin {
           die();
       }
     
-    
-    public function ays_get_all_image_sizes() {
-        $image_sizes = array();
-        global $_wp_additional_image_sizes;
-        $default_image_sizes = array( 'thumbnail', 'medium', 'medium_large', 'large' );
-
-        foreach ( $default_image_sizes as $size ) {
-            $image_sizes[$size]['width']	= intval( get_option( "{$size}_size_w") );
-            $image_sizes[$size]['height'] = intval( get_option( "{$size}_size_h") );
-            $image_sizes[$size]['crop']	= get_option( "{$size}_crop" ) ? get_option( "{$size}_crop" ) : false;
-        }
-
-        if ( isset( $_wp_additional_image_sizes ) && count( $_wp_additional_image_sizes ) )
-            $image_sizes = array_merge( $image_sizes, $_wp_additional_image_sizes );
-
-        return $image_sizes;
-    }
-
     public static function ays_restriction_string($type, $x, $length){
         $output = "";
         switch($type){
@@ -569,7 +552,7 @@ class GLP_Admin {
     }
     
     public function vc_before_init_actions() {
-        require_once( AYS_GPG_DIR.'pb_templates/gallery_photo_gallery_wpbvc.php' );
+        require_once( GLP_DIR.'pb_templates/geolocated-photo-wpbvc.php' );
     }
 
     public function gpg_el_widgets_registered() {
@@ -583,10 +566,10 @@ class GLP_Admin {
                     $elementor = Elementor\Plugin::instance();
                     if ( isset( $elementor->widgets_manager ) ) {
                         if ( method_exists( $elementor->widgets_manager, 'register_widget_type' ) ) {
-                            $widget_file   = 'plugins/elementor/gallery_photo_gallery_elementor.php';
+                            $widget_file   = 'plugins/elementor/geolocated-photo-elementor.php';
                             $template_file = locate_template( $widget_file );
                             if ( !$template_file || !is_readable( $template_file ) ) {
-                                $template_file = AYS_GPG_DIR.'pb_templates/gallery_photo_gallery_elementor.php';
+                                $template_file = GLP_DIR.'pb_templates/geolocated-photo-elementor.php';
                             }
                             if ( $template_file && is_readable( $template_file ) ) {
                                 require_once $template_file;
@@ -614,14 +597,7 @@ class GLP_Admin {
     public function gallery_admin_footer($a){
         if(isset($_REQUEST['page'])){
             if(false !== strpos( sanitize_text_field( $_REQUEST['page'] ), $this->plugin_name)){
-                ?>
-                <p style="font-size:13px;text-align:center;font-style:italic;">
-                    <span style="margin-left:0px;margin-right:10px;" class="ays_heart_beat"><i class="far fa-heart animated"></i></span>
-                    <span><?php echo __( "If you love our plugin, please do big favor and rate us on", $this->plugin_name); ?></span> 
-                    <a target="_blank" href='https://wordpress.org/support/plugin/gallery-photo-gallery/reviews/'>WordPress.org</a>
-                    <span class="ays_heart_beat"><i class="far fa-heart animated"></i></span>
-                </p>
-            <?php
+                ?><hr/><?php
             }
         }
     }
@@ -668,9 +644,10 @@ class GLP_Admin {
                 case 'galleries':
                     $listtable_title_length = (isset($options['galleries_title_length']) && intval($options['galleries_title_length']) != 0) ? absint(intval($options['galleries_title_length'])) : 5;
                     break;
-                 case 'gallery_categories':
-                    $listtable_title_length = (isset($options['gpg_categories_title_length']) && intval($options['gpg_categories_title_length']) != 0) ? absint(sanitize_text_field($options['gpg_categories_title_length'])) : 5;
-                    break;               
+                // case 'gallery_categories':
+                //     $listtable_title_length = (isset($options['gpg_categories_title_length']) && intval($options['gpg_categories_title_length']) != 0) ? absint(sanitize_text_field($options['gpg_categories_title_length'])) : 5;
+                //     break;               
+                // TODO add maps here
                 default:
                     $listtable_title_length = 5;
                     break;
@@ -716,10 +693,10 @@ class GLP_Admin {
 
     }
 
-    public function get_next_or_prev_gallery_cat_by_id( $id, $type = "next" ) {
+    public function get_next_or_prev_map_by_id( $id, $type = "next" ) {
         global $wpdb;
 
-        $gallery_cat_table = esc_sql( $wpdb->prefix . "glp_gallery_categories" );
+        $gallery_table = esc_sql( $wpdb->prefix . "glp_map" );
 
         $where = array();
         $where_condition = "";
@@ -733,7 +710,7 @@ class GLP_Admin {
 
         switch ( $type ) {            
             case 'prev':
-                $where[] = ' `id` < ' . $id . ' ORDER BY `id` DESC ';
+                $where[] = ' `id` < ' . $id . ' ORDER BY `id` DESC ';;
                 break;
             case 'next':
             default:
@@ -745,12 +722,47 @@ class GLP_Admin {
             $where_condition = " WHERE " . implode( " AND ", $where );
         }
 
-        $sql = "SELECT `id` FROM {$gallery_cat_table} ". $where_condition ." LIMIT 1;";
+        $sql = "SELECT `id` FROM {$gallery_table} ". $where_condition ." LIMIT 1;";
         $results = $wpdb->get_row( $sql, 'ARRAY_A' );
 
         return $results;
 
-    }
+    }    
+    // public function get_next_or_prev_gallery_cat_by_id( $id, $type = "next" ) {
+    //     global $wpdb;
+
+    //     $gallery_cat_table = esc_sql( $wpdb->prefix . "glp_gallery_categories" );
+
+    //     $where = array();
+    //     $where_condition = "";
+
+    //     $id     = (isset( $id ) && $id != "" && absint($id) != 0) ? absint( sanitize_text_field( $id ) ) : null;
+    //     $type   = (isset( $type ) && $type != "") ? sanitize_text_field( $type ) : "next";
+
+    //     if ( is_null( $id ) || $id == 0 ) {
+    //         return null;
+    //     }
+
+    //     switch ( $type ) {            
+    //         case 'prev':
+    //             $where[] = ' `id` < ' . $id . ' ORDER BY `id` DESC ';
+    //             break;
+    //         case 'next':
+    //         default:
+    //             $where[] = ' `id` > ' . $id;
+    //             break;
+    //     }
+
+    //     if( ! empty($where) ){
+    //         $where_condition = " WHERE " . implode( " AND ", $where );
+    //     }
+
+    //     $sql = "SELECT `id` FROM {$gallery_cat_table} ". $where_condition ." LIMIT 1;";
+    //     $results = $wpdb->get_row( $sql, 'ARRAY_A' );
+
+    //     return $results;
+
+    // }
 
     public function glp_author_user_search() {
         $search = isset($_REQUEST['search']) && $_REQUEST['search'] != '' ? sanitize_text_field( $_REQUEST['search'] ) : null;
@@ -797,6 +809,7 @@ class GLP_Admin {
         wp_die();
     }
 
+    //TODO check can be removed
     public function ays_gallery_generate_message_vars_html( $gallery_message_vars ) {
         $content = array();
         $var_counter = 0; 
@@ -804,7 +817,7 @@ class GLP_Admin {
         $content[] = '<div class="glp-message-vars-box">';
             $content[] = '<div class="glp-message-vars-icon">';
                 $content[] = '<div>';
-                    $content[] = '<i class="ays_fa ays_fa_link"></i>';
+                    $content[] = '<i class="ays_glp glp_fa_link"></i>';
                 $content[] = '</div>';
                 $content[] = '<div>';
                     $content[] = '<span>'. __("Message Variables" , $this->plugin_name) .'</span>';
@@ -834,7 +847,7 @@ class GLP_Admin {
 
     public static function get_gallery_max_id( $table ) {
         global $wpdb;
-        $db_table = $wpdb->prefix . 'ays_'.$table;;
+        $db_table = $wpdb->prefix . 'glp_'.$table;;
 
         $sql = "SELECT MAX(id) FROM {$db_table}";
 
@@ -843,10 +856,10 @@ class GLP_Admin {
         return $result;
     }
 
-    public function display_plugin_add_new_gallery_page() {
+/*    public function display_plugin_add_new_gallery_page() {
         $add_new_gpg_url = admin_url('admin.php?page=' . $this->plugin_name . '&action=add');
         wp_redirect($add_new_gpg_url);
-    }
+    }*/
 
     public function glp_dismiss_button(){
 
@@ -902,13 +915,13 @@ class GLP_Admin {
 
         // Afficher le chemin
         // echo $directory_courant;
-        // echo AYS_GPG_DIR;
+        // echo GLP_DIR;
     
         $dict = array();
         // Add None
         $dict["None"] = "None";
 
-        $worldfile = AYS_GPG_DIR . 'assets/world.json';
+        $worldfile = GLP_DIR . 'assets/world.json';
         //echo $worldfile;
         // // Utiliser glob pour obtenir la liste des fichiers dans le dossier
         //$files = glob($directory . '/*');
@@ -941,13 +954,13 @@ class GLP_Admin {
 
     //     // Afficher le chemin
     //     // echo $directory_courant;
-    //     // echo AYS_GPG_DIR;
+    //     // echo GLP_DIR;
     
     //     $dict = array();
     //     // Add None
     //     $dict["None"] = "None";
 
-    //     $worldfile = AYS_GPG_DIR . 'assets/world.json';
+    //     $worldfile = GLP_DIR . 'assets/world.json';
     //     //echo $worldfile;
     //     // // Utiliser glob pour obtenir la liste des fichiers dans le dossier
     //     //$files = glob($directory . '/*');
@@ -973,36 +986,36 @@ class GLP_Admin {
     //     return $dict;
     // }
 
-    function other_way_to_get_countries() {
+    // function other_way_to_get_countries() {
     
-        $directory_courant = ABSPATH;
+    //     $directory_courant = ABSPATH;
 
-        // Afficher le chemin
-        // echo $directory_courant;
-        // echo AYS_GPG_DIR;
+    //     // Afficher le chemin
+    //     // echo $directory_courant;
+    //     // echo GLP_DIR;
     
-        $dict = array();
-        $directory = AYS_GPG_DIR . 'assets/geojson';
-        // echo $directory;
-        // // Utiliser glob pour obtenir la liste des fichiers dans le dossier
-        $files = glob($directory . '/*');
+    //     $dict = array();
+    //     $directory = GLP_DIR . 'assets/geojson';
+    //     // echo $directory;
+    //     // // Utiliser glob pour obtenir la liste des fichiers dans le dossier
+    //     $files = glob($directory . '/*');
 
-        // Add None
-        $dict["None"] = "None";
+    //     // Add None
+    //     $dict["None"] = "None";
 
-        // Get file list
-        foreach ($files as $file) {
-            //echo $file;
-            if (is_file($file)) {
-                $option = str_replace('_', ' ', $file);
-                $option = str_replace('.geojson', '', $option);
-                $option = str_replace($directory . '/', '', $option);
-                $dict[$file] = $option;
-            }
-        }
+    //     // Get file list
+    //     foreach ($files as $file) {
+    //         //echo $file;
+    //         if (is_file($file)) {
+    //             $option = str_replace('_', ' ', $file);
+    //             $option = str_replace('.geojson', '', $option);
+    //             $option = str_replace($directory . '/', '', $option);
+    //             $dict[$file] = $option;
+    //         }
+    //     }
 
-        return $dict;
-    }
+    //     return $dict;
+    // }
 
     // Add custom field to media edit screen
     public function add_custom_fields_to_media_edit_screen($form_fields, $post) {
@@ -1013,7 +1026,7 @@ class GLP_Admin {
         $category_value = get_post_meta($post->ID, '_category', true);
 
         // echo $vignette_value;
-        // echo $latitude_value;
+        echo "vignette value=". $vignette_value;
         // echo $longitude_value;
         
         $form_fields['latitude'] = array(
@@ -1048,14 +1061,21 @@ class GLP_Admin {
         );
 
         // display categories selection
-        $gallery_categories = $this->ays_get_gallery_categories();
+        $listterms = $this->ays_get_categories();
+        //error_log("gallery_categories ".print_r($listterms, true));
+
         $categories_dropdown = '<select id="select-categories" name="attachments[' . $post->ID . '][category]">';
 
-        $gal_cats_ids = $category_value;
+        //$gal_cats_ids = $category_value;
         //$gal_cats_ids = array();
-        foreach ( $gallery_categories as $gallery_category ) {
-            $checked = $gallery_category['id'] == $category_value ? "selected" : "";
-            $categories_dropdown .= "<option value='".$gallery_category['id']."' ".$checked.">".$gallery_category['title']."</option>";
+        if (!isset($category_value) || $category_value == '') {
+            $category_value = "1";
+        }
+        error_log("add_custom_fields_to_media_edit_screen: IN category actual value ".$category_value);
+        foreach ( $listterms as $term ) {
+            error_log("add_custom_fields_to_media_edit_screen term id=".$term->term_id." name=".$term->name);
+            $checked = $term->term_id == $category_value ? "selected" : "";
+            $categories_dropdown .= "<option value='".$term->term_id."' ".$checked.">".$term->name."</option>";
         }  
         $categories_dropdown .= '</select>';
         
@@ -1090,5 +1110,106 @@ class GLP_Admin {
 
         return $post;
     }
-     
+
+    /**
+     * Convert GPS longitude from EXIF data to decimal longitude.
+     *
+     * @param array $gps_longitude
+     * @param string $longitude_ref
+     * @return float|false Decimal longitude or false on failure
+     */
+    function convert_gps_longitude_to_decimal($gps_longitude, $longitude_ref) {
+        if (!is_array($gps_longitude) || empty($longitude_ref)) {
+            return false;
+        }
+        
+        // Calculate the decimal longitude
+        $degrees = $this->make_division($gps_longitude[0]);
+        $minutes = $this->make_division($gps_longitude[1]);
+        $seconds = $this->make_division($gps_longitude[2]);
+
+        $decimal_longitude = $degrees + ($minutes / 60) + ($seconds / 3600);
+
+        // Check the hemisphere (east or west)
+        $longitude_ref = strtoupper($longitude_ref);
+        if ($longitude_ref == 'W') {
+            $decimal_longitude *= -1;
+        }
+
+        return $decimal_longitude;
+    }
+
+    /**
+     * Convert GPS latitude from EXIF data to decimal latitude.
+     *
+     * @param array $gps_latitude
+     * @param string $latitude_ref
+     * @return float|false Decimal latitude or false on failure
+     */
+    function convert_gps_latitude_to_decimal($gps_latitude, $latitude_ref) {
+        if (!is_array($gps_latitude) || empty($latitude_ref)) {
+            return false;
+        }
+        
+        // Calculate the decimal latitude
+        $degrees = $this->make_division($gps_latitude[0]);
+        $minutes = $this->make_division($gps_latitude[1]);
+        $seconds = $this->make_division($gps_latitude[2]);
+
+        $decimal_latitude = $degrees + ($minutes / 60) + ($seconds / 3600);
+
+        // Check the hemisphere (north or south)
+        $latitude_ref = strtoupper($latitude_ref);
+        if ($latitude_ref == 'S') {
+            $decimal_latitude *= -1;
+        }
+
+        return $decimal_latitude;
+    }    
+    
+    function make_division($fraction){
+
+        // Split the fraction into numerator and denominator
+        list($numerator, $denominator) = explode('/', $fraction);
+        
+        // Convert numerator and denominator to integers
+        $numerator = (int)$numerator;
+        $denominator = (int)$denominator;
+        
+        // Perform the division to get the decimal value
+        $decimal_value = $numerator / $denominator;
+        
+        return $decimal_value; // Output: 20.705519        
+    }
+
+    public function extract_exif_data($attachment_id) {
+        $file = get_attached_file($attachment_id);
+        
+        // Check if the file exists and is an image
+        if (file_exists($file) && wp_attachment_is_image($attachment_id)) {
+            // Read EXIF data
+            $exif_data = exif_read_data($file);
+            
+            // You can now access EXIF data and do whatever you want with it
+            if ($exif_data !== false) {
+                // Example: Print out all EXIF data
+                //error_log("extract_exif_data: ".print_r($exif_data, true));
+                // Example: Get specific EXIF data
+                // $camera_model = $exif_data['Model'];
+                // $image_size = $exif_data['COMPUTED']['Width'] . 'x' . $exif_data['COMPUTED']['Height'];
+                // error_log("extract_exif_data: camera_model=".$camera_model." image_size=".$image_size);
+                // Example: Save specific EXIF data to post meta
+                //update_post_meta($attachment_id, 'camera_model', $camera_model);
+                //update_post_meta($attachment_id, 'image_size', $image_size);
+                $lat = $this->convert_gps_latitude_to_decimal($exif_data['GPSLatitude'], $exif_data['GPSLatitudeRef']);
+                $lon = $this->convert_gps_longitude_to_decimal($exif_data['GPSLongitude'], $exif_data['GPSLongitudeRef']);
+                update_post_meta($attachment_id, '_latitude', $lat);
+                update_post_meta($attachment_id, '_longitude', $lon);
+                error_log("extract_exif_data: lat=".$lat." lon=".$lon);
+            } else {
+                // No EXIF data found or error occurred
+                echo 'No EXIF data found for the uploaded image.';
+            }
+        }
+    }
 }

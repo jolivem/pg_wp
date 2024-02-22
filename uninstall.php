@@ -19,10 +19,10 @@
  * For more information, see the following discussion:
  * https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate/pull/123#issuecomment-28541913
  *
- * @link       https://ays-pro.com/
+ * @link       https://glp-plugin.com/
  * @since      1.0.0
  *
- * @package    Gallery_Photo_Gallery
+ * @package    Geolocated_Photo
  */
 
 // If uninstall not called from WordPress, then exit.
@@ -32,11 +32,13 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 
 if(get_option('glp_upgrade_plugin','false') === 'false'){
     global $wpdb;
-    $table = $wpdb->prefix . 'glp_gallery';
+    $table_gallery = $wpdb->prefix . 'glp_gallery';
+    $table_map = $wpdb->prefix . 'glp_map';
     $cat_table = $wpdb->prefix . 'glp_gallery_categories';
     $settings_table = $wpdb->prefix . 'glp_gallery_settings';
 
-    $wpdb->query("DROP TABLE IF EXISTS `".$table."`");
+    $wpdb->query("DROP TABLE IF EXISTS `".$table_gallery."`");
+    $wpdb->query("DROP TABLE IF EXISTS `".$table_map."`");
     $wpdb->query("DROP TABLE IF EXISTS `".$cat_table."`");
     $wpdb->query("DROP TABLE IF EXISTS `".$settings_table."`");
 

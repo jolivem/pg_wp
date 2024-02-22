@@ -1,0 +1,306 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+		<meta charset="utf-8" />
+    <title>Leaflet example in one file</title>
+
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+
+		<!-- include leaflet css and javascript -->
+        <link rel="stylesheet" crossorigin="" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet-src.js" crossorigin=""></script>
+
+		<!-- include leaflet markers css and javascript -->
+		<link rel="stylesheet" crossorigin="" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+        <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js" crossorigin=""></script>
+
+        <link rel="stylesheet" crossorigin="" href="../public/css/lightgallery.min.css" />
+        <script src="../public/js/lightgallery-all.min.js" crossorigin=""></script>
+
+		<style type="text/css">
+			#map {
+			  height: 500px;
+			}
+            .mydivicon{
+                border-radius: 25%;
+                border: 3px solid #fff;
+            }
+            .mydivmarker6{
+                border-radius: 25%;
+                border: 6px solid #fff;
+            }
+            .mydivmarker9{
+                border-radius: 25%;
+                border: 9px solid #fff;
+            }
+            .mydivmarker12{
+                border-radius: 25%;
+                border: 12px solid #fff;
+            }
+            div.slider {
+                background-color: #333;
+                overflow: auto;
+                white-space: nowrap;
+                padding: 10px;
+            }
+            div.slider img {
+               padding: 2px;
+               height:100px;
+               cursor: pointer; /* Add cursor pointer for better usability */
+               /*border: 2px solid transparent; /*Initial border style */
+            }
+            .imgSelected {
+                border: 2px solid red; /* Adjust the border style for selected images */
+                opacity: 1;
+            }
+            .imgNotSelected {
+                border: 2px solid transparent; /* Adjust the border style for selected images */
+                opacity: 0.6;
+            }
+            /* .leaflet-marker-icon{
+                border-radius: 30%;
+                border: 3px solid #fff;
+            } */
+		</style>
+	</head>
+
+	<body>
+		<h1><a href="http://leafletjs.com/">Leaflet</a> example in one file</h1>
+		<p>
+			This is the self-contained one-file-version for a
+			<a href="http://leafletjs.com/">leaflet</a> map.
+			For a version with CSS and Javascript in different files see
+			<a href="index.html">index.html</a>. For a leaflet map without
+			Javascript programming try
+			<a href="https://lapizistik.github.io/leaflet-easymap/">Leasymap</a>.
+		</p>
+		<p>
+			Find the <a href="https://github.com/Lapizistik/leaflet-examples">source
+				code on Github</a>.
+		</p>
+		<p>
+			The one important thing is that the #map div needs a <em>height</em>
+			to be visible.
+		</p>
+		<div id="map"></div>
+        <div class="slider" id="imageSlider">
+            <img src="image1.jpg" alt="Image 1" class="imgNotSelected">
+            <img src="image2.jpg" alt="Image 2" class="imgNotSelected">
+            <img src="image3.jpg" alt="Image 3" class="imgNotSelected">
+            <img src="image4.jpg" alt="Image 4" class="imgNotSelected">
+            <img src="image5.jpg" alt="Image 5" class="imgNotSelected">
+            <img src="image6.jpg" alt="Image 6" class="imgNotSelected">
+            <img src="image7.jpg" alt="Image 7" class="imgNotSelected">
+            <img src="image8.jpg" alt="Image 8" class="imgNotSelected">
+            <img src="image9.jpg" alt="Image 9" class="imgNotSelected">
+            <img src="image10.jpg" alt="Image 10" class="imgNotSelected">
+            <img src="image11.jpg" alt="Image 11" class="imgNotSelected">
+            <img src="image12.jpg" alt="Image 12" class="imgNotSelected">
+        </div>
+
+		<script>
+			/*
+			the script mus be loaded after the map div is defined,
+			otherwise this will not work. Therefore the script is below
+			the div.
+
+			The source code below is the example from the leaflet start page.
+			*/
+
+            var selectedImage = null;
+            var imageSelected = null; //image clicked in the slider
+			
+			var map = L.map('map').setView([51.505, -0.09], 13);
+
+			L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+			  attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+			}).addTo(map);
+
+            // test with Icon
+            var LeafIcon = L.Icon.extend({
+                options: {
+                    //shadowUrl: 'leaf-shadow.png',
+                    iconSize:     [60, 60],
+                    shadowSize:   [50, 64],
+                    //iconAnchor:   [22, 94],
+                    shadowAnchor: [4, 62],
+                    popupAnchor:  [-3, -76],
+                    className: "mydivicon"
+                }
+            });
+            var icon1 = new LeafIcon({iconUrl: 'image1.jpg'});
+            var icon2 = new LeafIcon({iconUrl: 'image2.jpg'});
+            var icon3 = new LeafIcon({iconUrl: 'image3.jpg'});
+            var icon4 = new LeafIcon({iconUrl: 'image4.jpg'});
+            var icon5 = new LeafIcon({iconUrl: 'image5.jpg'});
+            var icon6 = new LeafIcon({iconUrl: 'image6.jpg'});
+            var icon7 = new LeafIcon({iconUrl: 'image7.jpg'});
+            var icon8 = new LeafIcon({iconUrl: 'image8.jpg'});
+            var icon9 = new LeafIcon({iconUrl: 'image9.jpg'});
+            var icon10 = new LeafIcon({iconUrl: 'image10.jpg'});
+            var icon11 = new LeafIcon({iconUrl: 'image11.jpg'});
+            var icon12 = new LeafIcon({iconUrl: 'image12.jpg'});
+            
+            //console.log("HE HO !");
+            var markers = L.markerClusterGroup({
+                zoomToBoundsOnClick: true,
+                iconCreateFunction: function(cluster) {
+                    console.log("iconCreateFunction cluster:", cluster);
+
+                    var children = cluster.getAllChildMarkers()[0];
+
+                    console.log("icon", children.options.icon);
+                    var iicoon = new L.Icon(children.options.icon.options);
+                    var count = cluster.getChildCount();
+                    if (count < 6) {
+                        iicoon.options.className = "mydivmarker6";    
+                    }
+                    else if (count < 20) {
+                        iicoon.options.className = "mydivmarker9";    
+                    }
+                    else {
+                        iicoon.options.className = "mydivmarker12";    
+                    }
+                    if (imageSelected != null) {
+                        iicoon.options.iconSize = [100,100];
+                        iicoon.options.iconUrl = imageSelected;
+                        imageSelected = null;
+                        console.log( 'imageSelected = null');
+                        setTimeout(function(){
+                            cluster.refreshIconOptions({
+                                //shadowUrl: 'leaf-shadow.png',
+                                iconSize:     [60, 60],
+                            }, true); 
+                        }, 400);                        
+                    }
+
+                    //iicoon.options.className = "mydivmarker";
+                    console.log("iicoon", iicoon);
+                    //return L.divIcon({ html: '<b>' + cluster.getChildCount() + '</b>' });
+                    return iicoon;
+                }
+            });
+
+            markers.addLayer(L.marker([51.51, -0.01], {icon: icon1}).addTo(map).bindPopup("I am a green leaf."));
+            markers.addLayer(L.marker([51.52, -0.02], {icon: icon2}).addTo(map).bindPopup("I am a green leaf."));
+            markers.addLayer(L.marker([51.53, -0.03], {icon: icon3}).addTo(map).bindPopup("I am a green leaf."));
+            markers.addLayer(L.marker([51.54, -0.04], {icon: icon4}).addTo(map).bindPopup("I am a green leaf."));
+            markers.addLayer(L.marker([51.55, -0.05], {icon: icon5}).addTo(map).bindPopup("I am a green leaf."));
+            markers.addLayer(L.marker([51.56, -0.06], {icon: icon6}).addTo(map).bindPopup("I am a green leaf."));
+            markers.addLayer(L.marker([51.57, -0.07], {icon: icon7}).addTo(map).bindPopup("I am a green leaf."));
+            markers.addLayer(L.marker([51.58, -0.08], {icon: icon8}).addTo(map).bindPopup("I am a green leaf."));
+            markers.addLayer(L.marker([51.59, -0.09], {icon: icon9}).addTo(map).bindPopup("I am a green leaf."));
+            markers.addLayer(L.marker([51.60, -0.10], {icon: icon10}).addTo(map).bindPopup("I am a green leaf."));
+            markers.addLayer(L.marker([51.61, -0.11], {icon: icon11}).addTo(map).bindPopup("I am a green leaf."));
+            markers.addLayer(L.marker([51.62, -0.12], {icon: icon12}).addTo(map).bindPopup("I am a green leaf."));
+            map.addLayer(markers);
+
+            // when clicked on marker
+            markers.on('click', function (a) {
+                console.log('marker ', a.layer.options.icon.options.iconUrl);
+                selectImage(a.layer.options.icon.options.iconUrl, true); // with scroll
+                let visibleOne = markers.getVisibleParent(a.layer)
+                console.log("visibleOne", visibleOne);
+            });
+
+            markers.on('clusterclick', function (a) {
+                // a.layer is actually a cluster
+                //console.log('clusterclick ', a);
+                //console.log('L ', L);
+                let visibleOne = markers.getVisibleParent(a.layer)
+                console.log("clusterclick: visibleOne", visibleOne);
+                visibleOne.refreshIconOptions({
+                            //shadowUrl: 'leaf-shadow.png',
+                            iconSize:     [100, 100],
+                        }, true);
+                markers.refreshClusters();
+                //markers.refreshClusters(visibleOne);
+            });            
+         
+            function selectImage(src, scroll) {
+                console.log('selectImage IN', src);
+                var slider = document.getElementById("imageSlider");
+
+                // Remove classname from previously selected image
+                if (selectedImage) {
+                    selectedImage.classList.remove("imgSelected");
+                    selectedImage.classList.add("imgNotSelected");
+                }
+
+                var imageElement = document.querySelector(`#imageSlider img[src='${src}']`);
+                // Add classname to the selected image
+                if (imageElement) {
+                    console.log('imageElement ', imageElement);
+                    imageElement.classList.remove("imgNotSelected");
+                    imageElement.classList.add("imgSelected");
+                    selectedImage = imageElement;
+
+                    // Scroll to the selected image
+                    if (scroll == true) {
+                        slider.scrollLeft = imageElement.offsetLeft - (slider.clientWidth - imageElement.clientWidth) / 2;
+                    }
+                }
+            }
+
+            function changeImageStyles() {
+                var allImages = document.querySelectorAll("#imageSlider img");
+
+                allImages.forEach(function (imgElement) {
+                    // Change styles for all images
+                    imgElement.style.border = "2px dashed blue"; // Adjust the border style as needed
+                    // You can modify other styles here
+                });
+            }
+            var gal = document.getElementById("imageSlider");
+            console.log("gal:", gal);
+
+            // When clicked on the slider gallery
+            gal.addEventListener("click", function(event){
+                event.preventDefault();
+                // console.log('gal.on "click" event ', event);
+                // console.log('gal.on "click" target', event.target);
+                // console.log('gal.on "click" src', event.target.attributes.src);
+                imageSelected = event.target.getAttribute('src');
+                console.log(`gal.on "click" imageSelected = ${imageSelected}`);
+                selectImage(imageSelected, false); // do not scroll
+              
+                let layers = markers.getLayers();
+                console.log( 'layers_', layers);
+                for (i in layers) {
+                    let layer = layers[i];
+                    //console.log( `layers[${i}]`, layer);
+                    let iconUrl = layer?.options?.icon?.options?.iconUrl;
+                    //console.log( `iconUrl`, layer.options.icon.options.iconUrl);
+                    if (iconUrl != null && iconUrl == imageSelected) {
+                        console.log( `FFOOUUNNDD iconUrl`, layer.options.icon.options.iconUrl);
+                        let visibleOne = markers.getVisibleParent(layer);
+                        console.log("visibleOne", visibleOne);
+
+                        if (visibleOne._childCount != undefined) {
+                            console.log("THIS IS A CLUSTER");
+                            markers.refreshClusters(visibleOne);
+                        }
+                        else {
+                            console.log("THIS IS A MARKER");
+                            imageSelected = null;
+                            console.log( 'imageSelected NOT null');                        
+                            visibleOne.refreshIconOptions({
+                                //shadowUrl: 'leaf-shadow.png',
+                                iconSize:     [100, 100],
+                            }, true); 
+                            
+                            setTimeout(function(){
+                                visibleOne.refreshIconOptions({
+                                    //shadowUrl: 'leaf-shadow.png',
+                                    iconSize:     [60, 60],
+                                }, true); 
+                            }, 400);
+                        }
+                       
+                    }
+                }
+            }); 
+
+		</script>
+	</body>
+</html>
