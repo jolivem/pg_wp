@@ -13,7 +13,7 @@ ob_start();
  * @package           GLI_Photo_Gallery
  *
  * @wordpress-plugin
- * Plugin Name:       GLP plugin
+ * Plugin Name:       Planet Gallery
  * Plugin URI:        https://glp-plugin.com/wordpress/photo-gallery
  * Description:       Display geolocation vignettes on photos.
  * Version:           1.0.1

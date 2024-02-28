@@ -250,8 +250,8 @@ class GLP_Admin {
     public function add_plugin_admin_menu() {
         
         $hook_gallery = add_menu_page( 
-            __('GLP Features', $this->plugin_name), 
-            __('GLP Features', $this->plugin_name), 
+            __('Planet Gallery', $this->plugin_name), 
+            __('Planet Gallery', $this->plugin_name), 
             'manage_options', 
             $this->plugin_name, 
             array($this, 'display_galleries_page'), GLP_ADMIN_URL . 'images/icons/icon-gpg-128x128.svg', 6);

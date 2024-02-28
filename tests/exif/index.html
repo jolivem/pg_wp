@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload and Check EXIF Data</title>
+    <style>
+        #image-preview {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .preview-item {
+            margin: 10px;
+        }
+
+        .preview-item img {
+            max-width: 200px;
+            max-height: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <input type="file" id="file-input" multiple>
+    <div id="image-preview"></div>
+
+    <script src="exif-js.js"></script>
+    <script>
+        document.getElementById('file-input').addEventListener('change', handleFileSelect);
+
+        function handleFileSelect(event) {
+            const files = event.target.files;
+            const preview = document.getElementById('image-preview');
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                if (!file.type.match('image.*')) {
+                    continue;
+                }
+
+                const reader = new FileReader();
+
+                reader.onload = function (event) {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.classList.add('preview-item');
+                    preview.appendChild(img);
+
+                    // Check EXIF data
+                    checkEXIF(file);
+                }
+
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function checkEXIF(file) {
+            EXIF.getData(file, function () {
+                const exifData = EXIF.getAllTags(this);
+                console.log('EXIF Data:', exifData);
+
+                const latitude = exifData.GPSLatitude;
+                const longitude = exifData.GPSLongitude;
+
+                if (latitude && longitude) {
+                    const latRef = exifData.GPSLatitudeRef || "N";
+                    const longRef = exifData.GPSLongitudeRef || "W";
+
+                    const latitudeDecimal = convertDMSToDD(latitude[0], latitude[1], latitude[2], latRef);
+                    const longitudeDecimal = convertDMSToDD(longitude[0], longitude[1], longitude[2], longRef);
+
+                    console.log('Latitude:', latitudeDecimal);
+                    console.log('Longitude:', longitudeDecimal);
+                } else {
+                    console.log('Latitude and longitude not available.');
+                }
+            });
+        }
+
+        function convertDMSToDD(degrees, minutes, seconds, direction) {
+            let dd = degrees + minutes / 60 + seconds / (60 * 60);
+
+            if (direction === "S" || direction === "W") {
+                dd = dd * -1;
+            }
+
+            return dd;
+        }
+    </script>
+</body>
+
+</html>

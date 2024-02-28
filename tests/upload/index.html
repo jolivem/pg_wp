@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stylish File Input Button</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Stylish File Input Button</h1>
+    <label for="fileInput" class="custom-file-upload">
+      Select Photos
+    </label>
+    <input type="file" id="fileInput" multiple>
+    <div id="thumbnails"></div>
+    <button onclick="uploadPhotos()">Upload Photos</button>
+    <div id="progressContainer"></div>
+  </div>
+  <script src="script.js"></script>
+  <script src="exif-js.js"></script>
+</body>
+</html>

@@ -130,6 +130,10 @@ class Geolocated_Photo {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/geolocated-photo-category-shortcode.php';
 
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-user-photos.php';
+
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-download-multiple.php';
+
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/glp-gallery-public.php';
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/glp-map-public.php';
@@ -226,7 +230,7 @@ class Geolocated_Photo {
 		$this->loader->add_filter('attachment_fields_to_save', $plugin_admin, 'save_custom_fields_value', 10, 2);
 		
 
-		$this->loader->add_action( 'add_attachment', $plugin_admin, 'extract_exif_data' );
+		//$this->loader->add_action( 'add_attachment', $plugin_admin, 'extract_exif_data' );
 	
 	}
 
@@ -239,13 +243,15 @@ class Geolocated_Photo {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new Glp_Gallery_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_gallery_public = new Glp_Gallery_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_user_photos_public = new Glp_User_Photos_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_download_multiple = new Pg_Download_Multiple_Public( $this->get_plugin_name(), $this->get_version() );
 		$plugin_map_public = new Glp_Map_Public( $this->get_plugin_name(), $this->get_version() );
 		$plugin_public_gallery_category = new Geolocated_Photo_Category( $this->get_plugin_name(), $this->get_version() );
 		$plugin_public_extra_shortcodes = new Ays_Gallery_Extra_Shortcodes_Public( $this->get_plugin_name(), $this->get_version() );
-        $this->loader->add_action( 'init', $plugin_public, 'ays_initialize_gallery_shortcode');
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles_early' );
-		$this->loader->add_filter( 'wp_img_tag_add_decoding_attr', $plugin_public, 'ays_gallery_wp_get_attachment_image_attributes' );
+        $this->loader->add_action( 'init', $plugin_gallery_public, 'ays_initialize_gallery_shortcode'); // TODO maybe removed
+		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_gallery_public, 'enqueue_styles_early' );
+		$this->loader->add_filter( 'wp_img_tag_add_decoding_attr', $plugin_gallery_public, 'ays_gallery_wp_get_attachment_image_attributes' );
 
     }
 
