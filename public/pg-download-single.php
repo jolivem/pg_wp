@@ -69,17 +69,6 @@ class Pg_Download_Single_Public {
      */
     public function enqueue_styles() {
 
-        /**
-         * This function is provided for demonstration purposes only.
-         *
-         * An instance of this class should be passed to the run() function
-         * defined in Geolocated_Photo_Loader as all of the hooks are defined
-         * in that particular class.
-         *
-         * The Geolocated_Photo_Loader will then create the relationship
-         * between the defined hooks and the functions defined in this
-         * class.
-         */
         wp_enqueue_style( 'gpg-fontawesome', 'https://use.fontawesome.com/releases/v5.4.1/css/all.css', array(), $this->version, 'all');
         // TODO lightgallery est payant !!
         wp_enqueue_style( 'animate.css', plugin_dir_url( __FILE__ ) . 'css/animate.css', array(), $this->version, 'all' );
@@ -92,17 +81,6 @@ class Pg_Download_Single_Public {
      */
     public function enqueue_scripts() {
 
-        /**
-         * This function is provided for demonstration purposes only.
-         *
-         * An instance of this class should be passed to the run() function
-         * defined in Geolocated_Photo_Loader as all of the hooks are defined
-         * in that particular class.
-         *
-         * The Geolocated_Photo_Loader will then create the relationship
-         * between the defined hooks and the functions defined in this
-         * class.
-         */
         wp_enqueue_script( 'jquery-effects-core' );
         wp_enqueue_script( 'jquery-ui-sortable' );
         wp_enqueue_media();

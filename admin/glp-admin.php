@@ -1071,9 +1071,9 @@ class GLP_Admin {
         if (!isset($category_value) || $category_value == '') {
             $category_value = "1";
         }
-        error_log("add_custom_fields_to_media_edit_screen: IN category actual value ".$category_value);
+       // error_log("add_custom_fields_to_media_edit_screen: IN category actual value ".$category_value);
         foreach ( $listterms as $term ) {
-            error_log("add_custom_fields_to_media_edit_screen term id=".$term->term_id." name=".$term->name);
+            //error_log("add_custom_fields_to_media_edit_screen term id=".$term->term_id." name=".$term->name);
             $checked = $term->term_id == $category_value ? "selected" : "";
             $categories_dropdown .= "<option value='".$term->term_id."' ".$checked.">".$term->name."</option>";
         }  

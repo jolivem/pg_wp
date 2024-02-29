@@ -23,7 +23,7 @@
 // TODO le rendu du nomber de colonne ne tient pas compte de la bordure de l'image
 // TODO probleme de responsive sur les images
 // TODO renommer les fichiers, les variables, les tables, etc..
-class Glp_User_Photos_Public {
+class Pg_Multiple_Public {
 
     /**
      * The ID of this plugin.
@@ -59,7 +59,7 @@ class Glp_User_Photos_Public {
         $this->plugin_name = $plugin_name;
         $this->version = $version;
         // $this->settings = new Gallery_Settings_Actions($this->plugin_name);
-        add_shortcode( 'glp_user_photos', array($this, 'pg_generate_page') );
+        add_shortcode( 'pg_multiple', array($this, 'pg_generate_page') );
     }
 
     /**
@@ -72,6 +72,7 @@ class Glp_User_Photos_Public {
         wp_enqueue_style( 'gpg-fontawesome', 'https://use.fontawesome.com/releases/v5.4.1/css/all.css', array(), $this->version, 'all');
         // TODO lightgallery est payant !!
         wp_enqueue_style( 'animate.css', plugin_dir_url( __FILE__ ) . 'css/animate.css', array(), $this->version, 'all' );
+        wp_enqueue_style( 'download-multiple.css', plugin_dir_url( __FILE__ ) . 'css/download-multiple.css', array(), $this->version, 'all' );
     }
 
     /**
@@ -87,7 +88,9 @@ class Glp_User_Photos_Public {
         wp_enqueue_script( $this->plugin_name.'-imagesloaded.min.js', 'https://unpkg.com/imagesloaded@4.1.4/imagesloaded.pkgd.min.js', array( 'jquery' ), null, true );
         wp_enqueue_script( $this->plugin_name.'-picturefill.min.js', plugin_dir_url( __FILE__ ) . 'js/picturefill.min.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-jquery.mousewheel.min.js', plugin_dir_url( __FILE__ ) . 'js/jquery.mousewheel.min.js', array( 'jquery' ), $this->version, true );
-        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/glp-public.js', array( 'jquery' ), $this->version, true );
+        wp_enqueue_script( $this->plugin_name.'-glp-public.js', plugin_dir_url( __FILE__ ) . 'js/glp-public.js', array( 'jquery' ), $this->version, true );
+        wp_enqueue_script( $this->plugin_name.'-exif-js.js', plugin_dir_url( __FILE__ ) . 'js/exif-js.js', array( 'jquery' ), $this->version, true );
+        wp_enqueue_script( $this->plugin_name.'-download-multiple.js', plugin_dir_url( __FILE__ ) . 'js/download-multiple.js', array( 'jquery' ), $this->version, true );
         wp_localize_script($this->plugin_name, 'ays_vars', array('base_url' => GLP_BASE_URL));
         // wp_localize_script($this->plugin_name, 'gal_ajax_public', array('ajax_url' => admin_url('admin-ajax.php')));
 
@@ -134,14 +137,27 @@ class Glp_User_Photos_Public {
         global $wpdb;
         $id = ( isset($attr['id']) ) ? absint( intval( $attr['id'] ) ) : null;
         
-        $medias = $this->pg_get_medias_by_user($id);
-        if(!$medias){
-            // TODO display no photos yet, upload your first photo
-            return "[glp_user_photos id='".$id."']";
-        }
-
+        // TODO check if user id is a valid user
+        // $medias = 
+        // if(!$medias){
+        //     // TODO display no photos yet, upload your first photo
+        //     return "[pg_download_multiple id='".$id."']";
+        // }
+        $admin_ajax_url = admin_url('admin-ajax.php');
+        error_log("pg_show_page admin_ajax_url=".$admin_ajax_url);
         $html_code = '
-        <p>COUCOU TO BE COMPLETED</p>';
+        <div class="container">
+            <form id="custom-upload-form">
+                <label for="fileInput" class="custom-file-upload">
+                    Select Photos
+                </label>
+                <input type="file" id="fileInput" name="custom-file[]" multiple>
+                <input type="hidden" id="wp_admin_ajax_url" value="'.$admin_ajax_url.'"/>
+                <div id="thumbnails"></div>
+                <button id="mediaupload">Upload openMediaUploader_Multiple</button>
+            </form>
+            <div id="progressContainer"></div>
+        </div>';
 
         return $html_code;
     } // end ays_show_galery()
@@ -153,72 +169,11 @@ class Glp_User_Photos_Public {
         return $content;
     }
 
-    public function pg_get_medias_by_user( $user_id ) {
-
-        $args = array(
-            'author'         => $user_id,
-            'post_type'      => 'attachment',
-            'post_status'    => 'inherit,private', // Adjust post status as needed
-            'posts_per_page' => -1, // Retrieve all attachments
-        );
-        
-        $query = new WP_Query( $args );
-        $medias = $query->get_posts();
-
-        /*error_log("pg_get_medias_by_user: ".print_r($medias, true));
-        Example for one post:
-        (
-            [ID] => 5
-            [post_author] => 1
-            [post_date] => 2023-11-08 08:11:38
-            [post_date_gmt] => 2023-11-08 08:11:38
-            [post_content] => desc earth
-            [post_title] => title earth
-            [post_excerpt] => caption earth
-            [post_status] => inherit
-            [comment_status] => open
-            [ping_status] => closed
-            [post_password] => 
-            [post_name] => earth
-            [to_ping] => 
-            [pinged] => 
-            [post_modified] => 2023-12-06 15:01:45
-            [post_modified_gmt] => 2023-12-06 15:01:45
-            [post_content_filtered] => 
-            [post_parent] => 44
-            [guid] => http://localhost:8000/wp-content/uploads/2023/11/earth.gif
-            [menu_order] => 0
-            [post_type] => attachment
-            [post_mime_type] => image/gif
-            [comment_count] => 0
-            [filter] => raw
-        )        
-*/
-        return $medias;
-
-/*        
-        if ( $query->have_posts() ) {
-            while ( $query->have_posts() ) {
-                $query->the_post();
-                
-                // Output attachment information
-                echo 'Attachment ID: ' . get_the_ID() . '<br>';
-                echo 'Attachment URL: ' . wp_get_attachment_url( get_the_ID() ) . '<br>';
-                echo 'Attachment Title: ' . get_the_title() . '<br>';
-                // You can retrieve more information as needed
-                
-                // To display the image thumbnail, you can use wp_get_attachment_image()
-                // Example: echo wp_get_attachment_image( get_the_ID(), 'thumbnail' );
-                
-                echo '<hr>';
-            }
-            
-            // Restore original post data
-            wp_reset_postdata();
-        } else {
-            echo 'No attachments found.';
-        }
-
-*/
+    // callback on request to download photos
+    public function download_multiple_photos() {
+        error_log("download_multiple_photos IN");
+        error_log("download_multiple_photos REQUEST".print_r($_REQUEST, true));
+        error_log("download_multiple_photos POST".print_r($_POST, true));
+        error_log("download_multiple_photos FILES".print_r($_FILES, true));
     }
 }

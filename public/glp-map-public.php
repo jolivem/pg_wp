@@ -70,17 +70,6 @@ class Glp_Map_Public {
      */
     public function enqueue_styles() {
 
-        /**
-         * This function is provided for demonstration purposes only.
-         *
-         * An instance of this class should be passed to the run() function
-         * defined in Geolocated_Photo_Loader as all of the hooks are defined
-         * in that particular class.
-         *
-         * The Geolocated_Photo_Loader will then create the relationship
-         * between the defined hooks and the functions defined in this
-         * class.
-         */
         // TODO remove useless css files
         wp_enqueue_style( 'leaflet.css', 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css', array(), $this->version, 'all');
         wp_enqueue_style( 'markercluster.css', 'https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css', array(), $this->version, 'all');
@@ -98,17 +87,6 @@ class Glp_Map_Public {
      */
     public function enqueue_scripts() {
 
-        /**
-         * This function is provided for demonstration purposes only.
-         *
-         * An instance of this class should be passed to the run() function
-         * defined in Geolocated_Photo_Loader as all of the hooks are defined
-         * in that particular class.
-         *
-         * The Geolocated_Photo_Loader will then create the relationship
-         * between the defined hooks and the functions defined in this
-         * class.
-         */
         // TODO remove useless JS files
         wp_enqueue_script( 'jquery-effects-core' );
         wp_enqueue_script( 'jquery-ui-sortable' );
