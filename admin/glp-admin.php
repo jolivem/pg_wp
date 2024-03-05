@@ -1020,10 +1020,10 @@ class GLP_Admin {
     // Add custom field to media edit screen
     public function add_custom_fields_to_media_edit_screen($form_fields, $post) {
 
-        $latitude_value = get_post_meta($post->ID, '_latitude', true);
-        $longitude_value = get_post_meta($post->ID, '_longitude', true);
-        $vignette_value = get_post_meta($post->ID, '_vignette', true);
-        $category_value = get_post_meta($post->ID, '_category', true);
+        $latitude_value = get_post_meta($post->ID, 'latitude', true);
+        $longitude_value = get_post_meta($post->ID, 'longitude', true);
+        $vignette_value = get_post_meta($post->ID, 'vignette', true);
+        $category_value = get_post_meta($post->ID, 'category', true);
 
         // echo $vignette_value;
         echo "vignette value=". $vignette_value;
@@ -1094,18 +1094,18 @@ class GLP_Admin {
     public function save_custom_fields_value($post, $attachment) {
         error_log("save attachment: IN ".print_r($attachment, true));
         if (isset($attachment['latitude'])) {
-            update_post_meta($post['ID'], '_latitude', $attachment['latitude']);
+            update_post_meta($post['ID'], 'latitude', $attachment['latitude']);
         }
         if (isset($attachment['longitude'])) {
-            update_post_meta($post['ID'], '_longitude', $attachment['longitude']);
+            update_post_meta($post['ID'], 'longitude', $attachment['longitude']);
         }
 
         if (isset($attachment['vignette'])) {
-            update_post_meta($post['ID'], '_vignette', $attachment['vignette']);
+            update_post_meta($post['ID'], 'vignette', $attachment['vignette']);
         }
 
         if (isset($attachment['category'])) {
-            update_post_meta($post['ID'], '_category', $attachment['category']);
+            update_post_meta($post['ID'], 'category', $attachment['category']);
         }
 
         return $post;

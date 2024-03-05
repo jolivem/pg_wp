@@ -1386,7 +1386,7 @@ class Glp_Gallery_Public {
         if ($images_request == "query" ) {
         
             //error_log("query_categories: ".$gallery_options['query_categories
-            $query = "SELECT post_id FROM `".$wpdb->prefix."postmeta` WHERE `meta_key` = '_category' AND `meta_value` = '".$gallery_options['query_categories']."'";
+            $query = "SELECT post_id FROM `".$wpdb->prefix."postmeta` WHERE `meta_key` = 'category' AND `meta_value` = '".$gallery_options['query_categories']."'";
             $result =  $wpdb->get_results( $query, "ARRAY_A" );
             //error_log("Image ids for the given category: ".print_r($result, true));
             foreach ($result as $item) {
@@ -1456,9 +1456,9 @@ class Glp_Gallery_Public {
             $vignette = '';
             if (count($result) > 0) {
                 //error_log("result : ".print_r($result , true));
-                $longitude = $this->findValueByKey($result, '_longitude');
-                $latitude = $this->findValueByKey($result, '_latitude');
-                $vignette = $this->findValueByKey($result, '_vignette');
+                $longitude = $this->findValueByKey($result, 'longitude');
+                $latitude = $this->findValueByKey($result, 'latitude');
+                $vignette = $this->findValueByKey($result, 'vignette');
 
                 $options = $this->checkGeolocation($latitude, $longitude, $vignette);
                 if ($options != null) {

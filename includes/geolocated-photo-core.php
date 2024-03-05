@@ -134,7 +134,7 @@ class Geolocated_Photo {
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-download-multiple.php';
 
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-multiple.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-download-single.php';
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/glp-gallery-public.php';
 
@@ -248,6 +248,7 @@ class Geolocated_Photo {
 		$plugin_gallery_public = new Glp_Gallery_Public( $this->get_plugin_name(), $this->get_version() );
 		$plugin_user_photos_public = new Glp_User_Photos_Public( $this->get_plugin_name(), $this->get_version() );
 		$plugin_download_multiple = new Pg_Download_Multiple_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_download_single = new Pg_Download_Single_Public( $this->get_plugin_name(), $this->get_version() );
 		//$plugin_multiple = new Pg_Multiple_Public( $this->get_plugin_name(), $this->get_version() );
 		$plugin_map_public = new Glp_Map_Public( $this->get_plugin_name(), $this->get_version() );
 		$plugin_public_gallery_category = new Geolocated_Photo_Category( $this->get_plugin_name(), $this->get_version() );
@@ -259,6 +260,8 @@ class Geolocated_Photo {
         $this->loader->add_action( 'wp_ajax_download_multiple_photos', $plugin_download_multiple, 'download_multiple_photos');
         $this->loader->add_action( 'wp_ajax_nopriv_download_multiple_photos', $plugin_download_multiple, 'download_multiple_photos'); // TODO be removed
 
+        $this->loader->add_action( 'wp_ajax_download_single_photos', $plugin_download_single, 'download_single_photos');
+        $this->loader->add_action( 'wp_ajax_nopriv_download_single_photos', $plugin_download_single, 'download_single_photos'); // TODO be removed
     }
 
 	/**

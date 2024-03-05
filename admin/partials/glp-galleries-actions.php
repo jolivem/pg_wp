@@ -488,7 +488,7 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                         $category = '';
                         if (count($result_meta) > 0) {
                             foreach ($result_meta as $item) {
-                                if ($item['meta_key'] === '_category') {
+                                if ($item['meta_key'] === 'category') {
                                     $category_id = $item['meta_value'];
                                 }
                             }
@@ -584,7 +584,7 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                         if (count($result_meta) > 0) {
            
                             foreach ($result_meta as $item) {
-                                if ($item['meta_key'] === '_category') {
+                                if ($item['meta_key'] === 'category') {
                                     $category_id = $item['meta_value'];
                                 }
                             }

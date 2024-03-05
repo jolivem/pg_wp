@@ -72,7 +72,12 @@ class Pg_Download_Multiple_Public {
         wp_enqueue_style( 'gpg-fontawesome', 'https://use.fontawesome.com/releases/v5.4.1/css/all.css', array(), $this->version, 'all');
         // TODO lightgallery est payant !!
         wp_enqueue_style( 'animate.css', plugin_dir_url( __FILE__ ) . 'css/animate.css', array(), $this->version, 'all' );
-        wp_enqueue_style( 'download-multiple.css', plugin_dir_url( __FILE__ ) . 'css/download-multiple.css', array(), $this->version, 'all' );
+        wp_enqueue_style( 'pg-download.css', plugin_dir_url( __FILE__ ) . 'css/pg-download.css', array(), $this->version, 'all' );
+		// TODO mettre à jour bootstrap
+        //wp_enqueue_style( 'ays_pb_bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css', array(), $this->version, 'all' );
+        wp_enqueue_style( 'ays_pb_bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css', array(), $this->version, 'all' );
+        wp_enqueue_style( 'font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css', array(), $this->version, 'all' );
+
     }
 
     /**
@@ -91,7 +96,9 @@ class Pg_Download_Multiple_Public {
         wp_enqueue_script( $this->plugin_name.'-jquery.mousewheel.min.js', plugin_dir_url( __FILE__ ) . 'js/jquery.mousewheel.min.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-glp-public.js', plugin_dir_url( __FILE__ ) . 'js/glp-public.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-exif-js.js', plugin_dir_url( __FILE__ ) . 'js/exif-js.js', array( 'jquery' ), $this->version, true );
-        wp_enqueue_script( $this->plugin_name.'-download-multiple.js', plugin_dir_url( __FILE__ ) . 'js/download-multiple.js', array( 'jquery' ), $this->version, true );
+        wp_enqueue_script( $this->plugin_name.'-pg-download.js', plugin_dir_url( __FILE__ ) . 'js/pg-download.js', array( 'jquery' ), $this->version, true );
+        wp_enqueue_script( $this->plugin_name.'-bootstrap.js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', array( 'jquery' ), $this->version, true );
+        
         wp_localize_script($this->plugin_name, 'ays_vars', array('base_url' => GLP_BASE_URL));
         // wp_localize_script($this->plugin_name, 'gal_ajax_public', array('ajax_url' => admin_url('admin-ajax.php')));
 
@@ -156,8 +163,8 @@ class Pg_Download_Multiple_Public {
                 <input type="file" id="fileInput" name="custom-file[]" multiple>
                 <input type="hidden" id="pg_admin_ajax_url" value="'.$admin_ajax_url.'"/>
                 <input type="hidden" id="pg_nonce" value="'.$nonce.'"/>
-                <div id="thumbnails"></div>
-                <button id="myupload">Upload Photos</button>
+                <div id="item-list"></div>
+                <button id="multiple-upload">Upload Photos</button>
             </form>
             <div id="progressContainer"></div>
         </div>';
@@ -171,11 +178,11 @@ class Pg_Download_Multiple_Public {
         }
         return $content;
     }
+
     // callback on request to download photos
     public function download_multiple_photos() {
         error_log("download_multiple_photos IN");
-        //error_log("download_multiple_photos REQUEST ".print_r($_REQUEST, true));
-        //error_log("download_multiple_photos FILES ".print_r($_FILES, true));
+        error_log("download_multiple_photos REQUEST ".print_r($_REQUEST, true));
 
         if( ! isset( $_REQUEST['nonce'] ) or 
             ! wp_verify_nonce( $_REQUEST['nonce'], 'download_multiple_photos' ) ) {
@@ -214,6 +221,14 @@ class Pg_Download_Multiple_Public {
                 $attachment_id,
                 wp_generate_attachment_metadata( $attachment_id, $movefile[ 'file' ] )
             );
+
+            update_post_meta($attachment_id , 'latitude', $_REQUEST['lat']);
+            update_post_meta($attachment_id , 'longitude', $_REQUEST['lon']);
+            update_post_meta($attachment_id , 'origin', $_REQUEST['origin']);
+            update_post_meta($attachment_id , 'altitude', $_REQUEST['altitude']);
+            update_post_meta($attachment_id , 'date', $_REQUEST['date']); // date of shooting
+            //TODO add zoom and 
+
 
         } else {
             /**
