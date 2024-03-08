@@ -166,29 +166,31 @@ class Pg_Download_Single_Public {
                 <input type="hidden" id="pg_nonce" value="'.$nonce.'"/>
                 <div id="download-single-block" style="display:none">
                     <div id="photo-to-download"></div>
-                    <h5>Saisir les coordonées GPS</h5>
+                    <h5 id="title-latlon">Saisir les coordonées GPS</h5>
                     <div class="input-group has-validation">
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="latitude" aria-describedby="emailHelp" placeholder="" required>
+                            <input type="text" class="form-control" id="latitude" aria-describedby="latitudeHelp" placeholder="" required>
                             <label for="latitude">Latitude</label>
                             <div id="latitude-feedback" class="invalid-feedback"></div>
-                            <small id="emailHelp" class="form-text text-muted">Exemple 39,6983333 ou 39°41\'54.1"N</small>
+                            <small id="latitudeHelp" class="form-text text-muted">Exemple 39.6983333 ou 39°41\'54.1"N</small>
                         </div>
                     </div>
                     <div class="input-group has-validation">
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="longitude" name="longitude" placeholder="Enter Longitude" required>
+                            <input type="text" class="form-control" id="longitude"  aria-describedby="longitudeHelp" placeholder="Enter Longitude" required>
                             <label for="longitude" class="form-label">Longitude</label>
                             <div id="longitude-feedback" class="invalid-feedback"></div>
-                            <small id="emailHelp" class="form-text text-muted">Exemple 31,104722 ou 31°06\'17.6"W</small>
+                            <small id="longitudeHelp" class="form-text text-muted">Exemple -31.104722 ou 31°06\'17.6"E</small>
                         </div>
                     </div>
-                    <h5>Ou copier coller la position à partir de GoogleMap</h5>
-                    <div class="input-group has-validation">
-                        <div id="googlemap-position" class="form-floating mb-3">
-                            <input type="text" class="form-control" id="input-google-position" placeholder="">
-                            <label for="input-google-position">GoogleMap position</label>
-                            <small id="emailHelp" class="form-text text-muted">Exemple 39°41\'54.1"N 31°06\'17.6"W</small>
+                    <div id="gmap-position">
+                        <h5>Ou copier coller la position à partir de GoogleMap</h5>
+                        <div class="input-group has-validation">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="input-google-position" placeholder="">
+                                <label for="input-google-position">GoogleMap position</label>
+                                <small id="emailHelp" class="form-text text-muted">Exemple 39°41\'54.1"S 31°06\'17.6"E</small>
+                            </div>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary" id="single-upload">Upload Photo</button>

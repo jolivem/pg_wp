@@ -481,7 +481,7 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                         }
 
                         // query from table postmeta
-                        $query = "SELECT meta_key, meta_value FROM `".$wpdb->prefix."postmeta` WHERE `post_id` = '".$image_ids[$key]."'";
+                        $query = "SELECT meta_key, meta_value FROM `".$wpdb->prefix."postmeta` WHERE `post_id` = '".$images_ids[$key]."'";
                         //error_log("query: ".$query);
                         $result_meta =  $wpdb->get_results( $query, "ARRAY_A" );
                         $category_id = -1;

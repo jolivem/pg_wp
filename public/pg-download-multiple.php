@@ -164,7 +164,7 @@ class Pg_Download_Multiple_Public {
                 <input type="hidden" id="pg_admin_ajax_url" value="'.$admin_ajax_url.'"/>
                 <input type="hidden" id="pg_nonce" value="'.$nonce.'"/>
                 <div id="item-list"></div>
-                <button id="multiple-upload">Upload Photos</button>
+                <button type="submit" id="multiple-upload" class="btn btn-primary">Upload Photos</button>
             </form>
             <div id="progressContainer"></div>
         </div>';

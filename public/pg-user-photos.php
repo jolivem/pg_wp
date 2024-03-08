@@ -141,10 +141,48 @@ class Glp_User_Photos_Public {
         }
 
         $html_code = '
-        <p>COUCOU TO BE COMPLETED</p>';
+        <p>COUCOU TO BE COMPLETED</p>
+        <div id="item-list">';
+
+        $html_code .= $this->render_images($medias);
+        $html_code .= 
+        '</div>';
 
         return $html_code;
-    } // end ays_show_galery()
+    } 
+
+    function render_images($medias){
+        $html='';
+        foreach($medias as $item){
+            //error_log("render_images item:".print_r($item, true));
+            $img_src = $item->guid;
+            $url_img = wp_get_attachment_image_src($item->ID, "thumbnail");
+            if ($url_img != false) {
+                $img_src = $url_img[0];
+            }
+            //error_log("render_images url:".print_r($url_img, true));
+            // TODO check url_img is OK, add try catch
+            $html.=
+            '<div class="flex-container">
+                <div class="miniature" style="background-image: url('.$img_src.')"></div>
+                <div class="photo-text-container" style="background-color: lightyellow";>
+                    <div class="photo-title">Ceci est un très grand titre. Ceci est un très grand titre. Ceci est un très grand titre.</div>
+                    <div class="photo-text">'.$item->title.'</div>
+                    <div class="footer" style="background-color: lightblue";>coucou me voilà</div>
+                </div>
+                <div class="options" style="background-color: lightgreen">
+                    <div class="flex-options">
+                        <div class="item-option trash-icon fas fa-trash"  aria-hidden="true"></div>
+                        <div class="item-option trash-icon fas fa-trash"  aria-hidden="true"></div>
+                        <div class="item-option edit-icon fas fa-edit"  aria-hidden="true"></div>
+                    </div>
+                </div>
+            </div>';
+            
+
+        }
+        return $html;
+    }
 
     public function ays_gallery_replace_message_variables($content, $data){
         foreach($data as $variable => $value){

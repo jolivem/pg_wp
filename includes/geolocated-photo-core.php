@@ -260,8 +260,8 @@ class Geolocated_Photo {
         $this->loader->add_action( 'wp_ajax_download_multiple_photos', $plugin_download_multiple, 'download_multiple_photos');
         $this->loader->add_action( 'wp_ajax_nopriv_download_multiple_photos', $plugin_download_multiple, 'download_multiple_photos'); // TODO be removed
 
-        $this->loader->add_action( 'wp_ajax_download_single_photos', $plugin_download_single, 'download_single_photos');
-        $this->loader->add_action( 'wp_ajax_nopriv_download_single_photos', $plugin_download_single, 'download_single_photos'); // TODO be removed
+        $this->loader->add_action( 'wp_ajax_download_single_photo', $plugin_download_single, 'download_single_photo');
+        $this->loader->add_action( 'wp_ajax_nopriv_download_single_photo', $plugin_download_single, 'download_single_photo'); // TODO be removed
     }
 
 	/**
