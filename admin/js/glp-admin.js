@@ -1403,13 +1403,13 @@
     }
 
     function ays_add_vignette( mapId, country) {
-        //console.log("country", country);
+        console.log("country", country);
         let zoom = country.zoom;
         let file = ays_vars.base_url + "assets/geojson/" + country.file;
  
         let select = document.getElementsByClassName("compat-field-vignette")[0];
-        //console.log("select", select);
-        //console.log("BABAauRHUM", parent);
+        console.log("select", select);
+        console.log("BABAauRHUM", parent);
         // select.appendChild(p);
         var elemDiv = document.createElement('td');
         elemDiv.id = mapId;

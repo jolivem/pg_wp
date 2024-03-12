@@ -155,6 +155,7 @@ class Pg_Download_Single_Public {
         $admin_ajax_url = admin_url('admin-ajax.php');
         $nonce = wp_create_nonce('download_single_photo');
         error_log("pg_show_page single admin_ajax_url=".$admin_ajax_url);
+        //TODO remove input-group class
         $html_code = '
         <div class="container">
             <form id="upload-single-form">

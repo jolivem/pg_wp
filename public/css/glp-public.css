@@ -635,3 +635,20 @@ button.lg-icon {
     flex: 10 0 20px;
     padding: 7px;
 }
+
+/* EDIT photos */
+
+.edit-photo-flex-container {
+    display: flex;
+    align-items: stretch;
+}
+
+.edit-photo-select {
+    flex: 10 0 200px;
+}
+
+.edit-photo-map {
+    flex-basis: 130px;
+    border-radius: 7px;
+    margin-left: 10px;
+}
