@@ -227,7 +227,7 @@ function downloadASinglePhoto(files) {
         function renderItemSingle(src, name, latitude, longitude) {
             const photo = document.getElementById('photo-to-download');
             //photo.className = 'list-item';
-            photo.innerHTML = `<img src="${src}" alt="Item Image" class="square-thumbnail">`;
+            photo.innerHTML = `<img src="${src}" alt="Item Image" style="height:200px; width:auto; border: 1px solid #BBB; padding:3px; border-radius: 4px; margin: 10px 0 10px 0">`;
 
             const gmapInput = document.getElementById('gmap-position');
 
@@ -351,6 +351,12 @@ function downloadASinglePhoto(files) {
 // MULTIPLE UPLOAD
 //
 
+jQuery(document).find('#close-multiple-modal').on('click', function(e){
+    console.log("close-multiple-modal IN");
+    e.preventDefault();
+    location.reload();
+});
+
 jQuery(document).find('#multiple-upload').on('click', function(e){
     console.log("uploadPhotos IN");
     e.preventDefault();
@@ -358,7 +364,7 @@ jQuery(document).find('#multiple-upload').on('click', function(e){
     const fileInput = document.getElementById('fileInput');
     const files = fileInput.files;
     const progressContainer = document.getElementById('progressContainer');
-
+    const galleryId = document.getElementById('gallery-id')?.value;
     progressContainer.innerHTML = '';
     progressContainer.style.display = 'block';
 
@@ -393,6 +399,7 @@ jQuery(document).find('#multiple-upload').on('click', function(e){
         formData.append('origin', file.pgpg.origin);
         formData.append('date', file.pgpg.date);
         formData.append('file', file);
+        formData.append('galleryId', galleryId);
         console.log("uploadPhotos gps=", file.pgpg);
         jQuery.ajax({
             method: 'POST',
@@ -430,11 +437,18 @@ function downloadMultiplePhotos(files) {
     const button = document.getElementById('multiple-upload');
     button.disabled = false;
 
+    if (filesArray.length > 0) {
+        button.style.display = "block";
+    }
+    else {
+        button.style.display = "none";
+    }
+
     for (let i = 0; i < filesArray.length ; i ++) {
         const file = filesArray[i];
         const reader = new FileReader();
 
-        const list = document.getElementById('item-list');
+        const list = document.getElementById('modal-item-list');
         console.log('list.length', list.childElementCount);
         console.log('filesArray.length', filesArray.length);
         if ( list.childElementCount == maxFile) {
@@ -444,7 +458,7 @@ function downloadMultiplePhotos(files) {
         }
   
         function renderItemMultiple(src, name, lat, lon, date) {
-            const list = document.getElementById('item-list');
+            const list = document.getElementById('modal-item-list');
             const listItem = document.createElement('div');
             listItem.className = 'list-item row';
             if (lat != undefined) {

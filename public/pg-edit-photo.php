@@ -80,7 +80,7 @@ class Pg_Edit_Photo_Public {
      */
     public function enqueue_scripts() {
 
-        wp_enqueue_media();
+        //wp_enqueue_media();
         wp_enqueue_script( $this->plugin_name.'-glp-public.js', plugin_dir_url( __FILE__ ) . 'js/glp-public.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-bootstrap.js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script('leaflet', 'https://unpkg.com/leaflet/dist/leaflet.js', array('jquery'), '1.7.1', true);
@@ -100,10 +100,10 @@ class Pg_Edit_Photo_Public {
         ob_start();
         error_log("pg_generate_page IN ".print_r($attr, true));
 
-        // TODO check that the photo belons to the current user
+        // TODO check that gallery belongs to the current user
 
         //Test with ID=67
-        $attr['id']=185;
+        $attr['id']=2; // test withs gallery id = 2
 
         $this->enqueue_styles();
         $this->enqueue_scripts();

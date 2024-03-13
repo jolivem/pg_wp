@@ -69,8 +69,8 @@ class Pg_Download_Single_Public {
      */
     public function enqueue_styles() {
 
-        wp_enqueue_style( 'gpg-fontawesome', 'https://use.fontawesome.com/releases/v5.4.1/css/all.css', array(), $this->version, 'all');
-        wp_enqueue_style( 'animate.css', plugin_dir_url( __FILE__ ) . 'css/animate.css', array(), $this->version, 'all' );
+        //wp_enqueue_style( 'gpg-fontawesome', 'https://use.fontawesome.com/releases/v5.4.1/css/all.css', array(), $this->version, 'all');
+        //wp_enqueue_style( 'animate.css', plugin_dir_url( __FILE__ ) . 'css/animate.css', array(), $this->version, 'all' );
         wp_enqueue_style( 'pg-download.css', plugin_dir_url( __FILE__ ) . 'css/pg-download.css', array(), $this->version, 'all' );
 		// TODO mettre à jour bootstrap
         //wp_enqueue_style( 'ays_pb_bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css', array(), $this->version, 'all' );
@@ -87,12 +87,12 @@ class Pg_Download_Single_Public {
     public function enqueue_scripts() {
 
         // TODO clean all thi stuff
-        wp_enqueue_script( 'jquery-effects-core' );
-        wp_enqueue_script( 'jquery-ui-sortable' );
-        wp_enqueue_media();
-        wp_enqueue_script( $this->plugin_name.'-imagesloaded.min.js', 'https://unpkg.com/imagesloaded@4.1.4/imagesloaded.pkgd.min.js', array( 'jquery' ), null, true );
-        wp_enqueue_script( $this->plugin_name.'-picturefill.min.js', plugin_dir_url( __FILE__ ) . 'js/picturefill.min.js', array( 'jquery' ), $this->version, true );
-        wp_enqueue_script( $this->plugin_name.'-jquery.mousewheel.min.js', plugin_dir_url( __FILE__ ) . 'js/jquery.mousewheel.min.js', array( 'jquery' ), $this->version, true );
+        //wp_enqueue_script( 'jquery-effects-core' );
+        //wp_enqueue_script( 'jquery-ui-sortable' );
+        //wp_enqueue_media();
+        //wp_enqueue_script( $this->plugin_name.'-imagesloaded.min.js', 'https://unpkg.com/imagesloaded@4.1.4/imagesloaded.pkgd.min.js', array( 'jquery' ), null, true );
+        //wp_enqueue_script( $this->plugin_name.'-picturefill.min.js', plugin_dir_url( __FILE__ ) . 'js/picturefill.min.js', array( 'jquery' ), $this->version, true );
+        //wp_enqueue_script( $this->plugin_name.'-jquery.mousewheel.min.js', plugin_dir_url( __FILE__ ) . 'js/jquery.mousewheel.min.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-glp-public.js', plugin_dir_url( __FILE__ ) . 'js/glp-public.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-exif-js.js', plugin_dir_url( __FILE__ ) . 'js/exif-js.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-pg-download.js', plugin_dir_url( __FILE__ ) . 'js/pg-download.js', array( 'jquery' ), $this->version, true );
@@ -165,8 +165,9 @@ class Pg_Download_Single_Public {
                 <input type="file" id="fileInput" name="custom-file[]">
                 <input type="hidden" id="pg_admin_ajax_url" value="'.$admin_ajax_url.'"/>
                 <input type="hidden" id="pg_nonce" value="'.$nonce.'"/>
+                <div id="photo-to-download" style="display:flex; justify-content: center;"></div>
+                
                 <div id="download-single-block" style="display:none">
-                    <div id="photo-to-download"></div>
                     <h5 id="title-latlon">Saisir les coordonées GPS</h5>
                     <div class="input-group has-validation">
                         <div class="form-floating mb-3">

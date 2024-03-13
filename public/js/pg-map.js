@@ -75,13 +75,15 @@
     function ays_remove_vignette( mapId) {
         console.log("ays_remove_vignette IN", mapId);
         let previous_map = document.getElementById(mapId);
-        console.log("ays_remove_vignette", previous_map);
-        previous_map.style.display="none";
-        //previous_map?.remove();
-        if (g_lmap && g_lmap.remove) {
-            g_lmap.off();
-            g_lmap.remove();
-            g_lmap = null;
+        if (previous_map) {
+            console.log("ays_remove_vignette", previous_map);
+            previous_map.style.display="none";
+            //previous_map?.remove();
+            if (g_lmap && g_lmap.remove) {
+                g_lmap.off();
+                g_lmap.remove();
+                g_lmap = null;
+            }
         }        
     }
 

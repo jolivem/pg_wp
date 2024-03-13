@@ -89,7 +89,7 @@ class Glp_Galleries_List_Table extends WP_List_Table{
             // List of images
             if ($data["ays-image-path"] != NULL) {
                 error_log("add_or_edit_gallery() images selected ! ");
-                $image_paths            = (isset($data["ays-image-path"]) && $data["ays-image-path"] != '') ? sanitize_text_field( implode( "***", array_filter($data["ays-image-path"] )) ) : '';
+                //$image_paths            = (isset($data["ays-image-path"]) && $data["ays-image-path"] != '') ? sanitize_text_field( implode( "***", array_filter($data["ays-image-path"] )) ) : '';
                 $image_ids              = (isset($data["ays-image-id"]) && $data["ays-image-id"] != '') ? sanitize_text_field( implode( "***", array_filter($data["ays-image-id"] )) ) : '';
                 //error_log("TODO image id:".$image_ids);
                 // $image_titles           = (isset($data["ays-image-title"]) && $data["ays-image-title"] != '') ? stripslashes(sanitize_text_field( implode( "***", $data["ays-image-title"] ) ) ) : '';
@@ -102,7 +102,7 @@ class Glp_Galleries_List_Table extends WP_List_Table{
             }
             else {
                 error_log("add_or_edit_gallery() NO images ! ");
-                $image_paths            = '';
+                //$image_paths            = '';
                 $image_ids              = '';
                 //$image_titles           = '';
                 //$image_alts             = '';

@@ -138,6 +138,8 @@ class Geolocated_Photo {
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-edit-photo.php';
 
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-edit-gallery.php';
+
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/glp-gallery-public.php';
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/glp-map-public.php';
@@ -248,7 +250,7 @@ class Geolocated_Photo {
 	private function define_public_hooks() {
 
 		$plugin_user_photos_public = new Glp_User_Photos_Public( $this->get_plugin_name(), $this->get_version() );
-        $plugin_edit_photo_public = new Pg_Edit_Photo_Public( $this->get_plugin_name(), $this->get_version() );
+       // $plugin_edit_photo_public = new Pg_Edit_Photo_Public( $this->get_plugin_name(), $this->get_version() );
 		//$plugin_multiple = new Pg_Multiple_Public( $this->get_plugin_name(), $this->get_version() );
 		$plugin_map_public = new Glp_Map_Public( $this->get_plugin_name(), $this->get_version() );
 		$plugin_public_gallery_category = new Geolocated_Photo_Category( $this->get_plugin_name(), $this->get_version() );
@@ -268,9 +270,12 @@ class Geolocated_Photo {
         $this->loader->add_action( 'wp_ajax_nopriv_download_single_photo', $plugin_download_single, 'download_single_photo'); // TODO be removed
 
 		$plugin_edit_photo = new Pg_Edit_Photo_Public( $this->get_plugin_name(), $this->get_version() );
-        $this->loader->add_action( 'wp_ajax_user_edit_photo', $plugin_edit_photo_public, 'user_edit_photo');
-        $this->loader->add_action( 'wp_ajax_nopriv_user_edit_photo', $plugin_edit_photo_public, 'user_edit_photo'); // TODO be removed
+        $this->loader->add_action( 'wp_ajax_user_edit_photo', $plugin_edit_photo, 'user_edit_photo');
+        $this->loader->add_action( 'wp_ajax_nopriv_user_edit_photo', $plugin_edit_photo, 'user_edit_photo'); // TODO be removed
 
+        $plugin_edit_gallery = new Pg_Edit_Gallery_Public( $this->get_plugin_name(), $this->get_version() );
+        $this->loader->add_action( 'wp_ajax_user_edit_gallery', $plugin_edit_gallery, 'user_edit_gallery');
+        $this->loader->add_action( 'wp_ajax_nopriv_user_edit_gallery', $plugin_edit_gallery, 'user_edit_gallery'); // TODO be removed
     }
 
 	/**

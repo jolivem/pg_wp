@@ -71,7 +71,7 @@ class Glp_User_Photos_Public {
 
         wp_enqueue_style( 'gpg-fontawesome', 'https://use.fontawesome.com/releases/v5.4.1/css/all.css', array(), $this->version, 'all');
         // TODO lightgallery est payant !!
-        wp_enqueue_style( 'animate.css', plugin_dir_url( __FILE__ ) . 'css/animate.css', array(), $this->version, 'all' );
+        //wp_enqueue_style( 'animate.css', plugin_dir_url( __FILE__ ) . 'css/animate.css', array(), $this->version, 'all' );
     }
 
     /**
@@ -81,15 +81,8 @@ class Glp_User_Photos_Public {
      */
     public function enqueue_scripts() {
 
-        wp_enqueue_script( 'jquery-effects-core' );
-        wp_enqueue_script( 'jquery-ui-sortable' );
-        wp_enqueue_media();
-        wp_enqueue_script( $this->plugin_name.'-imagesloaded.min.js', 'https://unpkg.com/imagesloaded@4.1.4/imagesloaded.pkgd.min.js', array( 'jquery' ), null, true );
-        wp_enqueue_script( $this->plugin_name.'-picturefill.min.js', plugin_dir_url( __FILE__ ) . 'js/picturefill.min.js', array( 'jquery' ), $this->version, true );
-        wp_enqueue_script( $this->plugin_name.'-jquery.mousewheel.min.js', plugin_dir_url( __FILE__ ) . 'js/jquery.mousewheel.min.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/glp-public.js', array( 'jquery' ), $this->version, true );
         wp_localize_script($this->plugin_name, 'ays_vars', array('base_url' => GLP_BASE_URL));
-        // wp_localize_script($this->plugin_name, 'gal_ajax_public', array('ajax_url' => admin_url('admin-ajax.php')));
 
     }
 
@@ -141,8 +134,7 @@ class Glp_User_Photos_Public {
         }
 
         $html_code = '
-        <p>COUCOU TO BE COMPLETED</p>
-        <div id="item-list">';
+        <div id="user-item-list">';
 
         $html_code .= $this->render_images($medias);
         $html_code .= 
@@ -153,6 +145,8 @@ class Glp_User_Photos_Public {
 
     function render_images($medias){
         $html='';
+
+        // loop for each media
         foreach($medias as $item){
             //error_log("render_images item:".print_r($item, true));
             $img_src = $item->guid;

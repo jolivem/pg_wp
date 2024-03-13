@@ -58,7 +58,6 @@ class Pg_Download_Multiple_Public {
 
         $this->plugin_name = $plugin_name;
         $this->version = $version;
-        // $this->settings = new Gallery_Settings_Actions($this->plugin_name);
         add_shortcode( 'pg_download_multiple', array($this, 'pg_generate_page') );
     }
 
@@ -69,12 +68,8 @@ class Pg_Download_Multiple_Public {
      */
     public function enqueue_styles() {
 
-        wp_enqueue_style( 'gpg-fontawesome', 'https://use.fontawesome.com/releases/v5.4.1/css/all.css', array(), $this->version, 'all');
-        // TODO lightgallery est payant !!
         wp_enqueue_style( 'animate.css', plugin_dir_url( __FILE__ ) . 'css/animate.css', array(), $this->version, 'all' );
         wp_enqueue_style( 'pg-download.css', plugin_dir_url( __FILE__ ) . 'css/pg-download.css', array(), $this->version, 'all' );
-		// TODO mettre à jour bootstrap
-        //wp_enqueue_style( 'ays_pb_bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css', array(), $this->version, 'all' );
         wp_enqueue_style( 'ays_pb_bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css', array(), $this->version, 'all' );
         wp_enqueue_style( 'font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css', array(), $this->version, 'all' );
 
@@ -87,13 +82,6 @@ class Pg_Download_Multiple_Public {
      */
     public function enqueue_scripts() {
 
-        // TODO clean all thi stuff
-        wp_enqueue_script( 'jquery-effects-core' );
-        wp_enqueue_script( 'jquery-ui-sortable' );
-        wp_enqueue_media();
-        wp_enqueue_script( $this->plugin_name.'-imagesloaded.min.js', 'https://unpkg.com/imagesloaded@4.1.4/imagesloaded.pkgd.min.js', array( 'jquery' ), null, true );
-        wp_enqueue_script( $this->plugin_name.'-picturefill.min.js', plugin_dir_url( __FILE__ ) . 'js/picturefill.min.js', array( 'jquery' ), $this->version, true );
-        wp_enqueue_script( $this->plugin_name.'-jquery.mousewheel.min.js', plugin_dir_url( __FILE__ ) . 'js/jquery.mousewheel.min.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-glp-public.js', plugin_dir_url( __FILE__ ) . 'js/glp-public.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-exif-js.js', plugin_dir_url( __FILE__ ) . 'js/exif-js.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-pg-download.js', plugin_dir_url( __FILE__ ) . 'js/pg-download.js', array( 'jquery' ), $this->version, true );
@@ -143,7 +131,7 @@ class Pg_Download_Multiple_Public {
     public function pg_show_page( $attr ){
         
         global $wpdb;
-        $id = ( isset($attr['id']) ) ? absint( intval( $attr['id'] ) ) : null;
+        //$id = ( isset($attr['id']) ) ? absint( intval( $attr['id'] ) ) : null;
         
         // TODO check if user id is a valid user
         // $medias = 
@@ -155,18 +143,33 @@ class Pg_Download_Multiple_Public {
         $nonce = wp_create_nonce('download_multiple_photos');
         error_log("pg_show_page admin_ajax_url=".$admin_ajax_url);
         $html_code = '
-        <div class="container">
-            <form id="custom-upload-form">
-                <label for="fileInput" class="custom-file-upload">
-                    Select Photos
-                </label>
-                <input type="file" id="fileInput" name="custom-file[]" multiple>
-                <input type="hidden" id="pg_admin_ajax_url" value="'.$admin_ajax_url.'"/>
-                <input type="hidden" id="pg_nonce" value="'.$nonce.'"/>
-                <div id="item-list"></div>
-                <button type="submit" id="multiple-upload" class="btn btn-primary">Upload Photos</button>
-            </form>
-            <div id="progressContainer"></div>
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="container">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Sélection multiple de photos</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>                            
+                        <div class="modal-body">
+                            <form id="custom-upload-form">
+                                <label for="fileInput" class="custom-file-upload">
+                                    Select Photos
+                                </label>
+                                <input type="file" id="fileInput" name="custom-file[]" multiple>
+                                <input type="hidden" id="pg_admin_ajax_url" value="'.$admin_ajax_url.'"/>
+                                <input type="hidden" id="pg_nonce" value="'.$nonce.'"/>
+                                <div id="modal-item-list"></div>
+                                <button type="submit" id="multiple-upload" class="btn btn-primary" style="display: none">Upload Photos</button>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="close-multiple-modal" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                        <div id="progressContainer"></div>
+                    </div>
+                </div>
+            </div>
         </div>';
 
         return $html_code;
@@ -227,9 +230,11 @@ class Pg_Download_Multiple_Public {
             update_post_meta($attachment_id , 'origin', $_REQUEST['origin']);
             update_post_meta($attachment_id , 'altitude', $_REQUEST['altitude']);
             update_post_meta($attachment_id , 'date', $_REQUEST['date']); // date of shooting
-            //TODO add zoom and 
-
-
+            
+            // if gallery id , add to gallery
+            if ($_REQUEST['galleryId']) {
+                $this->update_gallery_image($_REQUEST['galleryId'], $attachment_id);
+            }
         } else {
             /**
              * Error generated by _wp_handle_upload()
@@ -241,5 +246,54 @@ class Pg_Download_Multiple_Public {
         wp_send_json_success( null, 200);
         wp_die();
         
+    }
+
+    // $gallery_id = id of the gallery
+    // $images = array of image id
+    function update_gallery_image($gallery_id, $image_id){
+        error_log("update_gallery_image IN gallery_id=".$gallery_id.", image_id=".$image_id);
+        global $wpdb;
+        $gallery_table = $wpdb->prefix . "glp_gallery";
+
+        if( isset($image_id) && $image_id != '' && isset($gallery_id) && $gallery_id != '') {
+
+            // first get actual list of images ids
+            $image_ids = $this->pg_get_medias_by_gallery($gallery_id);
+            if ($image_ids != null ) {
+                // add to array
+                $image_ids[] = $image_id;
+            }
+            else {
+                // create array
+                $image_ids = array($image_id);
+            }
+
+            // then update the gallery
+            $images = sanitize_text_field( implode( "***", array_filter($image_ids)) );
+            //error_log("update_gallery_image ");
+            $gallery_result = $wpdb->update(
+                $gallery_table,
+                array("images_ids" => $images),
+                array( "id" => $gallery_id ),
+                array( "%s" ),
+                array( "%d" )
+            );
+            error_log("update_gallery_image OUT");
+        }
+    }
+
+    public function pg_get_medias_by_gallery( $id ) {
+        error_log("pg_get_medias_by_gallery IN gallery_id=".$id);
+        global $wpdb;
+
+        $sql = "SELECT * FROM {$wpdb->prefix}glp_gallery WHERE id={$id}";
+        $result = $wpdb->get_row( $sql, "ARRAY_A" );
+        if ( is_null( $result ) || empty( $result ) ) {
+            error_log("pg_get_medias_by_gallery OUT null");
+            return null;
+        }
+        error_log("pg_get_medias_by_gallery images_id=".$result["images_ids"]);
+        $image_ids = explode( "***", $result["images_ids"]);
+        return $image_ids;
     }
 }
