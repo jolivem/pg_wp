@@ -221,5 +221,47 @@
         });
     });
 
+   // When clicked on submit button
+   $(document).find('#edit-gallery').on('click', function(event){
+        console.log("edit-photo IN");
+        event.preventDefault();
+        let error = false;
+        let gallery_id = document.getElementById('gallery-id').value;
+        let nonce = document.getElementById('pg_nonce').value;
+        let admin_url = document.getElementById('pg_admin_ajax_url').value;
+
+        const title = document.getElementById('gallery-title').value;
+        const description = document.getElementById('gallery-description').value;
+
+        // get the image list in the order of display
+        const list = document.getElementById('item-list').children;
+        let images_id = [];
+        //console.log( "list", list);
+        for(let i = 0 ; i < list.length; i++){
+            // Append them to a string
+            //console.log( "list i", list[i]);
+            images_id.push(list[i].dataset.id);
+        }
+
+        const formData = new FormData();
+        formData.append('action', 'user_edit_gallery');
+        formData.append('nonce', nonce);
+        formData.append('gallery_id', gallery_id);
+        formData.append('title', title);
+        formData.append('desc', description);
+        formData.append('images_id', images_id);
+        jQuery.ajax({
+            method: 'POST',
+            url: admin_url,
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response){
+                console.log("upload done");
+            }
+            // TODO handle error
+        });
+    });
+
 
 })( jQuery );

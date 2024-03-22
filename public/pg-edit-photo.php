@@ -99,11 +99,13 @@ class Pg_Edit_Photo_Public {
     public function pg_generate_page( $attr ){
         ob_start();
         error_log("pg_generate_page IN ".print_r($attr, true));
+        error_log("pg_generate_page REQUEST ".print_r($_REQUEST, true));
+        error_log("pg_generate_page GET ".print_r($_GET, true));
 
         // TODO check that gallery belongs to the current user
-
+        
         //Test with ID=67
-        $attr['id']=2; // test withs gallery id = 2
+        $attr['id']=211; 
 
         $this->enqueue_styles();
         $this->enqueue_scripts();
@@ -131,6 +133,11 @@ class Pg_Edit_Photo_Public {
         $latitude = get_post_meta($id, 'latitude', true);
         $longitude = get_post_meta($id, 'longitude', true);
         $vignette = get_post_meta($id, 'vignette', true);
+
+        $post = get_post($id);
+        error_log("render_images content=".print_r($post, true));
+        $content = $post->post_content;
+        $title = $post->post_title;
 
         error_log("pg_show_page latitude=".$latitude.", longitude=".$longitude.", vignette=".$vignette);
 
@@ -164,34 +171,31 @@ class Pg_Edit_Photo_Public {
                 <input type="hidden" id="post_id" value="'.$id.'"/>
                 <input type="hidden" id="pg_admin_ajax_url" value="'.$admin_ajax_url.'"/>
                 <input type="hidden" id="pg_nonce" value="'.$nonce.'"/>
-                <div id="download-single-block">
-                    <div id="photo-to-download"></div>
-                    <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="photo-title" aria-describedby="titleHelp" placeholder="">
-                        <label for="photo-title">Titre</label>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="photo-title" aria-describedby="titleHelp" placeholder="" value="'.$title.'">
+                    <label for="photo-title">Titre</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <textarea rows="5" style="height:100%;" class="form-control" placeholder="" id="photo-description">'.$content.'</textarea>
+                    <label for="photo-description">Description</label>                        
+                </div>
+                <div class="edit-photo-flex-container" style="background-color: lightyellow">
+                    <div class="edit-photo-select">
+                        <select id="select-country" class="form-select mb-3" aria-label="">
+                            <option selected>Sélectionner la zone</option>'
+                            .$html_options.
+                        '</select>
                     </div>
-                    <div class="form-floating mb-3">
-                        <textarea rows="5" style="height:100%;" class="form-control" placeholder="" id="photo-description"></textarea>
-                        <label for="photo-description">Description</label>                        
-                    </div>
-                    <div class="edit-photo-flex-container" style="background-color: lightyellow">
-                        <div class="edit-photo-select">
-                            <select id="select-country" class="form-select mb-3" aria-label="">
-                                <option selected>Sélectionner la zone</option>'
-                                .$html_options.
-                            '</select>
-                        </div>
-                        <div id="leaflet-map" class="edit-photo-map"></div>
-                    </div>
-                        
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" role="switch" id="worldmap" value="on" checked>
-                        <label class="form-check-label" for="worldmap">Autoriser l\'affichage sur la carte mondiale</label>
-                    </div>
-                    <br>
-                    <div>
-                        <button type="submit" class="btn btn-primary" id="edit-photo">Enregistrer</button>
-                    </div>
+                    <div id="leaflet-map" class="edit-photo-map"></div>
+                </div>
+                    
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="worldmap" value="on" checked>
+                    <label class="form-check-label" for="worldmap">Autoriser l\'affichage sur la carte mondiale</label>
+                </div>
+                <br>
+                <div>
+                    <button type="submit" class="btn btn-primary" id="edit-photo">Enregistrer</button>
                 </div>
             </form>
         </div>';

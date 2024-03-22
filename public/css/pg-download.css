@@ -6,44 +6,44 @@
 }*/
 
 button {
-padding: 10px 20px;
-background-color: #007bff;
-color: white;
-border: none;
-cursor: pointer;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
 }
 
 #progressContainer {
-margin-top: 20px;
-display: none;
+    margin-top: 20px;
+    display: none;
 }
 
- 
+
 .progress-bar-container {
     margin-bottom: 10px;
-  }
-  
-  .progress-bar {
+}
+
+.progress-bar {
     width: 100%;
     background-color: #ddd;
     border: 1px solid #777;
     margin-top: 5px;
-  }
-  
-  .progress {
+}
+
+.progress {
     width: 0;
     height: 20px;
     background-color: #007bff;
-  }
-  
-  .thumbnail {
+}
+
+.thumbnail {
     max-width: 100px;
     max-height: 100px;
     margin-right: 5px;
     margin-bottom: 5px;
-  }
-  
-  .custom-file-upload {
+}
+
+.custom-file-upload {
     display: inline-block;
     background-color: #007bff;
     color: white;
@@ -52,14 +52,14 @@ display: none;
     cursor: pointer;
     border: none;
     font-size: 16px;
-  }
-  
-  /* Hide the default file input button */
-  input[type="file"] {
+}
+
+/* Hide the default file input button */
+input[type="file"] {
     display: none;
-  }
-  
- .square-thumbnail {
+}
+
+.square-thumbnail {
     width: 100px;
     /* Adjust the width as per your requirement */
     height: 100px;
@@ -74,7 +74,7 @@ display: none;
 
 .trash-icon {
     cursor: pointer;
-    margin-left: 10px;
+    /*margin-left: 10px;*/
 }
 
 .list-item {

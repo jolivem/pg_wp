@@ -164,7 +164,7 @@ class Pg_Download_Single_Public {
                 </label>
                 <input type="file" id="fileInput" name="custom-file[]">
                 <input type="hidden" id="pg_admin_ajax_url" value="'.$admin_ajax_url.'"/>
-                <input type="hidden" id="pg_nonce" value="'.$nonce.'"/>
+                <input type="hidden" id="download_nonce" value="'.$nonce.'"/>
                 <div id="photo-to-download" style="display:flex; justify-content: center;"></div>
                 
                 <div id="download-single-block" style="display:none">

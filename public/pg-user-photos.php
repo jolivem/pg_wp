@@ -134,7 +134,7 @@ class Glp_User_Photos_Public {
         }
 
         $html_code = '
-        <div id="user-item-list">';
+        <div class="container" id="user-item-list">';
 
         $html_code .= $this->render_images($medias);
         $html_code .= 
@@ -160,15 +160,15 @@ class Glp_User_Photos_Public {
             '<div class="flex-container">
                 <div class="miniature" style="background-image: url('.$img_src.')"></div>
                 <div class="photo-text-container" style="background-color: lightyellow";>
-                    <div class="photo-title">Ceci est un très grand titre. Ceci est un très grand titre. Ceci est un très grand titre.</div>
-                    <div class="photo-text">'.$item->title.'</div>
+                    <div class="photo-title">'.$item->post_title.'</div>
+                    <div class="photo-text">'.$item->post_content.'</div>
                     <div class="footer" style="background-color: lightblue";>coucou me voilà</div>
                 </div>
                 <div class="options" style="background-color: lightgreen">
                     <div class="flex-options">
-                        <div class="item-option trash-icon fas fa-trash"  aria-hidden="true"></div>
-                        <div class="item-option trash-icon fas fa-trash"  aria-hidden="true"></div>
-                        <div class="item-option edit-icon fas fa-edit"  aria-hidden="true"></div>
+                        <div class="user-item-option trash-icon fas fa-trash" aria-hidden="true"></div>
+                        <div class="user-item-option trash-icon fas fa-trash" aria-hidden="true"></div>
+                        <div class="user-item-option edit-icon fas fa-edit" aria-hidden="true" data-postid="'.$item->ID.'"></div>
                     </div>
                 </div>
             </div>';

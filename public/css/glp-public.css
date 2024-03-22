@@ -630,13 +630,21 @@ button.lg-icon {
     padding: 5px;
 }
 
-.item-option {
+.user-item-option {
+    cursor: pointer;
     flex-basis: 300px;
     flex: 10 0 20px;
     padding: 7px;
 }
 
 /* EDIT photos */
+
+.gallery-item-option {
+    cursor: pointer;
+    flex-basis: 300px;
+    flex: 10 0 20px;
+    padding: 7px;
+}
 
 .edit-photo-flex-container {
     display: flex;
@@ -652,3 +660,36 @@ button.lg-icon {
     border-radius: 7px;
     margin-left: 10px;
 }
+
+/** drag drop and sortable **/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: #595DB8;
+}
+
+.sortable-list .item {
+    list-style: none;
+    cursor: move;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+.item.dragging {
+    opacity: 0.6;
+}
+
+/*.item.dragging :where(.flex-container, i) {
+    opacity: 0;
+}*/

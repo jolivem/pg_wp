@@ -168,7 +168,7 @@ jQuery(document).find('#single-upload').on('click', function(event){
     progressContainer.appendChild(progressBarContainer);
 
     let admin_url = document.getElementById('pg_admin_ajax_url').value;
-    let nonce = document.getElementById('pg_nonce').value;
+    let nonce = document.getElementById('download_nonce').value;
     //console.log("uploadPhotos admin_url=", admin_url);
     //const xhr = new XMLHttpRequest();
     // admin_url = admin_url;// + "?action=download_multiple_photos";
@@ -385,7 +385,7 @@ jQuery(document).find('#multiple-upload').on('click', function(e){
         progressContainer.appendChild(progressBarContainer);
     
         let admin_url = document.getElementById('pg_admin_ajax_url').value;
-        let nonce = document.getElementById('pg_nonce').value;
+        let nonce = document.getElementById('download_nonce').value;
         //console.log("uploadPhotos admin_url=", admin_url);
         //const xhr = new XMLHttpRequest();
         // admin_url = admin_url;// + "?action=download_multiple_photos";
