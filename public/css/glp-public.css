@@ -587,7 +587,7 @@ button.lg-icon {
     background-position: center;
     background-size: cover;
     float: left;
-    border-radius: 10px 0 0 10px;
+    border-radius: 8px 0 0 8px;
     flex-basis: 110px;
 }
 
@@ -595,6 +595,27 @@ button.lg-icon {
     flex: 10 0 200px;
     padding: 5px;
     height: 100px;
+}
+
+
+.full-item {
+    margin-top: 10px;
+    border: solid 1px #aaa;
+    border-radius: 8px;
+    background-color: whitesmoke;
+}
+
+.full-miniature {
+    float: left;
+    max-height: 110px;
+    width: auto;
+    padding: 4px;
+    border-right: solid 1px #888
+}
+
+.full-photo-text-container {
+    padding: 5px;
+    height: 110px;
 }
 
 .photo-title {
@@ -626,7 +647,7 @@ button.lg-icon {
 
 .options {
     flex-basis: 40px;
-    border-radius: 0 10px 10px 0;
+    border-radius: 0 8px 8px 0;
     padding: 5px;
 }
 

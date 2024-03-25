@@ -77,9 +77,19 @@ input[type="file"] {
     /*margin-left: 10px;*/
 }
 
-.list-item {
-    border-style: solid;
-    border-radius: 8px;
-    border-width: 1px;
-    background-color: whitesmoke;
+.download-spinner {
+    display: none;
+    position: absolute;
+    top: 38px;
+    right: 60px;
+    background: #eee;
+}
+
+.download-success {
+    display: none;
+    position: absolute;
+    top: 32px;
+    right: 60px;
+    background: #eee;
+    font-size: xx-large;
 }

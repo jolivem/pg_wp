@@ -152,14 +152,16 @@ class Pg_Download_Multiple_Public {
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>                            
                         <div class="modal-body">
-                            <form id="custom-upload-form">
-                                <label for="fileInput" class="custom-file-upload">
-                                    Select Photos
-                                </label>
-                                <input type="file" id="fileInput" name="custom-file[]" multiple>
+                            <form id="custom-upload-form" style="text-align=center;">
                                 <input type="hidden" id="pg_admin_ajax_url" value="'.$admin_ajax_url.'"/>
                                 <input type="hidden" id="download_nonce" value="'.$nonce.'"/>
+                                <label for="fileInput" class="custom-file-upload">
+                                    Select photos...
+                                </label>
+                                <br/>
+                                <input type="file" id="fileInput" name="custom-file[]" multiple>
                                 <div id="modal-item-list"></div>
+                                <br/>
                                 <button type="submit" id="multiple-upload" class="btn btn-primary" style="display: none">Upload Photos</button>
                             </form>
                         </div>

@@ -358,31 +358,33 @@ jQuery(document).find('#close-multiple-modal').on('click', function(e){
 });
 
 jQuery(document).find('#multiple-upload').on('click', function(e){
-    console.log("uploadPhotos IN");
+    console.log("uploadPhotos IN", e);
     e.preventDefault();
 
     const fileInput = document.getElementById('fileInput');
+    console.log("uploadPhotos fileInput", fileInput);
     const files = fileInput.files;
-    const progressContainer = document.getElementById('progressContainer');
+    // const progressContainer = document.getElementById('progressContainer');
     const galleryId = document.getElementById('gallery-id')?.value;
-    progressContainer.innerHTML = '';
-    progressContainer.style.display = 'block';
+    // progressContainer.innerHTML = '';
+    // progressContainer.style.display = 'block';
 
     Array.from(files).forEach(file => {
         console.log("uploadPhotos file=", file);
-        const progressBarContainer = document.createElement('div');
-        progressBarContainer.className = 'progress-bar-container';
-        const fileName = document.createElement('span');
-        fileName.textContent = file.name;
-        const progressBar = document.createElement('div');
-        progressBar.className = 'progress-bar';
-        const progress = document.createElement('div');
-        progress.className = 'progress';
-    
-        progressBarContainer.appendChild(fileName);
-        progressBarContainer.appendChild(progressBar);
-        progressBar.appendChild(progress);
-        progressContainer.appendChild(progressBarContainer);
+        //const progressBarContainer = document.createElement('div');
+
+        // find the div element associated to the file name
+        let file_div = find_div_from_file_name(file.name);
+        if (file_div) {
+            let spinner = file_div.parentNode.getElementsByClassName('download-spinner');
+            spinner[0].style.display='block';
+
+            //file_div.classList.add( 'opaque');
+            file_div.style.opacity=0.4;
+
+            // show spinner
+            //file_div.getElementsByClassName()
+        }
     
         let admin_url = document.getElementById('pg_admin_ajax_url').value;
         let nonce = document.getElementById('download_nonce').value;
@@ -408,23 +410,49 @@ jQuery(document).find('#multiple-upload').on('click', function(e){
             contentType: false,
             processData: false,
             success: function(response){
-                console.log("success");
+                console.log("success", response);
+                console.log("file_div", file_div);
                 const button = document.getElementById('multiple-upload');
+                let spinner = file_div.parentNode.getElementsByClassName('download-spinner');
+                spinner[0].style.display='none';
+                let check = file_div.parentNode.getElementsByClassName('download-success');
+                check[0].style.display='block';
                 button.disabled = true;
-    
             }
         });
     });
 });
 
+function find_div_from_file_name(filename) {
+    parent = document.getElementById("modal-item-list");
+    if (parent) {
+        children = parent.children;
+        for (let i = 0; i < children.length; i++) {
+            let texts = children[i].getElementsByClassName( "full-photo-text-container");
+            if (texts.length > 0) {
+                console.log("find_div_from_file_name", texts[0].innerHTML);
+                substr = " " + filename;
+                if (texts[0].innerHTML.indexOf(substr) != -1) {
+                    console.log("find_div_from_file_name out", texts[0].parentNode);
+                    // get the flex container
+                    //let cont = children[i].
+                    return texts[0].parentNode;
+                }
+            }
+        }
+    }
+    return null;
+}
+
 // Function to remove the list item
-function removeListItem(item) {
+function removeDownloadPhoto(item) {
     //item.remove(); // Remove the corresponding list item
-    item.style.animationDuration = '.35s';
-    item.style.animationName = 'slideOutLeft';
+    let ancestor = item.parentNode.parentNode.parentNode;
+    ancestor.style.animationDuration = '.35s';
+    ancestor.style.animationName = 'slideOutLeft';
 
     setTimeout(() => {
-        item.remove(); // Remove the corresponding list item after animation
+        ancestor.remove(); // Remove the corresponding list item after animation
     }, 300); // Duration of the animation    
 }     
 
@@ -434,7 +462,17 @@ function downloadMultiplePhotos(files) {
 
     const filesArray = Array.from(files);
 
+    const list = document.getElementById('modal-item-list');
     const button = document.getElementById('multiple-upload');
+
+    console.log('downloadMultiplePhotos button.disabled', button.disabled);
+    
+    // delete previous list
+    if (button.disabled == true) {
+        // the previous list has been uploaded, remove it
+        list.innerHTML = "";
+    }
+
     button.disabled = false;
 
     if (filesArray.length > 0) {
@@ -447,8 +485,7 @@ function downloadMultiplePhotos(files) {
     for (let i = 0; i < filesArray.length ; i ++) {
         const file = filesArray[i];
         const reader = new FileReader();
-
-        const list = document.getElementById('modal-item-list');
+        
         console.log('list.length', list.childElementCount);
         console.log('filesArray.length', filesArray.length);
         if ( list.childElementCount == maxFile) {
@@ -460,26 +497,40 @@ function downloadMultiplePhotos(files) {
         function renderItemMultiple(src, name, lat, lon, date) {
             const list = document.getElementById('modal-item-list');
             const listItem = document.createElement('div');
-            listItem.className = 'list-item row';
+            listItem.className = 'full-item';
             if (lat != undefined) {
+
                 listItem.innerHTML = `
-                    <div class="col">
-                        <img src="${src}" alt="Item Image" class="square-thumbnail">
+                <div style="position: relative;">
+                    <div class="spinner-border text-primary download-spinner"></div>
+                    <div class="download-success"><i class="fas fa-check" style="color: green;"></i></div>
+                    <div class="flex-container" style="margin-top:0px">
+                        <img src="${src}"class="full-miniature"></img>
+                            <div class="full-photo-text-container" style="background-color: lightyellow; flex: 10 0 200px;">
+                                <div class="photo-title">Fichier : ${name}</div>
+                                <div class="photo-text"><i class="fas fa-map-marker-alt" style="color: cornflowerblue;"></i> géolocalisation OK<br/>Date : ${date}</div>
+                            </div>
+                            <div class="options" style="background-color: lightgreen">
+                                <div class="flex-options" data-id="'.$id.'">
+                                    <div class="gallery-item-option trash-icon fas fa-trash" aria-hidden="true" onclick='removeDownloadPhoto(this.parentNode)'></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col">${name}</div>
-                    <div class="col hidden-xs">lat=${lat}<br>lon=${lon}<br>date=${date}</div>
-                    <div class="col trash-icon fas fa-trash"  aria-hidden='true' onclick='removeListItem(this.parentNode)'></div>`;
+                </div>`;
+
             }
             else {
                 listItem.innerHTML = `
-                    <div class="col">
-                        <img src="${src}" alt="Item Image" class="square-thumbnail">
-                    </div>
-                    <div class="col">${name}</div>
-                    <div class="col hidden-xs">Absence de données GPS, utiliser le chargement TODO</div>
-                    <div class="col trash-icon fas fa-trash"  aria-hidden='true' onclick='removeListItem(this.parentNode)'></div>`;
+                <div class="col">
+                    <img src="${src}" alt="Item Image" class="square-thumbnail">
+                </div>
+                <div class="col">${name}</div>
+                <div class="col hidden-xs">Absence de données GPS, utiliser le chargement TODO</div>
+                <div class="col trash-icon fas fa-trash"  aria-hidden='true' onclick='removeDownloadPhoto(this.parentNode)'></div>`;
 
             }
+            //list.appendChild(spinner);
             list.appendChild(listItem);
         }
 

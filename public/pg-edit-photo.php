@@ -104,8 +104,8 @@ class Pg_Edit_Photo_Public {
 
         // TODO check that gallery belongs to the current user
         
-        //Test with ID=67
-        $attr['id']=211; 
+        //use the post ID provided in the URL
+        $attr['id']=$_GET['pid']; 
 
         $this->enqueue_styles();
         $this->enqueue_scripts();
@@ -195,7 +195,8 @@ class Pg_Edit_Photo_Public {
                 </div>
                 <br>
                 <div>
-                    <button type="submit" class="btn btn-primary" id="edit-photo">Enregistrer</button>
+                    <button type="submit" class="btn btn-primary" id="save-photo">Enregistrer</button>
+                    <button type="button" class="btn btn-secondary" id="close-photo" style="float: inline-end;">Fermer</button>
                 </div>
             </form>
         </div>';

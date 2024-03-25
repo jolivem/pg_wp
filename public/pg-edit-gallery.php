@@ -171,9 +171,10 @@ class Pg_Edit_Gallery_Public {
                 <input type='hidden' id='pg_edit_photo_url' value='$edit_photo_url'/>
                 <input type='hidden' id='pg_nonce' value='$nonce'/>
                 <div class='tab-content' id='nav-tabContent'>
+                    <br/>
                     <div class='tab-pane fade show active' id='nav-photos' role='tabpanel' aria-labelledby='nav-photos-tab'>
                         <button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#exampleModal'>
-                            Select more photos...
+                            Add photos...
                         </button>
                         <div id='gallery-item-list'>$html_images</div>
                     </div>
@@ -230,7 +231,7 @@ class Pg_Edit_Gallery_Public {
     function render_images($medias){
         error_log("render_images IN images=".print_r($medias, true));
         $html='<div>
-                    <ul class="sortable-list" id="item-list">';
+                    <div class="sortable-list" id="item-list">';
 
         // loop for each media
         foreach($medias as $id){
@@ -271,7 +272,7 @@ class Pg_Edit_Gallery_Public {
                 </div>
             </li>';
         }
-        $html.='</ul>
+        $html.='</div>
             </div>';
         // TODO make it work on mobiles
         return $html;

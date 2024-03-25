@@ -187,7 +187,14 @@
       });
     
     // When clicked on submit button
-    $(document).find('#edit-photo').on('click', function(event){
+    $(document).find('#close-photo').on('click', function(event){
+        console.log("close-photo IN");
+        event.preventDefault();
+        window.history.back();
+    });
+
+        // When clicked on submit button
+    $(document).find('#save-photo').on('click', function(event){
         console.log("edit-photo IN");
         event.preventDefault();
         let error = false;
@@ -216,6 +223,8 @@
             processData: false,
             success: function(response){
                 console.log("upload done");
+                // come back to the previous page
+                window.history.back();
             }
             // TODO handle error
         });
