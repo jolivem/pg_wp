@@ -23,7 +23,7 @@
 // TODO le rendu du nomber de colonne ne tient pas compte de la bordure de l'image
 // TODO probleme de responsive sur les images
 // TODO renommer les fichiers, les variables, les tables, etc..
-class Glp_User_Photos_Public {
+class Glp_User_Galleries_Public {
 
     /**
      * The ID of this plugin.
@@ -59,7 +59,7 @@ class Glp_User_Photos_Public {
         $this->plugin_name = $plugin_name;
         $this->version = $version;
         // $this->settings = new Gallery_Settings_Actions($this->plugin_name);
-        add_shortcode( 'glp_user_photos', array($this, 'pg_generate_page') );
+        add_shortcode( 'pg_user_galleries', array($this, 'pg_generate_page') );
     }
 
     /**
@@ -70,8 +70,6 @@ class Glp_User_Photos_Public {
     public function enqueue_styles() {
 
         wp_enqueue_style( 'gpg-fontawesome', 'https://use.fontawesome.com/releases/v5.4.1/css/all.css', array(), $this->version, 'all');
-        // TODO lightgallery est payant !!
-        //wp_enqueue_style( 'animate.css', plugin_dir_url( __FILE__ ) . 'css/animate.css', array(), $this->version, 'all' );
     }
 
     /**
@@ -124,51 +122,63 @@ class Glp_User_Photos_Public {
     // attr should have the user id
     public function pg_show_page( $attr ){
         
-        global $wpdb;
-        $id = ( isset($attr['id']) ) ? absint( intval( $attr['id'] ) ) : null;
-        
-        $medias = $this->pg_get_medias_by_user($id);
-        if(!$medias){
-            // TODO display no photos yet, upload your first photo
-            return "[glp_user_photos id='".$id."']";
+        $user_id = get_current_user_id();
+
+        $galleries = $this->pg_get_gallery_by_user_id($user_id);
+        if(empty($galleries)){
+            // TODO display No galleries, create your first gallery
+            return "<p>No galleries, create your first gallery</p>";
         }
 
-        $html_code = '
-        <div class="container" id="user-item-list">';
+        $edit_gallery_url = get_permalink(189); // TODO move 186 to a global constant or get by Title
 
-        $html_code .= $this->render_images($medias);
+        $html_code = "
+        <input type='hidden' id='pg_edit_gallery_url' value='$edit_gallery_url'/>
+        <div class='container' id='user-item-list'>";
+
+        $html_code .= $this->render_galleries($galleries);
         $html_code .= 
-        '</div>';
+        "</div>";
 
         return $html_code;
     } 
 
-    function render_images($medias){
+    function render_galleries($galleries){
         $html='';
 
         // loop for each media
-        foreach($medias as $item){
-            //error_log("render_images item:".print_r($item, true));
-            $img_src = $item->guid;
-            $url_img = wp_get_attachment_image_src($item->ID, "thumbnail");
-            if ($url_img != false) {
-                $img_src = $url_img[0];
+        foreach($galleries as $item){
+            error_log("render_galleries item:".print_r($item, true));
+            
+            // get the first image og the gallery
+            $image_id = $this->pg_get_first_image_by_id($item["id"]);
+            $img_src = "";
+            if ($image_id != null) {
+                // get the image source
+                $url_img = wp_get_attachment_image_src($image_id, "thumbnail");
+                if ($url_img != false) {
+                    $img_src = $url_img[0];
+                }
             }
-            //error_log("render_images url:".print_r($url_img, true));
+            // $url_img = wp_get_attachment_image_src($item->ID, "thumbnail");
+            // if ($url_img != false) {
+            //     $img_src = $url_img[0];
+            // }
+            //error_log("render_galleries url:".print_r($url_img, true));
             // TODO check url_img is OK, add try catch
             $html.=
             '<div class="flex-container">
                 <div class="miniature" style="background-image: url('.$img_src.')"></div>
                 <div class="photo-text-container" style="background-color: lightyellow";>
-                    <div class="photo-title">'.$item->post_title.'</div>
-                    <div class="photo-text">'.$item->post_content.'</div>
+                    <div class="photo-title">'.$item["title"].'</div>
+                    <div class="photo-text">'.$item["description"].'</div>
                     <div class="footer" style="background-color: lightblue">coucou me voilà</div>
                 </div>
                 <div class="options" style="background-color: lightgreen">
                     <div class="flex-options">
-                        <div class="user-photo-option trash-icon fas fa-trash" aria-hidden="true"></div>
-                        <div class="user-photo-option trash-icon fas fa-trash" aria-hidden="true"></div>
-                        <div class="user-photo-option edit-icon fas fa-edit" aria-hidden="true" data-postid="'.$item->ID.'"></div>
+                        <div class="user-gallery-option edit-icon fas fa-edit" aria-hidden="true" data-galid="'.$item["id"].'"></div>
+                        <div class="user-gallery-option"></div>
+                        <div class="user-gallery-option trash-icon fas fa-trash" aria-hidden="true"></div>
                     </div>
                 </div>
             </div>';
@@ -176,81 +186,49 @@ class Glp_User_Photos_Public {
 
         }
         return $html;
-    }
+    }    
 
-    public function ays_gallery_replace_message_variables($content, $data){
-        foreach($data as $variable => $value){
-            $content = str_replace("%%".$variable."%%", $value, $content);
+    // Get the list of galleries for a given user_id
+    // return empty array if none
+    static public function pg_get_gallery_by_user_id( $user_id ){
+        global $wpdb;
+
+        error_log("pg_get_gallery_by_user_id id: ".$user_id);
+
+        $gallery_table = esc_sql($wpdb->prefix . "glp_gallery");
+
+        $user_id = absint( sanitize_text_field( $user_id ));
+        $sql = "SELECT * FROM ".$gallery_table." WHERE images_dates=$user_id";
+        error_log("pg_get_gallery_by_user_id sql: ".$sql);
+        $results = $wpdb->get_results($sql, 'ARRAY_A');
+        error_log("pg_get_gallery_by_user_id result: ".print_r($results, true));
+        if(count($results) > 0){
+            return $results;
+        }else{
+            return array();
         }
-        return $content;
     }
 
-    public function pg_get_medias_by_user( $user_id ) {
+    // Get the first image of the gallery
+    // Return the image id or null if none
+    function pg_get_first_image_by_id( $gallery_id ) {
+        global $wpdb;
+        error_log("pg_get_first_image_by_id id: ".$gallery_id);
 
-        $args = array(
-            'author'         => $user_id,
-            'post_type'      => 'attachment',
-            'post_status'    => 'inherit,private', // Adjust post status as needed
-            'posts_per_page' => -1, // Retrieve all attachments
-        );
-        
-        $query = new WP_Query( $args );
-        $medias = $query->get_posts();
+        $gallery_table = esc_sql($wpdb->prefix . "glp_gallery");
 
-        /*error_log("pg_get_medias_by_user: ".print_r($medias, true));
-        Example for one post:
-        (
-            [ID] => 5
-            [post_author] => 1
-            [post_date] => 2023-11-08 08:11:38
-            [post_date_gmt] => 2023-11-08 08:11:38
-            [post_content] => desc earth
-            [post_title] => title earth
-            [post_excerpt] => caption earth
-            [post_status] => inherit
-            [comment_status] => open
-            [ping_status] => closed
-            [post_password] => 
-            [post_name] => earth
-            [to_ping] => 
-            [pinged] => 
-            [post_modified] => 2023-12-06 15:01:45
-            [post_modified_gmt] => 2023-12-06 15:01:45
-            [post_content_filtered] => 
-            [post_parent] => 44
-            [guid] => http://localhost:8000/wp-content/uploads/2023/11/earth.gif
-            [menu_order] => 0
-            [post_type] => attachment
-            [post_mime_type] => image/gif
-            [comment_count] => 0
-            [filter] => raw
-        )        
-*/
-        return $medias;
+        $sql = "SELECT images_ids FROM {$gallery_table} WHERE id={$gallery_id}";
+        error_log("pg_get_first_image_by_id sql: ".$sql);
+        $result = $wpdb->get_row( $sql, "ARRAY_A" );
 
-/*        
-        if ( $query->have_posts() ) {
-            while ( $query->have_posts() ) {
-                $query->the_post();
-                
-                // Output attachment information
-                echo 'Attachment ID: ' . get_the_ID() . '<br>';
-                echo 'Attachment URL: ' . wp_get_attachment_url( get_the_ID() ) . '<br>';
-                echo 'Attachment Title: ' . get_the_title() . '<br>';
-                // You can retrieve more information as needed
-                
-                // To display the image thumbnail, you can use wp_get_attachment_image()
-                // Example: echo wp_get_attachment_image( get_the_ID(), 'thumbnail' );
-                
-                echo '<hr>';
-            }
-            
-            // Restore original post data
-            wp_reset_postdata();
-        } else {
-            echo 'No attachments found.';
+        error_log("pg_get_first_image_by_id all ids: ".print_r($result, true));
+        $image_ids = explode( "***", $result["images_ids"]);
+
+        if (count($image_ids) > 0) {
+            return $image_ids[0];
         }
 
-*/
+        return null;
     }
+
 }

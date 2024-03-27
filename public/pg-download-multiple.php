@@ -162,7 +162,7 @@ class Pg_Download_Multiple_Public {
                                 <input type="file" id="fileInput" name="custom-file[]" multiple>
                                 <div id="modal-item-list"></div>
                                 <br/>
-                                <button type="submit" id="multiple-upload" class="btn btn-primary" style="display: none">Upload Photos</button>
+                                <button type="submit" id="multiple-upload" class="btn btn-primary" style="display: none">Télécharger</button>
                             </form>
                         </div>
                         <div class="modal-footer">

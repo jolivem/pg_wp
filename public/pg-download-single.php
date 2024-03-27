@@ -195,7 +195,7 @@ class Pg_Download_Single_Public {
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary" id="single-upload">Upload Photo</button>
+                    <button type="submit" class="btn btn-primary" id="single-upload">Télécharger</button>
                 </div>
             </form>
             <div id="progressContainer"></div>

@@ -634,7 +634,7 @@ button.lg-icon {
 
 .footer {
     position: relative;
-    top: 10px;
+    top: 12px;
     font-size: 10px;
     color: #888
 }
@@ -651,7 +651,14 @@ button.lg-icon {
     padding: 5px;
 }
 
-.user-item-option {
+.user-photo-option {
+    cursor: pointer;
+    flex-basis: 300px;
+    flex: 10 0 20px;
+    padding: 7px;
+}
+
+.user-gallery-option {
     cursor: pointer;
     flex-basis: 300px;
     flex: 10 0 20px;

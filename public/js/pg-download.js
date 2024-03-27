@@ -363,27 +363,34 @@ jQuery(document).find('#multiple-upload').on('click', function(e){
 
     const fileInput = document.getElementById('fileInput');
     console.log("uploadPhotos fileInput", fileInput);
-    const files = fileInput.files;
+    //const files = fileInput.files;
+    //console.log("uploadPhotos files", files);
     // const progressContainer = document.getElementById('progressContainer');
     const galleryId = document.getElementById('gallery-id')?.value;
     // progressContainer.innerHTML = '';
     // progressContainer.style.display = 'block';
-
-    Array.from(files).forEach(file => {
+    const files = Array.from(fileInput.files)
+    for (let i = 0 ; i < files.length ; i ++) {
+    //Array.from(files).forEach(file => {
+        const file = files[i];
         console.log("uploadPhotos file=", file);
         //const progressBarContainer = document.createElement('div');
 
         // find the div element associated to the file name
         let file_div = find_div_from_file_name(file.name);
         if (file_div) {
+
+            // check if file is valid (geoloc ok, data-valid="ok")
+            if (!file_div.dataset.valid) {
+                console.log("uploadPhotos ignore file=", file);
+                continue;
+            }
+
             let spinner = file_div.parentNode.getElementsByClassName('download-spinner');
             spinner[0].style.display='block';
 
             //file_div.classList.add( 'opaque');
             file_div.style.opacity=0.4;
-
-            // show spinner
-            //file_div.getElementsByClassName()
         }
     
         let admin_url = document.getElementById('pg_admin_ajax_url').value;
@@ -420,7 +427,7 @@ jQuery(document).find('#multiple-upload').on('click', function(e){
                 button.disabled = true;
             }
         });
-    });
+    };
 });
 
 function find_div_from_file_name(filename) {
@@ -430,7 +437,7 @@ function find_div_from_file_name(filename) {
         for (let i = 0; i < children.length; i++) {
             let texts = children[i].getElementsByClassName( "full-photo-text-container");
             if (texts.length > 0) {
-                console.log("find_div_from_file_name", texts[0].innerHTML);
+                //console.log("find_div_from_file_name", texts[0].innerHTML);
                 substr = " " + filename;
                 if (texts[0].innerHTML.indexOf(substr) != -1) {
                     console.log("find_div_from_file_name out", texts[0].parentNode);
@@ -504,30 +511,42 @@ function downloadMultiplePhotos(files) {
                 <div style="position: relative;">
                     <div class="spinner-border text-primary download-spinner"></div>
                     <div class="download-success"><i class="fas fa-check" style="color: green;"></i></div>
-                    <div class="flex-container" style="margin-top:0px">
+                    <div class="flex-container" style="margin-top:0px" data-valid="ok">
                         <img src="${src}"class="full-miniature"></img>
                             <div class="full-photo-text-container" style="background-color: lightyellow; flex: 10 0 200px;">
                                 <div class="photo-title">Fichier : ${name}</div>
-                                <div class="photo-text"><i class="fas fa-map-marker-alt" style="color: cornflowerblue;"></i> géolocalisation OK<br/>Date : ${date}</div>
+                                <div class="photo-text"><i class="fas fa-map-marker-alt" style="color: green;"></i> géolocalisation OK<br/>Date : ${date}</div>
                             </div>
                             <div class="options" style="background-color: lightgreen">
                                 <div class="flex-options" data-id="'.$id.'">
-                                    <div class="gallery-item-option trash-icon fas fa-trash" aria-hidden="true" onclick='removeDownloadPhoto(this.parentNode)'></div>
+                                    <div class="gallery-item-option trash-icon fas fa-trash" aria-hidden="true" onclick='removeDownloadPhoto(this.parentNode.parentNode)'></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>`;
-
             }
             else {
                 listItem.innerHTML = `
-                <div class="col">
-                    <img src="${src}" alt="Item Image" class="square-thumbnail">
-                </div>
-                <div class="col">${name}</div>
-                <div class="col hidden-xs">Absence de données GPS, utiliser le chargement TODO</div>
-                <div class="col trash-icon fas fa-trash"  aria-hidden='true' onclick='removeDownloadPhoto(this.parentNode)'></div>`;
+                <div style="position: relative;">
+                    <div class="download-error"><i class="fas fa-times" style="color: red;"></i></div>
+                    <div class="flex-container" style="margin-top:0px">
+                        <img src="${src}"class="full-miniature"></img>
+                            <div class="full-photo-text-container" style="background-color: lightyellow; flex: 10 0 200px;">
+                                <div class="photo-title">Fichier : ${name}</div>
+                                <div class="photo-text" style="color:red;">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    Absence de coordonnées GPS<br/> Utiliser le chargement manuel TODO link
+                                </div>
+                            </div>
+                            <div class="options" style="background-color: lightgreen">
+                                <div class="flex-options" data-id="'.$id.'">
+                                    <div class="gallery-item-option trash-icon fas fa-trash" aria-hidden="true" onclick='removeDownloadPhoto(this.parentNode.parentNode)'></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
 
             }
             //list.appendChild(spinner);

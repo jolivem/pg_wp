@@ -32,11 +32,24 @@
             }
         }); 
 
-        $(document).find('.user-item-option').on('click', function(e){
-            console.log("user-item-option click", e)
+        $(document).find('.user-photo-option').on('click', function(e){
+            console.log("user-photo-option click", e)
             if (e.target.classList.contains("fa-edit")) {
                 const postid = e.target.dataset.postid;
-                console.log("user-item-option postid=", postid)
+                console.log("user-photo-option postid=", postid)
+            }
+            e.preventDefault();
+        });
+
+        $(document).find('.user-gallery-option').on('click', function(e){
+            console.log("user-gallery-option click", e)
+            if (e.target.classList.contains("fa-edit")) {
+                const galid = e.target.dataset.galid;
+                console.log("user-gallery-option galid=", galid)
+                let edit_gallery_url = document.getElementById('pg_edit_gallery_url').value;
+                edit_gallery_url += "&gid=";
+                edit_gallery_url += galid;
+                window.location = edit_gallery_url;
             }
             e.preventDefault();
         });

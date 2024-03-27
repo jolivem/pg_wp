@@ -69,10 +69,10 @@ class Glp_Maps_List_Table extends WP_List_Table{
     public function get_map_by_id( $id ){
         global $wpdb;
 
-        $gallery_table = esc_sql($wpdb->prefix . "glp_map");
+        $map_table = esc_sql($wpdb->prefix . "glp_map");
 
         $id = absint( sanitize_text_field( $id ));
-        $sql = "SELECT * FROM ".$gallery_table." WHERE id = %d";
+        $sql = "SELECT * FROM ".$map_table." WHERE id = %d";
 
         $result = $wpdb->get_row($wpdb->prepare( $sql, $id), "ARRAY_A");
 

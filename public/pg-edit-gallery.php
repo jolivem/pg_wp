@@ -145,7 +145,7 @@ class Pg_Edit_Gallery_Public {
         $title = $gallery["title"];
         $description = $gallery["description"];
 
-        $edit_photo_url = get_permalink(186); // TODO move 186 to a global constant
+        $edit_photo_url = get_permalink(186); // TODO move 186 to a global constant or get by Title
 
         $admin_ajax_url = admin_url('admin-ajax.php');
         $admin_post_url = admin_url('admin-post.php');
@@ -260,13 +260,13 @@ class Pg_Edit_Gallery_Public {
                     <div class="photo-text-container" style="background-color: lightyellow";>
                         <div class="photo-title">'.$title.'</div>
                         <div class="photo-text">'.$content.'</div>
-                        <div class="footer" style="background-color: lightblue";>coucou me voilà</div>
+                        <div class="footer">Date : '.$post->post_date.'</div>
                     </div>
                     <div class="options" style="background-color: lightgreen">
                         <div class="flex-options" data-id="'.$id.'">
-                            <div class="gallery-item-option trash-icon fas fa-trash" aria-hidden="true"></div>
-                            <div class="gallery-item-option trash-icon fas fa-trash" aria-hidden="true"></div>
                             <div class="gallery-item-option edit-icon fas fa-edit" aria-hidden="true"></div>
+                            <div class="gallery-item-option edit-icon"></div>
+                            <div class="gallery-item-option trash-icon fas fa-trash" aria-hidden="true"></div>
                         </div>
                     </div>
                 </div>
@@ -337,7 +337,7 @@ class Pg_Edit_Gallery_Public {
 
         // TODO get current author
     
-        $author_id = get_current_user_id();
+        $user_id = get_current_user_id();
         $submit_type = (isset($data['submit_type'])) ?  $data['submit_type'] : '';
         if( $id == null ){
             $gallery_result = $wpdb->insert(
@@ -356,7 +356,7 @@ class Pg_Edit_Gallery_Public {
                     "options"           => '',
                     "lightbox_options"  => '',
                     "custom_css"        => '',
-                    "images_dates"      => $author_id,
+                    "images_dates"      => $user_id,
                     "images_ids"        => $images_ids
                 ),
                 array( "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%d", "%d", "%s", "%s", "%s", "%s", "%s" )
@@ -379,7 +379,7 @@ class Pg_Edit_Gallery_Public {
                     "options"           => '',
                     "lightbox_options"  => '',
                     "custom_css"        => '',
-                    "images_dates"      => $author_id,
+                    "images_dates"      => $user_id,
                     "images_ids"        => $images_ids
                 ),
                 array( "id" => $id ),

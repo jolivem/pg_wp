@@ -132,6 +132,8 @@ class Geolocated_Photo {
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-user-photos.php';
 
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-user-galleries.php';
+
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-download-multiple.php';
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-download-single.php';
@@ -250,9 +252,9 @@ class Geolocated_Photo {
 	private function define_public_hooks() {
 
 		$plugin_user_photos_public = new Glp_User_Photos_Public( $this->get_plugin_name(), $this->get_version() );
-       // $plugin_edit_photo_public = new Pg_Edit_Photo_Public( $this->get_plugin_name(), $this->get_version() );
-		//$plugin_multiple = new Pg_Multiple_Public( $this->get_plugin_name(), $this->get_version() );
-		$plugin_map_public = new Glp_Map_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_user_galleries_public = new Glp_User_Galleries_Public( $this->get_plugin_name(), $this->get_version() );
+
+        $plugin_map_public = new Glp_Map_Public( $this->get_plugin_name(), $this->get_version() );
 		$plugin_public_gallery_category = new Geolocated_Photo_Category( $this->get_plugin_name(), $this->get_version() );
 		$plugin_public_extra_shortcodes = new Ays_Gallery_Extra_Shortcodes_Public( $this->get_plugin_name(), $this->get_version() );
 

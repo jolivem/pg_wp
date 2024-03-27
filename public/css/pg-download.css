@@ -93,3 +93,10 @@ input[type="file"] {
     background: #eee;
     font-size: xx-large;
 }
+
+.download-error {
+    position: absolute;
+    top: 32px;
+    right: 60px;
+    font-size: xx-large;
+}
