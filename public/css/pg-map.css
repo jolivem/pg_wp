@@ -1,0 +1,67 @@
+.lg-outer,
+.lg-backdrop {
+    z-index: 999999999999 !important;
+}
+
+/* .ays_map_container_".$id." {
+    max-width: 100%;
+    transition: .5s ease-in-out;
+    animation-duration: .5s;
+    position: static!important;
+}
+.ays_map_container_".$id." {
+    $glp_container_css
+}
+.gpg_loader_".$id." {
+    $ays_gal_loader_display;
+} */
+#map {
+    height: 500px;
+}
+
+.mydivicon {
+    border-radius: 25%;
+    border: 3px solid #fff;
+}
+
+.mydivmarker6 {
+    border-radius: 25%;
+    border: 6px solid #fff;
+}
+
+.mydivmarker9 {
+    border-radius: 25%;
+    border: 9px solid #fff;
+}
+
+.mydivmarker12 {
+    border-radius: 25%;
+    border: 12px solid #fff;
+}
+
+div.slider {
+    background-color: #333;
+    overflow: auto;
+    white-space: nowrap;
+    padding: 10px;
+}
+
+div.slider img {
+    padding: 2px;
+    height: 100px;
+    cursor: pointer;
+    /* Add cursor pointer for better usability */
+    /*border: 2px solid transparent; /*Initial border style */
+}
+
+.imgSelected {
+    border: 2px solid red;
+    /* Adjust the border style for selected images */
+    opacity: 1;
+}
+
+.imgNotSelected {
+    border: 2px solid transparent;
+    /* Adjust the border style for selected images */
+    opacity: 0.6;
+}

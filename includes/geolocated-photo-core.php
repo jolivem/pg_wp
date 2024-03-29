@@ -140,6 +140,8 @@ class Geolocated_Photo {
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-edit-photo.php';
 
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-show-gallery.php';
+
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-edit-gallery.php';
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/glp-gallery-public.php';
