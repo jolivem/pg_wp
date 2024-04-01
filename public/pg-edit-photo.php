@@ -97,45 +97,43 @@ class Pg_Edit_Photo_Public {
     }
     
     public function pg_generate_page( $attr ){
-        ob_start();
+        
         error_log("pg_generate_page IN ".print_r($attr, true));
         error_log("pg_generate_page REQUEST ".print_r($_REQUEST, true));
         error_log("pg_generate_page GET ".print_r($_GET, true));
 
         // TODO check that gallery belongs to the current user
         
+        if (! isset($_GET['pid'])) {
+            return "";
+        }
+
+        ob_start();
+
         //use the post ID provided in the URL
-        $attr['id']=$_GET['pid']; 
+        $id=$_GET['pid']; 
 
         $this->enqueue_styles();
         $this->enqueue_scripts();
 
-        echo $this->pg_show_page( $attr );
+        echo $this->pg_show_page( $id );
 
         return str_replace(array("\r\n", "\n", "\r"), '', ob_get_clean());
     }
 
     // attr should have the user id
-    public function pg_show_page( $attr ){
+    public function pg_show_page( $id ){
 
-        error_log("pg_show_page IN ".print_r($attr, true));
+        error_log("pg_show_page IN photo id = ".$id);
         
         global $wpdb;
-        $id = ( isset($attr['id']) ) ? absint( intval( $attr['id'] ) ) : null;
-        
         // TODO check if user id is a valid user
-        // $medias = 
-        // if(!$medias){
-        //     // TODO display no photos yet, upload your first photo
-        //     return "[pg_download_single id='".$id."']";
-        // }
-
         $latitude = get_post_meta($id, 'latitude', true);
         $longitude = get_post_meta($id, 'longitude', true);
         $vignette = get_post_meta($id, 'vignette', true);
 
         $post = get_post($id);
-        error_log("render_images content=".print_r($post, true));
+        //error_log("render_images content=".print_r($post, true));
         $content = $post->post_content;
         $title = $post->post_title;
 

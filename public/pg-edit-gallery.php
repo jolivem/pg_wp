@@ -25,6 +25,8 @@
 // TODO renommer les fichiers, les variables, les tables, etc..
 class Pg_Edit_Gallery_Public {
 
+    const PAGE_ID_EDIT_PHOTO = 33;
+
     /**
      * The ID of this plugin.
      *
@@ -145,7 +147,7 @@ class Pg_Edit_Gallery_Public {
         $title = $gallery["title"];
         $description = $gallery["description"];
 
-        $edit_photo_url = get_permalink(186); // TODO move 186 to a global constant or get by Title
+        $edit_photo_url = get_permalink(self::PAGE_ID_EDIT_PHOTO); // TODO move 186 to a global constant or get by Title
 
         $admin_ajax_url = admin_url('admin-ajax.php');
         $admin_post_url = admin_url('admin-post.php');
@@ -229,13 +231,13 @@ class Pg_Edit_Gallery_Public {
 
     // render all the images 
     function render_images($medias){
-        error_log("render_images IN images=".print_r($medias, true));
+        //error_log("render_images IN images=".print_r($medias, true));
         $html='<div>
                     <div class="sortable-list" id="item-list">';
 
         // loop for each media
         foreach($medias as $id){
-            error_log("render_images id:".$id);
+            //error_log("render_images id:".$id);
             //$img_src = $item->guid;
             $url_img = wp_get_attachment_image_src($id, "thumbnail");
             if ($url_img != false) {
@@ -243,12 +245,12 @@ class Pg_Edit_Gallery_Public {
             }
 
             $post = get_post($id);
-            error_log("render_images content=".print_r($post, true));
+            //error_log("render_images content=".print_r($post, true));
             $content = $post->post_content;
             $title = $post->post_title;
 
             $meta = get_post_meta($id);
-            error_log("render_images meta=".print_r($meta, true));
+            //error_log("render_images meta=".print_r($meta, true));
 
             //TODO get title and text
             //error_log("render_images url:".print_r($url_img, true));
@@ -264,9 +266,9 @@ class Pg_Edit_Gallery_Public {
                     </div>
                     <div class="options" style="background-color: lightgreen">
                         <div class="flex-options" data-id="'.$id.'">
-                            <div class="gallery-item-option edit-icon fas fa-edit" aria-hidden="true"></div>
-                            <div class="gallery-item-option edit-icon"></div>
-                            <div class="gallery-item-option trash-icon fas fa-trash" aria-hidden="true"></div>
+                            <div class="gallery-photo-option pointer-icon fas fa-edit" aria-hidden="true"></div>
+                            <div class="gallery-photo-option"></div>
+                            <div class="gallery-photo-option pointer-icon fas fa-trash" aria-hidden="true"></div>
                         </div>
                     </div>
                 </div>

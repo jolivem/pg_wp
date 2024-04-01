@@ -166,9 +166,9 @@ class Glp_User_Photos_Public {
                 </div>
                 <div class="options" style="background-color: lightgreen">
                     <div class="flex-options">
-                        <div class="user-photo-option trash-icon fas fa-trash" aria-hidden="true"></div>
-                        <div class="user-photo-option trash-icon fas fa-trash" aria-hidden="true"></div>
-                        <div class="user-photo-option edit-icon fas fa-edit" aria-hidden="true" data-postid="'.$item->ID.'"></div>
+                        <div class="user-photo-option pointer-icon fas fa-trash" aria-hidden="true"></div>
+                        <div class="user-photo-option pointer-icon fas fa-trash" aria-hidden="true"></div>
+                        <div class="user-photo-option pointer-icon fas fa-edit" aria-hidden="true" data-postid="'.$item->ID.'"></div>
                     </div>
                 </div>
             </div>';

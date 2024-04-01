@@ -280,6 +280,9 @@ class Geolocated_Photo {
         $plugin_edit_gallery = new Pg_Edit_Gallery_Public( $this->get_plugin_name(), $this->get_version() );
         $this->loader->add_action( 'wp_ajax_user_edit_gallery', $plugin_edit_gallery, 'user_edit_gallery');
         $this->loader->add_action( 'wp_ajax_nopriv_user_edit_gallery', $plugin_edit_gallery, 'user_edit_gallery'); // TODO be removed
+
+        $plugin_show_gallery = new Pg_Show_Gallery_Public( $this->get_plugin_name(), $this->get_version() );
+
     }
 
 	/**

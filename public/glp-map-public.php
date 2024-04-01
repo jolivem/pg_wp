@@ -272,16 +272,6 @@ class Glp_Map_Public {
                 L.tileLayer("https://{s}.tile.osm.org/{z}/{x}/{y}.png", {
                     attribution: "&copy; <a href=\"https://osm.org/copyright\">OpenStreetMap</a> contributors"
                 }).addTo(map);
-
-                var LeafIcon = L.Icon.extend({
-                    options: {
-                        iconSize:     [60, 60],
-                        shadowSize:   [50, 64],
-                        shadowAnchor: [4, 62],
-                        popupAnchor:  [-3, -76],
-                        className: "mydivicon"
-                    }
-                });  
                 
                 var markers = L.markerClusterGroup({
                     zoomToBoundsOnClick: true,

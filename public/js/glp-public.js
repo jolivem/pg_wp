@@ -45,8 +45,24 @@
             console.log("user-gallery-option click", e)
             if (e.target.classList.contains("fa-edit")) {
                 const galid = e.target.dataset.galid;
-                console.log("user-gallery-option galid=", galid)
+                console.log("user-gallery-option edit galid=", galid)
                 let edit_gallery_url = document.getElementById('pg_edit_gallery_url').value;
+                edit_gallery_url += "&gid=";
+                edit_gallery_url += galid;
+                window.location = edit_gallery_url;
+            }
+            if (e.target.classList.contains("fa-eye")) {
+                const galid = e.target.dataset.galid;
+                console.log("user-gallery-option view galid=", galid)
+                let edit_gallery_url = document.getElementById('pg_show_gallery_url').value;
+                edit_gallery_url += "&gid=";
+                edit_gallery_url += galid;
+                window.location = edit_gallery_url;
+            }
+            if (e.target.classList.contains("fa-trash")) {
+                const galid = e.target.dataset.galid;
+                console.log("user-gallery-option trash galid=", galid)
+                let edit_gallery_url = document.getElementById('pg_show_gallery_url').value;
                 edit_gallery_url += "&gid=";
                 edit_gallery_url += galid;
                 window.location = edit_gallery_url;
@@ -54,11 +70,19 @@
             e.preventDefault();
         });
 
-        $(document).find('.gallery-item-option').on('click', function(e){
-            console.log("gallery-item-option click", e)
+        $(document).find('.gallery-item-opgallery-photo-optiontion').on('click', function(e){
+            console.log("gallery-photo-option click", e)
             if (e.target.classList.contains("fa-edit")) {
                 const postid = e.target.parentElement.dataset.id;
-                console.log("gallery-item-option postid=", postid);
+                console.log("gallery-photo-option postid=", postid);
+                let edit_photo_url = document.getElementById('pg_edit_photo_url').value;
+                edit_photo_url += "&pid=";
+                edit_photo_url += postid;
+                window.location = edit_photo_url;
+            }
+            if (e.target.classList.contains("fa-trash")) {
+                const postid = e.target.parentElement.dataset.id;
+                console.log("gallery-photo-option postid=", postid);
                 let edit_photo_url = document.getElementById('pg_edit_photo_url').value;
                 edit_photo_url += "&pid=";
                 edit_photo_url += postid;

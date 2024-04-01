@@ -14,10 +14,7 @@
 		<link rel="stylesheet" crossorigin="" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
         <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js" crossorigin=""></script>
 
-        <link rel="stylesheet" crossorigin="" href="../public/css/lightgallery.min.css" />
-        <script src="../public/js/lightgallery-all.min.js" crossorigin=""></script>
-
-		<style type="text/css">
+  		<style type="text/css">
 			#map {
 			  height: 500px;
 			}
@@ -222,12 +219,14 @@
                 var slider = document.getElementById("imageSlider");
 
                 // Remove classname from previously selected image
+                console.log('selectImage', selectImage);
                 if (selectedImage) {
                     selectedImage.classList.remove("imgSelected");
                     selectedImage.classList.add("imgNotSelected");
                 }
 
                 var imageElement = document.querySelector(`#imageSlider img[src='${src}']`);
+                console.log('selectImage', imageElement);
                 // Add classname to the selected image
                 if (imageElement) {
                     console.log('imageElement ', imageElement);
@@ -239,6 +238,9 @@
                     if (scroll == true) {
                         slider.scrollLeft = imageElement.offsetLeft - (slider.clientWidth - imageElement.clientWidth) / 2;
                     }
+                }
+                else {
+                    console.log('selectImage NOT FOUND');
                 }
             }
 

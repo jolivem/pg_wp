@@ -25,6 +25,9 @@
 // TODO renommer les fichiers, les variables, les tables, etc..
 class Glp_User_Galleries_Public {
 
+    const PAGE_ID_EDIT_GALLERY = 11;
+    const PAGE_ID_SHOW_GALLERY = 36;
+
     /**
      * The ID of this plugin.
      *
@@ -130,10 +133,12 @@ class Glp_User_Galleries_Public {
             return "<p>No galleries, create your first gallery</p>";
         }
 
-        $edit_gallery_url = get_permalink(189); // TODO move 186 to a global constant or get by Title
+        $edit_gallery_url = get_permalink(self::PAGE_ID_EDIT_GALLERY); // TODO move 186 to a global constant or get by Title
+        $show_gallery_url = get_permalink(self::PAGE_ID_SHOW_GALLERY); // TODO move 186 to a global constant or get by Title
 
         $html_code = "
         <input type='hidden' id='pg_edit_gallery_url' value='$edit_gallery_url'/>
+        <input type='hidden' id='pg_show_gallery_url' value='$show_gallery_url'/>
         <div class='container' id='user-item-list'>";
 
         $html_code .= $this->render_galleries($galleries);
@@ -176,9 +181,9 @@ class Glp_User_Galleries_Public {
                 </div>
                 <div class="options" style="background-color: lightgreen">
                     <div class="flex-options">
-                        <div class="user-gallery-option edit-icon fas fa-edit" aria-hidden="true" data-galid="'.$item["id"].'"></div>
-                        <div class="user-gallery-option"></div>
-                        <div class="user-gallery-option trash-icon fas fa-trash" aria-hidden="true"></div>
+                        <div class="user-gallery-option pointer-icon fas fa-edit" aria-hidden="true" data-galid="'.$item["id"].'"></div>
+                        <div class="user-gallery-option pointer-icon fas fa-eye" aria-hidden="true" data-galid="'.$item["id"].'"></div>
+                        <div class="user-gallery-option pointer-icon fas fa-trash" aria-hidden="true"></div>
                     </div>
                 </div>
             </div>';
@@ -193,15 +198,15 @@ class Glp_User_Galleries_Public {
     static public function pg_get_gallery_by_user_id( $user_id ){
         global $wpdb;
 
-        error_log("pg_get_gallery_by_user_id id: ".$user_id);
+        //error_log("pg_get_gallery_by_user_id id: ".$user_id);
 
         $gallery_table = esc_sql($wpdb->prefix . "glp_gallery");
 
         $user_id = absint( sanitize_text_field( $user_id ));
         $sql = "SELECT * FROM ".$gallery_table." WHERE images_dates=$user_id";
-        error_log("pg_get_gallery_by_user_id sql: ".$sql);
+        //error_log("pg_get_gallery_by_user_id sql: ".$sql);
         $results = $wpdb->get_results($sql, 'ARRAY_A');
-        error_log("pg_get_gallery_by_user_id result: ".print_r($results, true));
+        //error_log("pg_get_gallery_by_user_id result: ".print_r($results, true));
         if(count($results) > 0){
             return $results;
         }else{

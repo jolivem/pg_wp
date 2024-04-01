@@ -667,7 +667,7 @@ button.lg-icon {
 
 /* EDIT photos */
 
-.gallery-item-option {
+.gallery-photo-option {
     cursor: pointer;
     flex-basis: 300px;
     flex: 10 0 20px;

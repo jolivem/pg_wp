@@ -519,7 +519,7 @@ function downloadMultiplePhotos(files) {
                             </div>
                             <div class="options" style="background-color: lightgreen">
                                 <div class="flex-options" data-id="'.$id.'">
-                                    <div class="gallery-item-option trash-icon fas fa-trash" aria-hidden="true" onclick='removeDownloadPhoto(this.parentNode.parentNode)'></div>
+                                    <div class="gallery-photo-option pointer-icon fas fa-trash" aria-hidden="true" onclick='removeDownloadPhoto(this.parentNode.parentNode)'></div>
                                 </div>
                             </div>
                         </div>
@@ -541,7 +541,7 @@ function downloadMultiplePhotos(files) {
                             </div>
                             <div class="options" style="background-color: lightgreen">
                                 <div class="flex-options" data-id="'.$id.'">
-                                    <div class="gallery-item-option trash-icon fas fa-trash" aria-hidden="true" onclick='removeDownloadPhoto(this.parentNode.parentNode)'></div>
+                                    <div class="gallery-photo-option pointer-icon fas fa-trash" aria-hidden="true" onclick='removeDownloadPhoto(this.parentNode.parentNode)'></div>
                                 </div>
                             </div>
                         </div>
