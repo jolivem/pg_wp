@@ -651,11 +651,34 @@ button.lg-icon {
     padding: 5px;
 }
 
+.slider-options-left {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    flex-basis: 40px;
+    border-radius: 8px 0 0 8px;
+    padding: 5px;
+}
+.slider-options-right {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    flex-basis: 40px;
+    border-radius: 0 8px 8px 0;
+    padding: 5px;
+}
+
 .user-photo-option {
     cursor: pointer;
     flex-basis: 300px;
     flex: 10 0 20px;
     padding: 7px;
+}
+
+
+.show-gallery-option {
+    cursor: pointer;
+    padding: 4px;
 }
 
 .user-gallery-option {

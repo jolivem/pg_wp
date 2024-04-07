@@ -223,7 +223,11 @@ class Glp_Map_Public {
                 /*border: 2px solid transparent; /*Initial border style */
             }
             .imgSelected {
-                border: 2px solid red; /* Adjust the border style for selected images */
+                border: 2px solid red;
+                opacity: 1;
+            }
+            .imgCentered {
+                border: 2px solid transparent;
                 opacity: 1;
             }
             .imgNotSelected {

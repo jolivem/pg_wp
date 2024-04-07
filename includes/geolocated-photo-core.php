@@ -140,7 +140,7 @@ class Geolocated_Photo {
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-edit-photo.php';
 
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-show-gallery.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-show-user-map.php';
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-edit-gallery.php';
 
@@ -281,7 +281,7 @@ class Geolocated_Photo {
         $this->loader->add_action( 'wp_ajax_user_edit_gallery', $plugin_edit_gallery, 'user_edit_gallery');
         $this->loader->add_action( 'wp_ajax_nopriv_user_edit_gallery', $plugin_edit_gallery, 'user_edit_gallery'); // TODO be removed
 
-        $plugin_show_gallery = new Pg_Show_Gallery_Public( $this->get_plugin_name(), $this->get_version() );
+        new Pg_Show_User_Map_Public( $this->get_plugin_name(), $this->get_version() );
 
     }
 

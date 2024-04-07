@@ -23,7 +23,7 @@
 // TODO le rendu du nomber de colonne ne tient pas compte de la bordure de l'image
 // TODO probleme de responsive sur les images
 // TODO renommer les fichiers, les variables, les tables, etc..
-class Pg_Show_Gallery_Public {
+class Pg_Show_User_Map_Public {
 
     /**
      * The ID of this plugin.
@@ -59,7 +59,7 @@ class Pg_Show_Gallery_Public {
         $this->plugin_name = $plugin_name;
         $this->version = $version;
         // $this->settings = new Gallery_Settings_Actions($this->plugin_name);
-        add_shortcode( 'pg_show_gallery', array($this, 'pg_generate_page') );
+        add_shortcode( 'pg_show_user_map', array($this, 'pg_generate_page') );
     }
 
     /**
@@ -72,7 +72,8 @@ class Pg_Show_Gallery_Public {
         wp_enqueue_style( 'ays_pb_bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css', array(), $this->version, 'all' );
         wp_enqueue_style( 'leaflet', 'https://unpkg.com/leaflet@1.0.3/dist/leaflet.css', array(), $this->version, 'all' );
         wp_enqueue_style( 'MarkerCluster', '"https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css', array(), $this->version, 'all' );
-        
+        wp_enqueue_style( 'gpg-fontawesome', 'https://use.fontawesome.com/releases/v5.4.1/css/all.css', array(), $this->version, 'all');
+
         wp_enqueue_style( $this->plugin_name."-public.css", plugin_dir_url( __FILE__ ) . 'css/glp-public.css', array(), $this->version, 'all' );
         wp_enqueue_style( $this->plugin_name."-map.css", plugin_dir_url( __FILE__ ) . 'css/pg-map.css', array(), $this->version, 'all' );
         //wp_enqueue_style('leaflet.css', 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css');
@@ -151,10 +152,24 @@ class Pg_Show_Gallery_Public {
         $html_code = "
         <div class='container'>
             <div id='map'></div>
-            <div class='slider' id='imageSlider'>
-                $html_slider 
-            </div>
-        </div>";
+            <div class='flex-container'>
+                <div class='slider-options-left' style='background-color: lightgreen'>
+                    <div>
+                        <div class='show-gallery-option fas fa-step-backward' style='padding-bottom:38px;' aria-hidden='true'></div>
+                        <div class='show-gallery-option fas fa-angle-double-left' aria-hidden='true'></div>
+                    </div>
+                </div>
+                <div class='gallery-slider' id='imageSlider'>
+                    $html_slider 
+                </div>
+                <div class='slider-options-right' style='background-color: lightgreen'>
+                    <div>
+                        <div class='show-gallery-option fas fa-step-forward' style='padding-bottom:38px;' aria-hidden='true'></div>
+                        <div class='show-gallery-option fas fa-angle-double-right' aria-hidden='true'></div>
+                    </div>
+                </div>
+            </div>            
+         </div>";
 
         $js = $this->script_map($medias);
         $html_code .= $js;
@@ -264,6 +279,11 @@ class Pg_Show_Gallery_Public {
         //         let icon;
         //         ";
         
+                $minlat = 90.0; 
+                $maxlat = -90.0;
+                $minlng = 180.0;
+                $maxlng = -180.0;
+        
                 foreach($medias as $id){
                     //error_log("render_images id:".$id);
                     //$img_src = $item->guid;
@@ -274,6 +294,14 @@ class Pg_Show_Gallery_Public {
                         $latitude = get_post_meta($id, 'latitude', true);
                         $longitude = get_post_meta($id, 'longitude', true);
                         error_log("latitude=".$latitude."longitude=".$longitude);
+
+                        // keep min and max
+                        $minlat = min($minlat, $latitude);
+                        $maxlat = max($maxlat, $latitude);
+                        $minlng = min($minlng, $longitude);
+                        $maxlng = max($maxlng, $longitude);
+                        error_log("minlat=".$minlat.", maxlat=".$maxlat.",minlng=".$minlng.", maxlng=".$maxlng);
+    
                         
                         //$img_tag ="<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "' onload='console.log(\"ID=".$image_ids[$key]."\")'>";
                         $map_js .= "icon = new LeafIcon({iconUrl: '". $img_src ."'});";
@@ -283,8 +311,9 @@ class Pg_Show_Gallery_Public {
 
                 $map_js .= "
                 map.addLayer(markers);
-
-
+                const bbox = [[$minlat,$minlng],[$maxlat,$maxlng]];
+                /*L.rectangle(bbox).addTo(map);*/
+                map.fitBounds(bbox);                                
             })
         })(jQuery);
         </script>";

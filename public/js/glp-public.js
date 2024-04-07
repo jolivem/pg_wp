@@ -40,7 +40,7 @@
             }
             e.preventDefault();
         });
-
+        
         $(document).find('.user-gallery-option').on('click', function(e){
             console.log("user-gallery-option click", e)
             if (e.target.classList.contains("fa-edit")) {

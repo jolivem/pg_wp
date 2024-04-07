@@ -39,16 +39,16 @@
     border: 12px solid #fff;
 }
 
-div.slider {
+div.gallery-slider {
     background-color: #333;
-    overflow: auto;
+    overflow: hidden;
     white-space: nowrap;
-    padding: 10px;
+    padding: 4px;
 }
 
-div.slider img {
+div.gallery-slider img {
     padding: 2px;
-    height: 100px;
+    height: 120px;
     cursor: pointer;
     /* Add cursor pointer for better usability */
     /*border: 2px solid transparent; /*Initial border style */
