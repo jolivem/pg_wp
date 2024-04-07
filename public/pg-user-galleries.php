@@ -73,6 +73,7 @@ class Glp_User_Galleries_Public {
     public function enqueue_styles() {
 
         wp_enqueue_style( 'gpg-fontawesome', 'https://use.fontawesome.com/releases/v5.4.1/css/all.css', array(), $this->version, 'all');
+        wp_enqueue_style( 'ays_pb_bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css', array(), $this->version, 'all' );
     }
 
     /**
@@ -82,9 +83,9 @@ class Glp_User_Galleries_Public {
      */
     public function enqueue_scripts() {
 
+        wp_enqueue_script( $this->plugin_name.'-bootstrap.js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/glp-public.js', array( 'jquery' ), $this->version, true );
         wp_localize_script($this->plugin_name, 'ays_vars', array('base_url' => GLP_BASE_URL));
-
     }
 
     public function enqueue_styles_early(){
@@ -139,11 +140,18 @@ class Glp_User_Galleries_Public {
         $html_code = "
         <input type='hidden' id='pg_edit_gallery_url' value='$edit_gallery_url'/>
         <input type='hidden' id='pg_show_gallery_url' value='$show_gallery_url'/>
-        <div class='container' id='user-item-list'>";
+        <div class='container' id='user-item-list'>
+            <br/>
+            <div class='tab-pane fade show active' id='nav-photos' role='tabpanel' aria-labelledby='nav-photos-tab'>
+                <button type='button' class='btn btn-primary'>
+                    Add a gallery...
+                </button>
+            </div>";
 
         $html_code .= $this->render_galleries($galleries);
         $html_code .= 
         "</div>";
+        $html_code .= $this->pg_create_modal_for_delete_confirmation();
 
         return $html_code;
     } 
@@ -183,7 +191,7 @@ class Glp_User_Galleries_Public {
                     <div class="flex-options">
                         <div class="user-gallery-option pointer-icon fas fa-edit" aria-hidden="true" data-galid="'.$item["id"].'"></div>
                         <div class="user-gallery-option pointer-icon fas fa-eye" aria-hidden="true" data-galid="'.$item["id"].'"></div>
-                        <div class="user-gallery-option pointer-icon fas fa-trash" aria-hidden="true"></div>
+                        <div class="user-gallery-option pointer-icon fas fa-trash" aria-hidden="true" data-galid="'.$item["id"].'"></div>
                     </div>
                 </div>
             </div>';
@@ -234,6 +242,32 @@ class Glp_User_Galleries_Public {
         }
 
         return null;
+    }
+
+    function pg_create_modal_for_delete_confirmation() {
+        $html_code = "
+        <div class='modal fade' id='deleteConfirModal' tabindex='-1' aria-labelledby='deleteConfirModalLabel' aria-hidden='true'>
+            <div class='modal-dialog'>
+                <div class='modal-content'>
+                    <div class='container'>
+                        <div class='modal-header'>
+                            <h5 class='modal-title' id='deleteConfirModalLabel'>Confirmation</h5>
+                            <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                        </div>                            
+                        <div class='modal-body'>
+                            Voulez-vous vraiment supprimer la gallerie ?
+                        </div>
+                        <div class='modal-footer'>
+                            <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Close</button>
+                            <button type='button' id='delete-gallery' class='btn btn-primary'>Supprimer</button>
+                        </div>
+                        <div id='progressContainer'></div>
+                    </div>
+                </div>
+            </div>
+        </div>";
+
+        return $html_code;
     }
 
 }

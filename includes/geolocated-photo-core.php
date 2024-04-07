@@ -142,11 +142,11 @@ class Geolocated_Photo {
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-show-user-map.php';
 
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-show-user-gallery.php';
+
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-edit-gallery.php';
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/glp-gallery-public.php';
-
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/glp-map-public.php';
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/geolocated-photo-extra-shortcode.php';
 
@@ -256,7 +256,7 @@ class Geolocated_Photo {
 		$plugin_user_photos_public = new Glp_User_Photos_Public( $this->get_plugin_name(), $this->get_version() );
 		$plugin_user_galleries_public = new Glp_User_Galleries_Public( $this->get_plugin_name(), $this->get_version() );
 
-        $plugin_map_public = new Glp_Map_Public( $this->get_plugin_name(), $this->get_version() );
+        //$plugin_map_public = new Glp_Map_Public( $this->get_plugin_name(), $this->get_version() );
 		$plugin_public_gallery_category = new Geolocated_Photo_Category( $this->get_plugin_name(), $this->get_version() );
 		$plugin_public_extra_shortcodes = new Ays_Gallery_Extra_Shortcodes_Public( $this->get_plugin_name(), $this->get_version() );
 
@@ -282,6 +282,7 @@ class Geolocated_Photo {
         $this->loader->add_action( 'wp_ajax_nopriv_user_edit_gallery', $plugin_edit_gallery, 'user_edit_gallery'); // TODO be removed
 
         new Pg_Show_User_Map_Public( $this->get_plugin_name(), $this->get_version() );
+        new Pg_Show_User_Gallery_Public( $this->get_plugin_name(), $this->get_version() );
 
     }
 

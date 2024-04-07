@@ -33,45 +33,52 @@
         }); 
 
         $(document).find('.user-photo-option').on('click', function(e){
-            console.log("user-photo-option click", e)
+            console.log("user-photo-option click", e);
             if (e.target.classList.contains("fa-edit")) {
                 const postid = e.target.dataset.postid;
                 console.log("user-photo-option postid=", postid)
             }
             e.preventDefault();
         });
-        
+        var deleteConfirModal;
         $(document).find('.user-gallery-option').on('click', function(e){
-            console.log("user-gallery-option click", e)
+            console.log("user-gallery-option click", e);
             if (e.target.classList.contains("fa-edit")) {
                 const galid = e.target.dataset.galid;
-                console.log("user-gallery-option edit galid=", galid)
+                console.log("user-gallery-option edit galid=", galid);
                 let edit_gallery_url = document.getElementById('pg_edit_gallery_url').value;
                 edit_gallery_url += "&gid=";
                 edit_gallery_url += galid;
                 window.location = edit_gallery_url;
             }
-            if (e.target.classList.contains("fa-eye")) {
+            else if (e.target.classList.contains("fa-eye")) {
                 const galid = e.target.dataset.galid;
-                console.log("user-gallery-option view galid=", galid)
+                console.log("user-gallery-option view galid=", galid);
                 let edit_gallery_url = document.getElementById('pg_show_gallery_url').value;
                 edit_gallery_url += "&gid=";
                 edit_gallery_url += galid;
                 window.location = edit_gallery_url;
             }
-            if (e.target.classList.contains("fa-trash")) {
+            else if (e.target.classList.contains("fa-trash")) {
                 const galid = e.target.dataset.galid;
-                console.log("user-gallery-option trash galid=", galid)
-                let edit_gallery_url = document.getElementById('pg_show_gallery_url').value;
-                edit_gallery_url += "&gid=";
-                edit_gallery_url += galid;
-                window.location = edit_gallery_url;
+                console.log("user-gallery-option trash galid=", galid);
+                document.getElementById('delete-gallery').dataset.galid=galid;
+                // call the modal for delete 
+                deleteConfirModal = new bootstrap.Modal(document.getElementById('deleteConfirModal'), {});
+                deleteConfirModal.toggle();
             }
             e.preventDefault();
         });
 
+        $(document).find('#delete-gallery').on('click', function(e){
+            console.log("gallery-photo-option click", e.target.dataset.galid);
+            deleteConfirModal.toggle();
+            //console.log("gallery-photo-option click", deleteConfirModal);
+            e.preventDefault();
+        });
+
         $(document).find('.gallery-item-opgallery-photo-optiontion').on('click', function(e){
-            console.log("gallery-photo-option click", e)
+            console.log("gallery-photo-option click", e);
             if (e.target.classList.contains("fa-edit")) {
                 const postid = e.target.parentElement.dataset.id;
                 console.log("gallery-photo-option postid=", postid);

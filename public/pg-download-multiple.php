@@ -143,12 +143,12 @@ class Pg_Download_Multiple_Public {
         $nonce = wp_create_nonce('download_multiple_photos');
         error_log("pg_show_page admin_ajax_url=".$admin_ajax_url);
         $html_code = '
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="multipleDowloadModal" tabindex="-1" aria-labelledby="multipleDowloadModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="container">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Sélection multiple de photos</h5>
+                            <h5 class="modal-title" id="multipleDowloadModalLabel">Sélection multiple de photos</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>                            
                         <div class="modal-body">

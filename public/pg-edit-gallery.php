@@ -175,7 +175,7 @@ class Pg_Edit_Gallery_Public {
                 <div class='tab-content' id='nav-tabContent'>
                     <br/>
                     <div class='tab-pane fade show active' id='nav-photos' role='tabpanel' aria-labelledby='nav-photos-tab'>
-                        <button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#exampleModal'>
+                        <button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#multipleDowloadModal'>
                             Add photos...
                         </button>
                         <div id='gallery-item-list'>$html_images</div>
