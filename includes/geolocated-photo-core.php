@@ -142,6 +142,8 @@ class Geolocated_Photo {
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-show-user-map.php';
 
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-show-planet-map.php';
+
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-show-user-gallery.php';
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-edit-gallery.php';
@@ -163,6 +165,8 @@ class Geolocated_Photo {
         //require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/glp-categories-list-table.php';
 
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/glp-maps-list-table.php';
+
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/pg-geoposts-table.php';
 
 		$this->loader = new Geolocated_Photo_Loader();
 
@@ -254,7 +258,10 @@ class Geolocated_Photo {
 	private function define_public_hooks() {
 
 		$plugin_user_photos_public = new Glp_User_Photos_Public( $this->get_plugin_name(), $this->get_version() );
-		$plugin_user_galleries_public = new Glp_User_Galleries_Public( $this->get_plugin_name(), $this->get_version() );
+		
+        $plugin_user_galleries = new Glp_User_Galleries_Public( $this->get_plugin_name(), $this->get_version() );
+        $this->loader->add_action( 'wp_ajax_user_delete_gallery', $plugin_user_galleries, 'user_delete_gallery');
+        $this->loader->add_action( 'wp_ajax_nopriv_user_delete_gallery', $plugin_user_galleries, 'user_delete_gallery'); // TODO be removed
 
         //$plugin_map_public = new Glp_Map_Public( $this->get_plugin_name(), $this->get_version() );
 		$plugin_public_gallery_category = new Geolocated_Photo_Category( $this->get_plugin_name(), $this->get_version() );
@@ -282,8 +289,10 @@ class Geolocated_Photo {
         $this->loader->add_action( 'wp_ajax_nopriv_user_edit_gallery', $plugin_edit_gallery, 'user_edit_gallery'); // TODO be removed
 
         new Pg_Show_User_Map_Public( $this->get_plugin_name(), $this->get_version() );
+        new Pg_Show_Planet_Map_Public( $this->get_plugin_name(), $this->get_version() );
         new Pg_Show_User_Gallery_Public( $this->get_plugin_name(), $this->get_version() );
-
+        new Pg_Show_User_Gallery_Public( $this->get_plugin_name(), $this->get_version() );
+        new Pg_Geoposts_Table( $this->get_plugin_name(), $this->get_version() );
     }
 
 	/**

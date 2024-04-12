@@ -1134,8 +1134,9 @@ class Glp_Gallery_Public {
             elseif ($view == "masonry") {
                 //MJO TODO remove console.log in onload
                 $gallery_view .= "<div class='ays_masonry_grid-item ays_masonry_item_".$id." ays_count_views' data-src='" . $images[$key] .
-                    "' data-desc='" . $image_titles[$key] ." ". $image_alts[$key] ." ". $image_descs[$key] ."' ".$ays_data_sub_html.">".
-                    "<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "'>";
+                    "' data-desc='" . $image_titles[$key] ." ". $image_alts[$key] ." ". $image_descs[$key] ."' ".$ays_data_sub_html.">";
+                $gallery_view .=$img_tag;
+                //    "<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "'>";
             }
             elseif ($view == "grid") {
                 //MJO TODO remove data-src ?
@@ -1336,7 +1337,7 @@ class Glp_Gallery_Public {
         $vignette_display = (!isset($gallery_options['vignette_display']) ||
             $gallery_options['vignette_display'] == '' ||
             $gallery_options['vignette_display'] == false) ? 'permanent' : $gallery_options['vignette_display'];
-        error_log("XX vignette_display=".$vignette_display);
+        error_log("ays_get_gallery_content vignette_display=".$vignette_display);
       
         //Gallery image position
         $gallery_img_positions = (!isset($gallery_options['gallery_img_position']) ||

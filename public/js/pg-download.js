@@ -179,7 +179,7 @@ jQuery(document).find('#single-upload').on('click', function(event){
     formData.append('title', 'my Title');
     formData.append('lat', latitudeValue);
     formData.append('lon', longitudeValue);
-    formData.append('origin', "manual");
+    formData.append('is_exif', "false");
     formData.append('file', file);
     jQuery.ajax({
         method: 'POST',
@@ -195,6 +195,7 @@ jQuery(document).find('#single-upload').on('click', function(event){
         // TODO handle error
     });
 });
+
 
 function downloadASinglePhoto(files) {
 
@@ -327,11 +328,13 @@ function downloadASinglePhoto(files) {
                         document.getElementById("latitudeHelp").style.display = "none";
                         document.getElementById("longitudeHelp").style.display = "none";
 
+
+
                         file.pgpg = {};
                         file.pgpg.lat = latitude;
                         file.pgpg.lon = longitude;
                         file.pgpg.altitude = altitude; // atltide to calculate with denominator
-                        file.pgpg.origin = "exif";
+                        file.pgpg.is_exif = "true";
                         //TODO calculate and fill zoom value
                         file.pgpg.zoom = 1;
                         file.pgpg.date = date;
@@ -405,7 +408,7 @@ jQuery(document).find('#multiple-upload').on('click', function(e){
         formData.append('title', 'my Title');
         formData.append('lat', file.pgpg.lat);
         formData.append('lon', file.pgpg.lon);
-        formData.append('origin', file.pgpg.origin);
+        formData.append('is_exif', file.pgpg.is_exif);
         formData.append('date', file.pgpg.date);
         formData.append('file', file);
         formData.append('galleryId', galleryId);
@@ -519,7 +522,7 @@ function downloadMultiplePhotos(files) {
                             </div>
                             <div class="options" style="background-color: lightgreen">
                                 <div class="flex-options" data-id="'.$id.'">
-                                    <div class="gallery-photo-option pointer-icon fas fa-trash" aria-hidden="true" onclick='removeDownloadPhoto(this.parentNode.parentNode)'></div>
+                                    <div class="download-photo-option pointer-icon fas fa-trash" aria-hidden="true" onclick='removeDownloadPhoto(this.parentNode.parentNode)'></div>
                                 </div>
                             </div>
                         </div>
@@ -541,7 +544,7 @@ function downloadMultiplePhotos(files) {
                             </div>
                             <div class="options" style="background-color: lightgreen">
                                 <div class="flex-options" data-id="'.$id.'">
-                                    <div class="gallery-photo-option pointer-icon fas fa-trash" aria-hidden="true" onclick='removeDownloadPhoto(this.parentNode.parentNode)'></div>
+                                    <div class="download-photo-option pointer-icon fas fa-trash" aria-hidden="true" onclick='removeDownloadPhoto(this.parentNode.parentNode)'></div>
                                 </div>
                             </div>
                         </div>
@@ -578,13 +581,15 @@ function downloadMultiplePhotos(files) {
 
                     const date = EXIF.getTag(this, 'DateTimeOriginal');
 
-                    renderItemMultiple(event.target.result, file.name, latitude, longitude, date)
+                    reverseGeocoding(latitude, longitude);
+
+                    renderItemMultiple(event.target.result, file.name, latitude, longitude, date);
 
                     file.pgpg = {};
                     file.pgpg.lat = latitude;
                     file.pgpg.lon = longitude;
                     file.pgpg.altitude = altitude; // atltide to calculate with denominator
-                    file.pgpg.origin = "exif";
+                    file.pgpg.origin = "true";
                     //TODO calculate and fill zoom value
                     file.pgpg.zoom = 1;
                     file.pgpg.date = date;
@@ -594,7 +599,7 @@ function downloadMultiplePhotos(files) {
                     //thumbnailContainer.appendChild(info);
                 }
                 else {
-                    renderItemMultiple(event.target.result, file.name)
+                    renderItemMultiple(event.target.result, file.name);
                 }
             });
         };
@@ -666,3 +671,27 @@ function isNumber(st) {
     // console.log('isNumber', resu);
     return resu;
 }
+
+
+function reverseGeocoding(lat, lon) {
+    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`;
+    console.log('reverseGeocoding url=', url);
+
+    // Url for the request 
+    
+
+    // Making our request 
+    fetch(url, { method: 'GET' })
+        .then(Result => Result.json())
+        .then(string => {
+
+            // Printing our response 
+            console.log(string);
+
+            // Printing our field of our response
+            //console.log(`Title of our response : ${string.title}`);
+        })
+        .catch(errorMsg => { console.log(errorMsg); });
+
+}
+//4.836856, -52.949523

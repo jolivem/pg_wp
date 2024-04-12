@@ -230,8 +230,8 @@
         });
     });
 
-   // When clicked on submit button
-   $(document).find('#edit-gallery').on('click', function(event){
+   // When clicked on submit button of edit gallery page
+   $(document).find('#edit-gallery-save').on('click', function(event){
         console.log("edit-photo IN");
         event.preventDefault();
         let error = false;
@@ -243,13 +243,16 @@
         const description = document.getElementById('gallery-description').value;
 
         // get the image list in the order of display
-        const list = document.getElementById('item-list').children;
         let images_id = [];
+
+        if (document.getElementById('item-list')){
+        const list = document.getElementById('item-list').children;
         //console.log( "list", list);
-        for(let i = 0 ; i < list.length; i++){
-            // Append them to a string
-            //console.log( "list i", list[i]);
-            images_id.push(list[i].dataset.id);
+            for(let i = 0 ; i < list.length; i++){
+                // Append them to a string
+                //console.log( "list i", list[i]);
+                images_id.push(list[i].dataset.id);
+            }
         }
 
         const formData = new FormData();
@@ -267,6 +270,7 @@
             processData: false,
             success: function(response){
                 console.log("upload done");
+                window.history.back();
             }
             // TODO handle error
         });

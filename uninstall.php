@@ -36,11 +36,13 @@ if(get_option('glp_upgrade_plugin','false') === 'false'){
     $table_map = $wpdb->prefix . 'glp_map';
     $cat_table = $wpdb->prefix . 'glp_gallery_categories';
     $settings_table = $wpdb->prefix . 'glp_gallery_settings';
+    $geopost_table = $wpdb->prefix . 'glp_geo_posts';   
 
     $wpdb->query("DROP TABLE IF EXISTS `".$table_gallery."`");
     $wpdb->query("DROP TABLE IF EXISTS `".$table_map."`");
     $wpdb->query("DROP TABLE IF EXISTS `".$cat_table."`");
     $wpdb->query("DROP TABLE IF EXISTS `".$settings_table."`");
+    $wpdb->query("DROP TABLE IF EXISTS `".$geopost_table."`");
 
     delete_option( 'glp_gallery_db_version' );
     delete_option( "glp_upgrade_plugin" );

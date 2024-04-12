@@ -16,7 +16,6 @@ class Glp_Galleries_List_Table extends WP_List_Table{
 
     }
 
-
     /**
      * Retrieve customers data from the database
      *
@@ -388,7 +387,7 @@ class Glp_Galleries_List_Table extends WP_List_Table{
      *
      * @param int $id customer ID
      */
-    public static function delete_galleries( $id ) {
+    public static function delete_gallery( $id ) {
         global $wpdb;
         $wpdb->delete(
             "{$wpdb->prefix}glp_gallery",
@@ -740,7 +739,7 @@ class Glp_Galleries_List_Table extends WP_List_Table{
                 die( "Go get a life script kiddies" );
             }
             else {
-                self::delete_galleries( absint( $_GET["gallery"] ) );
+                self::delete_gallery( absint( $_GET["gallery"] ) );
 
                 // esc_url_raw() is used to prevent converting ampersand in url to "#038;"
                 // add_query_arg() return the current url
@@ -761,7 +760,7 @@ class Glp_Galleries_List_Table extends WP_List_Table{
 
             // loop over the array of record IDs and delete them
             foreach ( $delete_ids as $id ) {
-                self::delete_galleries( $id );
+                self::delete_gallery( $id );
 
             }
 

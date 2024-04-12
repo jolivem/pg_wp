@@ -186,14 +186,32 @@ class Pg_Download_Multiple_Public {
 
     // callback on request to download photos
     public function download_multiple_photos() {
-        error_log("download_multiple_photos IN");
-        error_log("download_multiple_photos REQUEST ".print_r($_REQUEST, true));
+        error_log("download_multiple_photos IN REQUEST ".print_r($_REQUEST, true));
 
         if( ! isset( $_REQUEST['nonce'] ) or 
             ! wp_verify_nonce( $_REQUEST['nonce'], 'download_multiple_photos' ) ) {
             error_log("download_multiple_photos nonce not found");
             wp_send_json_error( "NOK.", 403 );
+            return;
         }
+        if( ! isset( $_REQUEST['galleryId'] ) ) {
+            error_log("download_multiple_photos No gallery ");
+            wp_send_json_error( "NOK.", 403 );
+            return;
+        }
+        if( $_REQUEST['galleryId'] == -1 ) {
+            error_log("download_multiple_photos No gallery ");
+            wp_send_json_error( "NOK.", 404 );
+            return;
+        }
+        // check if gallery exists
+        $gallery = $gallery = Glp_Galleries_List_Table::get_gallery_by_id($_REQUEST['galleryId']);
+        if (!$gallery) {
+            error_log("download_multiple_photos Gallery Not found ");
+            wp_send_json_error( "NOK.", 404 );
+            return;
+        }
+
         $title = sanitize_text_field( $_POST['title'] );
         $uploadedfile = $_FILES['file'];
         $upload_overrides = array('test_form' => false);
@@ -227,11 +245,18 @@ class Pg_Download_Multiple_Public {
                 wp_generate_attachment_metadata( $attachment_id, $movefile[ 'file' ] )
             );
 
-            update_post_meta($attachment_id , 'latitude', $_REQUEST['lat']);
-            update_post_meta($attachment_id , 'longitude', $_REQUEST['lon']);
-            update_post_meta($attachment_id , 'origin', $_REQUEST['origin']);
+
+            //update_post_meta($attachment_id , 'latitude', $_REQUEST['lat']);
+            //update_post_meta($attachment_id , 'longitude', $_REQUEST['lon']);
+            //update_post_meta($attachment_id , 'origin', $_REQUEST['origin']);
             update_post_meta($attachment_id , 'altitude', $_REQUEST['altitude']);
-            update_post_meta($attachment_id , 'date', $_REQUEST['date']); // date of shooting
+            //update_post_meta($attachment_id , 'date', $_REQUEST['date']); // date of shooting
+
+            Pg_Geoposts_Table::insert_post( $attachment_id,
+                $_REQUEST['lat'],
+                $_REQUEST['lon'],
+                $_REQUEST['origin'],
+                $_REQUEST['date']);
             
             // if gallery id , add to gallery
             if ($_REQUEST['galleryId']) {
