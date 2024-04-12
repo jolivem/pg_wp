@@ -49,17 +49,24 @@ class Pg_Geoposts_Table {
     {
         global $wpdb;
         $table = $wpdb->prefix . "glp_geo_posts";
+        error_log("insert_post table=".$table);
         $bexif = 0;
         if ($is_exif == 'true') {
             $bexif = 1;
         }
-        $point = "ST_GeomFromText('POINT($latitude $longitude)')";
-        $query = "INSERT INTO wp_glp_geo_posts (post_id, location, zoom_level, point, date, is_exif) VALUES (%d, ST_GeomFromText('%s'), 30, 0, %s, %d)";
-        error_log("insert_post query=".$query);
-        $sql = $wpdb->prepare($query, $post_id, $point, $date, $bexif);
-        $wpdb->query($query);
+        //$point = "ST_GeomFromText('POINT($latitude $longitude)')";
+        // $query = "INSERT INTO wp_glp_geo_posts (post_id, location) VALUES (%d, ST_PointFromText('%s'), 30, 0, %s, %d)";
+        // error_log("insert_post query=".$query);
+        // $sql = $wpdb->prepare($query, $post_id, $point, $date, $bexif);
+        // $wpdb->query($query);
 
-        //$sql = $wpdb->prepare("INSERT INTO $dbTable (post_id, location, zoom_level, public, date, is_exif) VALUES (%d, POINT( %s", "%d", "%d", "%s", "%d")",$formData, $today, $userID);
+        //$point = "POINT($latitude $longitude)";
+        $point = "POINT(1 2)";
+        error_log("insert_post point=".$point);
+        //$query = $wpdb->prepare("INSERT INTO $dbTable (post_id, location) VALUES (%d, ST_PointFromText('POINT(%d %d)'))",13, 1, 2);
+        $query = $wpdb->prepare("INSERT INTO $table (`post_id`, `location`) VALUES (%d, ST_PointFromText('POINT(%f %f)'))",20,1.2,2.3);
+        error_log("insert_post query=".$query);
+        $wpdb->query($query);
 
         // sprintf("POINT(%s,%s)",$latitude, $longitude),
         // error_log("insert_post point=".$point);
@@ -75,8 +82,8 @@ class Pg_Geoposts_Table {
         //     ),
         //     array( "%d", "%s", "%d", "%d", "%s", "%d" ));
 
-        $wpdb->show_error();
-        $wpdb->print_error();
+        //$wpdb->show_error();
+        //$wpdb->print_error();
     }
 
     /**
