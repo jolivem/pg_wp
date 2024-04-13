@@ -100,8 +100,6 @@ switch( $action ) {
         break;
 }
 
-
-
 $gallery_message_vars = array(  
     '%%user_first_name%%'       => __("User's First Name", $this->plugin_name),
     '%%user_last_name%%'        => __("User's Last Name", $this->plugin_name),

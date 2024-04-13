@@ -60,7 +60,8 @@ var LeafIcon = L.Icon.extend({
         }
     }); 
 
-    map = L.map('map').setView([45.437859,7.085], 7);
+    /*map = L.map('map').setView([0,0], zoom);*/
+    map = L.map('map');
 
     L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -131,14 +132,6 @@ var LeafIcon = L.Icon.extend({
         // console.log('element.offsetLeft ', element.offsetLeft);
     }
 
-    // function changeImageStyles() {
-    //     var allImages = document.querySelectorAll('#imageSlider img');
-
-    //     allImages.forEach(function (imgElement) {
-    //         /* Change styles for all images */
-    //         imgElement.style.border = '2px dashed blue'; /* Adjust the border style as needed */
-    //     });
-    // }
     var gal = document.getElementById('imageSlider');
     console.log('gal:', gal);
 

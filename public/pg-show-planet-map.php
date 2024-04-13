@@ -23,7 +23,7 @@
 // TODO le rendu du nomber de colonne ne tient pas compte de la bordure de l'image
 // TODO probleme de responsive sur les images
 // TODO renommer les fichiers, les variables, les tables, etc..
-class Pg_Show_User_Map_Public {
+class Pg_Show_Planet_Map_Public {
 
     /**
      * The ID of this plugin.
@@ -59,7 +59,7 @@ class Pg_Show_User_Map_Public {
         $this->plugin_name = $plugin_name;
         $this->version = $version;
         // $this->settings = new Gallery_Settings_Actions($this->plugin_name);
-        add_shortcode( 'pg_show_user_map', array($this, 'pg_generate_page') );
+        add_shortcode( 'pg_show_planet_map', array($this, 'pg_generate_page') );
     }
 
     /**
@@ -106,40 +106,21 @@ class Pg_Show_User_Map_Public {
     public function pg_generate_page( $attr ){
         ob_start();
         //error_log("pg_generate_page aa  IN ".print_r($attr, true));
-        error_log("pg_generate_page aa  IN ".print_r($_GET, true));
-
-        // TODO check that the photo belons to the current user
-        if (! isset($_GET['gid'])) {
-            return "";
-        }
-
+ 
         $this->enqueue_styles();
         $this->enqueue_scripts();
 
-        echo $this->pg_show_page( $_GET['gid'] );
+        echo $this->pg_show_page();
 
         return str_replace(array("\r\n", "\n", "\r"), '', ob_get_clean());
     }
     
     // attr should have the user id
-    public function pg_show_page( $id ){
+    public function pg_show_page(){
 
         error_log("pg_show_page IN id=".$id);
         
         //global $wpdb;
-
-        $gallery = $this->pg_get_gallery_by_id($id);
-        if(!$gallery){
-            error_log("pg_show_page Gallery not found");
-            return "";
-        }
-        
-        $title = $gallery["title"];
-        $description = $gallery["description"];
-        if(!$gallery){
-            error_log("pg_show_page Gallery not found");
-            return "";
-        }
   
         $medias = $this->pg_get_medias_by_gallery($id);
 
@@ -215,47 +196,51 @@ class Pg_Show_User_Map_Public {
         (function($) {
             'use strict';
             $(window).ready(function(){
-               console.log('COUCOU script_map');
-               let icon;";
+                map.setView([0,0], 1);
+                /*console.log('COUCOU script_map');*/
+                let icon;
+                map.on('movestart', function(e) {
+                    console.log('movestart',e);
+                });
+                map.on('zoomstart', function(e) {
+                    console.log('zoomstart',e);
+                });
+                map.on('moveend', function(e) {
+                    console.log('movend',e);
+                    console.log('movend',map.getBounds());
+                    console.log('movend',map.getZoom());
+                });
+                map.on('zoomend', function(e) {
+                    console.log('zoomend',e);
+                    console.log('zoomend',e);
+                });";
 
         
-                $minlat = 90.0; 
-                $maxlat = -90.0;
-                $minlng = 180.0;
-                $maxlng = -180.0;
-        
-                foreach($medias as $id){
-                    error_log("render_images id:".$id);
-                    //$img_src = $item->guid;
-                    $url_img = wp_get_attachment_image_src($id, "medium");
-                    if ($url_img != false) {
-                        $img_src = $url_img[0];
+                // foreach($medias as $id){
+                //     error_log("render_images id:".$id);
+                //     //$img_src = $item->guid;
+                //     $url_img = wp_get_attachment_image_src($id, "medium");
+                //     if ($url_img != false) {
+                //         $img_src = $url_img[0];
                     
-                        $latitude = get_post_meta($id, 'latitude', true);
-                        $longitude = get_post_meta($id, 'longitude', true);
-                        error_log("latitude=".$latitude."longitude=".$longitude);
-                        if ($latitude && $longitude) {
+                //         $latitude = get_post_meta($id, 'latitude', true);
+                //         $longitude = get_post_meta($id, 'longitude', true);
+                //         error_log("latitude=".$latitude."longitude=".$longitude);
+                //         if ($latitude && $longitude) {
 
-                            // keep min and max
-                            $minlat = min($minlat, $latitude);
-                            $maxlat = max($maxlat, $latitude);
-                            $minlng = min($minlng, $longitude);
-                            $maxlng = max($maxlng, $longitude);
-                            error_log("minlat=".$minlat.", maxlat=".$maxlat.",minlng=".$minlng.", maxlng=".$maxlng);
+                //             error_log("minlat=".$minlat.", maxlat=".$maxlat.",minlng=".$minlng.", maxlng=".$maxlng);
         
                             
-                            //$img_tag ="<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "' onload='console.log(\"ID=".$image_ids[$key]."\")'>";
-                            $map_js .= "icon = new LeafIcon({iconUrl: '". $img_src ."'});";
-                            $map_js .= "markers.addLayer(L.marker([".strval($latitude).", ".strval($longitude)."], {icon: icon}).addTo(map).bindPopup('I am a green leaf.'));";
-                        }
-                    }
-                } // end foreach image
+                //             //$img_tag ="<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "' onload='console.log(\"ID=".$image_ids[$key]."\")'>";
+                //             $map_js .= "icon = new LeafIcon({iconUrl: '". $img_src ."'});";
+                //             $map_js .= "markers.addLayer(L.marker([".strval($latitude).", ".strval($longitude)."], {icon: icon}).addTo(map).bindPopup('I am a green leaf.'));";
+                //         }
+                //     }
+                // } // end foreach image
 
                 $map_js .= "
                 map.addLayer(markers);
-                const bbox = [[$minlat,$minlng],[$maxlat,$maxlng]];
-                /*L.rectangle(bbox).addTo(map);*/
-                map.fitBounds(bbox);                                
+                                
             })
         })(jQuery);
         </script>";
@@ -265,38 +250,7 @@ class Pg_Show_User_Map_Public {
     
     }// end ays_add_makers()    
 
-    // private function get_tumbnails_url() {
-    //     $thumbnails     = array();
-    //     $this_site_path = trim(get_site_url(), "https:");
-    //     // TODO get small size for leaflet
-    //     $image_sizes = "thumbnail"; // medium_large for gallery
-    //     error_log("public image_sizes=".$image_sizes);
-    //     foreach($images as $i => $img){
-    //         if(strpos(trim($img, "https:"), $this_site_path) !== false){ 
-    //             $query = "SELECT * FROM `".$wpdb->prefix."posts` WHERE `post_type` = 'attachment' AND `guid` = '".$img."'";
-    //             $result_img =  $wpdb->get_results( $query, "ARRAY_A" );
-    //             if(!empty($result_img)){
-    //                 // find the given size
-    //                 $url_img = wp_get_attachment_image_src($result_img[0]['ID'], $image_sizes);
-    //                 if($url_img === false){
-    //                     $thumbnails[] = $img;
-    //                 }else{
-    //                     $thumbnails[] = $url_img[0];
-    //                 }
-
-    //                 // TODO test content of metada
-    //                 // $metadata = wp_get_attachment_metadata($result_img[0]['ID']);
-    //                 // error_log("image metadata=".print_r($metadata, true));
-
-    //             }else{
-    //                 $thumbnails[] = $img;
-    //             }                
-    //         }else{
-    //             $thumbnails[] = $img;
-    //         }
-    //     }        
-    // }
-
+ 
     // $id = gallery id
     // return an array with image IDs
     // TODO, used elsewhere, to be defined in a static method

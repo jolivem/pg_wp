@@ -245,6 +245,7 @@ class Pg_Edit_Photo_Public {
         return $dict;
 
     }
+    
     // callback on request to download photos
     public function user_edit_photo() {
         error_log("user_edit_photo IN");

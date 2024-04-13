@@ -25,7 +25,8 @@
 // TODO renommer les fichiers, les variables, les tables, etc..
 class Pg_Edit_Gallery_Public {
 
-    const PAGE_ID_EDIT_PHOTO = 33;
+    //const PAGE_ID_EDIT_PHOTO = 33;
+    const PAGE_ID_EDIT_PHOTO = 186;
 
     /**
      * The ID of this plugin.
@@ -100,52 +101,78 @@ class Pg_Edit_Gallery_Public {
     
     public function pg_generate_page( $attr ){
         ob_start();
-        error_log("pg_generate_page IN ".print_r($attr, true));
+        error_log("pg_generate_page IN ".print_r($_GET, true));
 
         // TODO check that the photo belons to the current user
 
         //Test with ID=67
-        $attr['id']=2;
+        if (! isset($_GET['gid'])) {
+            // TODO return 404
+            return "";
+        }
+
+        //use the post ID provided in the URL
+        $id=$_GET['gid']; 
 
         $this->enqueue_styles();
         $this->enqueue_scripts();
 
-        echo $this->pg_show_page( $attr );
+        echo $this->pg_show_page( $id );
 
         return str_replace(array("\r\n", "\n", "\r"), '', ob_get_clean());
     }
 
     
-    function pg_add_nav_bar() {
-        $code = '
-        <!-- Tab Nav -->
-        <nav>
-            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <button class="nav-link active" id="nav-photos-tab" data-bs-toggle="tab" data-bs-target="#nav-photos" type="button" role="tab" aria-controls="nav-photos" aria-selected="true">Photos</button>
-                <button class="nav-link" id="nav-desc-tab" data-bs-toggle="tab" data-bs-target="#nav-desc" type="button" role="tab" aria-controls="nav-desc" aria-selected="false">Title</button>
-                <button class="nav-link" id="nav-config-tab" data-bs-toggle="tab" data-bs-target="#nav-config" type="button" role="tab" aria-controls="nav-config" aria-selected="false">Adanced</button>
-            </div>
-        </nav>
-        <!-- End of Tab Nav -->';
-        return $code;
-    }
+    // function pg_add_nav_bar() {
+    //     $code = '
+    //     <!-- Tab Nav -->
+    //     <nav>
+    //         <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    //             <button class="nav-link active" id="nav-photos-tab" data-bs-toggle="tab" data-bs-target="#nav-photos" type="button" role="tab" aria-controls="nav-photos" aria-selected="true">Photos</button>
+    //             <button class="nav-link" id="nav-desc-tab" data-bs-toggle="tab" data-bs-target="#nav-desc" type="button" role="tab" aria-controls="nav-desc" aria-selected="false">Title</button>
+    //             <button class="nav-link" id="nav-config-tab" data-bs-toggle="tab" data-bs-target="#nav-config" type="button" role="tab" aria-controls="nav-config" aria-selected="false">Adanced</button>
+    //         </div>
+    //     </nav>
+    //     <!-- End of Tab Nav -->';
+    //     return $code;
+    // }
     
     // attr should have the user id
-    public function pg_show_page( $attr ){
+    public function pg_show_page( $id ){
 
-        error_log("pg_show_page IN ".print_r($attr, true));
+        error_log("pg_show_page IN id=".$id);
         
-        //global $wpdb;
-        $id = ( isset($attr['id']) ) ? absint( intval( $attr['id'] ) ) : null;
+        if ($id == -1) {
+            // create a new gallery
+            $id = $this->create_gallery();
+            error_log("pg_show_page after id=".$id);
+            if ( $id == 0 ) {
+                // internal error
+                // TODO 404
+                return;
+            }
 
-        $gallery = $this->pg_get_gallery_by_id($id);
-        if(!$gallery){
-            error_log("pg_show_page Gallery not found");
-            return "";
+            $gallery = $this->pg_get_gallery_by_id($id);
+
+            $title = "";
+            $description = "";
+            $html_images = "";
+
         }
-        
-        $title = $gallery["title"];
-        $description = $gallery["description"];
+        else {
+            // get an existing gallery
+            $gallery = $this->pg_get_gallery_by_id($id);
+            if(!$gallery){
+                error_log("pg_show_page Gallery not found");
+                return "";
+            }
+            $title = $gallery["title"];
+            $description = $gallery["description"];
+            $medias = $this->pg_get_medias_by_gallery($id);
+            if ($medias != null) {
+                $html_images = $this->render_images($medias);
+            }
+        }
 
         $edit_photo_url = get_permalink(self::PAGE_ID_EDIT_PHOTO); // TODO move 186 to a global constant or get by Title
 
@@ -154,46 +181,39 @@ class Pg_Edit_Gallery_Public {
         $nonce = wp_create_nonce('edit_gallery');
         error_log("pg_show_page single admin_ajax_url=".$admin_ajax_url);
 
-        $medias = $this->pg_get_medias_by_gallery($id);
-
-        if ($medias != null) {
-            $html_images = $this->render_images($medias);
-        }
   
         //error_log("render_images url:".print_r($url_img, true));
         // TODO check url_img is OK, add try catch
-        $navbar = $this->pg_add_nav_bar();
+        //$navbar = $this->pg_add_nav_bar();
         $html_code = "
         <div class='container'>
-            $navbar
             <!-- Tab Content -->
             <form action='' method='POST'>
                 <input type='hidden' id='gallery-id' name='gallery-id' value='$id'/>
                 <input type='hidden' id='pg_admin_ajax_url' value='$admin_ajax_url'/>
                 <input type='hidden' id='pg_edit_photo_url' value='$edit_photo_url'/>
                 <input type='hidden' id='pg_nonce' value='$nonce'/>
-                <div class='tab-content' id='nav-tabContent'>
-                    <br/>
-                    <div class='tab-pane fade show active' id='nav-photos' role='tabpanel' aria-labelledby='nav-photos-tab'>
-                        <button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#multipleDowloadModal'>
-                            Add photos...
-                        </button>
-                        <div id='gallery-item-list'>$html_images</div>
-                    </div>
-                    <div class='tab-pane fade' id='nav-desc' role='tabpanel' aria-labelledby='nav-desc-tab'>
+                <div class='tab-content'>
+                    <div>
                         <div class='form-floating mb-3'>
                             <input type='text' name='title' class='form-control' id='gallery-title' aria-describedby='titleHelp' placeholder='' value='$title'>
                             <label for='gallery-title'>Titre</label>
                         </div>
                         <div class='form-floating mb-3'>
-                            <textarea rows='5' name='desc' style='height:100%;' class='form-control' placeholder='' id='gallery-description'>$description</textarea>
+                            <textarea rows='4' name='desc' style='height:100%;' class='form-control' placeholder='' id='gallery-description'>$description</textarea>
                             <label for='gallery-description'>Description</label>                        
                         </div>
                     </div>
-                    <div class='tab-pane fade' id='nav-config' role='tabpanel' aria-labelledby='nav-config-tab'>horrible</div>
-                </div>      
+                    <div>
+                        <button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#multipleDowloadModal'>
+                            Add photos...
+                        </button>
+                        <div id='gallery-item-list'>$html_images</div>
+                    </div>
+                </div>
+                <br/>
                 <div>
-                    <button type='submit' class='btn btn-primary' id='edit-gallery'>Enregistrer</button>
+                    <button type='submit' class='btn btn-primary' id='edit-gallery-save'>Enregistrer</button>
                 </div>
             </form>      
             <!-- End of Tab Content -->
@@ -287,7 +307,7 @@ class Pg_Edit_Gallery_Public {
     // callback on request to submit gallery settings
     public function user_edit_gallery() {
         error_log("user_edit_gallery IN");
-        error_log("user_edit_gallery REQUEST ".print_r($_REQUEST, true));
+        //error_log("user_edit_gallery REQUEST ".print_r($_REQUEST, true));
         //error_log("download_single_photo FILES ".print_r($_FILES, true));
 
         if( ! isset( $_REQUEST['nonce'] ) or 
@@ -300,7 +320,7 @@ class Pg_Edit_Gallery_Public {
         $title = sanitize_text_field( $_REQUEST['title'] );
         $desc = sanitize_text_field( $_REQUEST['desc'] );
 
-        $this->add_or_edit_gallery($_REQUEST);
+        $this->update_gallery($_REQUEST);
 
         error_log( "Respond success");
         wp_send_json_success( null, 200);
@@ -309,6 +329,7 @@ class Pg_Edit_Gallery_Public {
 
     function pg_get_gallery_by_id( $id ) {
         global $wpdb;
+        error_log( "pg_get_gallery_by_id IN id=".$id);
 
         $sql = "SELECT * FROM {$wpdb->prefix}glp_gallery WHERE id={$id}";
 
@@ -317,18 +338,117 @@ class Pg_Edit_Gallery_Public {
         return $result;
     }
 
-    public function add_or_edit_gallery($data){
+    private function get_default_options(){
+       
+        $options = array(
+            'columns_count'         => '3',
+            'view_type'             => 'masonry',
+            "border_radius"         => "0",
+            "admin_pagination"      => "all",
+            "hover_zoom"            => "no",
+            "vignette_display"      => "hover",
+            "show_gal_title"        => "off",
+            //"show_gal_desc"         => "off",
+            "images_hover_effect"   => "",
+            "hover_dir_aware"       => "slide",
+            "images_border"         => "",
+            "images_border_width"   => "1",
+            "images_border_style"   => "solid",
+            "images_border_color"   => "#000000",
+            "hover_effect"          => "fadeIn",
+            "hover_opacity"         => "0.5",
+            "image_sizes"           => "full_size",
+            "lightbox_color"        => "rgba(0,0,0,0)",
+            "images_orderby"        => "noordering",
+            "hover_icon"            => "search_plus",
+            "show_title"            => "on",
+            "show_title_on"         => "image_hover",
+            "title_position"        => "bottom",
+            "show_with_date"        => "",
+            "images_distance"       => "5",
+            "images_loading"        => "load_all",
+            "images_request"        => "selection",
+            "gallery_loader"        => "",
+            "hover_icon_size"       => "20",
+            "thumbnail_title_size"  => "12",
+            "thumb_height_mobile"   => "170",
+            "thumb_height_desktop"  => "260",
+            "enable_light_box"      => "off",
+            "ays_filter_cat"        => "off",
+            "filter_thubnail_opt"   => "none",
+            "ordering_asc_desc"     => "ascending",
+            "custom_class"          => "",
+            //"link_on_whole_img"     => "off",
+            "create_date"           => current_time( 'mysql' ),
+            "author"                => '',
+            'gpg_create_author'     => '',
+            "mosaic_row_size"       => "500",
+        );     
+        return $options;
+    }
+
+    private function get_default_lightbox_options(){
+
+        //lightbox option not displayed, can be removed ??
+        $options = array(
+            "lightbox_counter"      => "true",
+            "lightbox_autoplay"     => "true",
+            "lb_pause"              => "5000",
+            "lb_show_caption"       => "true",
+            "filter_lightbox_opt"   => "none",
+        );
+
+        return $options;
+    }
+
+    public function create_gallery(){
+        error_log( "create_gallery IN");
+        global $wpdb;
+        $gallery_table = $wpdb->prefix . "glp_gallery";
+    
+        $user_id = get_current_user_id();
+        $g_options=$this->get_default_options();
+        $g_l_options=$this->get_default_lightbox_options();
+ 
+        $gallery_result = $wpdb->insert(
+            $gallery_table,
+            array(
+                "title"             => '',
+                "description"       => '',
+                "images"            => '',
+                "images_titles"     => '',
+                "images_descs"      => '',
+                "images_alts"       => '', //TODO remove
+                "images_urls"       => '', //TODO remove
+                "categories_id"     => '',
+                "width"             => 0,
+                "height"            => 0,
+                "options"           => json_encode($g_options,true),
+                "lightbox_options"  => json_encode($g_l_options,true),
+                "custom_css"        => '',
+                "images_dates"      => $user_id,
+                "images_ids"        => ''
+            ),
+            array( "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%d", "%d", "%s", "%s", "%s", "%s", "%s" )
+        );
+
+        error_log( "create_gallery, id = ".$wpdb->insert_id);
+        return $wpdb->insert_id;
+    }
+    
+    
+    public function update_gallery($data){
         global $wpdb;
         $gallery_table = $wpdb->prefix . "glp_gallery";
 
         // List of images
         if (isset($data["images_id"]) && !empty($data["images_id"])) {
-            error_log("add_or_edit_gallery() images selected ! ");
+            error_log("update_gallery() images selected ! ");
             $images_ids = str_replace(",", "***", $data["images_id"]);
-            error_log("add_or_edit_gallery() images=".$image_ids);
+            error_log("update_gallery() images=".$image_ids);
         }
         else {
-            error_log("add_or_edit_gallery() NO images ! ");
+            error_log("update_gallery() NO images ! ");
             //$image_paths            = '';
             $images_ids = '';
         }
@@ -341,76 +461,35 @@ class Pg_Edit_Gallery_Public {
     
         $user_id = get_current_user_id();
         $submit_type = (isset($data['submit_type'])) ?  $data['submit_type'] : '';
-        if( $id == null ){
-            $gallery_result = $wpdb->insert(
-                $gallery_table,
-                array(
-                    "title"             => $title,
-                    "description"       => $description,
-                    "images"            => '',
-                    "images_titles"     => '',
-                    "images_descs"      => '',
-                    "images_alts"       => '', //TODO remove
-                    "images_urls"       => '', //TODO remove
-                    "categories_id"     => '',
-                    "width"             => 0,
-                    "height"            => 0,
-                    "options"           => '',
-                    "lightbox_options"  => '',
-                    "custom_css"        => '',
-                    "images_dates"      => $user_id,
-                    "images_ids"        => $images_ids
-                ),
-                array( "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%d", "%d", "%s", "%s", "%s", "%s", "%s" )
-            );
-            $message = "created";
-        }else{
-            $gallery_result = $wpdb->update(
-                $gallery_table,
-                array(
-                    "title"             => $title,
-                    "description"       => $description,
-                    "images"            => '',
-                    "images_titles"     => '',
-                    "images_descs"      => '',
-                    "images_alts"       => '', //TODO remove
-                    "images_urls"       => '', //TODO remove
-                    "categories_id"     => '',
-                    "width"             => 0,
-                    "height"            => 0,
-                    "options"           => '',
-                    "lightbox_options"  => '',
-                    "custom_css"        => '',
-                    "images_dates"      => $user_id,
-                    "images_ids"        => $images_ids
-                ),
-                array( "id" => $id ),
-                array( "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%d", "%d", "%s", "%s", "%s", "%s", "%s" ),
-                array( "%d" )
-            );
-            $message = "updated";
-        }
-        $glp_tab = isset($data['glp_settings_tab']) ? $data['glp_settings_tab'] : 'tab1';
-        if( $gallery_result >= 0 ){
-            if($submit_type == ''){
-                $url = esc_url_raw( remove_query_arg(["action", "gallery"]  ) ) . "&status=" . $message . "&type=success";
-                wp_redirect( $url );
-                exit();
-            }else{
-                if($id == null){
-                    $url = esc_url_raw( add_query_arg( array(
-                        "action"                => "edit",
-                        "gallery"               => $wpdb->insert_id,
-                        "glp_settings_tab"      => $glp_tab,
-                        "status"                => $message
-                    ) ) );
-                }else{
-                    $url = esc_url_raw( remove_query_arg(false) ) . '&glp_settings_tab='.$glp_tab.'&status=' . $message;
-                }
 
-                wp_redirect( $url );
-                exit();
-            }
-        }
+        $g_options=$this->get_default_options();
+        $g_l_options=$this->get_default_lightbox_options();
+
+        $gallery_result = $wpdb->update(
+            $gallery_table,
+            array(
+                "title"             => $title,
+                "description"       => $description,
+                "images"            => '',
+                "images_titles"     => '',
+                "images_descs"      => '',
+                "images_alts"       => '', //TODO remove
+                "images_urls"       => '', //TODO remove
+                "categories_id"     => '',
+                "width"             => 0,
+                "height"            => 0,
+                "options"           => json_encode($g_options,true),
+                "lightbox_options"  => json_encode($g_l_options,true),
+                "custom_css"        => '',
+                "images_dates"      => $user_id,
+                "images_ids"        => $images_ids
+            ),
+            array( "id" => $id ),
+            array( "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%d", "%d", "%s", "%s", "%s", "%s", "%s" ),
+            array( "%d" )
+        );
+
+        $glp_tab = isset($data['glp_settings_tab']) ? $data['glp_settings_tab'] : 'tab1';
+        return $gallery_result;
     }
 }

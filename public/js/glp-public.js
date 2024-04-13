@@ -32,6 +32,14 @@
             }
         }); 
 
+        $(document).find('#user-galleries-create').on('click', function(e){
+            console.log("user-galleries-create click", e);
+            let edit_gallery_url = document.getElementById('pg_edit_gallery_url').value;
+            edit_gallery_url += "&gid=-1";
+            window.location = edit_gallery_url;
+        });
+
+
         $(document).find('.user-photo-option').on('click', function(e){
             console.log("user-photo-option click", e);
             if (e.target.classList.contains("fa-edit")) {
@@ -62,7 +70,7 @@
             else if (e.target.classList.contains("fa-trash")) {
                 const galid = e.target.dataset.galid;
                 console.log("user-gallery-option trash galid=", galid);
-                document.getElementById('delete-gallery').dataset.galid=galid;
+                document.getElementById('modal-delete-gallery').dataset.galid=galid;
                 // call the modal for delete 
                 deleteConfirModal = new bootstrap.Modal(document.getElementById('deleteConfirModal'), {});
                 deleteConfirModal.toggle();
@@ -70,14 +78,56 @@
             e.preventDefault();
         });
 
-        $(document).find('#delete-gallery').on('click', function(e){
+        $(document).find('#modal-delete-gallery').on('click', function(e){
+            console.log("modal-delete-gallery IN galid=", e.target.dataset.galid);
+            galid = e.target.dataset.galid;
+            deleteConfirModal.toggle();
+            e.preventDefault();
+
+            //let post_id = document.getElementById('post_id').value;
+            let nonce = document.getElementById('pg_nonce').value;
+            let admin_url = document.getElementById('pg_admin_ajax_url').value;
+    
+            const formData = new FormData();
+            formData.append('action', 'user_delete_gallery');
+            formData.append('nonce', nonce);
+            formData.append('gid', galid);
+
+            jQuery.ajax({
+                method: 'POST',
+                url: admin_url,
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response){
+                    console.log("SUCCESS");
+                    // remove the gallery with animation
+                    // find the gallery elements
+                    const list = document.querySelectorAll(`[data-galid='${galid}']`)
+                    if (list) {
+                        console.log("modal-delete-gallery", list[0]);
+
+                        let ancestor = list[0].parentNode.parentNode.parentNode;
+                        ancestor.style.animationDuration = '.35s';
+                        ancestor.style.animationName = 'slideOutLeft';
+                    
+                        setTimeout(() => {
+                            ancestor.remove(); // Remove the corresponding list item after animation
+                        }, 300); // Duration of the animation    
+                    }
+                
+                }
+                // TODO handle error
+            });            
+        });
+
+        $(document).find('#create-gallery').on('click', function(e){
             console.log("gallery-photo-option click", e.target.dataset.galid);
             deleteConfirModal.toggle();
-            //console.log("gallery-photo-option click", deleteConfirModal);
             e.preventDefault();
         });
 
-        $(document).find('.gallery-item-opgallery-photo-optiontion').on('click', function(e){
+        $(document).find('.gallery-photo-option').on('click', function(e){
             console.log("gallery-photo-option click", e);
             if (e.target.classList.contains("fa-edit")) {
                 const postid = e.target.parentElement.dataset.id;
