@@ -25,10 +25,10 @@
 // TODO renommer les fichiers, les variables, les tables, etc..
 class Glp_User_Galleries_Public {
 
-    //const PAGE_ID_EDIT_GALLERY = 11;
-    const PAGE_ID_EDIT_GALLERY = 189;
-    //const PAGE_ID_SHOW_GALLERY = 36;
-    const PAGE_ID_SHOW_GALLERY = 272;
+    const PAGE_ID_EDIT_GALLERY = 11;
+    //const PAGE_ID_EDIT_GALLERY = 189;
+    const PAGE_ID_SHOW_GALLERY = 36;
+    //const PAGE_ID_SHOW_GALLERY = 272;
 
     /**
      * The ID of this plugin.
@@ -133,7 +133,7 @@ class Glp_User_Galleries_Public {
         error_log("pg_show_page IN user_id: ".$user_id);
 
         $html_code = "";
-        $galleries = $this->pg_get_gallery_by_user_id($user_id);
+        $galleries = $this->pg_get_galleries_by_user_id($user_id);
         if(empty($galleries)){
             // TODO display No galleries, create your first gallery
             $html_code .= "<p>No galleries, create your first gallery</p>";
@@ -160,7 +160,7 @@ class Glp_User_Galleries_Public {
         $html_code .= $this->render_galleries($galleries);
         $html_code .= 
         "</div>";
-        $html_code .= $this->pg_create_modal_for_delete_confirmation();
+        //$html_code .= $this->pg_create_modal_for_delete_confirmation();
 
         return $html_code;
     } 
@@ -170,7 +170,7 @@ class Glp_User_Galleries_Public {
 
         // loop for each media
         foreach($galleries as $item){
-            //error_log("render_galleries item:".print_r($item, true));
+            error_log("render_galleries item:".print_r($item, true));
             
             // get the first image og the gallery
             $image_id = $this->pg_get_first_image_by_id($item["id"]);
@@ -182,6 +182,8 @@ class Glp_User_Galleries_Public {
                     $img_src = $url_img[0];
                 }
             }
+            $datetime = explode( " ", $item['date_update']);
+            $date = $datetime[0];
             // $url_img = wp_get_attachment_image_src($item->ID, "thumbnail");
             // if ($url_img != false) {
             //     $img_src = $url_img[0];
@@ -192,15 +194,15 @@ class Glp_User_Galleries_Public {
             '<div class="flex-container">
                 <div class="miniature" style="background-image: url('.$img_src.')"></div>
                 <div class="photo-text-container" style="background-color: lightyellow";>
-                    <div class="photo-title">'.$item["title"].'</div>
-                    <div class="photo-text">'.$item["description"].'</div>
-                    <div class="footer" style="background-color: lightblue">coucou me voilà</div>
+                    <div class="gallery-title">'.$item["title"].'</div>
+                    <div class="gallery-text">'.$item["description"].'</div>
+                    <div class="footer-user-galleries">Modifiée le '.$date.'</div>
                 </div>
                 <div class="options" style="background-color: lightgreen">
-                    <div class="flex-options">
+                    <div class="flex-options-2">
                         <div class="user-gallery-option pointer-icon fas fa-edit" aria-hidden="true" data-galid="'.$item["id"].'"></div>
                         <div class="user-gallery-option pointer-icon fas fa-eye" aria-hidden="true" data-galid="'.$item["id"].'"></div>
-                        <div class="user-gallery-option pointer-icon fas fa-trash" aria-hidden="true" data-galid="'.$item["id"].'"></div>
+                        <div class="user-gallery-option pointer-icon fas fa-share-alt" aria-hidden="true" data-galid="'.$item["id"].'"></div>
                     </div>
                 </div>
             </div>';
@@ -212,18 +214,18 @@ class Glp_User_Galleries_Public {
 
     // Get the list of galleries for a given user_id
     // return empty array if none
-    static public function pg_get_gallery_by_user_id( $user_id ){
+    static public function pg_get_galleries_by_user_id( $user_id ){
         global $wpdb;
 
-        error_log("pg_get_gallery_by_user_id id: ".$user_id);
+        error_log("pg_get_galleries_by_user_id id: ".$user_id);
 
         $gallery_table = esc_sql($wpdb->prefix . "glp_gallery");
 
         $user_id = absint( sanitize_text_field( $user_id ));
-        $sql = "SELECT * FROM ".$gallery_table." WHERE images_dates=$user_id";
-        //error_log("pg_get_gallery_by_user_id sql: ".$sql);
+        $sql = "SELECT * FROM ".$gallery_table." WHERE user_id=$user_id";
+        //error_log("pg_get_galleries_by_user_id sql: ".$sql);
         $results = $wpdb->get_results($sql, 'ARRAY_A');
-        //error_log("pg_get_gallery_by_user_id result: ".print_r($results, true));
+        //error_log("pg_get_galleries_by_user_id result: ".print_r($results, true));
         if(count($results) > 0){
             return $results;
         }else{
@@ -252,72 +254,5 @@ class Glp_User_Galleries_Public {
 
         return null;
     }
-
-    function pg_create_modal_for_delete_confirmation() {
-        $html_code = "
-        <div class='modal fade' id='deleteConfirModal' tabindex='-1' aria-labelledby='deleteConfirModalLabel' aria-hidden='true'>
-            <div class='modal-dialog'>
-                <div class='modal-content'>
-                    <div class='container'>
-                        <div class='modal-header'>
-                            <h5 class='modal-title' id='deleteConfirModalLabel'>Confirmation</h5>
-                            <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
-                        </div>                            
-                        <div class='modal-body'>
-                            Voulez-vous vraiment supprimer la gallerie ?
-                        </div>
-                        <div class='modal-footer'>
-                            <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Close</button>
-                            <button type='button' id='modal-delete-gallery' class='btn btn-primary'>Supprimer</button>
-                        </div>
-                        <div id='progressContainer'></div>
-                    </div>
-                </div>
-            </div>
-        </div>";
-
-        return $html_code;
-    }
-
-   
-    // callback on request to delete a gallery
-    public function user_delete_gallery() {
-        error_log("user_delete_gallery IN");
-        error_log("user_delete_gallery REQUEST ".print_r($_REQUEST, true));
-        //error_log("download_single_photo FILES ".print_r($_FILES, true));
-
-        // TODO test current user is gallery user
-
-        if( ! isset( $_REQUEST['nonce'] ) or 
-            ! wp_verify_nonce( $_REQUEST['nonce'], 'user_galleries' ) ) {
-            error_log("user_delete_gallery nonce not found");
-            wp_send_json_error( "NOK.", 403 );
-            wp_die();
-            return;
-        }
-
-        if( ! isset( $_REQUEST['gid'] )){
-            error_log("user_delete_gallery no gid");
-            wp_send_json_error( "NOT Found", 404 );
-            wp_die();
-            return;
-        }
-
-        // find the gallery
-        $gallery = Glp_Galleries_List_Table::get_gallery_by_id($_REQUEST['gid']);
-        if (!$gallery) {
-            error_log("user_delete_gallery gallery noty found");
-            wp_send_json_error( "NOT Found", 404 );
-            wp_die();
-            return;
-        }
-
-        Glp_Galleries_List_Table::delete_gallery($_REQUEST['gid']);
-
-        error_log( "Respond success");
-        wp_send_json_success( null, 200);
-        wp_die();
-        
-    }    
 
 }

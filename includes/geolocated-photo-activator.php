@@ -49,33 +49,31 @@ class Geolocated_Photo_Activator {
             `id` INT(16) UNSIGNED NOT NULL AUTO_INCREMENT,
             `title` VARCHAR(256) NOT NULL,
             `description` TEXT NOT NULL,
-            `images` TEXT NOT NULL,
-            `images_titles` TEXT NOT NULL, 
-            `images_descs` TEXT NOT NULL,
-            `images_alts` TEXT NOT NULL,
-            `images_urls` TEXT NOT NULL,
             `categories_id` TEXT NOT NULL,
             `width` INT(16) NOT NULL,
             `height` INT NOT NULL,
             `options` TEXT NOT NULL,
             `lightbox_options` TEXT NOT NULL,
             `custom_css` TEXT NOT NULL,
-            `images_dates` TEXT NOT NULL,
+            `user_id` TEXT NOT NULL,
+            `date_creation` DATETIME NOT NULL,
+            `date_update` DATETIME NOT NULL,
+            `uuid` BINARY(16) NULL,
             `images_ids` TEXT NOT NULL,
             PRIMARY KEY (`id`)
         )$charset_collate;";
         dbDelta( $sql );
 
-        $sql = "CREATE TABLE `" . $table_map . "` (
-            `id` INT(16) UNSIGNED NOT NULL AUTO_INCREMENT,
-            `title` VARCHAR(256) NOT NULL,
-            `options` TEXT NOT NULL,
-            `lightbox_options` TEXT NOT NULL,
-            `provider` TEXT NOT NULL,
-            `gallery_id` TEXT NOT NULL,
-            PRIMARY KEY (`id`)
-            )$charset_collate;";
-        dbDelta( $sql );
+        // $sql = "CREATE TABLE `" . $table_map . "` (
+        //     `id` INT(16) UNSIGNED NOT NULL AUTO_INCREMENT,
+        //     `title` VARCHAR(256) NOT NULL,
+        //     `options` TEXT NOT NULL,
+        //     `lightbox_options` TEXT NOT NULL,
+        //     `provider` TEXT NOT NULL,
+        //     `gallery_id` TEXT NOT NULL,
+        //     PRIMARY KEY (`id`)
+        //     )$charset_collate;";
+        // dbDelta( $sql );
 
         $sql = "CREATE TABLE `" . $general_settings_table . "` (
             `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -85,19 +83,20 @@ class Geolocated_Photo_Activator {
             `options` TEXT NULL DEFAULT NULL,
             PRIMARY KEY (`id`)
         )".$charset_collate.";";
+        dbDelta( $sql );
 
         $sql = "CREATE TABLE `" . $geopost_table . "` (
             `id` INT(16) NOT NULL AUTO_INCREMENT,
             `post_id` BIGINT(20) NOT NULL,
             `location` POINT NOT NULL,
             `zoom_level` INT NULL DEFAULT NULL, 
-            `public` BOOL NULL DEFAULT NULL, 
+            `visible` BOOL NULL DEFAULT NULL, 
             `rating` INT NULL DEFAULT NULL,
             `date` DATE NULL DEFAULT NULL,
-            `is_exif` BOOL NOT NULL,
+            `is_exif` BOOL NULL DEFAULT NULL,
             SPATIAL INDEX(location),
             PRIMARY KEY (`id`)
-            )".$charset_collate.";";
+        )".$charset_collate.";";
 
 
         $sql_schema = "SELECT * FROM INFORMATION_SCHEMA.TABLES

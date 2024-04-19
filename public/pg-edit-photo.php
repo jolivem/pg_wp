@@ -34,6 +34,13 @@ class Pg_Edit_Photo_Public {
      */
     private $plugin_name;
 
+    const STATUS_NOT_SEEN = 0;
+    const STATUS_PUBLIC_OK = 1;
+    const STATUS_NOT_PUBLIC = 2;
+
+    const WORLDMAP_ON = 'on';
+    const WORLDMAP_OFF = 'off';
+
     /**
      * The version of this plugin.
      *
@@ -131,13 +138,18 @@ class Pg_Edit_Photo_Public {
         $latitude = get_post_meta($id, 'latitude', true);
         $longitude = get_post_meta($id, 'longitude', true);
         $vignette = get_post_meta($id, 'vignette', true);
+        $worldmap_checked = "";
+        $worldmap_value = self::WORLDMAP_OFF;
+        if (get_post_meta($id, 'worldmap', true) == self::WORLDMAP_ON) {
+            $worldmap_checked = " checked";
+            $worldmap_value = self::WORLDMAP_ON;
+        }
 
         $post = get_post($id);
-        //error_log("render_images content=".print_r($post, true));
         $content = $post->post_content;
         $title = $post->post_title;
 
-        error_log("pg_show_page latitude=".$latitude.", longitude=".$longitude.", vignette=".$vignette);
+        error_log("pg_show_page latitude=$latitude, longitude=$longitude, vignette=$vignette, worldmap=$worldmap");
 
         //$vignette_dropdown = '<select id="select-country" name="attachments[' . $post->ID . '][vignette]">';
         $vignette_options = $this->get_vignette_options();
@@ -154,50 +166,55 @@ class Pg_Edit_Photo_Public {
         if ($url_img != false) {
             $img_src = $url_img[0];
         }
-        //error_log("render_images url:".print_r($url_img, true));
         // TODO check url_img is OK, add try catch
-         $html_code = '
-        <div class="container">
-            <div style="display:flex; justify-content: center;">
-                <img style="height:200px; width:auto; border: 1px solid #BBB; padding:3px; border-radius: 4px" src="'.$img_src.'" alt="">
+        $html_code = "
+        <input type='hidden' id='latitude' value='$latitude'/>
+        <input type='hidden' id='longitude' value='$longitude'/>
+        <input type='hidden' id='vignette' value='$vignette'/>
+        <input type='hidden' id='post_id' value='$id'/>
+        <input type='hidden' id='pg_admin_ajax_url' value='$admin_ajax_url'/>
+        <input type='hidden' id='pg_nonce' value='$nonce'/>
+        <div class='toast-container position-absolute bottom-0 end-0 p-3'>
+            <div id='save-photo-success' class='toast align-items-center text-white bg-success bg-gradient border-0' role='alert' aria-live='assertive' aria-atomic='true'>
+                <div class='d-flex'>
+                    <div class='toast-body'>
+                        Enregistré !
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='container'>
+            <div style='display:flex; justify-content: center;'>
+                <img style='height:200px; width:auto; border: 1px solid #BBB; padding:3px; border-radius: 4px' src='$img_src' alt=''>
             </div>
             <br>
-            <form id="edit-photo-form">
-                <input type="hidden" id="latitude" value="'.$latitude.'"/>
-                <input type="hidden" id="longitude" value="'.$longitude.'"/>
-                <input type="hidden" id="vignette" value="'.$vignette.'"/>
-                <input type="hidden" id="post_id" value="'.$id.'"/>
-                <input type="hidden" id="pg_admin_ajax_url" value="'.$admin_ajax_url.'"/>
-                <input type="hidden" id="pg_nonce" value="'.$nonce.'"/>
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="photo-title" aria-describedby="titleHelp" placeholder="" value="'.$title.'">
-                    <label for="photo-title">Titre</label>
+            <div class='form-floating mb-3'>
+                <input type='text' class='form-control' id='photo-title' aria-describedby='titleHelp' placeholder='' value='$title'>
+                <label for='photo-title'>Titre</label>
+            </div>
+            <div class='form-floating mb-3'>
+                <textarea rows='5' style='height:100%;' class='form-control' placeholder='' id='photo-description'>$content</textarea>
+                <label for='photo-description'>Description</label>                        
+            </div>
+            <div class='edit-photo-flex-container'>
+                <div class='edit-photo-select'>
+                    <select id='select-country' class='form-select mb-3' aria-label=''>
+                        <option selected>Sélectionner la zone</option>$html_options
+                    </select>
                 </div>
-                <div class="form-floating mb-3">
-                    <textarea rows="5" style="height:100%;" class="form-control" placeholder="" id="photo-description">'.$content.'</textarea>
-                    <label for="photo-description">Description</label>                        
-                </div>
-                <div class="edit-photo-flex-container" style="background-color: lightyellow">
-                    <div class="edit-photo-select">
-                        <select id="select-country" class="form-select mb-3" aria-label="">
-                            <option selected>Sélectionner la zone</option>'
-                            .$html_options.
-                        '</select>
-                    </div>
-                    <div id="leaflet-map" class="edit-photo-map"></div>
-                </div>
-                    
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="worldmap" value="on" checked>
-                    <label class="form-check-label" for="worldmap">Autoriser l\'affichage sur la carte mondiale</label>
-                </div>
-                <br>
-                <div>
-                    <button type="submit" class="btn btn-primary" id="save-photo">Enregistrer</button>
-                    <button type="button" class="btn btn-secondary" id="close-photo" style="float: inline-end;">Fermer</button>
-                </div>
-            </form>
-        </div>';
+                <div id='leaflet-map' class='edit-photo-map'></div>
+            </div>
+                
+            <div class='form-check form-switch'>
+                <input class='form-check-input' type='checkbox' role='switch' id='worldmap' value='$worldmap_value'$worldmap_checked>
+                <label class='form-check-label' for='worldmap'>Autoriser l'affichage sur la carte mondiale</label>
+            </div>
+            <br>
+            <div>
+                <a href='javascript:history.back()'>Retour</a>
+                <button type='button' class='btn btn-primary' id='save-photo' style='float: inline-end;'>Enregistrer</button>
+            </div>
+        </div>";
 
         return $html_code;
     } // end ays_show_galery()
@@ -246,9 +263,11 @@ class Pg_Edit_Photo_Public {
 
     }
     
+    //
     // callback on request to download photos
+    //
     public function user_edit_photo() {
-        error_log("user_edit_photo IN");
+        //error_log("user_edit_photo IN");
         error_log("user_edit_photo REQUEST ".print_r($_REQUEST, true));
         //error_log("download_single_photo FILES ".print_r($_FILES, true));
 
@@ -256,12 +275,22 @@ class Pg_Edit_Photo_Public {
             ! wp_verify_nonce( $_REQUEST['nonce'], 'edit_photo' ) ) {
             error_log("user_edit_photo nonce not found");
             wp_send_json_error( "NOK.", 403 );
+            return;
         }
 
+        $user_id = get_current_user_id();
+        if ($user_id == 0) {
+            error_log("user_edit_photo No USER");
+            // TODO 404 NOT FOUND
+            wp_send_json_error( "NOK.", 401 );
+            return;
+        }
 
         $post_id = sanitize_text_field( $_REQUEST['post_id'] );
         $title = sanitize_text_field( $_REQUEST['title'] );
         $desc = sanitize_text_field( $_REQUEST['desc'] );
+        $vignette = sanitize_text_field( $_REQUEST['vignette'] );
+        $worldmap = sanitize_text_field( $_REQUEST['worldmap'] );
 
         if ( wp_attachment_is_image( $post_id ) ) {
             //$my_image_title = get_post( $post_ID )->post_title;
@@ -287,10 +316,13 @@ class Pg_Edit_Photo_Public {
             //update_post_meta( $post_id, '_wp_attachment_image_alt', $title );
 
             // Set the country
-            update_post_meta($post_id , 'vignette', $_REQUEST['vignette']);
+            update_post_meta($post_id , 'vignette', $vignette);
 
             // Set the 'worldmap'
-            update_post_meta($post_id , 'user-worldmap', $_REQUEST['worldmap']);
+            update_post_meta($post_id , 'worldmap', $worldmap);
+
+            // 
+            $this->update_visibility($post_id, $worldmap);
 
         }
         else {
@@ -301,5 +333,20 @@ class Pg_Edit_Photo_Public {
         wp_send_json_success( null, 200);
         wp_die();
         
+    }
+
+    // Update the public visibility
+    private function update_visibility($post_id, $worldmap) {
+        error_log("update_visibility IN id=$post_id worldmap=$worldmap");
+
+        $status = get_post_meta($post_id, 'status', true);
+        error_log("update_visibility status=$status");
+
+        if ($worldmap == self::WORLDMAP_ON && $status == self::STATUS_PUBLIC_OK) {
+            Pg_Geoposts_Table::update_visible($post_id, Pg_Geoposts_Table::PUBLIC_VISIBLE);
+        }
+        else {
+            Pg_Geoposts_Table::update_visible($post_id, Pg_Geoposts_Table::PUBLIC_HIDDEN);
+        }
     }
 }

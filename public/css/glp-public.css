@@ -626,6 +626,34 @@ button.lg-icon {
 }
 
 .photo-text {
+    line-height: 26px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: 70px;
+}
+
+.photo-text-user {
+    line-height: 26px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: 48px;
+}
+
+.photo-text-gallery {
+    line-height: 26px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: 48px;
+}
+
+.gallery-title {
+    line-height: 20px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: 20px;
+}
+
+.gallery-text {
     line-height: 20px;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -636,7 +664,23 @@ button.lg-icon {
     position: relative;
     top: 12px;
     font-size: 10px;
-    color: #888
+    color: #666
+}
+
+.footer-user-galleries {
+    position: relative;
+    top: 18px;
+    font-size: 10px;
+    color: #666
+}
+
+.footer-edit-gallery {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    top: 12px;
+    font-size: 10px;
+    color: #666
 }
 
 .flex-options {
@@ -645,10 +689,33 @@ button.lg-icon {
     flex-direction: column;
 }
 
+.flex-options-2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
 .options {
     flex-basis: 40px;
     border-radius: 0 8px 8px 0;
     padding: 5px;
+}
+
+.options-photo-gallery {
+    flex-basis: 40px;
+    border-radius: 0 8px 8px 0;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.flex-options-3 {
+    flex-basis: 40px;
+    display: flex;
+    align-items: center;
+    border-radius: 0 8px 8px 0;
+    justify-content: center;
 }
 
 .slider-options-left {
@@ -673,6 +740,7 @@ button.lg-icon {
     flex-basis: 300px;
     flex: 10 0 20px;
     padding: 7px;
+    padding-top: 17px;
 }
 
 
@@ -694,7 +762,7 @@ button.lg-icon {
     cursor: pointer;
     flex-basis: 300px;
     flex: 10 0 20px;
-    padding: 7px;
+    padding-top: 17px;
 }
 
 .edit-photo-flex-container {
@@ -712,14 +780,32 @@ button.lg-icon {
     margin-left: 10px;
 }
 
+.align-right {
+    position: relative;
+    float: right;
+}
+
+.align-left {
+    position: relative;
+    float: leftt;
+}
+
+.search-place {
+    display: flex;
+    padding-bottom: 10px;
+}
+
+.search-place button {
+    margin-left: 10px; /* Add some space between input and button */
+}
 /** drag drop and sortable **/
 
-* {
+/** {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
-}
+}*/
 
 body {
     display: flex;

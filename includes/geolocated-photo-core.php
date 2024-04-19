@@ -258,10 +258,10 @@ class Geolocated_Photo {
 	private function define_public_hooks() {
 
 		$plugin_user_photos_public = new Glp_User_Photos_Public( $this->get_plugin_name(), $this->get_version() );
+        $this->loader->add_action( 'wp_ajax_user_delete_photo', $plugin_user_photos_public, 'user_delete_photo');
+        $this->loader->add_action( 'wp_ajax_nopriv_user_delete_photo', $plugin_user_photos_public, 'user_delete_photo'); // TODO be removed
 		
         $plugin_user_galleries = new Glp_User_Galleries_Public( $this->get_plugin_name(), $this->get_version() );
-        $this->loader->add_action( 'wp_ajax_user_delete_gallery', $plugin_user_galleries, 'user_delete_gallery');
-        $this->loader->add_action( 'wp_ajax_nopriv_user_delete_gallery', $plugin_user_galleries, 'user_delete_gallery'); // TODO be removed
 
         //$plugin_map_public = new Glp_Map_Public( $this->get_plugin_name(), $this->get_version() );
 		$plugin_public_gallery_category = new Geolocated_Photo_Category( $this->get_plugin_name(), $this->get_version() );
@@ -287,9 +287,16 @@ class Geolocated_Photo {
         $plugin_edit_gallery = new Pg_Edit_Gallery_Public( $this->get_plugin_name(), $this->get_version() );
         $this->loader->add_action( 'wp_ajax_user_edit_gallery', $plugin_edit_gallery, 'user_edit_gallery');
         $this->loader->add_action( 'wp_ajax_nopriv_user_edit_gallery', $plugin_edit_gallery, 'user_edit_gallery'); // TODO be removed
+        $this->loader->add_action( 'wp_ajax_user_delete_gallery', $plugin_edit_gallery, 'user_delete_gallery');
+        $this->loader->add_action( 'wp_ajax_nopriv_user_delete_gallery', $plugin_edit_gallery, 'user_delete_gallery'); // TODO be removed
+        // $this->loader->add_action( 'wp_ajax_user_remove_photo', $plugin_edit_gallery, 'user_remove_photo');
+        // $this->loader->add_action( 'wp_ajax_nopriv_user_remove_photo', $plugin_edit_gallery, 'user_remove_photo'); // TODO be removed
 
-        new Pg_Show_User_Map_Public( $this->get_plugin_name(), $this->get_version() );
-        new Pg_Show_Planet_Map_Public( $this->get_plugin_name(), $this->get_version() );
+        $planet = new Pg_Show_Planet_Map_Public( $this->get_plugin_name(), $this->get_version() );
+        $this->loader->add_action( 'wp_ajax_get_bb_images', $planet, 'get_bb_images');
+        $this->loader->add_action( 'wp_ajax_nopriv_get_bb_images', $planet, 'get_bb_images'); // TODO be removed
+
+		new Pg_Show_User_Map_Public( $this->get_plugin_name(), $this->get_version() );
         new Pg_Show_User_Gallery_Public( $this->get_plugin_name(), $this->get_version() );
         new Pg_Show_User_Gallery_Public( $this->get_plugin_name(), $this->get_version() );
         new Pg_Geoposts_Table( $this->get_plugin_name(), $this->get_version() );

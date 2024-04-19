@@ -151,7 +151,7 @@ class Pg_Show_User_Map_Public {
 
         $html_code = "
         <div class='container'>
-            <div id='map'></div>
+            <div id='map' style='height:300px;'></div>
             <div class='flex-container'>
                 <div class='slider-options-left' style='background-color: lightgreen'>
                     <div>
@@ -190,7 +190,7 @@ class Pg_Show_User_Map_Public {
                 $img_src = $url_img[0];
             }
 
-            $html.="<img src='$img_src' alt='Image 1' class='imgNotSelected'>";
+            $html.="<img src='$img_src' id='postid-$id' alt='Image 1' class='imgNotSelected'>";
         }
         return $html;
     }

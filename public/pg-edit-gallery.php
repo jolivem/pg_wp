@@ -25,9 +25,6 @@
 // TODO renommer les fichiers, les variables, les tables, etc..
 class Pg_Edit_Gallery_Public {
 
-    //const PAGE_ID_EDIT_PHOTO = 33;
-    const PAGE_ID_EDIT_PHOTO = 186;
-
     /**
      * The ID of this plugin.
      *
@@ -49,6 +46,11 @@ class Pg_Edit_Gallery_Public {
 
     // list of al lpossible countries and their options (file, width, height)
     private $countries = array();
+
+
+    const PAGE_ID_EDIT_PHOTO = 33;
+    //const PAGE_ID_EDIT_PHOTO = 186;
+    const PAGE_ID_USER_GALLERIES = 20;
 
     /**
      * Initialize the class and set its properties.
@@ -84,8 +86,8 @@ class Pg_Edit_Gallery_Public {
     public function enqueue_scripts() {
 
         //wp_enqueue_media();
-        wp_enqueue_script( $this->plugin_name.'-glp-public.js', plugin_dir_url( __FILE__ ) . 'js/glp-public.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-bootstrap.js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', array( 'jquery' ), $this->version, true );
+        wp_enqueue_script( $this->plugin_name.'-glp-public.js', plugin_dir_url( __FILE__ ) . 'js/glp-public.js', array( 'jquery' ), $this->version, true );
         //wp_enqueue_script('leaflet', 'https://unpkg.com/leaflet/dist/leaflet.js', array('jquery'), '1.7.1', true);
 
         wp_enqueue_script( $this->plugin_name.'-pg-vignette.js', plugin_dir_url( __FILE__ ) . 'js/pg-vignette.js', array( 'jquery' ), $this->version, true );
@@ -117,7 +119,7 @@ class Pg_Edit_Gallery_Public {
         $this->enqueue_styles();
         $this->enqueue_scripts();
 
-        echo $this->pg_show_page( $id );
+        echo $this->pg_show_page( $id, $_GET['page_id'] );
 
         return str_replace(array("\r\n", "\n", "\r"), '', ob_get_clean());
     }
@@ -138,7 +140,7 @@ class Pg_Edit_Gallery_Public {
     // }
     
     // attr should have the user id
-    public function pg_show_page( $id ){
+    public function pg_show_page( $id, $page_id ){
 
         error_log("pg_show_page IN id=".$id);
         
@@ -152,11 +154,16 @@ class Pg_Edit_Gallery_Public {
                 return;
             }
 
-            $gallery = $this->pg_get_gallery_by_id($id);
+            //$gallery = $this->pg_get_gallery_by_id($id);
 
-            $title = "";
-            $description = "";
-            $html_images = "";
+            $url = esc_url_raw( add_query_arg( array(
+                "page_id"           => $page_id,
+                "gid"               => $id) ) );
+            wp_redirect( $url );
+
+            // $title = "";
+            // $description = "";
+            // $html_images = "";
 
         }
         else {
@@ -173,51 +180,66 @@ class Pg_Edit_Gallery_Public {
                 $html_images = $this->render_images($medias);
             }
         }
-
+        $user_galleries_url = get_permalink(self::PAGE_ID_USER_GALLERIES);
         $edit_photo_url = get_permalink(self::PAGE_ID_EDIT_PHOTO); // TODO move 186 to a global constant or get by Title
 
         $admin_ajax_url = admin_url('admin-ajax.php');
-        $admin_post_url = admin_url('admin-post.php');
+        //$admin_post_url = admin_url('admin-post.php');
         $nonce = wp_create_nonce('edit_gallery');
         error_log("pg_show_page single admin_ajax_url=".$admin_ajax_url);
 
-  
         //error_log("render_images url:".print_r($url_img, true));
         // TODO check url_img is OK, add try catch
         //$navbar = $this->pg_add_nav_bar();
         $html_code = "
+        <div class='toast-container position-absolute bottom-0 end-0 p-3'>
+            <div id='save-gallery-success' class='toast align-items-center text-white bg-success bg-gradient border-0' role='alert' aria-live='assertive' aria-atomic='true'>
+                <div class='d-flex'>
+                    <div class='toast-body'>
+                        Enregistré !
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class='container'>
-            <!-- Tab Content -->
-            <form action='' method='POST'>
-                <input type='hidden' id='gallery-id' name='gallery-id' value='$id'/>
-                <input type='hidden' id='pg_admin_ajax_url' value='$admin_ajax_url'/>
-                <input type='hidden' id='pg_edit_photo_url' value='$edit_photo_url'/>
-                <input type='hidden' id='pg_nonce' value='$nonce'/>
-                <div class='tab-content'>
-                    <div>
-                        <div class='form-floating mb-3'>
-                            <input type='text' name='title' class='form-control' id='gallery-title' aria-describedby='titleHelp' placeholder='' value='$title'>
-                            <label for='gallery-title'>Titre</label>
-                        </div>
-                        <div class='form-floating mb-3'>
-                            <textarea rows='4' name='desc' style='height:100%;' class='form-control' placeholder='' id='gallery-description'>$description</textarea>
-                            <label for='gallery-description'>Description</label>                        
-                        </div>
-                    </div>
-                    <div>
-                        <button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#multipleDowloadModal'>
-                            Add photos...
-                        </button>
-                        <div id='gallery-item-list'>$html_images</div>
-                    </div>
-                </div>
-                <br/>
+            <input type='hidden' id='gallery-id' name='gallery-id' value='$id'/>
+            <input type='hidden' id='pg_admin_ajax_url' value='$admin_ajax_url'/>
+            <input type='hidden' id='pg_edit_photo_url' value='$edit_photo_url'/>
+            <input type='hidden' id='pg_user_galleries_url' value='$user_galleries_url'/>
+            <input type='hidden' id='pg_nonce' value='$nonce'/>
+            <div class='tab-content'>
                 <div>
-                    <button type='submit' class='btn btn-primary' id='edit-gallery-save'>Enregistrer</button>
+                    <div class='form-floating mb-3'>
+                        <input type='text' name='title' class='form-control' id='gallery-title' aria-describedby='titleHelp' placeholder='' value='$title'>
+                        <label for='gallery-title'>Titre</label>
+                    </div>
+                    <div class='form-floating mb-3'>
+                        <textarea rows='4' name='desc' style='height:100%;' class='form-control' placeholder='' id='gallery-description'>$description</textarea>
+                        <label for='gallery-description'>Description</label>                        
+                    </div>
                 </div>
-            </form>      
-            <!-- End of Tab Content -->
+                <div>
+                    <button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#multipleDowloadModal'>
+                        Add photos...
+                    </button>
+                    <button type='button' class='btn btn-primary align-right' id='edit-gallery-save'>Enregistrer</button>
+            </div>
+                <div id='gallery-item-list'>$html_images</div>
+            </div>
+            <br/>
+            <div>
+                <button type='button' class='btn btn-primary align-left' data-bs-toggle='modal' data-bs-target='#delete-confirmation'>
+                    Supprimer la gallerie
+                </button>";
+        if ($html_images != "") {
+            $html_code .= "
+                <button type='button' class='btn btn-primary align-right' id='edit-gallery-save'>Enregistrer</button>";
+        }
+        $html_code .= "
+            </div>
         </div>";
+
+        $html_code .= $this->get_html_for_delete_confirmation();
 
         return $html_code;
     } // end ays_show_galery()
@@ -252,8 +274,7 @@ class Pg_Edit_Gallery_Public {
     // render all the images 
     function render_images($medias){
         //error_log("render_images IN images=".print_r($medias, true));
-        $html='<div>
-                    <div class="sortable-list" id="item-list">';
+        $html='<div class="sortable-list" id="item-list">';
 
         // loop for each media
         foreach($medias as $id){
@@ -271,6 +292,19 @@ class Pg_Edit_Gallery_Public {
 
             $meta = get_post_meta($id);
             //error_log("render_images meta=".print_r($meta, true));
+            error_log("render_images type=".gettype($meta['status'][0]));
+            if ($meta['worldmap'][0] != Pg_Edit_Photo_Public::WORLDMAP_ON){
+                $statext = "Private";
+            }
+            else {
+                //TODO get if its shared or not
+                if ($meta['status'][0] == Pg_Edit_Photo_Public::STATUS_PUBLIC_OK) {
+                    $statext = "Shared";
+                }
+                else {
+                    $statext = "Shared not validated";
+                }
+            }
 
             //TODO get title and text
             //error_log("render_images url:".print_r($url_img, true));
@@ -281,21 +315,20 @@ class Pg_Edit_Gallery_Public {
                     <div class="miniature" style="background-image: url('.$img_src.')"></div>
                     <div class="photo-text-container" style="background-color: lightyellow";>
                         <div class="photo-title">'.$title.'</div>
-                        <div class="photo-text">'.$content.'</div>
-                        <div class="footer">Date : '.$post->post_date.'</div>
-                    </div>
-                    <div class="options" style="background-color: lightgreen">
-                        <div class="flex-options" data-id="'.$id.'">
-                            <div class="gallery-photo-option pointer-icon fas fa-edit" aria-hidden="true"></div>
-                            <div class="gallery-photo-option"></div>
-                            <div class="gallery-photo-option pointer-icon fas fa-trash" aria-hidden="true"></div>
+                        <div class="photo-text-gallery">'.$content.'</div>
+                        <div class="footer-edit-gallery">
+                            <div>Date : '.$post->post_date.'</div>
+                            <div>'.$statext.'</div>
                         </div>
+                    </div>
+                    <div class="options-photo-gallery" data-id="'.$id.'" style="background-color: lightgreen">
+                        <div class="gallery-photo-option pointer-icon fas fa-edit" aria-hidden="true"></div>
+                        <div class="gallery-photo-option pointer-icon fas fa-trash" aria-hidden="true"></div>
                     </div>
                 </div>
             </li>';
         }
-        $html.='</div>
-            </div>';
+        $html.='</div>';
         // TODO make it work on mobiles
         return $html;
     }
@@ -314,6 +347,15 @@ class Pg_Edit_Gallery_Public {
             ! wp_verify_nonce( $_REQUEST['nonce'], 'edit_gallery' ) ) {
             error_log("user_edit_gallery nonce not found");
             wp_send_json_error( "NOK.", 403 );
+            return;
+        }
+
+        $user_id = get_current_user_id();
+        if ($user_id == 0) {
+            error_log("user_edit_gallery No USER");
+            // TODO 404 NOT FOUND
+            wp_send_json_error( "NOK.", 401 );
+            return;
         }
 
         $gallery_id = sanitize_text_field( $_REQUEST['gallery_id'] );
@@ -326,6 +368,79 @@ class Pg_Edit_Gallery_Public {
         wp_send_json_success( null, 200);
         wp_die();
     }
+
+  
+    // callback on request to delete a gallery
+    public function user_delete_gallery() {
+        error_log("user_delete_gallery IN");
+        error_log("user_delete_gallery REQUEST ".print_r($_REQUEST, true));
+        //error_log("download_single_photo FILES ".print_r($_FILES, true));
+
+        // TODO test current user is gallery user
+
+        $user_id = get_current_user_id();
+        if ($user_id == 0) {
+            error_log("user_delete_gallery No USER");
+            // TODO 404 NOT FOUND
+            wp_send_json_error( "NOK.", 401 );
+            return;
+        }
+
+        if( ! isset( $_REQUEST['nonce'] ) or 
+            ! wp_verify_nonce( $_REQUEST['nonce'], 'edit_gallery' ) ) {
+            error_log("user_delete_gallery nonce not found");
+            wp_send_json_error( "NOK.", 403 );
+            wp_die();
+            return;
+        }
+
+        if( ! isset( $_REQUEST['gid'] )){
+            error_log("user_delete_gallery no gid");
+            wp_send_json_error( "NOT Found", 404 );
+            wp_die();
+            return;
+        }
+
+        // find the gallery
+        $gallery = Glp_Galleries_List_Table::get_gallery_by_id($_REQUEST['gid']);
+        if (!$gallery) {
+            error_log("user_delete_gallery gallery noty found");
+            wp_send_json_error( "NOT Found", 404 );
+            wp_die();
+            return;
+        }
+
+        Glp_Galleries_List_Table::delete_gallery($_REQUEST['gid']);
+
+        error_log( "Respond success");
+        wp_send_json_success( null, 200);
+        wp_die();
+        
+    }    
+
+
+    // callback on request to submit gallery settings
+    // public function user_remove_photo() {
+    //     error_log("user_remove_photo IN");
+    //     //error_log("user_remove_photo REQUEST ".print_r($_REQUEST, true));
+    //     //error_log("download_single_photo FILES ".print_r($_FILES, true));
+
+    //     if( ! isset( $_REQUEST['nonce'] ) or 
+    //         ! wp_verify_nonce( $_REQUEST['nonce'], 'edit_gallery' ) ) {
+    //         error_log("user_remove_photo nonce not found");
+    //         wp_send_json_error( "NOK.", 403 );
+    //     }
+
+    //     $gallery_id = sanitize_text_field( $_REQUEST['gid'] );
+    //     $post_id = sanitize_text_field( $_REQUEST['postid'] );
+
+
+    //     $this->remove_post_from_gallery($post_id, $gallery_id);
+
+    //     error_log( "Respond success");
+    //     wp_send_json_success( null, 200);
+    //     wp_die();
+    // }
 
     function pg_get_gallery_by_id( $id ) {
         global $wpdb;
@@ -409,27 +524,26 @@ class Pg_Edit_Gallery_Public {
         $user_id = get_current_user_id();
         $g_options=$this->get_default_options();
         $g_l_options=$this->get_default_lightbox_options();
+
+        $date_now = date('Y-m-d H:i:s');
  
         $gallery_result = $wpdb->insert(
             $gallery_table,
             array(
                 "title"             => '',
                 "description"       => '',
-                "images"            => '',
-                "images_titles"     => '',
-                "images_descs"      => '',
-                "images_alts"       => '', //TODO remove
-                "images_urls"       => '', //TODO remove
                 "categories_id"     => '',
                 "width"             => 0,
                 "height"            => 0,
                 "options"           => json_encode($g_options,true),
                 "lightbox_options"  => json_encode($g_l_options,true),
                 "custom_css"        => '',
-                "images_dates"      => $user_id,
+                "user_id"           => $user_id,
+                "date_creation"     => $date_now,
+                "date_update"       => $date_now,
                 "images_ids"        => ''
             ),
-            array( "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%d", "%d", "%s", "%s", "%s", "%s", "%s" )
+            array( "%s", "%s", "%s", "%d", "%d", "%s", "%s", "%s", "%s", "%s" )
         );
 
         error_log( "create_gallery, id = ".$wpdb->insert_id);
@@ -470,26 +584,80 @@ class Pg_Edit_Gallery_Public {
             array(
                 "title"             => $title,
                 "description"       => $description,
-                "images"            => '',
-                "images_titles"     => '',
-                "images_descs"      => '',
-                "images_alts"       => '', //TODO remove
-                "images_urls"       => '', //TODO remove
                 "categories_id"     => '',
                 "width"             => 0,
                 "height"            => 0,
                 "options"           => json_encode($g_options,true),
                 "lightbox_options"  => json_encode($g_l_options,true),
                 "custom_css"        => '',
-                "images_dates"      => $user_id,
+                "user_id"           => $user_id,
                 "images_ids"        => $images_ids
             ),
             array( "id" => $id ),
-            array( "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%d", "%d", "%s", "%s", "%s", "%s", "%s" ),
+            array( "%s", "%s", "%s", "%d", "%d", "%s", "%s", "%s", "%s", "%s" ),
             array( "%d" )
         );
 
         $glp_tab = isset($data['glp_settings_tab']) ? $data['glp_settings_tab'] : 'tab1';
         return $gallery_result;
     }
+
+    function get_html_for_delete_confirmation() {
+        $html_code = '
+        <div class="modal fade" id="delete-confirmation" tabindex="-1" aria-labelledby="delete-confirmation-label" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="container">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="delete-confirmation-label">Suppression de la galerie</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>                            
+                        <div class="modal-body">
+                            <p>La galerie va être supprimée définitivement.</p>
+                            <p>Note : Les photos de la galerie sont conservées et accessibles dans le menu TODO<p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="close-modal" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" id="modal-delete-gallery" class="btn btn-primary">Confirmer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>';   
+        
+        return $html_code;
+    }
+
+    // public function remove_post_from_gallery($post_id, $gallery_id){
+    //     global $wpdb;
+    //     $gallery_table = $wpdb->prefix . "glp_gallery";
+
+    //     $gallery = $this->pg_get_gallery_by_id($gallery_id);
+    //     if ($gallery) {
+
+    //         $image_ids = explode( "***", $result["images_ids"]);
+
+    //         // search post_id and delete it
+    //         if(($key = array_search($post_id, $image_ids)) !== false) {
+    //             unset($image_ids[$key]);
+
+    //             // update table
+    //             $gallery_table = $wpdb->prefix . "glp_gallery";
+
+    //             $images = sanitize_text_field( implode( "***", array_filter($image_ids)) );
+    //             //error_log("remove_post_from_gallery");
+    //             $gallery_result = $wpdb->update(
+    //                 $gallery_table,
+    //                 array("images_ids" => $images),
+    //                 array( "id" => $gallery_id ),
+    //                 array( "%s" ),
+    //                 array( "%d" )
+    //             );
+    //             error_log("remove_post_from_gallery OUT");                
+            
+    //         }
+    //     }
+
+    // }
+
 }

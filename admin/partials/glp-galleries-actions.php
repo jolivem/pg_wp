@@ -75,18 +75,13 @@ $gallery = array(
     "id"                => "",
     "title"             => "Demo title",
     // "description"       => "Demo description",
-    "images"            => "",
-    "images_titles"     => "",
-    "images_descs"      => "",
-    "images_alts"       => "",
-    "images_urls"       => "",
     "categories_id"     => "",
     "width"             => "",
     "height"            => "1000",
     "options"           => json_encode($g_options,true),
     "lightbox_options"  => json_encode($g_l_options,true),
     "custom_css"        => "",
-    "images_dates"      => "",
+    "user_id"      => "",
     "images_ids"        => "",
 );
 switch( $action ) {
@@ -439,16 +434,8 @@ $loader_iamge = "<span class='display_none glp_loader_box'><img src='". GLP_ADMI
                 else:
                     // Gallery id NOT NULL
                     //error_log("^^^^^^^^^^^^^^ id is not null: ".$id);
-                    // echo "url=".$gallery["images_urls"]; empty
-                    // echo "dates=".$gallery["images_dates"]; with date
-                    //$images = explode( "***", $gallery["images"] );
-                    // $images_descriptions = explode( "***", $gallery["images_descs"] );
-                    // $images_alts = explode( "***", $gallery["images_alts"] );
-                    // $images_urls = explode( "***", $gallery["images_urls"] );
-                    // $images_dates = explode( "***", $gallery["images_dates"] );
                     $images_ids = explode( "***", $gallery["images_ids"] );
                     //error_log("images_ids: ".print_r($images_ids, true));//TODO
-                    //error_log("#-# images: ".print_r($images, true));//TODO
 
                     $gal_cat_ids = isset($gallery['categories_id']) && $gallery['categories_id'] != '' ? explode( "***", $gallery["categories_id"] ) : array();
                     if($admin_pagination != "all"){

@@ -1509,22 +1509,6 @@ class Glp_Gallery_Public {
                 break;
         }
 
-        // if($gallery["images_dates"] == '' || $gallery["images_dates"] == null){
-        //     $image_dates = array();
-        //     for($i=0; $i < count($images); $i++){
-        //         $image_dates[] = time();
-        //     }
-        // }else{
-        //     $image_dates = explode( "***", $gallery["images_dates"]  );
-        // }
-        
-        // if($image_dates == ''){
-        //     $image_dates = array();
-        //     for($i=0; $i < count($images); $i++){
-        //         $image_dates[] = time();
-        //     }
-        // }
-        
         $html_hover_icon = $this->get_over_icon($ays_hover_icon);
 
         if ($ays_gallery_loader == 'text') {

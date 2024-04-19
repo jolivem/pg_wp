@@ -78,7 +78,6 @@ input[type="file"] {
 }
 
 .download-spinner {
-    display: none;
     position: absolute;
     top: 38px;
     right: 60px;
@@ -95,8 +94,10 @@ input[type="file"] {
 }
 
 .download-error {
+    display: none;
     position: absolute;
     top: 32px;
     right: 60px;
+    background: #eee;
     font-size: xx-large;
 }

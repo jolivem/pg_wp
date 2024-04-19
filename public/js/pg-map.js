@@ -111,7 +111,6 @@ var LeafIcon = L.Icon.extend({
 
             /* Scroll and center to the selected image */
             if (scroll == true) {
-
                 centerInSlider(imageElement, slider);
             }
         }
@@ -132,21 +131,21 @@ var LeafIcon = L.Icon.extend({
         // console.log('element.offsetLeft ', element.offsetLeft);
     }
 
-    var gal = document.getElementById('imageSlider');
-    console.log('gal:', gal);
+    // var gal = document.getElementById('imageSlider');
+    // console.log('gal:', gal);
 
     /* When user clicked on the slider gallery */
-    gal.addEventListener('click', function(event){
+    $("#imageSlider").on('click', function(event){
         event.preventDefault();
         /* console.log('gal.on 'click' event ', event);
         console.log('gal.on 'click' target', event.target);
         console.log('gal.on 'click' src', event.target.attributes.src); */
         imageSelected = event.target.getAttribute('src');
-        console.log('gal.on click imageSelected = '+imageSelected);
+        //console.log('gal.on click imageSelected = '+imageSelected);
         selectSliderImage(imageSelected, false); 
     
         let layers = markers.getLayers();
-        console.log( 'layers_', layers);
+        //console.log( 'layers_', layers);
         for (let i in layers) {
             let layer = layers[i];
             let iconUrl = layer?.options?.icon?.options?.iconUrl;
@@ -154,10 +153,14 @@ var LeafIcon = L.Icon.extend({
             if (iconUrl != null && iconUrl == imageSelected) {
                 //console.log( `FFOOUUNNDD iconUrl`, layer.options.icon.options.iconUrl);
                 let visibleOne = markers.getVisibleParent(layer);
-                //console.log('visibleOne', visibleOne);
-                let position = visibleOne.getLatLng();
-                //console.log('position', position);
-                map.setView(new L.latLng(position));
+                
+                // move map only for user gallery, not for planet 
+                if ($("#imageSlider").hasClass("gallery-slider")) {
+                    //console.log('visibleOne', visibleOne);
+                    let position = visibleOne.getLatLng();
+                    //console.log('position', position);
+                    map.setView(new L.latLng(position));
+                }
 
                 if (visibleOne._childCount != undefined) {
                     console.log('THIS IS A CLUSTER',visibleOne);
@@ -171,6 +174,7 @@ var LeafIcon = L.Icon.extend({
                         /*shadowUrl: 'leaf-shadow.png',*/
                         iconSize:     [100, 100],
                     }, true); 
+                    visibleOne._zIndex +=10000;
                     // let savZIndex = visibleOne.zIndexOffset;
                     // visibleOne.zIndexOffset = 999999;
                     
@@ -180,6 +184,7 @@ var LeafIcon = L.Icon.extend({
                             /*shadowUrl: 'leaf-shadow.png',*/
                             iconSize:     [60, 60],
                         }, true);
+                        visibleOne._zIndex -=10000;
                         // visibleOne.zIndexOffset = savZIndex;
                     }, 400);
                 }
@@ -188,14 +193,14 @@ var LeafIcon = L.Icon.extend({
         }
     });
 
-    $(document).find('.user-photo-option').on('click', function(e){
-        console.log("user-photo-option click", e)
-        if (e.target.classList.contains("fa-edit")) {
-            const postid = e.target.dataset.postid;
-            console.log("user-photo-option postid=", postid)
-        }
-        e.preventDefault();
-    });
+    // $(document).find('.user-photo-option').on('click', function(e){
+    //     console.log("user-photo-option click", e)
+    //     if (e.target.classList.contains("fa-edit")) {
+    //         const postid = e.target.dataset.postid;
+    //         console.log("user-photo-option postid=", postid)
+    //     }
+    //     e.preventDefault();
+    // });
 
     // Process when user click on step-forward or step-backward
     // and when user click on angle-double-right or angle-double-left
@@ -272,4 +277,111 @@ var LeafIcon = L.Icon.extend({
             }
     }
 
+    document.getElementById("searchInput").addEventListener("keypress", function(event) {
+        // Check if the pressed key is 'Enter' (key code 13)
+        console.log('searchInput IN', event);
+        if (event.key === 'Enter') {
+            event.preventDefault();
+
+            // Call the function to handle the 'Enter' key press
+            searchAddress();
+        }
+    });
+
+    document.getElementById('searchButton').addEventListener('click', function(event) {
+        event.preventDefault();
+        searchAddress();
+    });                
+
+    function searchAddress() {
+        console.log('searchAddress IN');
+        var address = document.getElementById('searchInput').value;
+
+        if (address == '') {
+            return;
+        }
+
+        // Utilisation de l'API Nominatim pour géocoder l'adresse
+        var url = 'https://nominatim.openstreetmap.org/search?format=json&q=' + address;
+        console.log('searchAddress url', url);
+
+        fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            console.log('searchAddress response', data);
+            if (data.length > 0) {
+                var lat = parseFloat(data[0].lat);
+                var lon = parseFloat(data[0].lon);
+                
+                // Création de la carte OpenStreetMap
+                map.setView([lat, lon], 12);
+
+                L.marker([lat, lon]).addTo(map)
+                    .bindPopup(address)
+                    .openPopup();
+            } else {
+                alert('Adresse introuvable');
+            }
+        })
+        .catch(error => console.error('Erreur :', error));
+    }
+
 })( jQuery );
+
+    
+function getImagesFromBB(ne_lat, ne_lng, sw_lat, sw_lng, zoom) {
+
+    console.log("getImagesFromBB IN", {ne_lat, ne_lng, sw_lat, sw_lng, zoom});
+    
+    let admin_url = document.getElementById('pg_admin_ajax_url').value;
+    let nonce = document.getElementById('page_nonce').value;
+    //console.log("uploadPhotos admin_url=", admin_url);
+
+    const formData = new FormData();
+    formData.append('action', 'get_bb_images');
+    formData.append('nonce', nonce);
+    formData.append('ne_lat', ne_lat);
+    formData.append('ne_lng', ne_lng);
+    formData.append('sw_lat', sw_lat);
+    formData.append('sw_lng', sw_lng);
+    formData.append('zoom', zoom);
+    jQuery.ajax({
+        method: 'POST',
+        url: admin_url,
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function(response){
+            console.log("success", response);
+            updateSlider(response.data);
+
+        },
+        error: function(response) {
+            console.log("error", response);
+        }
+    });
+}
+
+function updateSlider(datas) {
+    console.log("updateSlider IN", datas);
+    const slider = document.getElementById('imageSlider');
+    slider.innerHTML="";
+    if (datas) {
+        datas.forEach(function(image) {
+            //console.log("updateSlider image", image);
+            const img = createImageElement(image.url);
+            slider.appendChild(img);
+        });
+    }
+
+}
+
+// Function to create image elements
+function createImageElement(url) {
+    //console.log("createImageElement IN", url);
+    const img = document.createElement('img');
+    img.src = url;
+    img.classList.add('ImgNotSelected');
+    return img;
+  }
+

@@ -170,8 +170,6 @@ jQuery(document).find('#single-upload').on('click', function(event){
     let admin_url = document.getElementById('pg_admin_ajax_url').value;
     let nonce = document.getElementById('download_nonce').value;
     //console.log("uploadPhotos admin_url=", admin_url);
-    //const xhr = new XMLHttpRequest();
-    // admin_url = admin_url;// + "?action=download_multiple_photos";
 
     const formData = new FormData();
     formData.append('action', 'download_single_photo');
@@ -179,7 +177,7 @@ jQuery(document).find('#single-upload').on('click', function(event){
     formData.append('title', 'my Title');
     formData.append('lat', latitudeValue);
     formData.append('lon', longitudeValue);
-    formData.append('is_exif', "false");
+    formData.append('is_exif', false);
     formData.append('file', file);
     jQuery.ajax({
         method: 'POST',
@@ -334,7 +332,7 @@ function downloadASinglePhoto(files) {
                         file.pgpg.lat = latitude;
                         file.pgpg.lon = longitude;
                         file.pgpg.altitude = altitude; // atltide to calculate with denominator
-                        file.pgpg.is_exif = "true";
+                        file.pgpg.is_exif = true;
                         //TODO calculate and fill zoom value
                         file.pgpg.zoom = 1;
                         file.pgpg.date = date;
@@ -355,7 +353,7 @@ function downloadASinglePhoto(files) {
 //
 
 jQuery(document).find('#close-multiple-modal').on('click', function(e){
-    console.log("close-multiple-modal IN");
+    console.log("show-modal IN");
     e.preventDefault();
     location.reload();
 });
@@ -399,8 +397,6 @@ jQuery(document).find('#multiple-upload').on('click', function(e){
         let admin_url = document.getElementById('pg_admin_ajax_url').value;
         let nonce = document.getElementById('download_nonce').value;
         //console.log("uploadPhotos admin_url=", admin_url);
-        //const xhr = new XMLHttpRequest();
-        // admin_url = admin_url;// + "?action=download_multiple_photos";
     
         const formData = new FormData();
         formData.append('action', 'download_multiple_photos');
@@ -426,6 +422,15 @@ jQuery(document).find('#multiple-upload').on('click', function(e){
                 let spinner = file_div.parentNode.getElementsByClassName('download-spinner');
                 spinner[0].style.display='none';
                 let check = file_div.parentNode.getElementsByClassName('download-success');
+                check[0].style.display='block';
+                button.disabled = true;
+            },
+            error: function(response) {
+                console.log("error", response);
+                const button = document.getElementById('multiple-upload');
+                let spinner = file_div.parentNode.getElementsByClassName('download-spinner');
+                spinner[0].style.display='none';
+                let check = file_div.parentNode.getElementsByClassName('download-error');
                 check[0].style.display='block';
                 button.disabled = true;
             }
@@ -504,24 +509,32 @@ function downloadMultiplePhotos(files) {
             break;
         }
   
-        function renderItemMultiple(src, name, lat, lon, date) {
+        function renderItemMultiple(src, name, lat, lon, date, zoomRatio) {
+            console.log('renderItemMultiple zoomRatio', zoomRatio);
             const list = document.getElementById('modal-item-list');
             const listItem = document.createElement('div');
             listItem.className = 'full-item';
             if (lat != undefined) {
+                let zoomHtml='';
+                if (zoomRatio != '1') {
+                    zoomHtml = `<br>Zoom: *${zoomRatio}`;                    
+                }
+                console.log('renderItemMultiple zoomHtml', zoomHtml);
 
                 listItem.innerHTML = `
                 <div style="position: relative;">
-                    <div class="spinner-border text-primary download-spinner"></div>
+                    <div class="spinner-border text-primary download-spinner" style="display:none;"></div>
                     <div class="download-success"><i class="fas fa-check" style="color: green;"></i></div>
+                    <div class="download-error"><i class="fas fa-times" style="color: red;"></i></div>
                     <div class="flex-container" style="margin-top:0px" data-valid="ok">
                         <img src="${src}"class="full-miniature"></img>
                             <div class="full-photo-text-container" style="background-color: lightyellow; flex: 10 0 200px;">
                                 <div class="photo-title">Fichier : ${name}</div>
-                                <div class="photo-text"><i class="fas fa-map-marker-alt" style="color: green;"></i> géolocalisation OK<br/>Date : ${date}</div>
+                                <div class="photo-text"><i class="fas fa-map-marker-alt" style="color: green;">
+                                    </i> géolocalisation OK<br/>Date : ${date}${zoomHtml}</div>
                             </div>
-                            <div class="options" style="background-color: lightgreen">
-                                <div class="flex-options" data-id="'.$id.'">
+                            <div class="flex-options-3" style="background-color: lightgreen">
+                                <div data-id="'.$id.'">
                                     <div class="download-photo-option pointer-icon fas fa-trash" aria-hidden="true" onclick='removeDownloadPhoto(this.parentNode.parentNode)'></div>
                                 </div>
                             </div>
@@ -543,7 +556,7 @@ function downloadMultiplePhotos(files) {
                                 </div>
                             </div>
                             <div class="options" style="background-color: lightgreen">
-                                <div class="flex-options" data-id="'.$id.'">
+                                <div data-id="'.$id.'">
                                     <div class="download-photo-option pointer-icon fas fa-trash" aria-hidden="true" onclick='removeDownloadPhoto(this.parentNode.parentNode)'></div>
                                 </div>
                             </div>
@@ -580,23 +593,23 @@ function downloadMultiplePhotos(files) {
                     const longitude = convertDMSToDDExif(lon[0], lon[1], lon[2], lonRef);
 
                     const date = EXIF.getTag(this, 'DateTimeOriginal');
+                    let zoomRatio = EXIF.getTag(this, 'DigitalZoomRation');
+                    if (zoomRatio) {
+                        zoomRatio = zoomRatio.toString();
+                    }
 
                     reverseGeocoding(latitude, longitude);
 
-                    renderItemMultiple(event.target.result, file.name, latitude, longitude, date);
+                    renderItemMultiple(event.target.result, file.name, latitude, longitude, date, zoomRatio);
 
                     file.pgpg = {};
                     file.pgpg.lat = latitude;
                     file.pgpg.lon = longitude;
                     file.pgpg.altitude = altitude; // atltide to calculate with denominator
-                    file.pgpg.origin = "true";
+                    file.pgpg.is_exif = true;
                     //TODO calculate and fill zoom value
-                    file.pgpg.zoom = 1;
+                    file.pgpg.zoom = zoomRatio;
                     file.pgpg.date = date;
-        
-                    const info = document.createElement('div');
-                    info.textContent = `Latitude: ${latitude}, Longitude: ${longitude}`;
-                    //thumbnailContainer.appendChild(info);
                 }
                 else {
                     renderItemMultiple(event.target.result, file.name);

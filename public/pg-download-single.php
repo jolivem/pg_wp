@@ -221,7 +221,17 @@ class Pg_Download_Single_Public {
             ! wp_verify_nonce( $_REQUEST['nonce'], 'download_single_photo' ) ) {
             error_log("download_single_photo nonce not found");
             wp_send_json_error( "NOK.", 403 );
+            return;
         }
+
+        $user_id = get_current_user_id();
+        if ($user_id == 0) {
+            error_log("download_multiple_photos No USER");
+            // TODO 404 NOT FOUND
+            wp_send_json_error( "NOK.", 401 );
+            return;
+        }
+
         $title = sanitize_text_field( $_POST['title'] );
         $uploadedfile = $_FILES['file'];
         $upload_overrides = array('test_form' => false);
@@ -257,7 +267,7 @@ class Pg_Download_Single_Public {
 
             update_post_meta($attachment_id , 'latitude', $_REQUEST['lat']);
             update_post_meta($attachment_id , 'longitude', $_REQUEST['lon']);
-            update_post_meta($attachment_id , 'origin', $_REQUEST['origin']);
+            update_post_meta($attachment_id , 'is_exif', $_REQUEST['is_exif']);
 
 
         } else {

@@ -15,9 +15,6 @@
 .gpg_loader_".$id." {
     $ays_gal_loader_display;
 } */
-#map {
-    height: 500px;
-}
 
 .mydivicon {
     border-radius: 25%;
@@ -54,6 +51,21 @@ div.gallery-slider img {
     /*border: 2px solid transparent; /*Initial border style */
 }
 
+div.planet-slider {
+    background-color: #333;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 4px;
+}
+
+div.planet-slider img {
+    padding: 2px;
+    height: 140px;
+    cursor: pointer;
+    /* Add cursor pointer for better usability */
+    /*border: 2px solid transparent; /*Initial border style */
+}
+
 .imgSelected {
     border: 2px solid red;
     /* Adjust the border style for selected images */
@@ -63,5 +75,5 @@ div.gallery-slider img {
 .imgNotSelected {
     border: 2px solid transparent;
     /* Adjust the border style for selected images */
-    opacity: 0.6;
+    opacity: 0.85;
 }

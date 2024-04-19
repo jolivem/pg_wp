@@ -90,24 +90,12 @@ class Glp_Galleries_List_Table extends WP_List_Table{
                 error_log("add_or_edit_gallery() images selected ! ");
                 //$image_paths            = (isset($data["ays-image-path"]) && $data["ays-image-path"] != '') ? sanitize_text_field( implode( "***", array_filter($data["ays-image-path"] )) ) : '';
                 $image_ids              = (isset($data["ays-image-id"]) && $data["ays-image-id"] != '') ? sanitize_text_field( implode( "***", array_filter($data["ays-image-id"] )) ) : '';
-                //error_log("TODO image id:".$image_ids);
-                // $image_titles           = (isset($data["ays-image-title"]) && $data["ays-image-title"] != '') ? stripslashes(sanitize_text_field( implode( "***", $data["ays-image-title"] ) ) ) : '';
-                //$image_alts             = (isset($data["ays-image-alt"]) && $data["ays-image-alt"] != '') ? stripslashes (sanitize_text_field( implode( "***", $data["ays-image-alt"] ) ) ) : '';
-                //$image_descriptions     = (isset($data["ays-image-description"]) && $data["ays-image-description"] != '') ? stripslashes(sanitize_text_field( implode( "***", $data["ays-image-description"] ) ) ) : '';
-                // TODO: image_external_urls can be removed
-                //$image_external_urls    = (isset($data["ays-image-url"]) && $data["ays-image-url"] != '') ? sanitize_text_field( implode( "***", $data["ays-image-url"] ) ) : '';
-                //$images_dates           = (isset($data['ays-image-date']) &&  $data['ays-image-date'] != '') ? sanitize_text_field( implode( "***", $data['ays-image-date'] ) ) : '';
                 $image_categories       = (isset($data['ays_gallery_category']) && $data['ays_gallery_category'] != '') ? sanitize_text_field( implode('***', $data['ays_gallery_category']) ) : '';
             }
             else {
                 error_log("add_or_edit_gallery() NO images ! ");
                 //$image_paths            = '';
                 $image_ids              = '';
-                //$image_titles           = '';
-                //$image_alts             = '';
-                //$image_descriptions     = '';
-                //$image_external_urls    = ''; //TODO remove
-                $images_dates           = '';
                 $image_categories       = '';
             }
 
@@ -314,21 +302,17 @@ class Glp_Galleries_List_Table extends WP_List_Table{
                     array(
                         "title"             => $title,
                         "description"       => $description,
-                        "images"            => '',
-                        "images_titles"     => '',
-                        "images_descs"      => '',
-                        "images_alts"       => '', //TODO remove
-                        "images_urls"       => '', //TODO remove
                         "categories_id"     => '',
                         "width"             => $width,
                         "height"            => $height,
                         "options"           => json_encode($options),
                         "lightbox_options"  => json_encode($lightbox_options),
                         "custom_css"        => $custom_css,
-                        "images_dates"      => '',
+                        "user_id"           => '1',
                         "images_ids"        => $image_ids
                     ),
-                    array( "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%d", "%d", "%s", "%s", "%s", "%s", "%s" )
+                    array( "%s", "%s",
+                    "%s", "%d", "%d", "%s", "%s", "%s", "%s", "%s" )
                 );
                 $message = "created";
             }else{
@@ -337,22 +321,16 @@ class Glp_Galleries_List_Table extends WP_List_Table{
                     array(
                         "title"             => $title,
                         "description"       => $description,
-                        "images"            => '',
-                        "images_titles"     => '',
-                        "images_descs"      => '',
-                        "images_alts"       => '', //TODO remove
-                        "images_urls"       => '', //TODO remove
                         "categories_id"     => '',
                         "width"             => $width,
                         "height"            => $height,
                         "options"           => json_encode($options),
                         "lightbox_options"  => json_encode($lightbox_options),
                         "custom_css"        => $custom_css,
-                        "images_dates"      => '',
                         "images_ids"        => $image_ids
                     ),
                     array( "id" => $id ),
-                    array( "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%d", "%d", "%s", "%s", "%s", "%s", "%s" ),
+                    array( "%s", "%s", "%s", "%d", "%d", "%s", "%s", "%s", "%s" ),
                     array( "%d" )
                 );
                 $message = "updated";
@@ -454,12 +432,6 @@ class Glp_Galleries_List_Table extends WP_List_Table{
             array(
                 'title'             => "Copy - ".sanitize_text_field($gallery['title']),
                 'description'       => sanitize_text_field($gallery['description']),
-                'images'            => '',
-                'images_titles'     => '',
-                'images_descs'      => '',
-                'images_alts'       => '',
-                'images_urls'       => '',
-                'images_dates'      => '',
                 'width'             => sanitize_text_field($gallery['width']),
                 'height'            => sanitize_text_field($gallery['height']),
                 'options'           => json_encode($options),
@@ -468,12 +440,6 @@ class Glp_Galleries_List_Table extends WP_List_Table{
                 'custom_css'        => $gallery['custom_css']
             ),
             array(
-                '%s',
-                '%s',
-                '%s',
-                '%s',
-                '%s',
-                '%s',
                 '%s',
                 '%s',
                 '%d',

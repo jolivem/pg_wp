@@ -224,12 +224,6 @@ class Glp_Maps_List_Table extends WP_List_Table{
             array(
                 'title'             => "Copy - ".sanitize_text_field($map['title']),
                 'description'       => sanitize_text_field($map['description']),
-                'images'            => '',
-                'images_titles'     => '',
-                'images_descs'      => '',
-                'images_alts'       => '',
-                'images_urls'       => '',
-                'images_dates'      => '',
                 'width'             => sanitize_text_field($map['width']),
                 'height'            => sanitize_text_field($map['height']),
                 'options'           => json_encode($options),
@@ -238,12 +232,6 @@ class Glp_Maps_List_Table extends WP_List_Table{
                 'custom_css'        => $map['custom_css']
             ),
             array(
-                '%s',
-                '%s',
-                '%s',
-                '%s',
-                '%s',
-                '%s',
                 '%s',
                 '%s',
                 '%d',

@@ -34,6 +34,9 @@ class Glp_User_Photos_Public {
      */
     private $plugin_name;
 
+    const PAGE_ID_EDIT_GALLERY = 11;
+    //const PAGE_ID_EDIT_GALLERY = 189;
+
     /**
      * The version of this plugin.
      *
@@ -70,6 +73,10 @@ class Glp_User_Photos_Public {
     public function enqueue_styles() {
 
         wp_enqueue_style( 'gpg-fontawesome', 'https://use.fontawesome.com/releases/v5.4.1/css/all.css', array(), $this->version, 'all');
+        wp_enqueue_style( 'ays_pb_bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css', array(), $this->version, 'all' );
+        wp_enqueue_style( 'animate.css', plugin_dir_url( __FILE__ ) . 'css/animate.css', array(), $this->version, 'all' );
+
+
         // TODO lightgallery est payant !!
         //wp_enqueue_style( 'animate.css', plugin_dir_url( __FILE__ ) . 'css/animate.css', array(), $this->version, 'all' );
     }
@@ -81,6 +88,7 @@ class Glp_User_Photos_Public {
      */
     public function enqueue_scripts() {
 
+        wp_enqueue_script( $this->plugin_name.'-bootstrap.js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/glp-public.js', array( 'jquery' ), $this->version, true );
         wp_localize_script($this->plugin_name, 'ays_vars', array('base_url' => GLP_BASE_URL));
 
@@ -127,14 +135,36 @@ class Glp_User_Photos_Public {
         global $wpdb;
         $id = ( isset($attr['id']) ) ? absint( intval( $attr['id'] ) ) : null;
         
-        $medias = $this->pg_get_medias_by_user($id);
+        $user_id = get_current_user_id();
+        $medias = $this->pg_get_medias_by_user($user_id);
         if(!$medias){
-            // TODO display no photos yet, upload your first photo
-            return "[glp_user_photos id='".$id."']";
+            // TODO add a link the the gallery creationAdd gal
+            $edit_gallery_url = get_permalink(self::PAGE_ID_EDIT_GALLERY); // TODO move 186 to a global constant or get by Title
+            $edit_gallery_url .= "&gid=-1";
+            //<input type='hidden' id='pg_edit_gallery_url' value='$edit_gallery_url'/>
+            $html_code = "
+            <div>Aucune photo dans la bibliothèque. <a href='$edit_gallery_url'>Créer une galerie</a> pour ajouter des photos.<div>";
+            return $html_code;    
         }
 
-        $html_code = '
-        <div class="container" id="user-item-list">';
+        $admin_ajax_url = admin_url('admin-ajax.php');
+        //$admin_post_url = admin_url('admin-post.php');
+        $nonce = wp_create_nonce('user_photos');
+
+
+        $html_code = "
+        <div class='toast-container position-absolute bottom-0 end-0 p-3'>
+            <div id='delete-photo-success' class='toast align-items-center text-white bg-success bg-gradient border-0' role='alert' aria-live='assertive' aria-atomic='true'>
+                <div class='d-flex'>
+                    <div class='toast-body'>
+                        Supprimée !
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type='hidden' id='pg_admin_ajax_url' value='$admin_ajax_url'/>
+        <input type='hidden' id='pg_nonce' value='$nonce'/>
+        <div class='container' id='user-item-list'>";
 
         $html_code .= $this->render_images($medias);
         $html_code .= 
@@ -161,14 +191,16 @@ class Glp_User_Photos_Public {
                 <div class="miniature" style="background-image: url('.$img_src.')"></div>
                 <div class="photo-text-container" style="background-color: lightyellow";>
                     <div class="photo-title">'.$item->post_title.'</div>
-                    <div class="photo-text">'.$item->post_content.'</div>
-                    <div class="footer" style="background-color: lightblue">coucou me voilà</div>
+                    <div class="photo-text-user">'.$item->post_content.'</div>
+                    <div class="footer-edit-gallery">
+                        <div>Date : '.$item->post_date.'</div>
+                        <div>status</div>
+                    </div>
                 </div>
                 <div class="options" style="background-color: lightgreen">
                     <div class="flex-options">
-                        <div class="user-photo-option pointer-icon fas fa-trash" aria-hidden="true"></div>
-                        <div class="user-photo-option pointer-icon fas fa-trash" aria-hidden="true"></div>
-                        <div class="user-photo-option pointer-icon fas fa-edit" aria-hidden="true" data-postid="'.$item->ID.'"></div>
+                        <i class="user-photo-option pointer-icon fas fa-edit" aria-hidden="true" data-postid="'.$item->ID.'"></i>
+                        <i class="user-photo-option pointer-icon fas fa-trash" aria-hidden="true" data-postid="'.$item->ID.'"></i>
                     </div>
                 </div>
             </div>';
@@ -224,33 +256,50 @@ class Glp_User_Photos_Public {
             [post_mime_type] => image/gif
             [comment_count] => 0
             [filter] => raw
-        )        
-*/
-        return $medias;
+        )*/
 
-/*        
-        if ( $query->have_posts() ) {
-            while ( $query->have_posts() ) {
-                $query->the_post();
-                
-                // Output attachment information
-                echo 'Attachment ID: ' . get_the_ID() . '<br>';
-                echo 'Attachment URL: ' . wp_get_attachment_url( get_the_ID() ) . '<br>';
-                echo 'Attachment Title: ' . get_the_title() . '<br>';
-                // You can retrieve more information as needed
-                
-                // To display the image thumbnail, you can use wp_get_attachment_image()
-                // Example: echo wp_get_attachment_image( get_the_ID(), 'thumbnail' );
-                
-                echo '<hr>';
-            }
-            
-            // Restore original post data
-            wp_reset_postdata();
-        } else {
-            echo 'No attachments found.';
+        return $medias;
+    }
+
+    // callback on request to delete a photo
+    public function user_delete_photo() {
+        error_log("user_delete_photo IN");
+        error_log("user_delete_photo REQUEST ".print_r($_REQUEST, true));
+        //error_log("download_single_photo FILES ".print_r($_FILES, true));
+
+        // TODO test current user is gallery user
+
+        if( ! isset( $_REQUEST['nonce'] ) or 
+            ! wp_verify_nonce( $_REQUEST['nonce'], 'user_photos' ) ) {
+            error_log("user_delete_photo nonce not found");
+            wp_send_json_error( "NOK.", 403 );
+            wp_die();
+            return;
         }
 
-*/
-    }
+        $user_id = get_current_user_id();
+        if ($user_id == 0) {
+            error_log("user_delete_photo No USER");
+            // TODO 404 NOT FOUND
+            wp_send_json_error( "NOK.", 401 );
+            return;
+        }
+
+        if( ! isset( $_REQUEST['pid'] )){
+            error_log("user_delete_photo no pid");
+            wp_send_json_error( "NOT Found", 404 );
+            wp_die();
+            return;
+        }
+
+        $pid = sanitize_text_field($_REQUEST['pid']);
+
+        wp_delete_attachment( $pid, true );
+        wp_delete_post( $pid, true);
+
+        error_log( "user_delete_photo Respond success");
+        wp_send_json_success( null, 200);
+        wp_die();
+        
+    }    
 }

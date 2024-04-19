@@ -187,13 +187,6 @@
       });
     
     // When clicked on submit button
-    $(document).find('#close-photo').on('click', function(event){
-        console.log("close-photo IN");
-        event.preventDefault();
-        window.history.back();
-    });
-
-    // When clicked on submit button
     $(document).find('#save-photo').on('click', function(event){
         console.log("edit-photo IN");
         event.preventDefault();
@@ -224,7 +217,16 @@
             success: function(response){
                 console.log("upload done");
                 // come back to the previous page
-                window.history.back();
+                console.log("upload done");
+                var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+                toastElList.map(function(toastEl) {
+                    return new bootstrap.Toast(toastEl)
+                })
+                
+                var myToastEl = document.getElementById('save-photo-success')
+                var myToast = bootstrap.Toast.getInstance(myToastEl);
+                myToast.show();                
+                
             }
             // TODO handle error
         });
@@ -232,7 +234,7 @@
 
    // When clicked on submit button of edit gallery page
    $(document).find('#edit-gallery-save').on('click', function(event){
-        console.log("edit-photo IN");
+        console.log("edit-gallery-save IN");
         event.preventDefault();
         let error = false;
         let gallery_id = document.getElementById('gallery-id').value;
@@ -270,7 +272,20 @@
             processData: false,
             success: function(response){
                 console.log("upload done");
-                window.history.back();
+                var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+                toastElList.map(function(toastEl) {
+                    return new bootstrap.Toast(toastEl)
+                })
+                
+                var myToastEl = document.getElementById('save-gallery-success')
+                var myToast = bootstrap.Toast.getInstance(myToastEl);
+                myToast.show();
+
+                // $("#save-gallery-success").fadeTo(2000, 500).slideUp(500, function() {
+                //     $("#save-gallery-success").slideUp(500);
+                // });
+                // TODO add toast
+                // disable "save" button
             }
             // TODO handle error
         });

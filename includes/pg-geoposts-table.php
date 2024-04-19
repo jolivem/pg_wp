@@ -2,7 +2,12 @@
 
 class Pg_Geoposts_Table {
     private $plugin_name;
+
+    const PUBLIC_HIDDEN = 0;
+    const PUBLIC_VISIBLE = 1;
+
     private $title_length;
+
     /** Class constructor */
     public function __construct($plugin_name) 
     {
@@ -14,7 +19,7 @@ class Pg_Geoposts_Table {
     `post_id` BIGINT(20) NOT NULL,
     `location` POINT NOT NULL,
     `zoom_level` INT NULL DEFAULT NULL, do not display if ZOOM < value
-    `public` BOOL NULL DEFAULT NULL, 
+    `visible` BOOL NULL DEFAULT NULL, 
     `rating` INT NULL DEFAULT NULL,
     `date` DATE NULL DEFAULT NULL,
     `is_exif` BOOL NOT NULL,
@@ -45,45 +50,50 @@ class Pg_Geoposts_Table {
         return $result;
     }
 
-    public static function insert_post($post_id, $latitude, $longitude, $is_exif, $date)
+    public static function insert_post(int $post_id, float $latitude, float $longitude, string $is_exif, bool $date)
     {
         global $wpdb;
+
+        error_log("insert_post post_id=$post_id, latitude=$latitude, longitude=$longitude, is_exif=$is_exif, date=$date");
+
         $table = $wpdb->prefix . "glp_geo_posts";
         error_log("insert_post table=".$table);
         $bexif = 0;
         if ($is_exif == 'true') {
             $bexif = 1;
         }
-        //$point = "ST_GeomFromText('POINT($latitude $longitude)')";
-        // $query = "INSERT INTO wp_glp_geo_posts (post_id, location) VALUES (%d, ST_PointFromText('%s'), 30, 0, %s, %d)";
-        // error_log("insert_post query=".$query);
-        // $sql = $wpdb->prepare($query, $post_id, $point, $date, $bexif);
-        // $wpdb->query($query);
 
-        //$point = "POINT($latitude $longitude)";
-        $point = "POINT(1 2)";
-        error_log("insert_post point=".$point);
-        //$query = $wpdb->prepare("INSERT INTO $dbTable (post_id, location) VALUES (%d, ST_PointFromText('POINT(%d %d)'))",13, 1, 2);
-        $query = $wpdb->prepare("INSERT INTO $table (`post_id`, `location`) VALUES (%d, ST_PointFromText('POINT(%f %f)'))",20,1.2,2.3);
-        error_log("insert_post query=".$query);
+        $query = $wpdb->prepare("INSERT INTO $table (`post_id`, `location`, `visible`, `date`, `is_exif`) 
+            VALUES (%d, ST_PointFromText('POINT(%f %f)'), %d, %s, %d)",
+            $post_id, $latitude, $longitude, self::PUBLIC_HIDDEN, $date, $bexif);
+        
+            error_log("insert_post query=".$query);
         $wpdb->query($query);
 
-        // sprintf("POINT(%s,%s)",$latitude, $longitude),
-        // error_log("insert_post point=".$point);
-        // $result = $wpdb->insert(
-        //     $table,
-        //     array(
-        //         "post_id"           => $post_id,
-        //         "location"          => $point,
-        //         "zoom_level"        => 30,
-        //         "public"            => 0,
-        //         "date"              => $date,
-        //         "is_exif"           => $bexif
-        //     ),
-        //     array( "%d", "%s", "%d", "%d", "%s", "%d" ));
+    }
 
-        //$wpdb->show_error();
-        //$wpdb->print_error();
+    public static function update_visible(int $post_id, int $visible)
+    {
+        global $wpdb;
+
+        $visible = 0;
+        if ($visible != self::PUBLIC_VISIBLE && $visible != self::PUBLIC_HIDDEN) {
+            return;
+        }
+        error_log("update_visible post_id=$post_id, visible=$visible");
+
+
+        $table = $wpdb->prefix . "glp_geo_posts";
+        //error_log("update_visible table=".$table);
+
+        $gallery_result = $wpdb->update(
+            $table,
+            array("post_id" => $images),
+            array( "visible" => $visible),
+            array( "%d" ),
+            array( "%d" )
+        );
+        
     }
 
     /**
@@ -91,7 +101,7 @@ class Pg_Geoposts_Table {
      *
      * @param int $id customer ID
      */
-    public static function delete_post( $id ) {
+    public static function delete_post( int $id ) {
         global $wpdb;
         $wpdb->delete(
             "{$wpdb->prefix}glp_geo_posts",
@@ -99,4 +109,35 @@ class Pg_Geoposts_Table {
             array( "%d" )
         );
     }
+
+    public static function get_all_public_images() 
+    {
+
+        global $wpdb;
+        $table = $wpdb->prefix . "glp_geo_posts";
+        $sql = "SELECT post_id FROM ".$table." WHERE public = 1";
+
+        $result = $wpdb->get_results( $sql, "ARRAY_A");
+        //error_log("get_all_public_images: ".print_r($result, true));
+        return $result;
+    }
+
+    public static function get_boundingbox_images(float $ne_lat, float $ne_lng, float $sw_lat, float $sw_lng, int $zoom)
+    {
+
+        global $wpdb;
+        $table = $wpdb->prefix . "glp_geo_posts";
+        $query = $wpdb->prepare("SELECT post_id FROM ".$table." WHERE (visible = 1 and ST_within(location, 
+            ST_GeomFromText('POLYGON((%f %f, %f %f, %f %f, %f %f, %f %f))')))",
+            $sw_lat, $sw_lng,
+            $ne_lat, $sw_lng,
+            $ne_lat, $ne_lng,
+            $sw_lat, $ne_lng,
+            $sw_lat, $sw_lng);
+
+        $result = $wpdb->get_results( $query, "ARRAY_A");
+        //error_log("get_boundingbox_images: ".print_r($result, true));
+        return $result;
+    }
+
 }
