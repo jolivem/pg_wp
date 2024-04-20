@@ -232,11 +232,8 @@
         });
     });
 
-   // When clicked on submit button of edit gallery page
-   $(document).find('#edit-gallery-save').on('click', function(event){
-        console.log("edit-gallery-save IN");
-        event.preventDefault();
-        let error = false;
+    function save_current_gallery() {
+
         let gallery_id = document.getElementById('gallery-id').value;
         let nonce = document.getElementById('pg_nonce').value;
         let admin_url = document.getElementById('pg_admin_ajax_url').value;
@@ -280,15 +277,21 @@
                 var myToastEl = document.getElementById('save-gallery-success')
                 var myToast = bootstrap.Toast.getInstance(myToastEl);
                 myToast.show();
-
-                // $("#save-gallery-success").fadeTo(2000, 500).slideUp(500, function() {
-                //     $("#save-gallery-success").slideUp(500);
-                // });
-                // TODO add toast
-                // disable "save" button
             }
             // TODO handle error
         });
+
+    }
+    // When clicked on submit button of edit gallery page
+    $(document).find('#edit-gallery-save').on('click', function(event){
+        console.log("edit-gallery-save IN");
+        event.preventDefault();
+        save_current_gallery();
+    });
+    $(document).find('#edit-gallery-save-2').on('click', function(event){
+        console.log("edit-gallery-save-2 IN");
+        event.preventDefault();
+        save_current_gallery();
     });
 
 

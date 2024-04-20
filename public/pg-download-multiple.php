@@ -214,14 +214,12 @@ class Pg_Download_Multiple_Public {
         }
 
         // check if gallery exists
-        $gallery = $gallery = Glp_Galleries_List_Table::get_gallery_by_id($_REQUEST['galleryId']);
+        $gallery = Glp_Galleries_List_Table::get_gallery_by_id($_REQUEST['galleryId']);
         if (!$gallery) {
             error_log("download_multiple_photos Gallery Not found ");
             wp_send_json_error( "NOK.", 404 );
             return;
         }
-
-        $title = sanitize_text_field( $_POST['title'] );
         $uploadedfile = $_FILES['file'];
         $upload_overrides = array('test_form' => false);
         $movefile = wp_handle_upload($uploadedfile, $upload_overrides);
@@ -239,6 +237,11 @@ class Pg_Download_Multiple_Public {
         }
         else {
 
+            $address = sanitize_text_field( $_REQUEST['address'] );
+            error_log("download_multiple_photos address = $address");
+            $country_code = sanitize_text_field( $_REQUEST['country_code'] );
+            $title = sanitize_text_field( $_REQUEST['title'] );
+    
             // echo $movefile['url'];
             if ($movefile && !isset($movefile['error'])) {
                 error_log( "File Upload Successfully");
@@ -267,7 +270,6 @@ class Pg_Download_Multiple_Public {
                     wp_generate_attachment_metadata( $attachment_id, $movefile[ 'file' ] )
                 );
 
-
                 update_post_meta($attachment_id , 'latitude', $_REQUEST['lat']);
                 update_post_meta($attachment_id , 'longitude', $_REQUEST['lon']);
                 //update_post_meta($attachment_id , 'is_exif', $_REQUEST['is_exif']);
@@ -276,6 +278,11 @@ class Pg_Download_Multiple_Public {
 
                 update_post_meta($attachment_id , 'worldmap', Pg_Edit_Photo_Public::WORLDMAP_ON); // worldmap enable by default
                 update_post_meta($attachment_id , 'status', Pg_Edit_Photo_Public::STATUS_NOT_SEEN); // 0 = image not checked
+
+                $vignette = Pg_Edit_Photo_Public::get_vignette_from_country_code($country_code);
+                if ($vignette != null) {
+                    update_post_meta($attachment_id , 'vignette', $vignette);
+                }
 
                 // insert with public=0
                 Pg_Geoposts_Table::insert_post( $attachment_id,

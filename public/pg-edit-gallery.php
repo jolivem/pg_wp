@@ -192,7 +192,12 @@ class Pg_Edit_Gallery_Public {
         // TODO check url_img is OK, add try catch
         //$navbar = $this->pg_add_nav_bar();
         $html_code = "
-        <div class='toast-container position-absolute bottom-0 end-0 p-3'>
+        <input type='hidden' id='gallery-id' name='gallery-id' value='$id'/>
+        <input type='hidden' id='pg_admin_ajax_url' value='$admin_ajax_url'/>
+        <input type='hidden' id='pg_edit_photo_url' value='$edit_photo_url'/>
+        <input type='hidden' id='pg_user_galleries_url' value='$user_galleries_url'/>
+        <input type='hidden' id='pg_nonce' value='$nonce'/>
+        <div class='toast-container position-fixed bottom-0 end-0 p-3'>
             <div id='save-gallery-success' class='toast align-items-center text-white bg-success bg-gradient border-0' role='alert' aria-live='assertive' aria-atomic='true'>
                 <div class='d-flex'>
                     <div class='toast-body'>
@@ -202,11 +207,6 @@ class Pg_Edit_Gallery_Public {
             </div>
         </div>
         <div class='container'>
-            <input type='hidden' id='gallery-id' name='gallery-id' value='$id'/>
-            <input type='hidden' id='pg_admin_ajax_url' value='$admin_ajax_url'/>
-            <input type='hidden' id='pg_edit_photo_url' value='$edit_photo_url'/>
-            <input type='hidden' id='pg_user_galleries_url' value='$user_galleries_url'/>
-            <input type='hidden' id='pg_nonce' value='$nonce'/>
             <div class='tab-content'>
                 <div>
                     <div class='form-floating mb-3'>
@@ -233,7 +233,7 @@ class Pg_Edit_Gallery_Public {
                 </button>";
         if ($html_images != "") {
             $html_code .= "
-                <button type='button' class='btn btn-primary align-right' id='edit-gallery-save'>Enregistrer</button>";
+                <button type='button' class='btn btn-primary align-right' id='edit-gallery-save-2'>Enregistrer</button>";
         }
         $html_code .= "
             </div>
@@ -290,21 +290,7 @@ class Pg_Edit_Gallery_Public {
             $content = $post->post_content;
             $title = $post->post_title;
 
-            $meta = get_post_meta($id);
-            //error_log("render_images meta=".print_r($meta, true));
-            error_log("render_images type=".gettype($meta['status'][0]));
-            if ($meta['worldmap'][0] != Pg_Edit_Photo_Public::WORLDMAP_ON){
-                $statext = "Private";
-            }
-            else {
-                //TODO get if its shared or not
-                if ($meta['status'][0] == Pg_Edit_Photo_Public::STATUS_PUBLIC_OK) {
-                    $statext = "Shared";
-                }
-                else {
-                    $statext = "Shared not validated";
-                }
-            }
+            $statext = $this->get_photo_status($id);
 
             //TODO get title and text
             //error_log("render_images url:".print_r($url_img, true));
@@ -331,6 +317,27 @@ class Pg_Edit_Gallery_Public {
         $html.='</div>';
         // TODO make it work on mobiles
         return $html;
+    }
+
+   
+    public static function get_photo_status($id) {
+        $meta = get_post_meta($id);
+        //error_log("get_photo_status meta=".print_r($meta, true));
+        //error_log("get_photo_status type=".gettype($meta['status'][0]));
+
+        if ($meta['worldmap'][0] != Pg_Edit_Photo_Public::WORLDMAP_ON){
+            $statext = "Privée";
+        }
+        else {
+            //TODO get if its shared or not
+            if ($meta['status'][0] == Pg_Edit_Photo_Public::STATUS_PUBLIC_OK) {
+                $statext = "Partagée";
+            }
+            else {
+                $statext = "Partagée non vérifiée";
+            }
+        }
+        return $statext;
     }
 
     //////////////////////////////////////

@@ -46,6 +46,11 @@
             if (e.target.classList.contains("fa-edit")) {
                 const postid = e.target.dataset.postid;
                 console.log("user-photo-option edit postid=", postid)
+                let edit_photo_url = document.getElementById('pg_edit_photo_url').value;
+                edit_photo_url += "&pid=";
+                edit_photo_url += postid;
+                window.location = edit_photo_url;
+
             }
             if (e.target.classList.contains("fa-trash")) {
                 const postid = e.target.dataset.postid;

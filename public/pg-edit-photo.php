@@ -174,7 +174,7 @@ class Pg_Edit_Photo_Public {
         <input type='hidden' id='post_id' value='$id'/>
         <input type='hidden' id='pg_admin_ajax_url' value='$admin_ajax_url'/>
         <input type='hidden' id='pg_nonce' value='$nonce'/>
-        <div class='toast-container position-absolute bottom-0 end-0 p-3'>
+        <div class='toast-container position-fixed bottom-0 end-0 p-3'>
             <div id='save-photo-success' class='toast align-items-center text-white bg-success bg-gradient border-0' role='alert' aria-live='assertive' aria-atomic='true'>
                 <div class='d-flex'>
                     <div class='toast-body'>
@@ -225,7 +225,7 @@ class Pg_Edit_Photo_Public {
         }
         return $content;
     }
-
+ 
     function get_vignette_options() {
 
         // Afficher le chemin
@@ -262,7 +262,46 @@ class Pg_Edit_Photo_Public {
         return $dict;
 
     }
+
+    static public function get_vignette_from_country_code($country_code) {
+
+        // Afficher le chemin
+        // echo $directory_courant;
+        // echo GLP_DIR;
+
+        if ($country_code == null || $country_code == '') {
+            return null;
+        }
     
+        $uppercode = strtoupper($country_code);
+
+        // Add None
+        $worldfile = GLP_DIR . 'assets/world.json';
+        //echo $worldfile;
+        // // Utiliser glob pour obtenir la liste des fichiers dans le dossier
+        //$files = glob($directory . '/*');
+        $json = file_get_contents($worldfile); 
+        if ($json === false) {
+            // deal with error...
+            return null;
+        }
+        
+        $json_a = json_decode($json, true);
+        if ($json_a === null) {
+            // deal with error...
+            return null;
+        }
+        
+        foreach ($json_a as $country) {
+            if ($country['code'] === $uppercode) {
+                error_log("get_vignette_from_country_code Found: ".$country['file']);
+                return $country['file'];
+            }
+        }
+        error_log("get_vignette_from_country_code $country_code not Found");
+        return null;
+    }    
+
     //
     // callback on request to download photos
     //

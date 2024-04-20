@@ -150,10 +150,14 @@ class Glp_User_Photos_Public {
         $admin_ajax_url = admin_url('admin-ajax.php');
         //$admin_post_url = admin_url('admin-post.php');
         $nonce = wp_create_nonce('user_photos');
+        $edit_photo_url = get_permalink(Pg_Edit_Gallery_Public::PAGE_ID_EDIT_PHOTO); // TODO move 186 to a global constant or get by Title
 
 
         $html_code = "
-        <div class='toast-container position-absolute bottom-0 end-0 p-3'>
+        <input type='hidden' id='pg_admin_ajax_url' value='$admin_ajax_url'/>
+        <input type='hidden' id='pg_nonce' value='$nonce'/>
+        <input type='hidden' id='pg_edit_photo_url' value='$edit_photo_url'/>
+        <div class='toast-container position-fixed bottom-0 end-0 p-3'>
             <div id='delete-photo-success' class='toast align-items-center text-white bg-success bg-gradient border-0' role='alert' aria-live='assertive' aria-atomic='true'>
                 <div class='d-flex'>
                     <div class='toast-body'>
@@ -162,8 +166,6 @@ class Glp_User_Photos_Public {
                 </div>
             </div>
         </div>
-        <input type='hidden' id='pg_admin_ajax_url' value='$admin_ajax_url'/>
-        <input type='hidden' id='pg_nonce' value='$nonce'/>
         <div class='container' id='user-item-list'>";
 
         $html_code .= $this->render_images($medias);
@@ -184,6 +186,9 @@ class Glp_User_Photos_Public {
             if ($url_img != false) {
                 $img_src = $url_img[0];
             }
+
+            $statext = Pg_Edit_Gallery_Public::get_photo_status($item->ID);
+
             //error_log("render_images url:".print_r($url_img, true));
             // TODO check url_img is OK, add try catch
             $html.=
@@ -194,7 +199,7 @@ class Glp_User_Photos_Public {
                     <div class="photo-text-user">'.$item->post_content.'</div>
                     <div class="footer-edit-gallery">
                         <div>Date : '.$item->post_date.'</div>
-                        <div>status</div>
+                        <div>'.$statext.'</div>
                     </div>
                 </div>
                 <div class="options" style="background-color: lightgreen">

@@ -405,6 +405,8 @@ jQuery(document).find('#multiple-upload').on('click', function(e){
         formData.append('lat', file.pgpg.lat);
         formData.append('lon', file.pgpg.lon);
         formData.append('is_exif', file.pgpg.is_exif);
+        formData.append('address', file.pgpg.address);
+        formData.append('country_code', file.pgpg.country_code);
         formData.append('date', file.pgpg.date);
         formData.append('file', file);
         formData.append('galleryId', galleryId);
@@ -576,7 +578,7 @@ function downloadMultiplePhotos(files) {
             //thumbnailContainer.appendChild(img);
     
             // Extract EXIF data
-            EXIF.getData(file, function() {
+            EXIF.getData(file, async function() {
                 console.log( "file: ", file);
                 const exifData = EXIF.getAllTags(this);
                 console.log('EXIF Data:', exifData);
@@ -598,8 +600,8 @@ function downloadMultiplePhotos(files) {
                         zoomRatio = zoomRatio.toString();
                     }
 
-                    reverseGeocoding(latitude, longitude);
-
+                    let geocod = await reverseGeocoding(latitude, longitude);
+                    console.log( "onload geocod", geocod);
                     renderItemMultiple(event.target.result, file.name, latitude, longitude, date, zoomRatio);
 
                     file.pgpg = {};
@@ -610,6 +612,10 @@ function downloadMultiplePhotos(files) {
                     //TODO calculate and fill zoom value
                     file.pgpg.zoom = zoomRatio;
                     file.pgpg.date = date;
+                    if (geocod) {
+                        file.pgpg.address = geocod.address;
+                        file.pgpg.country_code = geocod.country_code;
+                    }
                 }
                 else {
                     renderItemMultiple(event.target.result, file.name);
@@ -686,25 +692,31 @@ function isNumber(st) {
 }
 
 
-function reverseGeocoding(lat, lon) {
+async function reverseGeocoding(lat, lon) {
     const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`;
     console.log('reverseGeocoding url=', url);
 
-    // Url for the request 
+    // Url for the request
+    let address='';
+    let country_code = '';
     
-
     // Making our request 
-    fetch(url, { method: 'GET' })
+    await fetch(url, { method: 'GET' })
         .then(Result => Result.json())
-        .then(string => {
+        .then(json => {
 
+            console.log('reverseGeocoding json=', json);
             // Printing our response 
-            console.log(string);
-
+            if (json.address) {
+                console.log('reverseGeocoding BINGO');
+                country_code = json.address.country_code
+                address = json.display_name;
+            }
             // Printing our field of our response
             //console.log(`Title of our response : ${string.title}`);
         })
         .catch(errorMsg => { console.log(errorMsg); });
+    console.log('reverseGeocoding out=', {country_code, address});
+    return {country_code, address};
 
 }
-//4.836856, -52.949523
