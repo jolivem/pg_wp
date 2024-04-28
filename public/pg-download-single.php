@@ -130,7 +130,7 @@ class Pg_Download_Single_Public {
     
     public function pg_generate_page( $attr ){
         ob_start();
-        error_log("pg_generate_page IN");
+        error_log("Pg_Download_Single_Public::pg_generate_page IN");
 
         $this->enqueue_styles();
         $this->enqueue_scripts();

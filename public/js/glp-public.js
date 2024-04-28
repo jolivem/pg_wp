@@ -35,7 +35,7 @@
         $(document).find('#user-galleries-create').on('click', function(e){
             console.log("user-galleries-create click", e);
             let edit_gallery_url = document.getElementById('pg_edit_gallery_url').value;
-            edit_gallery_url += "&gid=-1";
+            edit_gallery_url += "?gid=-1";
             window.location = edit_gallery_url;
         });
 
@@ -47,7 +47,7 @@
                 const postid = e.target.dataset.postid;
                 console.log("user-photo-option edit postid=", postid)
                 let edit_photo_url = document.getElementById('pg_edit_photo_url').value;
-                edit_photo_url += "&pid=";
+                edit_photo_url += "?pid=";
                 edit_photo_url += postid;
                 window.location = edit_photo_url;
 
@@ -109,16 +109,16 @@
                 const galid = e.target.dataset.galid;
                 console.log("user-gallery-option edit galid=", galid);
                 let edit_gallery_url = document.getElementById('pg_edit_gallery_url').value;
-                edit_gallery_url += "&gid=";
+                edit_gallery_url += "?gid=";
                 edit_gallery_url += galid;
                 window.location = edit_gallery_url;
             }
             else if (e.target.classList.contains("fa-eye")) {
-                const galid = e.target.dataset.galid;
-                console.log("user-gallery-option view galid=", galid);
+                const galuuid = e.target.dataset.galuuid;
+                console.log("user-gallery-option view galuuid=", galuuid);
                 let edit_gallery_url = document.getElementById('pg_show_gallery_url').value;
-                edit_gallery_url += "&gid=";
-                edit_gallery_url += galid;
+                edit_gallery_url += "?guuid=";
+                edit_gallery_url += galuuid;
                 window.location = edit_gallery_url;
             }
             // else if (e.target.classList.contains("fa-trash")) {
@@ -166,12 +166,6 @@
             });            
         });
 
-        // $(document).find('#create-gallery').on('click', function(e){
-        //     console.log("gallery-photo-option click", e.target.dataset.galid);
-        //     deleteConfirModal.toggle();
-        //     e.preventDefault();
-        // });
-
         $(document).find('.gallery-photo-option').on('click', function(e){
             console.log("gallery-photo-option click", e);
             e.preventDefault();
@@ -179,7 +173,7 @@
                 const postid = e.target.parentElement.dataset.id;
                 console.log("gallery-photo-option postid=", postid);
                 let edit_photo_url = document.getElementById('pg_edit_photo_url').value;
-                edit_photo_url += "&pid=";
+                edit_photo_url += "?pid=";
                 edit_photo_url += postid;
                 window.location = edit_photo_url;
             }

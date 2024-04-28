@@ -134,31 +134,32 @@ class Pg_Show_User_Gallery_Public {
         error_log("ays_generate_gallery IN ".print_r($_GET, true));
 
         // TODO check that the photo belons to the current user
-        if (! isset($_GET['gid'])) {
+        if (! isset($_GET['guuid'])) {
             return "";
         }
 
         $this->enqueue_styles();
         $this->enqueue_scripts();
 
-        echo $this->pg_show_gallery( $_GET['gid'] );
+        echo $this->pg_show_gallery( $_GET['guuid'] );
 
 
         return str_replace(array("\r\n", "\n", "\r"), '', ob_get_clean());
     }
 
-    public function pg_show_gallery( $id ){
+    public function pg_show_gallery( $uuid ){
         
         global $wpdb;
         
-        $gallery = $this->ays_get_gallery_by_id($id);
+        $gallery = $this->ays_get_gallery_by_uuid($uuid);
         if(!$gallery){
-            return "[glp_gallery id='".$id."']";
+            return;
         }
         /*
          * Gallery global settings
          */
         error_log("pg_show_gallery, read gallery: ".print_r($gallery, true));
+        $id = $gallery['id'];
 
         $gallery_options = json_decode($gallery['options'],true);
         //error_log("pg_show_gallery read: ".print_r($gallery_options, true));
@@ -874,10 +875,10 @@ class Pg_Show_User_Gallery_Public {
         return $content;
     }
 
-    public function ays_get_gallery_by_id( $id ) {
+    public function ays_get_gallery_by_uuid( $uuid ) {
         global $wpdb;
 
-        $sql = "SELECT * FROM {$wpdb->prefix}glp_gallery WHERE id={$id}";
+        $sql = "SELECT * FROM {$wpdb->prefix}glp_gallery WHERE uuid={$uuid}";
 
         $result = $wpdb->get_row( $sql, "ARRAY_A" );
 

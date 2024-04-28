@@ -118,6 +118,7 @@ class Pg_Download_Multiple_Public {
     
     public function pg_generate_page( $attr ){
         ob_start();
+        error_log("Pg_Download_Multiple_Public::pg_generate_page IN ".print_r($attr, true));
 
         $this->enqueue_styles();
         $this->enqueue_scripts();

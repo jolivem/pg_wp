@@ -105,35 +105,35 @@ class Pg_Show_User_Map_Public {
     
     public function pg_generate_page( $attr ){
         ob_start();
-        //error_log("pg_generate_page aa  IN ".print_r($attr, true));
-        error_log("pg_generate_page aa  IN ".print_r($_GET, true));
+        error_log("Pg_Show_User_Map_Public::pg_generate_page IN ".print_r($_GET, true));
+        //error_log("pg_generate_page IN ".print_r($attr, true));
 
         // TODO check that the photo belons to the current user
-        if (! isset($_GET['gid'])) {
+        if (! isset($_GET['guuid'])) {
             return "";
         }
 
         $this->enqueue_styles();
         $this->enqueue_scripts();
 
-        echo $this->pg_show_page( $_GET['gid'] );
+        echo $this->pg_show_page( $_GET['guuid'] );
 
         return str_replace(array("\r\n", "\n", "\r"), '', ob_get_clean());
     }
     
     // attr should have the user id
-    public function pg_show_page( $id ){
+    public function pg_show_page( $guuid ){
 
-        error_log("pg_show_page IN id=".$id);
+        error_log("pg_show_page IN guuid=".$guuid);
         
         //global $wpdb;
 
-        $gallery = $this->pg_get_gallery_by_id($id);
+        $gallery = $this->pg_get_gallery_by_uuid($guuid);
         if(!$gallery){
             error_log("pg_show_page Gallery not found");
             return "";
         }
-        
+        $id = $gallery["id"];
         $title = $gallery["title"];
         $description = $gallery["description"];
         if(!$gallery){
@@ -195,10 +195,15 @@ class Pg_Show_User_Map_Public {
         return $html;
     }
  
-    function pg_get_gallery_by_id( $id ) {
+    function pg_get_gallery_by_uuid( $uuid ) {
         global $wpdb;
 
-        $sql = "SELECT * FROM {$wpdb->prefix}glp_gallery WHERE id={$id}";
+        //$sql = "SELECT * FROM {$wpdb->prefix}glp_gallery WHERE uuid={$uuid}";
+        $table = $wpdb->prefix . "glp_gallery";
+        $sql = $wpdb->prepare(
+            "SELECT * FROM $table WHERE uuid = %s",
+            $uuid
+        );
 
         $result = $wpdb->get_row( $sql, "ARRAY_A" );
 

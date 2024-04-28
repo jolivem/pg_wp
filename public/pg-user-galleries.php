@@ -117,6 +117,7 @@ class Glp_User_Galleries_Public {
     
     public function pg_generate_page( $attr ){
         ob_start();
+        error_log("Glp_User_Galleries_Public::pg_generate_page IN ");
 
         $this->enqueue_styles();
         $this->enqueue_scripts();
@@ -140,7 +141,9 @@ class Glp_User_Galleries_Public {
         }
 
         $edit_gallery_url = get_permalink(self::PAGE_ID_EDIT_GALLERY); // TODO move 186 to a global constant or get by Title
+        //$edit_gallery_url = substr($edit_gallery_url, 0, -1);
         $show_gallery_url = get_permalink(self::PAGE_ID_SHOW_GALLERY); // TODO move 186 to a global constant or get by Title
+        //$show_gallery_url = substr($show_gallery_url, 0, -1);
         $nonce = wp_create_nonce('user_galleries');
         $admin_ajax_url = admin_url('admin-ajax.php');
 
@@ -153,7 +156,7 @@ class Glp_User_Galleries_Public {
             <br/>
             <div class='tab-pane fade show active' id='nav-photos' role='tabpanel' aria-labelledby='nav-photos-tab'>
                 <button type='button' class='btn btn-primary' id='user-galleries-create'>
-                    Add a gallery...
+                    Ajouter une gallerie...
                 </button>
             </div>";
 
@@ -183,7 +186,7 @@ class Glp_User_Galleries_Public {
                 }
             }
             $datetime = explode( " ", $item['date_update']);
-            $date = $datetime[0];
+            $date = $this->format_date($datetime[0]);
             // $url_img = wp_get_attachment_image_src($item->ID, "thumbnail");
             // if ($url_img != false) {
             //     $img_src = $url_img[0];
@@ -201,7 +204,7 @@ class Glp_User_Galleries_Public {
                 <div class="options" style="background-color: lightgreen">
                     <div class="flex-options-2">
                         <div class="user-gallery-option pointer-icon fas fa-edit" aria-hidden="true" data-galid="'.$item["id"].'"></div>
-                        <div class="user-gallery-option pointer-icon fas fa-eye" aria-hidden="true" data-galid="'.$item["id"].'"></div>
+                        <div class="user-gallery-option pointer-icon fas fa-eye" aria-hidden="true" data-galuuid="'.$item["uuid"].'"></div>
                         <div class="user-gallery-option pointer-icon fas fa-share-alt" aria-hidden="true" data-galid="'.$item["id"].'"></div>
                     </div>
                 </div>
@@ -211,6 +214,26 @@ class Glp_User_Galleries_Public {
         }
         return $html;
     }    
+
+    function format_date($date_str) {
+        
+        $date = new DateTime($date_str);
+        // Define an array of French month names
+        $frenchMonthNames = [
+            'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
+            'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'
+        ];
+        
+        // Get the day, month, and year from the DateTime object
+        $day = $date->format('d');
+        $month = $date->format('n');
+        $year = $date->format('Y');
+        
+        // Format the date in French format
+        return $day . ' ' . $frenchMonthNames[$month - 1] . ' ' . $year;
+    }
+
+
 
     // Get the list of galleries for a given user_id
     // return empty array if none

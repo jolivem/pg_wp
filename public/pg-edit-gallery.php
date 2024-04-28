@@ -103,7 +103,9 @@ class Pg_Edit_Gallery_Public {
     
     public function pg_generate_page( $attr ){
         ob_start();
-        error_log("pg_generate_page IN ".print_r($_GET, true));
+        error_log("Pg_Edit_Gallery_Public::pg_generate_page IN ");
+        error_log("Pg_Edit_Gallery_Public::pg_generate_page IN ".print_r($_GET, true));
+        error_log("Pg_Edit_Gallery_Public::pg_generate_page IN ".print_r($attr, true));
 
         // TODO check that the photo belons to the current user
 
@@ -533,7 +535,7 @@ class Pg_Edit_Gallery_Public {
         $g_l_options=$this->get_default_lightbox_options();
 
         $date_now = date('Y-m-d H:i:s');
- 
+        $uuid = $this->generate_uuid();
         $gallery_result = $wpdb->insert(
             $gallery_table,
             array(
@@ -548,15 +550,28 @@ class Pg_Edit_Gallery_Public {
                 "user_id"           => $user_id,
                 "date_creation"     => $date_now,
                 "date_update"       => $date_now,
+                "uuid"              => $uuid,
                 "images_ids"        => ''
             ),
-            array( "%s", "%s", "%s", "%d", "%d", "%s", "%s", "%s", "%s", "%s" )
+            array( "%s", "%s", "%s", "%d", "%d", "%s", "%s", "%s", "%s", "%s", "%s" )
         );
 
         error_log( "create_gallery, id = ".$wpdb->insert_id);
         return $wpdb->insert_id;
     }
     
+    private function generate_uuid() {
+        return sprintf(
+            '%04x%04x%04x%04x%04x%04x%04x%04x',
+            mt_rand( 0, 0xffff ),
+            mt_rand( 0, 0xffff ),
+            mt_rand( 0, 0xffff ),
+            mt_rand( 0, 0x0fff ) | 0x4000,
+            mt_rand( 0, 0x3fff ) | 0x8000,
+            mt_rand( 0, 0xffff ),
+            mt_rand( 0, 0xffff ),
+            mt_rand( 0, 0xffff ));
+    }
     
     public function update_gallery($data){
         global $wpdb;

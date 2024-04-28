@@ -120,7 +120,7 @@ class Glp_User_Photos_Public {
     
     public function pg_generate_page( $attr ){
         ob_start();
-
+        error_log("Glp_User_Photos_Public::pg_generate_page IN ".print_r($attr, true));
         $this->enqueue_styles();
         $this->enqueue_scripts();
 
@@ -140,7 +140,7 @@ class Glp_User_Photos_Public {
         if(!$medias){
             // TODO add a link the the gallery creationAdd gal
             $edit_gallery_url = get_permalink(self::PAGE_ID_EDIT_GALLERY); // TODO move 186 to a global constant or get by Title
-            $edit_gallery_url .= "&gid=-1";
+            $edit_gallery_url .= "?gid=-1";
             //<input type='hidden' id='pg_edit_gallery_url' value='$edit_gallery_url'/>
             $html_code = "
             <div>Aucune photo dans la bibliothèque. <a href='$edit_gallery_url'>Créer une galerie</a> pour ajouter des photos.<div>";
@@ -215,12 +215,12 @@ class Glp_User_Photos_Public {
         return $html;
     }
 
-    public function ays_gallery_replace_message_variables($content, $data){
-        foreach($data as $variable => $value){
-            $content = str_replace("%%".$variable."%%", $value, $content);
-        }
-        return $content;
-    }
+    // public function ays_gallery_replace_message_variables($content, $data){
+    //     foreach($data as $variable => $value){
+    //         $content = str_replace("%%".$variable."%%", $value, $content);
+    //     }
+    //     return $content;
+    // }
 
     public function pg_get_medias_by_user( $user_id ) {
 

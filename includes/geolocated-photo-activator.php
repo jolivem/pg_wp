@@ -58,7 +58,7 @@ class Geolocated_Photo_Activator {
             `user_id` TEXT NOT NULL,
             `date_creation` DATETIME NOT NULL,
             `date_update` DATETIME NOT NULL,
-            `uuid` BINARY(16) NULL,
+            `uuid` BINARY(20) NULL,
             `images_ids` TEXT NOT NULL,
             PRIMARY KEY (`id`)
         )$charset_collate;";

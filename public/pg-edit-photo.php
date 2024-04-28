@@ -105,7 +105,7 @@ class Pg_Edit_Photo_Public {
     
     public function pg_generate_page( $attr ){
         
-        error_log("pg_generate_page IN ".print_r($attr, true));
+        error_log("Pg_Edit_Photo_Public::pg_generate_page IN ".print_r($attr, true));
         error_log("pg_generate_page REQUEST ".print_r($_REQUEST, true));
         error_log("pg_generate_page GET ".print_r($_GET, true));
 

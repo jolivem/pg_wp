@@ -105,7 +105,7 @@ class Pg_Show_Planet_Map_Public {
     
     public function pg_generate_page( $attr ){
         ob_start();
-        //error_log("pg_generate_page aa  IN ".print_r($attr, true));
+        error_log("Pg_Show_Planet_Map_Public::pg_generate_page IN ".print_r($attr, true));
  
         $this->enqueue_styles();
         $this->enqueue_scripts();
