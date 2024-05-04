@@ -37,7 +37,6 @@
 }
 
 div.gallery-slider {
-    background-color: #333;
     overflow: hidden;
     white-space: nowrap;
     padding: 4px;
@@ -52,7 +51,7 @@ div.gallery-slider img {
 }
 
 div.planet-slider {
-    background-color: #333;
+    /*background-color: #333;*/
     overflow: hidden;
     white-space: nowrap;
     padding: 4px;

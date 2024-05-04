@@ -34,12 +34,12 @@ class Pg_Edit_Photo_Public {
      */
     private $plugin_name;
 
-    const STATUS_NOT_SEEN = 0;
-    const STATUS_PUBLIC_OK = 1;
-    const STATUS_NOT_PUBLIC = 2;
+    const ADMIN_STATUS_NOT_SEEN = 0;
+    const ADMIN_STATUS_PUBLIC_OK = 1;
+    const ADMIN_STATUS_NOT_OK = 2;
 
-    const WORLDMAP_ON = 'on';
-    const WORLDMAP_OFF = 'off';
+    const USER_STATUS_PUBLIC = 'public';
+    const USER_STATUS_PRIVATE = 'private';
 
     /**
      * The version of this plugin.
@@ -138,18 +138,18 @@ class Pg_Edit_Photo_Public {
         $latitude = get_post_meta($id, 'latitude', true);
         $longitude = get_post_meta($id, 'longitude', true);
         $vignette = get_post_meta($id, 'vignette', true);
-        $worldmap_checked = "";
-        $worldmap_value = self::WORLDMAP_OFF;
-        if (get_post_meta($id, 'worldmap', true) == self::WORLDMAP_ON) {
-            $worldmap_checked = " checked";
-            $worldmap_value = self::WORLDMAP_ON;
+        $user_status_checked = "";
+        $user_status = self::USER_STATUS_PRIVATE;
+        if (get_post_meta($id, 'user_status', true) == self::USER_STATUS_PUBLIC) {
+            $user_status_checked = " checked";
+            $user_status = self::USER_STATUS_PUBLIC;
         }
 
         $post = get_post($id);
         $content = $post->post_content;
         $title = $post->post_title;
 
-        error_log("pg_show_page latitude=$latitude, longitude=$longitude, vignette=$vignette, worldmap=$worldmap");
+        error_log("pg_show_page latitude=$latitude, longitude=$longitude, vignette=$vignette, user_status=$user_status");
 
         //$vignette_dropdown = '<select id="select-country" name="attachments[' . $post->ID . '][vignette]">';
         $vignette_options = $this->get_vignette_options();
@@ -206,8 +206,8 @@ class Pg_Edit_Photo_Public {
             </div>
                 
             <div class='form-check form-switch'>
-                <input class='form-check-input' type='checkbox' role='switch' id='worldmap' value='$worldmap_value'$worldmap_checked>
-                <label class='form-check-label' for='worldmap'>Autoriser l'affichage sur la carte mondiale</label>
+                <input class='form-check-input' type='checkbox' role='switch' id='user_status' value='$user_status'$user_status_checked>
+                <label class='form-check-label' for='user_status'>Autoriser l'affichage sur la carte mondiale</label>
             </div>
             <br>
             <div>
@@ -329,7 +329,7 @@ class Pg_Edit_Photo_Public {
         $title = sanitize_text_field( $_REQUEST['title'] );
         $desc = sanitize_text_field( $_REQUEST['desc'] );
         $vignette = sanitize_text_field( $_REQUEST['vignette'] );
-        $worldmap = sanitize_text_field( $_REQUEST['worldmap'] );
+        $user_status = sanitize_text_field( $_REQUEST['user_status'] );
 
         if ( wp_attachment_is_image( $post_id ) ) {
             //$my_image_title = get_post( $post_ID )->post_title;
@@ -357,11 +357,11 @@ class Pg_Edit_Photo_Public {
             // Set the country
             update_post_meta($post_id , 'vignette', $vignette);
 
-            // Set the 'worldmap'
-            update_post_meta($post_id , 'worldmap', $worldmap);
+            // Set the 'user_status'
+            update_post_meta($post_id , 'user_status', $user_status);
 
             // 
-            $this->update_visibility($post_id, $worldmap);
+            $this->update_visibility($post_id, $user_status);
 
         }
         else {
@@ -375,13 +375,13 @@ class Pg_Edit_Photo_Public {
     }
 
     // Update the public visibility
-    private function update_visibility($post_id, $worldmap) {
-        error_log("update_visibility IN id=$post_id worldmap=$worldmap");
+    private function update_visibility($post_id, $user_status) {
+        error_log("update_visibility IN id=$post_id user_status=$user_status");
 
-        $status = get_post_meta($post_id, 'status', true);
-        error_log("update_visibility status=$status");
+        $admin_status = get_post_meta($post_id, 'admin_status', true);
+        error_log("update_visibility admin_status=$admin_status");
 
-        if ($worldmap == self::WORLDMAP_ON && $status == self::STATUS_PUBLIC_OK) {
+        if ($user_status == self::USER_STATUS_PUBLIC && $admin_status == self::ADMIN_STATUS_PUBLIC_OK) {
             Pg_Geoposts_Table::update_visible($post_id, Pg_Geoposts_Table::PUBLIC_VISIBLE);
         }
         else {

@@ -277,8 +277,8 @@ class Pg_Download_Multiple_Public {
                 update_post_meta($attachment_id , 'altitude', $_REQUEST['altitude']);
                 update_post_meta($attachment_id , 'date', $_REQUEST['date']); // date of shooting
 
-                update_post_meta($attachment_id , 'worldmap', Pg_Edit_Photo_Public::WORLDMAP_ON); // worldmap enable by default
-                update_post_meta($attachment_id , 'status', Pg_Edit_Photo_Public::STATUS_NOT_SEEN); // 0 = image not checked
+                update_post_meta($attachment_id , 'user_status', Pg_Edit_Photo_Public::USER_STATUS_PUBLIC); // user_status enable by default
+                update_post_meta($attachment_id , 'admin_status', Pg_Edit_Photo_Public::ADMIN_STATUS_NOT_SEEN); // 0 = image not checked
 
                 $vignette = Pg_Edit_Photo_Public::get_vignette_from_country_code($country_code);
                 if ($vignette != null) {

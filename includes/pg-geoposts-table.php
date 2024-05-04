@@ -76,7 +76,7 @@ class Pg_Geoposts_Table {
     {
         global $wpdb;
 
-        $visible = 0;
+        //$visible = 0;
         if ($visible != self::PUBLIC_VISIBLE && $visible != self::PUBLIC_HIDDEN) {
             return;
         }
@@ -88,12 +88,11 @@ class Pg_Geoposts_Table {
 
         $gallery_result = $wpdb->update(
             $table,
-            array("post_id" => $images),
             array( "visible" => $visible),
+            array("post_id" => $post_id),
             array( "%d" ),
             array( "%d" )
         );
-        
     }
 
     /**
@@ -115,10 +114,10 @@ class Pg_Geoposts_Table {
 
         global $wpdb;
         $table = $wpdb->prefix . "glp_geo_posts";
-        $sql = "SELECT post_id FROM ".$table." WHERE public = 1";
+        $sql = "SELECT post_id FROM ".$table." WHERE visible = 1";
 
         $result = $wpdb->get_results( $sql, "ARRAY_A");
-        //error_log("get_all_public_images: ".print_r($result, true));
+        error_log("get_all_public_images: ".print_r($result, true));
         return $result;
     }
 

@@ -578,6 +578,15 @@ button.lg-icon {
     border-radius: 10px;
 }
 
+.flex-container-planet {
+    margin-top: 10px;
+    display: flex;
+    align-items: stretch;
+    background-color: #f1f1f1;
+    border-radius: 10px;
+    justify-content: space-between;
+}
+
 .list-item {
     border-bottom: 1px solid #ddd;
     padding: 10px 0;
@@ -743,6 +752,13 @@ button.lg-icon {
     padding-top: 17px;
 }
 
+.admin-photo-option {
+    cursor: pointer;
+    flex-basis: 300px;
+    flex: 10 0 20px;
+    padding: 7px;
+    padding-top: 20px;
+}
 
 .show-gallery-option {
     cursor: pointer;
@@ -799,27 +815,19 @@ button.lg-icon {
     margin-left: 10px; /* Add some space between input and button */
 }
 /** drag drop and sortable **/
-
-/** {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-}*/
-
+/* 
 body {
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 100vh;
     background: #595DB8;
-}
+} */
 
 .sortable-list .item {
     list-style: none;
     cursor: move;
     margin-top: 10px;
-    border: 1px solid #ccc;
     border-radius: 10px;
 }
 
@@ -827,6 +835,6 @@ body {
     opacity: 0.6;
 }
 
-/*.item.dragging :where(.flex-container, i) {
+.item.dragging :where(.flex-container, i) {
     opacity: 0;
-}*/
+  }

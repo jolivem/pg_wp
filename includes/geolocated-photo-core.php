@@ -140,6 +140,8 @@ class Geolocated_Photo {
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-edit-photo.php';
 
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-check-photos.php';
+
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-show-user-map.php';
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-show-planet-map.php';
@@ -261,7 +263,13 @@ class Geolocated_Photo {
         $this->loader->add_action( 'wp_ajax_user_delete_photo', $plugin_user_photos_public, 'user_delete_photo');
         $this->loader->add_action( 'wp_ajax_nopriv_user_delete_photo', $plugin_user_photos_public, 'user_delete_photo'); // TODO be removed
 		
-        $plugin_user_galleries = new Glp_User_Galleries_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_check_photos_public = new Glp_Check_Photos_Public( $this->get_plugin_name(), $this->get_version() );
+        $this->loader->add_action( 'wp_ajax_admin_valid_photo', $plugin_check_photos_public, 'admin_valid_photo');
+        $this->loader->add_action( 'wp_ajax_nopriv_admin_valid_photo', $plugin_check_photos_public, 'admin_valid_photo'); // TODO be removed
+        $this->loader->add_action( 'wp_ajax_admin_reject_photo', $plugin_check_photos_public, 'admin_reject_photo');
+        $this->loader->add_action( 'wp_ajax_nopriv_admin_reject_photo', $plugin_check_photos_public, 'admin_reject_photo'); // TODO be removed
+
+		$plugin_user_galleries = new Glp_User_Galleries_Public( $this->get_plugin_name(), $this->get_version() );
 
         //$plugin_map_public = new Glp_Map_Public( $this->get_plugin_name(), $this->get_version() );
 		$plugin_public_gallery_category = new Geolocated_Photo_Category( $this->get_plugin_name(), $this->get_version() );

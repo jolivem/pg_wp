@@ -33,19 +33,116 @@
         }); 
 
         $(document).find('#user-galleries-create').on('click', function(e){
-            console.log("user-galleries-create click", e);
+            //console.log("user-galleries-create click", e);
             let edit_gallery_url = document.getElementById('pg_edit_gallery_url').value;
             edit_gallery_url += "?gid=-1";
             window.location = edit_gallery_url;
         });
 
 
+        $(document).find('.admin-photo-option').on('click', function(e){
+            console.log("admin-photo-option click", e);
+            e.preventDefault();
+            if (e.target.classList.contains("fa-thumbs-up")) {
+                const postid = e.target.dataset.postid;
+                //console.log("admin-photo-option thumbs-up postid=", postid)
+
+                //let post_id = document.getElementById('post_id').value;
+                let nonce = document.getElementById('pg_nonce').value;
+                let admin_url = document.getElementById('pg_admin_ajax_url').value;
+        
+                const formData = new FormData();
+                formData.append('action', 'admin_valid_photo');
+                formData.append('nonce', nonce);
+                formData.append('pid', postid);
+    
+                jQuery.ajax({
+                    method: 'POST',
+                    url: admin_url,
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response){
+                        //console.log("valid success");
+
+                        // remove the photo from list with animation
+                        let ancestor = e.target.parentNode.parentNode.parentNode;
+                        //console.log("valid success ancestor", ancestor);
+                        ancestor.style.animationDuration = '.35s';
+                        ancestor.style.animationName = 'slideOutRight';
+                    
+                        setTimeout(() => {
+                            ancestor.remove(); // Remove the corresponding list item after animation
+                        }, 300); // Duration of the animation    
+        
+                        // display a toast
+                        var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+                        toastElList.map(function(toastEl) {
+                            return new bootstrap.Toast(toastEl)
+                        })
+                        
+                        // var myToastEl = document.getElementById('delete-photo-success')
+                        // var myToast = bootstrap.Toast.getInstance(myToastEl);
+                        // myToast.show();
+        
+                    }
+                    // TODO handle error
+                });                          
+            }
+            if (e.target.classList.contains("fa-thumbs-down")) {
+                const postid = e.target.dataset.postid;
+                //console.log("admin-photo-option thumbs-down postid=", postid)
+
+                //let post_id = document.getElementById('post_id').value;
+                let nonce = document.getElementById('pg_nonce').value;
+                let admin_url = document.getElementById('pg_admin_ajax_url').value;
+        
+                const formData = new FormData();
+                formData.append('action', 'admin_reject_photo');
+                formData.append('nonce', nonce);
+                formData.append('pid', postid);
+    
+                jQuery.ajax({
+                    method: 'POST',
+                    url: admin_url,
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response){
+                        //console.log("delete success");
+
+                        // remove the photo from list with animation
+                        let ancestor = e.target.parentNode.parentNode.parentNode;
+                        //console.log("delete success ancestor", ancestor);
+                        ancestor.style.animationDuration = '.35s';
+                        ancestor.style.animationName = 'slideOutLeft';
+                    
+                        setTimeout(() => {
+                            ancestor.remove(); // Remove the corresponding list item after animation
+                        }, 300); // Duration of the animation    
+        
+                        // display a toast
+                        var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+                        toastElList.map(function(toastEl) {
+                            return new bootstrap.Toast(toastEl)
+                        })
+                        
+                        // var myToastEl = document.getElementById('delete-photo-success')
+                        // var myToast = bootstrap.Toast.getInstance(myToastEl);
+                        // myToast.show();
+        
+                    }
+                    // TODO handle error
+                });                         
+            }
+        });
+
         $(document).find('.user-photo-option').on('click', function(e){
             console.log("user-photo-option click", e);
             e.preventDefault();
             if (e.target.classList.contains("fa-edit")) {
                 const postid = e.target.dataset.postid;
-                console.log("user-photo-option edit postid=", postid)
+                //console.log("user-photo-option edit postid=", postid)
                 let edit_photo_url = document.getElementById('pg_edit_photo_url').value;
                 edit_photo_url += "?pid=";
                 edit_photo_url += postid;
@@ -54,7 +151,7 @@
             }
             if (e.target.classList.contains("fa-trash")) {
                 const postid = e.target.dataset.postid;
-                console.log("user-photo-option trash postid=", postid)
+                //console.log("user-photo-option trash postid=", postid)
 
                 e.preventDefault();
 
@@ -74,11 +171,11 @@
                     contentType: false,
                     processData: false,
                     success: function(response){
-                        console.log("delete success");
+                        //console.log("delete success");
 
                         // remove the photo from list with animation
                         let ancestor = e.target.parentNode.parentNode.parentNode;
-                        console.log("delete success ancestor", ancestor);
+                        //console.log("delete success ancestor", ancestor);
                         ancestor.style.animationDuration = '.35s';
                         ancestor.style.animationName = 'slideOutLeft';
                     
@@ -107,7 +204,7 @@
             console.log("user-gallery-option click", e);
             if (e.target.classList.contains("fa-edit")) {
                 const galid = e.target.dataset.galid;
-                console.log("user-gallery-option edit galid=", galid);
+                //console.log("user-gallery-option edit galid=", galid);
                 let edit_gallery_url = document.getElementById('pg_edit_gallery_url').value;
                 edit_gallery_url += "?gid=";
                 edit_gallery_url += galid;
@@ -115,7 +212,7 @@
             }
             else if (e.target.classList.contains("fa-eye")) {
                 const galuuid = e.target.dataset.galuuid;
-                console.log("user-gallery-option view galuuid=", galuuid);
+                //console.log("user-gallery-option view galuuid=", galuuid);
                 let edit_gallery_url = document.getElementById('pg_show_gallery_url').value;
                 edit_gallery_url += "?guuid=";
                 edit_gallery_url += galuuid;
@@ -134,7 +231,7 @@
 
         $(document).find('#modal-delete-gallery').on('click', function(e){
             let galid = document.getElementById('gallery-id').value;
-            console.log("modal-delete-gallery galid=", galid);
+            //console.log("modal-delete-gallery galid=", galid);
             //deleteConfirModal.toggle();
             e.preventDefault();
 
@@ -154,7 +251,7 @@
                 contentType: false,
                 processData: false,
                 success: function(response){
-                    console.log("delete success");
+                    //console.log("delete success");
                     
                     let url = document.getElementById('pg_user_galleries_url').value;
                     window.location = url;
@@ -167,11 +264,11 @@
         });
 
         $(document).find('.gallery-photo-option').on('click', function(e){
-            console.log("gallery-photo-option click", e);
+            //console.log("gallery-photo-option click", e);
             e.preventDefault();
             if (e.target.classList.contains("fa-edit")) {
                 const postid = e.target.parentElement.dataset.id;
-                console.log("gallery-photo-option postid=", postid);
+                //console.log("gallery-photo-option postid=", postid);
                 let edit_photo_url = document.getElementById('pg_edit_photo_url').value;
                 edit_photo_url += "?pid=";
                 edit_photo_url += postid;
@@ -235,24 +332,24 @@ function ays_closestEdge(x,y,w,h) {
 }
 
 function lazyload_single () {
-    console.log('lazyload_single in');
+    // console.log('lazyload_single in');
     
     var scrollTop = window.pageYOffset;
-    console.log('lazyload_single in1');
+    // console.log('lazyload_single in1');
     var lazyloadImages = document.querySelectorAll('img.lazy');
     if(lazyloadImages.length != 0) { 
         let img = lazyloadImages[0];
         if (img.src == '') {
             let parent = img.parentNode;
-            console.log('lazyload_single offsetTop', parent.offsetTop);
-            console.log('lazyload_single innerHeight', window.innerHeight);
-            console.log('lazyload_single scrollTop', scrollTop);
-            console.log('lazyload_single sum', window.innerHeight + scrollTop);
+            // console.log('lazyload_single offsetTop', parent.offsetTop);
+            // console.log('lazyload_single innerHeight', window.innerHeight);
+            // console.log('lazyload_single scrollTop', scrollTop);
+            // console.log('lazyload_single sum', window.innerHeight + scrollTop);
             if(parent.offsetTop < (window.innerHeight + scrollTop)) {
                 //img.classList.remove('lazy');
                 img.classList.add('lazyloaded');
                 img.src = img.dataset.src;
-                console.log('lazyload_single img', img);
+                // console.log('lazyload_single img', img);
             }
         }
     };
@@ -260,12 +357,12 @@ function lazyload_single () {
 
 // for grid 
 function lazyload_max () {
-    console.log('lazyload_max in');
+    // console.log('lazyload_max in');
     var lazyloadImages = document.querySelectorAll('img.lazy');    
-    console.log('lazyload_max lenght', lazyloadImages.length);
+    // console.log('lazyload_max lenght', lazyloadImages.length);
     
     var scrollTop = window.pageYOffset;
-    console.log('lazyload_max in1');
+    // console.log('lazyload_max in1');
     lazyloadImages.forEach(function(img) {
         if (img.src == '') {
             let parent = img.parentNode;
@@ -273,7 +370,7 @@ function lazyload_max () {
                 img.classList.add('lazyloaded');
                 img.src = img.dataset.src;
                 //
-                console.log('lazyload_max img', img);
+                // console.log('lazyload_max img', img);
             }
         }
     });
@@ -285,7 +382,7 @@ var geojson={};
 
 async function ays_add_vignette_to_image( lmapId,jfile,lat,lon,zoom) {
 
-    console.log("ays_add_vignette_to_image IN lmapId=", lmapId);
+    // console.log("ays_add_vignette_to_image IN lmapId=", lmapId);
     // get country
     //console.log("country", country);
     //let zoom = country.zoom;
@@ -380,15 +477,18 @@ function ays_getDirectionKey(ev, obj) {
 }
 
 
-/** dragable and sortable list **/
+/** dragable and sortable list
+ * see https://www.codingayush.com/2023/05/sortable-list-using-html-css-javascript.html **/
 
 
 const sortableList = document.querySelector(".sortable-list");
 if (sortableList) {
     const items = sortableList.querySelectorAll(".item");
+    console.log("sortableList found");
 
     items.forEach(item => {
         item.addEventListener("dragstart", () => {
+            console.log("dragstart");
             // Adding dragging class to item after a delay
             setTimeout(() => item.classList.add("dragging"), 0);
         });
@@ -398,15 +498,17 @@ if (sortableList) {
 
     const initSortableList = (e) => {
         e.preventDefault();
+        console.log("initSortableList");
         const draggingItem = document.querySelector(".dragging");
         // Getting all items except currently dragging and making array of them
         let siblings = [...sortableList.querySelectorAll(".item:not(.dragging)")];
 
         // Finding the sibling after which the dragging item should be placed
         let nextSibling = siblings.find(sibling => {
+            console.log("initSortableList found", sibling);
             return e.clientY <= sibling.offsetTop + sibling.offsetHeight / 2;
         });
-
+        console.log("initSortableList insert Before", nextSibling);
         // Inserting the dragging item before the found sibling
         sortableList.insertBefore(draggingItem, nextSibling);
     }

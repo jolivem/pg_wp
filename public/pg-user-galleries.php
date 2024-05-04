@@ -93,25 +93,7 @@ class Glp_User_Galleries_Public {
 
     public function enqueue_styles_early(){
 
-        $settings_options = Gallery_Settings_Actions::ays_get_setting('options');
-        if($settings_options){
-            $settings_options = json_decode(stripcslashes($settings_options), true);
-        }else{
-            $settings_options = array();
-        }
-
-        // General CSS File
-        $settings_options['gpg_exclude_general_css'] = isset($settings_options['gpg_exclude_general_css']) ? esc_attr( $settings_options['gpg_exclude_general_css'] ) : 'off';
-        $gpg_exclude_general_css = (isset($settings_options['gpg_exclude_general_css']) && esc_attr( $settings_options['gpg_exclude_general_css'] ) == "on") ? true : false;
-
-        if ( ! $gpg_exclude_general_css ) {
-            wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/glp-public.css', array(), $this->version, 'all' );
-        }else {
-            if ( ! is_front_page() ) {
-                wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/glp-public.css', array(), $this->version, 'all' );
-            }
-        }
-        
+        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/glp-public.css', array(), $this->version, 'all' );
         wp_enqueue_script('jquery');
     }
     
@@ -133,14 +115,20 @@ class Glp_User_Galleries_Public {
         $user_id = get_current_user_id();
         error_log("pg_show_page IN user_id: ".$user_id);
 
+        $edit_gallery_url = get_permalink(self::PAGE_ID_EDIT_GALLERY); // TODO move 186 to a global constant or get by Title
+
         $html_code = "";
         $galleries = $this->pg_get_galleries_by_user_id($user_id);
         if(empty($galleries)){
             // TODO display No galleries, create your first gallery
-            $html_code .= "<p>No galleries, create your first gallery</p>";
+            // TODO add a link the the gallery creationAdd gal
+            $edit_gallery_url .= "?gid=-1";
+            //<input type='hidden' id='pg_edit_gallery_url' value='$edit_gallery_url'/>
+            $html_code = "
+            <div>Aucune galerie. <a href='$edit_gallery_url'>Créez votre première galerie</a> et ajoutez des photos.<div>";
+            return $html_code;    
         }
 
-        $edit_gallery_url = get_permalink(self::PAGE_ID_EDIT_GALLERY); // TODO move 186 to a global constant or get by Title
         //$edit_gallery_url = substr($edit_gallery_url, 0, -1);
         $show_gallery_url = get_permalink(self::PAGE_ID_SHOW_GALLERY); // TODO move 186 to a global constant or get by Title
         //$show_gallery_url = substr($show_gallery_url, 0, -1);
@@ -196,7 +184,7 @@ class Glp_User_Galleries_Public {
             $html.=
             '<div class="flex-container">
                 <div class="miniature" style="background-image: url('.$img_src.')"></div>
-                <div class="photo-text-container" style="background-color: lightyellow";>
+                <div class="photo-text-container">
                     <div class="gallery-title">'.$item["title"].'</div>
                     <div class="gallery-text">'.$item["description"].'</div>
                     <div class="footer-user-galleries">Modifiée le '.$date.'</div>

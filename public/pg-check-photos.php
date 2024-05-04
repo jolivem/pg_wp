@@ -23,7 +23,7 @@
 // TODO le rendu du nomber de colonne ne tient pas compte de la bordure de l'image
 // TODO probleme de responsive sur les images
 // TODO renommer les fichiers, les variables, les tables, etc..
-class Glp_User_Photos_Public {
+class Glp_Check_Photos_Public {
 
     /**
      * The ID of this plugin.
@@ -34,7 +34,6 @@ class Glp_User_Photos_Public {
      */
     private $plugin_name;
 
-    const PAGE_ID_EDIT_GALLERY = 11;
     //const PAGE_ID_EDIT_GALLERY = 189;
 
     /**
@@ -62,7 +61,7 @@ class Glp_User_Photos_Public {
         $this->plugin_name = $plugin_name;
         $this->version = $version;
         // $this->settings = new Gallery_Settings_Actions($this->plugin_name);
-        add_shortcode( 'glp_user_photos', array($this, 'pg_generate_page') );
+        add_shortcode( 'glp_check_photos', array($this, 'pg_generate_page') );
     }
 
     /**
@@ -104,51 +103,38 @@ class Glp_User_Photos_Public {
         }
 
         // General CSS File
-        $settings_options['gpg_exclude_general_css'] = isset($settings_options['gpg_exclude_general_css']) ? esc_attr( $settings_options['gpg_exclude_general_css'] ) : 'off';
-        $gpg_exclude_general_css = (isset($settings_options['gpg_exclude_general_css']) && esc_attr( $settings_options['gpg_exclude_general_css'] ) == "on") ? true : false;
-
-        if ( ! $gpg_exclude_general_css ) {
-            wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/glp-public.css', array(), $this->version, 'all' );
-        }else {
-            if ( ! is_front_page() ) {
-                wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/glp-public.css', array(), $this->version, 'all' );
-            }
-        }
-        
+        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/glp-public.css', array(), $this->version, 'all' );
         wp_enqueue_script('jquery');
     }
     
     public function pg_generate_page( $attr ){
         ob_start();
-        error_log("Glp_User_Photos_Public::pg_generate_page IN ");
+        error_log("Glp_Check_Photos_Public::pg_generate_page IN ".print_r($attr, true));
         $this->enqueue_styles();
         $this->enqueue_scripts();
 
-        echo $this->pg_show_page();
+        echo $this->pg_show_page( $attr );
 
         return str_replace(array("\r\n", "\n", "\r"), '', ob_get_clean());
     }
 
     // attr should have the user id
-    public function pg_show_page(){
+    public function pg_show_page( $attr ){
         
         global $wpdb;
+        $id = ( isset($attr['id']) ) ? absint( intval( $attr['id'] ) ) : null;
         
         $user_id = get_current_user_id();
-        $medias = $this->pg_get_medias_by_user($user_id);
+        $medias = $this->pg_get_medias_to_be_checked();
         if(!$medias){
-            // TODO add a link the the gallery creationAdd gal
-            $edit_gallery_url = get_permalink(self::PAGE_ID_EDIT_GALLERY); // TODO move 186 to a global constant or get by Title
-            $edit_gallery_url .= "?gid=-1";
-            //<input type='hidden' id='pg_edit_gallery_url' value='$edit_gallery_url'/>
             $html_code = "
-            <div>Aucune photo dans la bibliothèque. <a href='$edit_gallery_url'>Créez une galerie</a> et ajoutez des photos.<div>";
+            <div>Aucune photo à vérifier.<div>";
             return $html_code;    
         }
-        error_log("Glp_User_Photos_Public::pg_show_page count image =". count($medias));
+
         $admin_ajax_url = admin_url('admin-ajax.php');
         //$admin_post_url = admin_url('admin-post.php');
-        $nonce = wp_create_nonce('user_photos');
+        $nonce = wp_create_nonce('admin_check');
         $edit_photo_url = get_permalink(Pg_Edit_Gallery_Public::PAGE_ID_EDIT_PHOTO); // TODO move 186 to a global constant or get by Title
 
 
@@ -160,7 +146,7 @@ class Glp_User_Photos_Public {
             <div id='delete-photo-success' class='toast align-items-center text-white bg-success bg-gradient border-0' role='alert' aria-live='assertive' aria-atomic='true'>
                 <div class='d-flex'>
                     <div class='toast-body'>
-                        Photo supprimée !
+                        Supprimée !
                     </div>
                 </div>
             </div>
@@ -181,33 +167,32 @@ class Glp_User_Photos_Public {
         foreach($medias as $item){
             //error_log("render_images item:".print_r($item, true));
             $img_src = $item->guid;
-            $url_img = wp_get_attachment_image_src($item->ID, "thumbnail");
+            $url_img = wp_get_attachment_image_src($item->ID, "medium");
             if ($url_img != false) {
                 $img_src = $url_img[0];
             }
 
             $statext = Pg_Edit_Gallery_Public::get_photo_status($item->ID);
-            $metadate = get_post_meta($item->ID, 'date', true);
-            $date = Pg_Edit_Gallery_Public::get_photo_date($metadate);
-            
 
             //error_log("render_images url:".print_r($url_img, true));
             // TODO check url_img is OK, add try catch
+            //<div class="full-miniature" style="background-image: url('.$img_src.')"></div>
             $html.=
             '<div class="flex-container">
-                <div class="miniature" style="background-image: url('.$img_src.')"></div>
-                <div class="photo-text-container";>
+                
+                <img src="'.$img_src.'" class="full-miniature"></img>
+                <div class="photo-text-container" style="background-color: lightyellow";>
                     <div class="photo-title">'.$item->post_title.'</div>
                     <div class="photo-text-user">'.$item->post_content.'</div>
                     <div class="footer-edit-gallery">
-                        <div>Date : '.$date.'</div>
+                        <div>Date : '.$item->post_date.'</div>
                         <div>'.$statext.'</div>
                     </div>
                 </div>
-                <div class="options" style="background-color: lightblue">
+                <div class="options" style="background-color: lightgreen">
                     <div class="flex-options">
-                        <i class="user-photo-option pointer-icon fas fa-edit" aria-hidden="true" data-postid="'.$item->ID.'"></i>
-                        <i class="user-photo-option pointer-icon fas fa-trash" aria-hidden="true" data-postid="'.$item->ID.'"></i>
+                        <i class="admin-photo-option fas fa-thumbs-up" aria-hidden="true" data-postid="'.$item->ID.'"></i>
+                        <i class="admin-photo-option fas fa-thumbs-down" aria-hidden="true" data-postid="'.$item->ID.'"></i>
                     </div>
                 </div>
             </div>';
@@ -224,75 +209,60 @@ class Glp_User_Photos_Public {
     //     return $content;
     // }
 
-    public function pg_get_medias_by_user( $user_id ) {
+    public function pg_get_medias_to_be_checked(  ) {
+
 
         $args = array(
-            'author'         => $user_id,
+            //'author'         => $user_id,
             'post_type'      => 'attachment',
             'post_status'    => 'inherit,private', // Adjust post status as needed
             'posts_per_page' => -1, // Retrieve all attachments
+            'meta_query'     => array(
+                'relation' => 'AND',
+                array(
+                    'key'   => 'user_status', 
+                    'value' => Pg_Edit_Photo_Public::USER_STATUS_PUBLIC, 
+                    'compare' => '='
+                ),
+                array(
+                    'key'   => 'admin_status',
+                    'value' => Pg_Edit_Photo_Public::ADMIN_STATUS_NOT_SEEN,
+                    'compare' => '=',
+                )
+            ),            
         );
         
         $query = new WP_Query( $args );
         $medias = $query->get_posts();
 
-        /*error_log("pg_get_medias_by_user: ".print_r($medias, true));
-        Example for one post:
-        (
-            [ID] => 5
-            [post_author] => 1
-            [post_date] => 2023-11-08 08:11:38
-            [post_date_gmt] => 2023-11-08 08:11:38
-            [post_content] => desc earth
-            [post_title] => title earth
-            [post_excerpt] => caption earth
-            [post_status] => inherit
-            [comment_status] => open
-            [ping_status] => closed
-            [post_password] => 
-            [post_name] => earth
-            [to_ping] => 
-            [pinged] => 
-            [post_modified] => 2023-12-06 15:01:45
-            [post_modified_gmt] => 2023-12-06 15:01:45
-            [post_content_filtered] => 
-            [post_parent] => 44
-            [guid] => http://localhost:8000/wp-content/uploads/2023/11/earth.gif
-            [menu_order] => 0
-            [post_type] => attachment
-            [post_mime_type] => image/gif
-            [comment_count] => 0
-            [filter] => raw
-        )*/
-
         return $medias;
     }
 
     // callback on request to delete a photo
-    public function user_delete_photo() {
-        error_log("user_delete_photo IN REQUEST ".print_r($_REQUEST, true));
+    public function admin_valid_photo() {
+        error_log("admin_valid_photo IN REQUEST ".print_r($_REQUEST, true));
         //error_log("download_single_photo FILES ".print_r($_FILES, true));
 
         // TODO test current user is gallery user
 
         if( ! isset( $_REQUEST['nonce'] ) or 
-            ! wp_verify_nonce( $_REQUEST['nonce'], 'user_photos' ) ) {
-            error_log("user_delete_photo nonce not found");
+            ! wp_verify_nonce( $_REQUEST['nonce'], 'admin_check' ) ) {
+            error_log("admin_valid_photo nonce not found");
             wp_send_json_error( "NOK.", 403 );
             wp_die();
             return;
         }
 
         $user_id = get_current_user_id();
-        if ($user_id == 0) {
-            error_log("user_delete_photo No USER");
+        if ($user_id!== 1) {
+            error_log("admin_valid_photo No ADMIN");
             // TODO 404 NOT FOUND
             wp_send_json_error( "NOK.", 401 );
             return;
         }
 
         if( ! isset( $_REQUEST['pid'] )){
-            error_log("user_delete_photo no pid");
+            error_log("admin_valid_photo no pid");
             wp_send_json_error( "NOT Found", 404 );
             wp_die();
             return;
@@ -300,12 +270,66 @@ class Glp_User_Photos_Public {
 
         $pid = sanitize_text_field($_REQUEST['pid']);
 
-        wp_delete_attachment( $pid, true );
-        wp_delete_post( $pid, true);
-
-        error_log( "user_delete_photo Respond success");
+        update_post_meta($pid , 'admin_status', Pg_Edit_Photo_Public::ADMIN_STATUS_PUBLIC_OK);
+        $this->update_visibility($pid, Pg_Edit_Photo_Public::ADMIN_STATUS_PUBLIC_OK);
+        
+        error_log( "admin_valid_photo Respond success");
         wp_send_json_success( null, 200);
         wp_die();
         
-    }    
+    } 
+
+    public function admin_reject_photo() {
+        error_log("admin_reject_photo IN REQUEST ".print_r($_REQUEST, true));
+        //error_log("download_single_photo FILES ".print_r($_FILES, true));
+
+        // TODO test current user is gallery user
+
+        if( ! isset( $_REQUEST['nonce'] ) or 
+            ! wp_verify_nonce( $_REQUEST['nonce'], 'admin_check' ) ) {
+            error_log("admin_reject_photo nonce not found");
+            wp_send_json_error( "NOK.", 403 );
+            wp_die();
+            return;
+        }
+
+        $user_id = get_current_user_id();
+        if ($user_id != 1) {
+            error_log("admin_reject_photo No ADMIN");
+            // TODO 404 NOT FOUND
+            wp_send_json_error( "NOK.", 401 );
+            return;
+        }
+
+        if( ! isset( $_REQUEST['pid'] )){
+            error_log("admin_reject_photo no pid");
+            wp_send_json_error( "NOT Found", 404 );
+            wp_die();
+            return;
+        }
+
+        $pid = sanitize_text_field($_REQUEST['pid']);
+        update_post_meta($pid , 'admin_status', Pg_Edit_Photo_Public::ADMIN_STATUS_NOT_OK);
+        $this->update_visibility($pid, Pg_Edit_Photo_Public::ADMIN_STATUS_NOT_OK);
+
+        error_log( "admin_reject_photo Respond success");
+        wp_send_json_success( null, 200);
+        wp_die();
+    }
+
+    private function update_visibility($post_id, $admin_status) {
+        error_log("update_visibility IN id=$post_id admin_status=$admin_status");
+
+        $user_status = get_post_meta($post_id, 'user_status', true);
+        error_log("update_visibility user_status=$user_status");
+
+        if ($user_status == Pg_Edit_Photo_Public::USER_STATUS_PUBLIC && $admin_status == Pg_Edit_Photo_Public::ADMIN_STATUS_PUBLIC_OK) {
+            Pg_Geoposts_Table::update_visible($post_id, Pg_Geoposts_Table::PUBLIC_VISIBLE);
+        }
+        else {
+            Pg_Geoposts_Table::update_visible($post_id, Pg_Geoposts_Table::PUBLIC_HIDDEN);
+        }
+    }
+
 }
+

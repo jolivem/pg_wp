@@ -529,19 +529,19 @@ function downloadMultiplePhotos(files) {
                     <div class="download-success"><i class="fas fa-check" style="color: green;"></i></div>
                     <div class="download-error"><i class="fas fa-times" style="color: red;"></i></div>
                     <div class="flex-container" style="margin-top:0px" data-valid="ok">
-                        <img src="${src}"class="full-miniature"></img>
-                            <div class="full-photo-text-container" style="background-color: lightyellow; flex: 10 0 200px;">
-                                <div class="photo-title">Fichier : ${name}</div>
-                                <div class="photo-text"><i class="fas fa-map-marker-alt" style="color: green;">
-                                    </i> géolocalisation OK<br/>Date : ${date}${zoomHtml}</div>
-                            </div>
-                            <div class="flex-options-3" style="background-color: lightgreen">
-                                <div data-id="'.$id.'">
-                                    <div class="download-photo-option pointer-icon fas fa-trash" aria-hidden="true" onclick='removeDownloadPhoto(this.parentNode.parentNode)'></div>
-                                </div>
+                        <img src="${src}" class="full-miniature"></img>
+                        <div class="full-photo-text-container" style="background-color: lightyellow; flex: 10 0 200px;">
+                            <div class="photo-title">Fichier : ${name}</div>
+                            <div class="photo-text"><i class="fas fa-map-marker-alt" style="color: green;">
+                                </i> géolocalisation OK<br/>Date : ${date}${zoomHtml}</div>
+                        </div>
+                        <div class="flex-options-3" style="background-color: lightgreen">
+                            <div data-id="'.$id.'">
+                                <div class="download-photo-option pointer-icon fas fa-trash" aria-hidden="true" onclick='removeDownloadPhoto(this.parentNode.parentNode)'></div>
                             </div>
                         </div>
                     </div>
+                </div>
                 </div>`;
             }
             else {
@@ -549,7 +549,7 @@ function downloadMultiplePhotos(files) {
                 <div style="position: relative;">
                     <div class="download-error"><i class="fas fa-times" style="color: red;"></i></div>
                     <div class="flex-container" style="margin-top:0px">
-                        <img src="${src}"class="full-miniature"></img>
+                        <img src="${src}" class="full-miniature"></img>
                             <div class="full-photo-text-container" style="background-color: lightyellow; flex: 10 0 200px;">
                                 <div class="photo-title">Fichier : ${name}</div>
                                 <div class="photo-text" style="color:red;">

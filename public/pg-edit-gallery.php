@@ -75,7 +75,7 @@ class Pg_Edit_Gallery_Public {
     public function enqueue_styles() {
 
         wp_enqueue_style( 'ays_pb_bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css', array(), $this->version, 'all' );
-        //wp_enqueue_style('leaflet.css', 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css');
+        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/glp-public.css', array(), $this->version, 'all' );
     }
 
     /**
@@ -88,26 +88,20 @@ class Pg_Edit_Gallery_Public {
         //wp_enqueue_media();
         wp_enqueue_script( $this->plugin_name.'-bootstrap.js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-glp-public.js', plugin_dir_url( __FILE__ ) . 'js/glp-public.js', array( 'jquery' ), $this->version, true );
-        //wp_enqueue_script('leaflet', 'https://unpkg.com/leaflet/dist/leaflet.js', array('jquery'), '1.7.1', true);
-
-        wp_enqueue_script( $this->plugin_name.'-pg-vignette.js', plugin_dir_url( __FILE__ ) . 'js/pg-vignette.js', array( 'jquery' ), $this->version, true );
-        wp_localize_script($this->plugin_name.'-pg-vignette.js', 'ays_vars', array('base_url' => GLP_BASE_URL));
 
     }
 
     public function enqueue_styles_early(){
 
-        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/glp-public.css', array(), $this->version, 'all' );
         wp_enqueue_script('jquery');
     }
     
     public function pg_generate_page( $attr ){
         ob_start();
-        error_log("Pg_Edit_Gallery_Public::pg_generate_page IN ");
-        error_log("Pg_Edit_Gallery_Public::pg_generate_page IN ".print_r($_GET, true));
-        error_log("Pg_Edit_Gallery_Public::pg_generate_page IN ".print_r($attr, true));
+        error_log("Pg_Edit_Gallery_Public::pg_generate_page IN GET ".print_r($_GET, true));
 
-        // TODO check that the photo belons to the current user
+        // TODO check that the gallery belongs to the current user
+        // TODO check that the gallery belongs to the current user
 
         //Test with ID=67
         if (! isset($_GET['gid'])) {
@@ -121,7 +115,7 @@ class Pg_Edit_Gallery_Public {
         $this->enqueue_styles();
         $this->enqueue_scripts();
 
-        echo $this->pg_show_page( $id, $_GET['page_id'] );
+        echo $this->pg_show_page( $id );
 
         return str_replace(array("\r\n", "\n", "\r"), '', ob_get_clean());
     }
@@ -142,9 +136,9 @@ class Pg_Edit_Gallery_Public {
     // }
     
     // attr should have the user id
-    public function pg_show_page( $id, $page_id ){
+    public function pg_show_page( $id ){
 
-        error_log("pg_show_page IN id=".$id);
+        error_log("pg_show_page IN id=$id");
         
         if ($id == -1) {
             // create a new gallery
@@ -159,7 +153,6 @@ class Pg_Edit_Gallery_Public {
             //$gallery = $this->pg_get_gallery_by_id($id);
 
             $url = esc_url_raw( add_query_arg( array(
-                "page_id"           => $page_id,
                 "gid"               => $id) ) );
             wp_redirect( $url );
 
@@ -213,7 +206,7 @@ class Pg_Edit_Gallery_Public {
                 <div>
                     <div class='form-floating mb-3'>
                         <input type='text' name='title' class='form-control' id='gallery-title' aria-describedby='titleHelp' placeholder='' value='$title'>
-                        <label for='gallery-title'>Titre</label>
+                        <label for='gallery-title'>Titre de la galerie</label>
                     </div>
                     <div class='form-floating mb-3'>
                         <textarea rows='4' name='desc' style='height:100%;' class='form-control' placeholder='' id='gallery-description'>$description</textarea>
@@ -222,7 +215,7 @@ class Pg_Edit_Gallery_Public {
                 </div>
                 <div>
                     <button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#multipleDowloadModal'>
-                        Add photos...
+                        Ajouter des photos...
                     </button>
                     <button type='button' class='btn btn-primary align-right' id='edit-gallery-save'>Enregistrer</button>
             </div>
@@ -270,13 +263,14 @@ class Pg_Edit_Gallery_Public {
             return null;
         }
         $image_ids = explode( "***", $result["images_ids"]);
+        error_log("pg_get_medias_by_gallery count =".count($image_ids));
         return $image_ids;
     }
 
     // render all the images 
     function render_images($medias){
         //error_log("render_images IN images=".print_r($medias, true));
-        $html='<div class="sortable-list" id="item-list">';
+        $html='<ul class="sortable-list" id="item-list">';
 
         // loop for each media
         foreach($medias as $id){
@@ -293,6 +287,9 @@ class Pg_Edit_Gallery_Public {
             $title = $post->post_title;
 
             $statext = $this->get_photo_status($id);
+            $metadate = get_post_meta($id, 'date', true);
+            $date = Pg_Edit_Gallery_Public::get_photo_date($metadate);
+
 
             //TODO get title and text
             //error_log("render_images url:".print_r($url_img, true));
@@ -301,22 +298,22 @@ class Pg_Edit_Gallery_Public {
             '<li class="item" draggable="true" data-id="'.$id.'">
                 <div class="flex-container" style="margin-top:0px">
                     <div class="miniature" style="background-image: url('.$img_src.')"></div>
-                    <div class="photo-text-container" style="background-color: lightyellow";>
+                    <div class="photo-text-container">
                         <div class="photo-title">'.$title.'</div>
                         <div class="photo-text-gallery">'.$content.'</div>
                         <div class="footer-edit-gallery">
-                            <div>Date : '.$post->post_date.'</div>
+                            <div>Date : '.$date.'</div>
                             <div>'.$statext.'</div>
                         </div>
                     </div>
-                    <div class="options-photo-gallery" data-id="'.$id.'" style="background-color: lightgreen">
+                    <div class="options-photo-gallery" data-id="'.$id.'" style="background-color: lightblue">
                         <div class="gallery-photo-option pointer-icon fas fa-edit" aria-hidden="true"></div>
                         <div class="gallery-photo-option pointer-icon fas fa-trash" aria-hidden="true"></div>
                     </div>
                 </div>
             </li>';
         }
-        $html.='</div>';
+        $html.='</ul>';
         // TODO make it work on mobiles
         return $html;
     }
@@ -327,19 +324,42 @@ class Pg_Edit_Gallery_Public {
         //error_log("get_photo_status meta=".print_r($meta, true));
         //error_log("get_photo_status type=".gettype($meta['status'][0]));
 
-        if ($meta['worldmap'][0] != Pg_Edit_Photo_Public::WORLDMAP_ON){
+        if ($meta['user_status'][0] != Pg_Edit_Photo_Public::USER_STATUS_PUBLIC){
             $statext = "Privée";
         }
         else {
             //TODO get if its shared or not
-            if ($meta['status'][0] == Pg_Edit_Photo_Public::STATUS_PUBLIC_OK) {
-                $statext = "Partagée";
+            if ($meta['admin_status'][0] == Pg_Edit_Photo_Public::ADMIN_STATUS_PUBLIC_OK) {
+                $statext = "Publique";
             }
-            else {
-                $statext = "Partagée non vérifiée";
+            else if ($meta['admin_status'][0] == Pg_Edit_Photo_Public::ADMIN_STATUS_NOT_SEEN) {
+                $statext = "Non vérifiée";
+            }
+            else if ($meta['admin_status'][0] == Pg_Edit_Photo_Public::ADMIN_STATUS_NOT_OK) {
+                $statext = "Non publique";
             }
         }
         return $statext;
+    }
+
+    public static function get_photo_date($datetime) {
+        error_log("get_photo_date IN date = $datetime");
+
+        $date = new DateTime($datetime);
+        // Define an array of French month names
+        $frenchMonthNames = [
+            'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
+            'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'
+        ];
+        
+        // Get the day, month, and year from the DateTime object
+        $day = $date->format('d');
+        $month = $date->format('n');
+        $year = $date->format('Y');
+        $time = $date->format('H:i');
+        
+        // Format the date in French format
+        return $day . ' ' . $frenchMonthNames[$month - 1] . ' ' . $year . ' à ' . $time;;
     }
 
     //////////////////////////////////////

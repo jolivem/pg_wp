@@ -141,7 +141,7 @@ class Pg_Show_Planet_Map_Public {
                 <button type='button' id='searchButton' class='btn btn-primary'>Rechercher</button>
             </form>
             <div id='map' style='height:300px;'></div>
-            <div class='flex-container'>
+            <div class='flex-container-planet'>
                 <div class='slider-options-left' style='background-color: lightgreen'>
                     <div>
                         <div class='show-gallery-option fas fa-step-backward' style='padding-bottom:38px;' aria-hidden='true'></div>
@@ -246,7 +246,8 @@ class Pg_Show_Planet_Map_Public {
                             
                             //$img_tag ="<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "' onload='console.log(\"ID=".$image_ids[$key]."\")'>";
                             $map_js .= "icon = new LeafIcon({iconUrl: '". $img_src ."'});";
-                            $map_js .= "markers.addLayer(L.marker([".strval($latitude).", ".strval($longitude)."], {icon: icon}).addTo(map).bindPopup('I am a green leaf.'));";
+                            //$map_js .= "markers.addLayer(L.marker([".strval($latitude).", ".strval($longitude)."], {icon: icon}).addTo(map).bindPopup('I am a green leaf.'));";
+                            $map_js .= "markers.addLayer(L.marker([".strval($latitude).", ".strval($longitude)."], {icon: icon}).addTo(map));";
                         }
                     }
                 } // end foreach image

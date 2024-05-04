@@ -181,9 +181,9 @@
 
     
     // When changing 
-    $('#worldmap').on('change', function(e) {
+    $('#user_status').on('change', function(e) {
         e.stopPropagation();
-        this.value = this.checked ? "on" : "off";
+        this.value = this.checked ? "public" : "private";
       });
     
     // When clicked on submit button
@@ -197,7 +197,7 @@
 
         const title = document.getElementById('photo-title').value;
         const description = document.getElementById('photo-description').value;
-        const worldmap = document.getElementById('worldmap').value;
+        const user_status = document.getElementById('user_status').value;
         const vignette = document.getElementById("select-country").value;
 
         const formData = new FormData();
@@ -207,7 +207,7 @@
         formData.append('title', title);
         formData.append('desc', description);
         formData.append('vignette', vignette);
-        formData.append('worldmap', worldmap);
+        formData.append('user_status', user_status);
         jQuery.ajax({
             method: 'POST',
             url: admin_url,
