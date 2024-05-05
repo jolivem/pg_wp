@@ -13,18 +13,28 @@ items.forEach(item => {
 
 const initSortableList = (e) => {
     e.preventDefault();
-    console.log("initSortableList");
+    //console.log("initSortableList");
     const draggingItem = document.querySelector(".dragging");
     // Getting all items except currently dragging and making array of them
     let siblings = [...sortableList.querySelectorAll(".item:not(.dragging)")];
 
     // Finding the sibling after which the dragging item should be placed
     let nextSibling = siblings.find(sibling => {
-        console.log("initSortableList found", sibling);
+        //console.log("initSortableList found", sibling);
+        console.log("initSortableList sibling", sibling);
+        console.log("initSortableList found", {
+            y: e.clientY,
+            top: sibling.offsetTop,
+            height: sibling.offsetHeight,
+            sum: sibling.offsetTop + sibling.offsetHeight / 2
+        });
+
         return e.clientY <= sibling.offsetTop + sibling.offsetHeight / 2;
     });
-    console.log("initSortableList insert Before", nextSibling);
-    // Inserting the dragging item before the found sibling
+    // console.log("initSortableList insert draggingItem", draggingItem);
+    // console.log("initSortableList insert nextSibling", nextSibling);
+    // console.log("initSortableList insert sortableList", sortableList);
+// Inserting the dragging item before the found sibling
     sortableList.insertBefore(draggingItem, nextSibling);
 }
 

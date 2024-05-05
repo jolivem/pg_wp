@@ -136,7 +136,7 @@ var LeafIcon = L.Icon.extend({
 
     /* When user clicked on the slider gallery */
     $("#imageSlider").on('click', function(event){
-        event.preventDefault();
+        //event.preventDefault();
         /* console.log('gal.on 'click' event ', event);
         console.log('gal.on 'click' target', event.target);
         console.log('gal.on 'click' src', event.target.attributes.src); */
@@ -277,53 +277,56 @@ var LeafIcon = L.Icon.extend({
             }
     }
 
-    document.getElementById("searchInput").addEventListener("keypress", function(event) {
-        // Check if the pressed key is 'Enter' (key code 13)
-        console.log('searchInput IN', event);
-        if (event.key === 'Enter') {
-            event.preventDefault();
+    let searchElem = document.getElementById("searchInput");
+    if (searchElem) {
+        document.getElementById("searchInput").addEventListener("keypress", function(event) {
+            // Check if the pressed key is 'Enter' (key code 13)
+            console.log('searchInput IN', event);
+            if (event.key === 'Enter') {
+                event.preventDefault();
 
-            // Call the function to handle the 'Enter' key press
-            searchAddress();
-        }
-    });
-
-    document.getElementById('searchButton').addEventListener('click', function(event) {
-        event.preventDefault();
-        searchAddress();
-    });                
-
-    function searchAddress() {
-        console.log('searchAddress IN');
-        var address = document.getElementById('searchInput').value;
-
-        if (address == '') {
-            return;
-        }
-
-        // Utilisation de l'API Nominatim pour géocoder l'adresse
-        var url = 'https://nominatim.openstreetmap.org/search?format=json&q=' + address;
-        console.log('searchAddress url', url);
-
-        fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            console.log('searchAddress response', data);
-            if (data.length > 0) {
-                var lat = parseFloat(data[0].lat);
-                var lon = parseFloat(data[0].lon);
-                
-                // Création de la carte OpenStreetMap
-                map.setView([lat, lon], 12);
-
-                L.marker([lat, lon]).addTo(map)
-                    .bindPopup(address)
-                    .openPopup();
-            } else {
-                alert('Adresse introuvable');
+                // Call the function to handle the 'Enter' key press
+                searchAddress();
             }
-        })
-        .catch(error => console.error('Erreur :', error));
+        });
+
+        document.getElementById('searchButton').addEventListener('click', function(event) {
+            event.preventDefault();
+            searchAddress();
+        });                
+
+        function searchAddress() {
+            console.log('searchAddress IN');
+            var address = document.getElementById('searchInput').value;
+
+            if (address == '') {
+                return;
+            }
+
+            // Utilisation de l'API Nominatim pour géocoder l'adresse
+            var url = 'https://nominatim.openstreetmap.org/search?format=json&q=' + address;
+            console.log('searchAddress url', url);
+
+            fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                console.log('searchAddress response', data);
+                if (data.length > 0) {
+                    var lat = parseFloat(data[0].lat);
+                    var lon = parseFloat(data[0].lon);
+                    
+                    // Création de la carte OpenStreetMap
+                    map.setView([lat, lon], 12);
+
+                    L.marker([lat, lon]).addTo(map)
+                        .bindPopup(address)
+                        .openPopup();
+                } else {
+                    alert('Adresse introuvable');
+                }
+            })
+            .catch(error => console.error('Erreur :', error));
+        }
     }
 
 })( jQuery );

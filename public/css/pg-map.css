@@ -40,9 +40,11 @@ div.gallery-slider {
     overflow: hidden;
     white-space: nowrap;
     padding: 4px;
+    display: ruby;
 }
 
 div.gallery-slider img {
+    display: ruby;
     padding: 2px;
     height: 120px;
     cursor: pointer;
@@ -76,3 +78,30 @@ div.planet-slider img {
     /* Adjust the border style for selected images */
     opacity: 0.85;
 }
+
+.slider-item {
+    position: relative;
+}
+  
+.slider-overlay {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    height: 32px;
+    width: 32px;
+    opacity: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    transition: .3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.slider-icon {
+    color: white; /* Change the color of the icon */
+    cursor: pointer;
+}
+
+.slider-item:hover .slider-overlay {
+    opacity: 1;
+  }
+  

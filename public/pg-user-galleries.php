@@ -164,13 +164,28 @@ class Glp_User_Galleries_Public {
             error_log("render_galleries item:".print_r($item, true));
             
             // get the first image og the gallery
-            $image_id = $this->pg_get_first_image_by_id($item["id"]);
-            $img_src = "";
-            if ($image_id != null) {
+            $image_ids = $this->pg_get_images_by_id($item["id"]);
+            $img_src1 = "";
+            $img_src2 = "";
+            if (count($image_ids) >= 1) {
                 // get the image source
-                $url_img = wp_get_attachment_image_src($image_id, "thumbnail");
+                $url_img = wp_get_attachment_image_src($image_ids[0], "thumbnail");
                 if ($url_img != false) {
-                    $img_src = $url_img[0];
+                    $img_src1 = $url_img[0];
+                }
+            }
+            if (count($image_ids) >= 2) {
+                // get the image source
+                $url_img = wp_get_attachment_image_src($image_ids[1], "thumbnail");
+                if ($url_img != false) {
+                    $img_src2 = $url_img[0];
+                }
+            }
+            if (count($image_ids) >= 3) {
+                // get the image source
+                $url_img = wp_get_attachment_image_src($image_ids[2], "thumbnail");
+                if ($url_img != false) {
+                    $img_src3 = $url_img[0];
                 }
             }
             $datetime = explode( " ", $item['date_update']);
@@ -183,7 +198,9 @@ class Glp_User_Galleries_Public {
             // TODO check url_img is OK, add try catch
             $html.=
             '<div class="flex-container">
-                <div class="miniature" style="background-image: url('.$img_src.')"></div>
+                <div class="miniature1" style="background-image: url('.$img_src1.')"></div>
+                <div class="miniature2" style="background-image: url('.$img_src2.')"></div>
+                <div class="miniature3" style="background-image: url('.$img_src3.')"></div>
                 <div class="photo-text-container">
                     <div class="gallery-title">'.$item["title"].'</div>
                     <div class="gallery-text">'.$item["description"].'</div>
@@ -246,7 +263,7 @@ class Glp_User_Galleries_Public {
 
     // Get the first image of the gallery
     // Return the image id or null if none
-    function pg_get_first_image_by_id( $gallery_id ) {
+    function pg_get_images_by_id( $gallery_id ) {
         global $wpdb;
         //error_log("pg_get_first_image_by_id id: ".$gallery_id);
 
@@ -258,12 +275,12 @@ class Glp_User_Galleries_Public {
 
         //error_log("pg_get_first_image_by_id all ids: ".print_r($result, true));
         $image_ids = explode( "***", $result["images_ids"]);
+        return $image_ids;
+        // if (count($image_ids) > 0) {
+        //     return $image_ids[0];
+        // }
 
-        if (count($image_ids) > 0) {
-            return $image_ids[0];
-        }
-
-        return null;
+        // return null;
     }
 
 }

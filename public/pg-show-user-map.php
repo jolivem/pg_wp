@@ -74,6 +74,7 @@ class Pg_Show_User_Map_Public {
         wp_enqueue_style( 'MarkerCluster', '"https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css', array(), $this->version, 'all' );
         wp_enqueue_style( 'gpg-fontawesome', 'https://use.fontawesome.com/releases/v5.4.1/css/all.css', array(), $this->version, 'all');
 
+        wp_enqueue_style( $this->plugin_name."-simpleLightbox.css", plugin_dir_url( __FILE__ ) . 'css/simpleLightbox.css', array(), $this->version, 'all' );
         wp_enqueue_style( $this->plugin_name."-public.css", plugin_dir_url( __FILE__ ) . 'css/glp-public.css', array(), $this->version, 'all' );
         wp_enqueue_style( $this->plugin_name."-map.css", plugin_dir_url( __FILE__ ) . 'css/pg-map.css', array(), $this->version, 'all' );
         //wp_enqueue_style('leaflet.css', 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css');
@@ -93,6 +94,7 @@ class Pg_Show_User_Map_Public {
         wp_enqueue_script( $this->plugin_name.'-leaflet.js', 'https://unpkg.com/leaflet@1.0.3/dist/leaflet-src.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-markercluster.js', 'https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js', array( 'jquery' ), $this->version, true );
 
+        wp_enqueue_script( $this->plugin_name.'-simpleLightbox.js', plugin_dir_url( __FILE__ ) . 'js/simpleLightbox.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-pg-map.js', plugin_dir_url( __FILE__ ) . 'js/pg-map.js', array( 'jquery' ), $this->version, true );
         wp_localize_script($this->plugin_name.'-pg-map.js', 'ays_vars', array('base_url' => GLP_BASE_URL));
 
@@ -181,16 +183,31 @@ class Pg_Show_User_Map_Public {
     function render_slider($medias){
         //error_log("render_images IN images=".print_r($medias, true));
         $html='';
+        $num=0;
         // loop for each media
         foreach($medias as $id){
             //error_log("render_images id:".$id);
             //$img_src = $item->guid;
+            $img_src_medium = "";
+            $img_src_full = "";
             $url_img = wp_get_attachment_image_src($id, "medium");
             if ($url_img != false) {
-                $img_src = $url_img[0];
+                $img_src_medium = $url_img[0];
             }
 
-            $html.="<img src='$img_src' id='postid-$id' alt='Image 1' class='imgNotSelected'>";
+            $url_img = wp_get_attachment_image_src($id, "full");
+            if ($url_img != false) {
+                $img_src_full = $url_img[0];
+            }
+
+            $html.="
+            <div class='slider-item'>
+                <img src='$img_src_medium' id='postid-$id' alt='Image 1' class='imgNotSelected' data-full='$img_src_full'>
+                <div class='slider-overlay'>
+                    <i class='fas fa-expand slider-icon' data-num='$num'></i>
+                </div>
+            </div>";
+            $num = $num + 1;
         }
         return $html;
     }
@@ -261,7 +278,24 @@ class Pg_Show_User_Map_Public {
                 map.addLayer(markers);
                 const bbox = [[$minlat,$minlng],[$maxlat,$maxlng]];
                 /*L.rectangle(bbox).addTo(map);*/
-                map.fitBounds(bbox);                                
+                map.fitBounds(bbox);
+                
+                /* add lightbox */ 
+                let bobo = document.querySelectorAll('#imageSlider img');
+                console.log('INIT SimpleLightbox with', bobo);
+                var lightbox = new SimpleLightbox({
+                    elements: document.querySelectorAll('#imageSlider img'),
+                    urlAttribute: 'data-full',
+                    bindToItems: false
+                });
+                $(document).find('.slider-overlay').on('click', function(e){
+                    console.log('slider-overlay', e.target);
+                    const num = e.target.getAttribute('data-num');
+                    console.log('slider-overlay', num);
+                    e.preventDefault();
+                    lightbox.showPosition(num);
+                });
+                
             })
         })(jQuery);
         </script>";
@@ -270,6 +304,7 @@ class Pg_Show_User_Map_Public {
         return $map_js;
     
     }// end ays_add_makers()    
+    // just added 
 
     // private function get_tumbnails_url() {
     //     $thumbnails     = array();

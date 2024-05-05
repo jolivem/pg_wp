@@ -203,6 +203,7 @@ class Pg_Edit_Gallery_Public {
         </div>
         <div class='container'>
             <div class='tab-content'>
+            
                 <div>
                     <div class='form-floating mb-3'>
                         <input type='text' name='title' class='form-control' id='gallery-title' aria-describedby='titleHelp' placeholder='' value='$title'>
@@ -270,7 +271,7 @@ class Pg_Edit_Gallery_Public {
     // render all the images 
     function render_images($medias){
         //error_log("render_images IN images=".print_r($medias, true));
-        $html='<ul class="sortable-list" id="item-list">';
+        $html='<div class="sortable-list" id="item-list">';
 
         // loop for each media
         foreach($medias as $id){
@@ -313,7 +314,7 @@ class Pg_Edit_Gallery_Public {
                 </div>
             </li>';
         }
-        $html.='</ul>';
+        $html.='</div>';
         // TODO make it work on mobiles
         return $html;
     }

@@ -600,6 +600,26 @@ button.lg-icon {
     flex-basis: 110px;
 }
 
+.miniature1 {
+    background-position: center;
+    background-size: cover;
+    border-radius: 8px 0 0 8px;
+    flex-basis: 100px;
+}
+
+.miniature2 {
+    background-position: right;
+    background-size: cover;
+    border-left: 1px solid white;
+    flex-basis: 50px;
+}
+
+.miniature3 {
+    background-position: right;
+    background-size: cover;
+    border-left: 1px solid white;
+    flex-basis: 20px;
+}
 .photo-text-container {
     flex: 10 0 200px;
     padding: 5px;
