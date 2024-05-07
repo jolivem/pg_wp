@@ -578,7 +578,7 @@ button.lg-icon {
     border-radius: 10px;
 }
 
-.flex-container-planet {
+.flex-container-slider {
     margin-top: 10px;
     display: flex;
     align-items: stretch;
@@ -620,6 +620,7 @@ button.lg-icon {
     border-left: 1px solid white;
     flex-basis: 20px;
 }
+
 .photo-text-container {
     flex: 10 0 200px;
     padding: 5px;
@@ -734,7 +735,7 @@ button.lg-icon {
 .options-photo-gallery {
     flex-basis: 40px;
     border-radius: 0 8px 8px 0;
-    display:flex;
+    display: flex;
     flex-direction: column;
     align-items: center;
 }
@@ -748,15 +749,16 @@ button.lg-icon {
 }
 
 .slider-options-left {
-    display:flex;
+    display: flex;
     justify-content: center;
     align-items: center;
     flex-basis: 40px;
     border-radius: 8px 0 0 8px;
     padding: 5px;
 }
+
 .slider-options-right {
-    display:flex;
+    display: flex;
     justify-content: center;
     align-items: center;
     flex-basis: 40px;
@@ -832,8 +834,10 @@ button.lg-icon {
 }
 
 .search-place button {
-    margin-left: 10px; /* Add some space between input and button */
+    margin-left: 10px;
+    /* Add some space between input and button */
 }
+
 /** drag drop and sortable **/
 /* 
 body {
@@ -857,4 +861,16 @@ body {
 
 .item.dragging :where(.flex-container, i) {
     opacity: 0;
-  }
+}
+
+.desc-all {
+    display: none;
+}
+
+.desc-title {
+    text-align: center;
+}
+
+.desc-description {
+    text-align: center;
+}

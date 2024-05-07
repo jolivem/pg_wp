@@ -34,8 +34,8 @@ class Glp_User_Photos_Public {
      */
     private $plugin_name;
 
-    const PAGE_ID_EDIT_GALLERY = 11;
-    //const PAGE_ID_EDIT_GALLERY = 189;
+    //const PAGE_ID_EDIT_GALLERY = 11;
+    const PAGE_ID_EDIT_GALLERY = 189;
 
     /**
      * The version of this plugin.

@@ -25,10 +25,10 @@
 // TODO renommer les fichiers, les variables, les tables, etc..
 class Glp_User_Galleries_Public {
 
-    const PAGE_ID_EDIT_GALLERY = 11;
-    //const PAGE_ID_EDIT_GALLERY = 189;
-    const PAGE_ID_SHOW_GALLERY = 36;
-    //const PAGE_ID_SHOW_GALLERY = 272;
+    //const PAGE_ID_EDIT_GALLERY = 11;
+    const PAGE_ID_EDIT_GALLERY = 189;
+    //const PAGE_ID_SHOW_GALLERY = 36;
+    const PAGE_ID_SHOW_GALLERY = 272;
 
     /**
      * The ID of this plugin.

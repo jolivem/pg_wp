@@ -1,6 +1,6 @@
-var selectedImage = null;
-var imageSelected = null; /*image clicked in the slider */
-var map;
+var g_selectedImageElem = null;
+var g_selectedImageSrc = null; /*image src when clicked in the slider target*/
+var g_map;
 var markers;
 var toto='montoto';
 var LeafIcon = L.Icon.extend({
@@ -13,13 +13,105 @@ var LeafIcon = L.Icon.extend({
     }
 });
 
+var setSliderPhotoCss = function (element, class_) {
+
+    switch( class_) {
+        case "imgNotSelected":
+            element.classList.remove('imgSelected');
+            element.classList.add(class_);
+            break;
+        case "imgSelected":
+            element.classList.remove('imgNotSelected');
+            element.classList.add(class_);
+            break;
+        }
+};
+
+var selectSliderImage =  function(mysrc, scroll) {
+    console.log('selectSliderImage IN', mysrc);
+    var slider = document.getElementById('imageSlider');
+
+    /* Remove classname from previously selected image */
+    //console.log('selectSliderImage current g_selectedImageElem', g_selectedImageElem);
+    if (g_selectedImageElem) {
+        g_selectedImageElem.classList.remove('imgSelected');
+        g_selectedImageElem.classList.add('imgNotSelected');
+    }
+
+    //let thumbnailSrc = makeThumbnailSrc(mysrc);
+    var imageElement = document.querySelector(`#imageSlider img[src='${mysrc}']`);
+    /* Add classname to the selected image */
+    console.log('selectSliderImage imageElement', imageElement);
+    if (imageElement) {
+        console.log('slider ', slider);
+        console.log('imageElement ', imageElement);
+        imageElement.classList.remove('imgNotSelected');
+        imageElement.classList.add('imgSelected');
+        g_selectedImageElem = imageElement;
+
+        /* Scroll and center to the selected image */
+        if (scroll == true) {
+            centerInSlider(imageElement, slider);
+        }
+
+        //  remove prefix "slider-"
+        let postid = imageElement.id.substring(7);
+        displayPostDesription(postid);
+
+    }
+    else {
+        console.log('selectSliderImage NOT FOUND');
+    }
+};
+
+var displayPostDesription = function(postid) {
+    // hide all descriptions
+    let alldescs = document.querySelectorAll('.desc-all');
+    for (let i = 0; i < alldescs.length; i++) {
+        alldescs[i].style.display = "none";
+    }
+
+    // find description
+    if (postid != null) {
+        const descid = "desc-"+postid;
+        var descr = document.getElementById(descid);
+        console.log('descid ', descid);
+        if (descr) {
+            descr.style.display='block';
+        }
+    }
+};
+
+var centerInSlider = function ( image, slider) {
+    console.log('centerInSlider IN', slider.scrollLeft);
+
+    const parent = image.parentElement;
+    const currentLeft = slider.scrollLeft;
+    //slider.scrollLeft = parent.offsetLeft - slider.offsetLeft + (parent.clientWidth - slider.offsetWidth) / 2;
+    const newLeft = parent.offsetLeft - slider.offsetLeft + (parent.clientWidth - slider.offsetWidth) / 2;
+    slider.scrollBy({
+        left: newLeft - currentLeft,
+        top: 0,
+        behavior: 'smooth'
+    })
+    console.log('centerInSlider OUT', slider.scrollLeft);
+
+    // for centering:
+    // iOL + iOW/2 = sOL + sSL + sOW/2
+
+    // console.log('slider.offsetWidth ', slider.offsetWidth);
+    // console.log('slider.offsetLeft ', slider.offsetLeft);
+    // console.log('slider.scrollLeft ', slider.scrollLeft);
+    // console.log('element.offsetWidth ', element.offsetWidth);
+    // console.log('element.offsetLeft ', element.offsetLeft);
+};
+
 (function( $ ) {
 	'use strict';	
 	//$(document).ready(function(){     
-        //console.log('COUCOU ready map.js', toto);
-
-    selectedImage = null;
-    imageSelected = null; /*image clicked in the slider */
+    //console.log('COUCOU ready map.js', toto);
+    g_selectedImageElem = null;
+    g_selectedImageSrc = null; /*image clicked in the slider */
 
     markers = L.markerClusterGroup({
         zoomToBoundsOnClick: true,
@@ -40,11 +132,12 @@ var LeafIcon = L.Icon.extend({
             else {
                 iicoon.options.className = 'mydivmarker12';    
             }
-            if (imageSelected != null) {
+            console.log( 'g_selectedImageSrc', g_selectedImageSrc);
+            if (g_selectedImageSrc != null) {
                 iicoon.options.iconSize = [100,100];
-                iicoon.options.iconUrl = imageSelected;
-                imageSelected = null;
-                console.log( 'imageSelected = null');
+                iicoon.options.iconUrl = g_selectedImageSrc;
+                g_selectedImageSrc = null;
+                console.log( 'g_selectedImageSrc = null');
                 setTimeout(function(){
                     cluster.refreshIconOptions({
                         //shadowUrl: 'leaf-shadow.png',
@@ -61,11 +154,11 @@ var LeafIcon = L.Icon.extend({
     }); 
 
     /*map = L.map('map').setView([0,0], zoom);*/
-    map = L.map('map');
+    g_map = L.map('map');
 
     L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);    
+    }).addTo(g_map);    
 
     /* when clicked on marker */
     markers.on('click', function (a) {
@@ -88,194 +181,218 @@ var LeafIcon = L.Icon.extend({
         /*markers.refreshClusters(visibleOne);*/
     });            
 
-    function selectSliderImage(mysrc, scroll) {
-        console.log('selectSliderImage IN', mysrc);
-        var slider = document.getElementById('imageSlider');
-
-        /* Remove classname from previously selected image */
-        console.log('selectSliderImage', selectedImage);
-        if (selectedImage) {
-            selectedImage.classList.remove('imgSelected');
-            selectedImage.classList.add('imgNotSelected');
-        }
-
-        var imageElement = document.querySelector(`#imageSlider img[src='${mysrc}']`);
-        /* Add classname to the selected image */
-        console.log('selectSliderImage', imageElement);
-        if (imageElement) {
-            console.log('slider ', slider);
-            console.log('imageElement ', imageElement);
-            imageElement.classList.remove('imgNotSelected');
-            imageElement.classList.add('imgSelected');
-            selectedImage = imageElement;
-
-            /* Scroll and center to the selected image */
-            if (scroll == true) {
-                centerInSlider(imageElement, slider);
-            }
-        }
-        else {
-            console.log('selectSliderImage NOT FOUND');
-        }
-    }
-
-    function centerInSlider( element, slider) {
-        slider.scrollLeft = element.offsetLeft - slider.offsetLeft + (element.clientWidth - slider.offsetWidth) / 2;
-        // for centering:
-        // iOL + iOW/2 = sOL + sSL + sOW/2
-
-        // console.log('slider.offsetWidth ', slider.offsetWidth);
-        // console.log('slider.offsetLeft ', slider.offsetLeft);
-        // console.log('slider.scrollLeft ', slider.scrollLeft);
-        // console.log('element.offsetWidth ', element.offsetWidth);
-        // console.log('element.offsetLeft ', element.offsetLeft);
-    }
-
     // var gal = document.getElementById('imageSlider');
     // console.log('gal:', gal);
 
-    /* When user clicked on the slider gallery */
-    $("#imageSlider").on('click', function(event){
-        //event.preventDefault();
-        /* console.log('gal.on 'click' event ', event);
-        console.log('gal.on 'click' target', event.target);
-        console.log('gal.on 'click' src', event.target.attributes.src); */
-        imageSelected = event.target.getAttribute('src');
-        //console.log('gal.on click imageSelected = '+imageSelected);
-        selectSliderImage(imageSelected, false); 
-    
+    function animateMarkerByImage(img) {
+
+        console.log('animateMarkerByImage IN', img);
+        let imageSrc= img.getAttribute('src');
+
+        // animate the marker on the map
         let layers = markers.getLayers();
         //console.log( 'layers_', layers);
         for (let i in layers) {
             let layer = layers[i];
             let iconUrl = layer?.options?.icon?.options?.iconUrl;
             //console.log( 'iconUrl', layer.options.icon.options.iconUrl);
-            if (iconUrl != null && iconUrl == imageSelected) {
-                //console.log( `FFOOUUNNDD iconUrl`, layer.options.icon.options.iconUrl);
+            if (iconUrl != null && iconUrl == imageSrc) {
+                console.log( `FFOOUUNNDD iconUrl`, layer.options.icon.options.iconUrl);
                 let visibleOne = markers.getVisibleParent(layer);
+                if (visibleOne != null) {
                 
-                // move map only for user gallery, not for planet 
-                if ($("#imageSlider").hasClass("gallery-slider")) {
-                    //console.log('visibleOne', visibleOne);
-                    let position = visibleOne.getLatLng();
-                    //console.log('position', position);
-                    map.setView(new L.latLng(position));
-                }
+                    // move map only for user gallery, not for planet 
+                    if ($("#imageSlider").hasClass("gallery-slider")) {
+                        console.log('visibleOne', visibleOne);
+                        let position = visibleOne.getLatLng();
+                        //console.log('position', position);h
+                        g_map.setView(new L.latLng(position));
+                    }
 
-                if (visibleOne._childCount != undefined) {
-                    console.log('THIS IS A CLUSTER',visibleOne);
-                    markers.refreshClusters(visibleOne);
-                }
-                else {
-                    console.log('THIS IS A MARKER', visibleOne);
-                    imageSelected = null;
-                    //console.log( 'imageSelected NOT null');                        
-                    visibleOne.refreshIconOptions({
-                        /*shadowUrl: 'leaf-shadow.png',*/
-                        iconSize:     [100, 100],
-                    }, true); 
-                    visibleOne._zIndex +=10000;
-                    // let savZIndex = visibleOne.zIndexOffset;
-                    // visibleOne.zIndexOffset = 999999;
-                    
-                    setTimeout(function(){
-                        // come back to normal size after timeout
+                    if (visibleOne._childCount != undefined) {
+                        console.log('THIS IS A CLUSTER',visibleOne);
+                        markers.refreshClusters(visibleOne);
+                    }
+                    else {
+                        console.log('THIS IS A MARKER', visibleOne);
+                        g_selectedImageSrc = null;
+                        //console.log( 'imageSelected NOT null');                        
                         visibleOne.refreshIconOptions({
                             /*shadowUrl: 'leaf-shadow.png',*/
-                            iconSize:     [60, 60],
-                        }, true);
-                        visibleOne._zIndex -=10000;
-                        // visibleOne.zIndexOffset = savZIndex;
-                    }, 400);
+                            iconSize:     [100, 100],
+                        }, true); 
+                        //visibleOne._zIndex +=10000;
+                        // let savZIndex = visibleOne.zIndexOffset;
+                        // visibleOne.zIndexOffset = 999999;
+                        
+                        setTimeout(function(){
+                            // come back to normal size after timeout
+                            visibleOne.refreshIconOptions({
+                                /*shadowUrl: 'leaf-shadow.png',*/
+                                iconSize:     [60, 60],
+                            }, true);
+                            //visibleOne._zIndex -=10000;
+                            // visibleOne.zIndexOffset = savZIndex;
+                        }, 400);
+                    }
                 }
-            
+                else {
+                    // TODO display "dezoom to show the image on the map"
+                    console.log( `parent not visible`);
+                }
             }
         }
+    }
+
+    /* When user clicked on the slider gallery */
+    $(".slider-overlay-circle").on('click', function(event){
+        //event.preventDefault();
+        console.log('gal.on click event ', event);
+        console.log('gal.on click target parent', event.target.parentElement.parentElement);
+        console.log('gal.on click src', event.target.attributes.src);
+        const img = event.target.parentElement.parentElement.getElementsByTagName("img")[0];
+        console.log('gal.on click img', img);
+        const imageSrc = img.getAttribute('src');
+        g_selectedImageSrc = imageSrc; // imageSelected used
+        console.log('gal.on click imageSrc = '+imageSrc);
+        selectSliderImage(imageSrc, false);
+        animateMarkerByImage(img);
+
     });
 
-    // $(document).find('.user-photo-option').on('click', function(e){
-    //     console.log("user-photo-option click", e)
-    //     if (e.target.classList.contains("fa-edit")) {
-    //         const postid = e.target.dataset.postid;
-    //         console.log("user-photo-option postid=", postid)
-    //     }
-    //     e.preventDefault();
-    // });
 
-    // Process when user click on step-forward or step-backward
+    /* When user clicked on the slider gallery */
+    $(".slider-overlay-text").on('click', function(event){
+        //event.preventDefault();
+        console.log('gal.on click target parent', event.target.parentElement.parentElement);
+        console.log('gal.on click src', event.target.attributes.src);
+        const img = event.target.parentElement?.parentElement?.getElementsByTagName("img")[0];
+        if (img){
+            console.log('gal.on click img', img);
+            const imageSrc = img.getAttribute('src');
+            selectSliderImage(imageSrc, false);
+
+            // setSliderPhotoCss(img, 'imgSelected');
+            // var slider = document.getElementById('imageSlider');
+            // centerInSlider(img, slider);
+            // let postid = img.id.substring(7);
+            // displayPostDesription(postid);
+        }
+
+        //animateMarkerByImage(img);
+
+    });
+
+     // Process when user click on step-forward or step-backward
     // and when user click on angle-double-right or angle-double-left
     $(document).find('.show-gallery-option').on('click', function(e){
-        console.log("show-gallery-option click", e)
+        console.log("show-gallery-option click", e);
         e.preventDefault();
-        if (selectedImage) {
-            setSliderPhotoClass(selectedImage, 'imgNotSelected');
+        if (g_selectedImageElem) {
+            setSliderPhotoCss(g_selectedImageElem, 'imgNotSelected');
+            let selected = false;
 
             if (e.target.classList.contains("fa-step-forward")) {
+                console.log("show-gallery-option forward");
                 // find the following image
-                const nextImage = selectedImage.nextElementSibling;
+                const nextImage = g_selectedImageElem?.parentElement?.nextElementSibling?.children[0];
+                console.log("show-gallery-option forward", nextImage);
                 if (nextImage){
-                    selectedImage = nextImage;
+                    g_selectedImageElem = nextImage;
+                    g_selectedImageSrc = g_selectedImageElem.getAttribute('src');
+                    selectSliderImage(g_selectedImageSrc, true);
+                    animateMarkerByImage(g_selectedImageElem);
+                    selected = true;
                 }
-                selectedImage.click();
-                //setSliderPhotoClass(selectedImage, 'imgSelected');
+                else {
+                    // go to the first image
+                    const firstImage = g_selectedImageElem?.parentElement?.parentElement?.firstElementChild?.children[0];
+                    if (firstImage) {
+                        g_selectedImageElem = firstImage;
+                        g_selectedImageSrc = g_selectedImageElem.getAttribute('src');
+                        selectSliderImage(g_selectedImageSrc, true);
+                        animateMarkerByImage(g_selectedImageElem);
+                        selected = true;
+                    }
+                }
             }
             else if (e.target.classList.contains("fa-step-backward")) {
-                console.log("show-gallery-option backward");
+                console.log("show-gallery-option backward g_selectedImageElem", g_selectedImageElem);
                 // find the following image
-                const previousImage = selectedImage.previousElementSibling;
+                const previousImage = g_selectedImageElem?.parentElement?.previousElementSibling?.children[0];
+                console.log("show-gallery-option backward", previousImage);
                 if (previousImage){
-                    selectedImage = previousImage;
+                    g_selectedImageElem = previousImage;
+                    g_selectedImageSrc = g_selectedImageElem.getAttribute('src');
+                    selectSliderImage(g_selectedImageSrc, true);
+                    animateMarkerByImage(g_selectedImageElem);
+                    selected = true;
                 }
-                selectedImage.click();
-                //setSliderPhotoClass(selectedImage, 'imgSelected');
+                else {
+                    // go to the last image
+                    const lastImage = g_selectedImageElem?.parentElement?.parentElement?.lastElementChild?.children[0];
+                    if (lastImage) {
+                        g_selectedImageElem = lastImage;
+                        g_selectedImageSrc = g_selectedImageElem.getAttribute('src');
+                        selectSliderImage(g_selectedImageSrc, true);
+                        animateMarkerByImage(g_selectedImageElem);
+                        selected = true;
+                    }
+                }
             }
             else if (e.target.classList.contains("fa-angle-double-right")) {
+                console.log("show-gallery-option right");
                 // find the following image
-                const nextImage = selectedImage.nextElementSibling;
+                const nextImage = g_selectedImageElem?.parentElement?.nextElementSibling?.children[0];
+                console.log("show-gallery-option right", nextImage);
                 if (nextImage){
-                    selectedImage = nextImage;
+                    g_selectedImageElem = nextImage;
+                    const imageSrc = g_selectedImageElem.getAttribute('src');
+                    selectSliderImage(imageSrc, true);
+                    selected = true;
+                } else {
+                    // go to the first image
+                    const firstImage = g_selectedImageElem?.parentElement?.parentElement?.firstElementChild?.children[0];
+                    if (firstImage) {
+                        g_selectedImageElem = firstImage;
+                        g_selectedImageSrc = g_selectedImageElem.getAttribute('src');
+                        selectSliderImage(g_selectedImageSrc, true);
+                        selected = true;
+                    }
                 }
-                setSliderPhotoClass(selectedImage, 'imgCentered');
+
             }
             else if (e.target.classList.contains("fa-angle-double-left")) {
-                console.log("show-gallery-option backward");
+                console.log("show-gallery-option left");
                 // find the following image
-                const previousImage = selectedImage.previousElementSibling;
+                const previousImage = g_selectedImageElem?.parentElement?.previousElementSibling?.children[0];
                 if (previousImage){
-                    selectedImage = previousImage;
+                    g_selectedImageElem = previousImage;
+                    const imageSrc = g_selectedImageElem.getAttribute('src');
+                    selectSliderImage(imageSrc, true);
+                    selected = true;
+                }else {
+                    // go to the last image
+                    const lastImage = g_selectedImageElem?.parentElement?.parentElement?.lastElementChild?.children[0];
+                    if (lastImage) {
+                        g_selectedImageElem = lastImage;
+                        g_selectedImageSrc = g_selectedImageElem.getAttribute('src');
+                        selectSliderImage(g_selectedImageSrc, true);
+                        selected = true;
+                    }
                 }
-                setSliderPhotoClass(selectedImage, 'imgCentered');
             }
 
-            var slider = document.getElementById('imageSlider');
-            centerInSlider(selectedImage, slider);
+            if (!selected) {
+                displayPostDesription(null);
+            }
+
         }
         else {
-
+            console.log("show-gallery-option nothing selected");
         }
 
     });
-
-    function setSliderPhotoClass(element, class_) {
-
-        switch( class_) {
-            case "imgNotSelected":
-                element.classList.remove('imgSelected');
-                element.classList.remove('imgCentered');
-                element.classList.add(class_);
-                break;
-            case "imgSelected":
-                element.classList.remove('imgNotSelected');
-                element.classList.remove('imgCentered');
-                element.classList.add(class_);
-                break;
-            case "imgCentered":
-                element.classList.remove('imgSelected');
-                element.classList.remove('imgNotSelected');
-                element.classList.add(class_);
-                break;
-            }
-    }
 
     let searchElem = document.getElementById("searchInput");
     if (searchElem) {
@@ -316,9 +433,9 @@ var LeafIcon = L.Icon.extend({
                     var lon = parseFloat(data[0].lon);
                     
                     // Création de la carte OpenStreetMap
-                    map.setView([lat, lon], 12);
+                    g_map.setView([lat, lon], 12);
 
-                    L.marker([lat, lon]).addTo(map)
+                    L.marker([lat, lon]).addTo(g_map)
                         .bindPopup(address)
                         .openPopup();
                 } else {
@@ -331,7 +448,6 @@ var LeafIcon = L.Icon.extend({
 
 })( jQuery );
 
-    
 function getImagesFromBB(ne_lat, ne_lng, sw_lat, sw_lng, zoom) {
 
     console.log("getImagesFromBB IN", {ne_lat, ne_lng, sw_lat, sw_lng, zoom});
@@ -386,5 +502,6 @@ function createImageElement(url) {
     img.src = url;
     img.classList.add('ImgNotSelected');
     return img;
-  }
+}
+
 

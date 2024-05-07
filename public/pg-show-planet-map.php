@@ -141,7 +141,7 @@ class Pg_Show_Planet_Map_Public {
                 <button type='button' id='searchButton' class='btn btn-primary'>Rechercher</button>
             </form>
             <div id='map' style='height:300px;'></div>
-            <div class='flex-container-planet'>
+            <div class='flex-container-slider'>
                 <div class='slider-options-left' style='background-color: lightgreen'>
                     <div>
                         <div class='show-gallery-option fas fa-step-backward' style='padding-bottom:38px;' aria-hidden='true'></div>
@@ -193,27 +193,27 @@ class Pg_Show_Planet_Map_Public {
             'use strict';
             $(window).ready(function(){
 
-                map.setView([0,0], 1);
+                g_map.setView([0,0], 1);
                 /*console.log('COUCOU script_map');
-                map.on('movestart', function(e) {
+                g_map.on('movestart', function(e) {
                     console.log('movestart',e);
                 });
-                map.on('zoomstart', function(e) {
+                g_map.on('zoomstart', function(e) {
                     console.log('zoomstart',e);
                 });*/
-                map.on('moveend', function(e) {
+                g_map.on('moveend', function(e) {
                     console.log('movend',e);
-                    console.log('movend',map.getBounds());
-                    const ne = map.getBounds().getNorthEast();
-                    const sw = map.getBounds().getSouthWest();
-                    const zoom = map.getZoom();
+                    console.log('movend',g_map.getBounds());
+                    const ne = g_map.getBounds().getNorthEast();
+                    const sw = g_map.getBounds().getSouthWest();
+                    const zoom = g_map.getZoom();
                     getImagesFromBB(ne.lat, ne.lng, sw.lat, sw.lng, zoom);
-                    /*console.log('movend',map.getZoom());*/
+                    /*console.log('movend',g_map.getZoom());*/
                 });
-                map.on('zoomend', function(e) {
+                g_map.on('zoomend', function(e) {
                     console.log('zoomend',e);
-                    console.log('zoomST_end',map.getBounds());
-                    getImagesFromBB(map.getBounds().getNorthEast(), map.getBounds().getSouthWest());
+                    console.log('zoomST_end',g_map.getBounds());
+                    getImagesFromBB(g_map.getBounds().getNorthEast(), g_map.getBounds().getSouthWest());
                 });
                 let icon;";
  
@@ -253,10 +253,10 @@ class Pg_Show_Planet_Map_Public {
                 } // end foreach image
 
                 $map_js .= "
-                map.addLayer(markers);
+                g_map.addLayer(markers);
                 /*const bbox = [[$minlat,$minlng],[$maxlat,$maxlng]];
-                L.rectangle(bbox).addTo(map);
-                map.fitBounds(bbox);*/
+                L.rectangle(bbox).addTo(g_map);
+                g_map.fitBounds(bbox);*/
 
             })
         })(jQuery);

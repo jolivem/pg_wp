@@ -48,8 +48,8 @@ class Pg_Edit_Gallery_Public {
     private $countries = array();
 
 
-    const PAGE_ID_EDIT_PHOTO = 33;
-    //const PAGE_ID_EDIT_PHOTO = 186;
+    //const PAGE_ID_EDIT_PHOTO = 33;
+    const PAGE_ID_EDIT_PHOTO = 186;
     const PAGE_ID_USER_GALLERIES = 20;
 
     /**
@@ -105,6 +105,7 @@ class Pg_Edit_Gallery_Public {
 
         //Test with ID=67
         if (! isset($_GET['gid'])) {
+            error_log("Pg_Edit_Gallery_Public::pg_generate_page Missing parameters");
             // TODO return 404
             return "";
         }
@@ -138,7 +139,7 @@ class Pg_Edit_Gallery_Public {
     // attr should have the user id
     public function pg_show_page( $id ){
 
-        error_log("pg_show_page IN id=$id");
+        error_log("Pg_Edit_Gallery_Public::pg_show_page IN id=$id");
         
         if ($id == -1) {
             // create a new gallery
