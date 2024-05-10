@@ -48,8 +48,8 @@ class Pg_Edit_Gallery_Public {
     private $countries = array();
 
 
-    //const PAGE_ID_EDIT_PHOTO = 33;
-    const PAGE_ID_EDIT_PHOTO = 186;
+    const PAGE_ID_EDIT_PHOTO = 33;
+    //const PAGE_ID_EDIT_PHOTO = 186;
     const PAGE_ID_USER_GALLERIES = 20;
 
     /**
@@ -88,7 +88,8 @@ class Pg_Edit_Gallery_Public {
         //wp_enqueue_media();
         wp_enqueue_script( $this->plugin_name.'-bootstrap.js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-glp-public.js', plugin_dir_url( __FILE__ ) . 'js/glp-public.js', array( 'jquery' ), $this->version, true );
-
+        wp_enqueue_script( $this->plugin_name.'-pg-vignette.js', plugin_dir_url( __FILE__ ) . 'js/pg-vignette.js', array( 'jquery' ), $this->version, true );
+        wp_localize_script($this->plugin_name.'-pg-vignette.js', 'ays_vars', array('base_url' => GLP_BASE_URL));
     }
 
     public function enqueue_styles_early(){
@@ -228,10 +229,11 @@ class Pg_Edit_Gallery_Public {
                 <button type='button' class='btn btn-primary align-left' data-bs-toggle='modal' data-bs-target='#delete-confirmation'>
                     Supprimer la gallerie
                 </button>";
-        if ($html_images != "") {
-            $html_code .= "
-                <button type='button' class='btn btn-primary align-right' id='edit-gallery-save-2'>Enregistrer</button>";
-        }
+        // The photos added are automatically saved in the gallery
+        // if ($html_images != "") {
+        //     $html_code .= "
+        //         <button type='button' class='btn btn-primary align-right' id='edit-gallery-save-2'>Enregistrer</button>";
+        // }
         $html_code .= "
             </div>
         </div>";
@@ -278,42 +280,46 @@ class Pg_Edit_Gallery_Public {
         foreach($medias as $id){
             //error_log("render_images id:".$id);
             //$img_src = $item->guid;
-            $url_img = wp_get_attachment_image_src($id, "thumbnail");
-            if ($url_img != false) {
-                $img_src = $url_img[0];
-            }
-
             $post = get_post($id);
-            //error_log("render_images content=".print_r($post, true));
-            $content = $post->post_content;
-            $title = $post->post_title;
+            if ($post != null) { // not been removed
 
-            $statext = $this->get_photo_status($id);
-            $metadate = get_post_meta($id, 'date', true);
-            $date = Pg_Edit_Gallery_Public::get_photo_date($metadate);
+                $url_img = wp_get_attachment_image_src($id, "thumbnail");
+                if ($url_img != false) {
+                    $img_src = $url_img[0];
+                }
+
+                
+                //error_log("render_images content=".print_r($post, true));
+                $content = $post->post_content;
+                $title = $post->post_title;
+
+                $statext = $this->get_photo_status($id);
+                $metadate = get_post_meta($id, 'date', true);
+                $date = Pg_Edit_Gallery_Public::get_photo_date($metadate);
 
 
-            //TODO get title and text
-            //error_log("render_images url:".print_r($url_img, true));
-            // TODO check url_img is OK, add try catch
-            $html.=
-            '<li class="item" draggable="true" data-id="'.$id.'">
-                <div class="flex-container" style="margin-top:0px">
-                    <div class="miniature" style="background-image: url('.$img_src.')"></div>
-                    <div class="photo-text-container">
-                        <div class="photo-title">'.$title.'</div>
-                        <div class="photo-text-gallery">'.$content.'</div>
-                        <div class="footer-edit-gallery">
-                            <div>Date : '.$date.'</div>
-                            <div>'.$statext.'</div>
+                //TODO get title and text
+                //error_log("render_images url:".print_r($url_img, true));
+                // TODO check url_img is OK, add try catch
+                $html.=
+                '<li class="item" draggable="true" data-id="'.$id.'">
+                    <div class="flex-container" style="margin-top:0px">
+                        <div class="miniature" style="background-image: url('.$img_src.')"></div>
+                        <div class="photo-text-container">
+                            <div class="photo-title">'.$title.'</div>
+                            <div class="photo-text-gallery">'.$content.'</div>
+                            <div class="footer-edit-gallery">
+                                <div>Date : '.$date.'</div>
+                                <div>'.$statext.'</div>
+                            </div>
+                        </div>
+                        <div class="options-photo-gallery" data-id="'.$id.'" style="background-color: lightblue">
+                            <div class="gallery-photo-option pointer-icon fas fa-edit" aria-hidden="true"></div>
+                            <div class="gallery-photo-option pointer-icon fas fa-trash" aria-hidden="true"></div>
                         </div>
                     </div>
-                    <div class="options-photo-gallery" data-id="'.$id.'" style="background-color: lightblue">
-                        <div class="gallery-photo-option pointer-icon fas fa-edit" aria-hidden="true"></div>
-                        <div class="gallery-photo-option pointer-icon fas fa-trash" aria-hidden="true"></div>
-                    </div>
-                </div>
-            </li>';
+                </li>';
+            }
         }
         $html.='</div>';
         // TODO make it work on mobiles
@@ -345,7 +351,7 @@ class Pg_Edit_Gallery_Public {
     }
 
     public static function get_photo_date($datetime) {
-        error_log("get_photo_date IN date = $datetime");
+        //error_log("get_photo_date IN date = $datetime");
 
         $date = new DateTime($datetime);
         // Define an array of French month names

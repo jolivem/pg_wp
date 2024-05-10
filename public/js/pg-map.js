@@ -1,8 +1,8 @@
 var g_selectedImageElem = null;
 var g_selectedImageSrc = null; /*image src when clicked in the slider target*/
 var g_map;
+var g_lightbox;
 var markers;
-var toto='montoto';
 var LeafIcon = L.Icon.extend({
     options: {
         iconSize:     [60, 60],
@@ -12,6 +12,52 @@ var LeafIcon = L.Icon.extend({
         className: 'mydivicon'
     }
 });
+
+
+/* START grab and scroll image slider 
+
+const slider = document.getElementById('imageSlider');
+
+let isDragging = false;
+let startPos = 0;
+let scrollLeft = 0;
+
+// Add mousedown event listener to start dragging
+slider.addEventListener('mousedown', (event) => {
+    console.log('slider mousedown');
+    isDragging = true;
+    startPos = event.clientX;
+    scrollLeft = slider.scrollLeft;
+    slider.classList.add('dragging');
+    return false;
+});
+
+// Add mousemove event listener to track movement
+slider.addEventListener('mousemove', (event) => {
+    if (!isDragging) return;
+    const distance = event.clientX - startPos;
+    slider.scrollLeft = scrollLeft - distance;
+});
+
+// Add mouseup event listener to stop dragging
+slider.addEventListener('mouseup', (event) => {
+    console.log('slider mouseup');
+    isDragging = false;
+    slider.classList.remove('dragging');
+    event.preventDefault()
+});
+
+// Add mouseleave event listener to stop dragging when mouse leaves the slider
+slider.addEventListener('mouseleave', () => {
+    console.log('slider mouseleave');
+    isDragging = false;
+    slider.classList.remove('dragging');
+});
+
+// Prevent default behavior of mouse events
+slider.addEventListener('dragstart', (event) => event.preventDefault());        
+
+/* END grab and scroll image slider */
 
 var setSliderPhotoCss = function (element, class_) {
 
@@ -27,12 +73,12 @@ var setSliderPhotoCss = function (element, class_) {
         }
 };
 
-var selectSliderImage =  function(mysrc, scroll) {
-    console.log('selectSliderImage IN', mysrc);
-    var slider = document.getElementById('imageSlider');
+var selectSliderImageBySrc =  function(mysrc, scroll) {
+    console.log('selectSliderImageBySrc IN', mysrc);
+    const slider = document.getElementById('imageSlider');
 
     /* Remove classname from previously selected image */
-    //console.log('selectSliderImage current g_selectedImageElem', g_selectedImageElem);
+    //console.log('selectSliderImageBySrc current g_selectedImageElem', g_selectedImageElem);
     if (g_selectedImageElem) {
         g_selectedImageElem.classList.remove('imgSelected');
         g_selectedImageElem.classList.add('imgNotSelected');
@@ -41,9 +87,9 @@ var selectSliderImage =  function(mysrc, scroll) {
     //let thumbnailSrc = makeThumbnailSrc(mysrc);
     var imageElement = document.querySelector(`#imageSlider img[src='${mysrc}']`);
     /* Add classname to the selected image */
-    console.log('selectSliderImage imageElement', imageElement);
+    console.log('selectSliderImageBySrc imageElement', imageElement);
     if (imageElement) {
-        console.log('slider ', slider);
+        //console.log('slider ', slider);
         console.log('imageElement ', imageElement);
         imageElement.classList.remove('imgNotSelected');
         imageElement.classList.add('imgSelected');
@@ -56,15 +102,49 @@ var selectSliderImage =  function(mysrc, scroll) {
 
         //  remove prefix "slider-"
         let postid = imageElement.id.substring(7);
-        displayPostDesription(postid);
+        displayPostDescription(postid);
 
     }
     else {
-        console.log('selectSliderImage NOT FOUND');
+        console.log('selectSliderImageBySrc NOT FOUND');
     }
 };
 
-var displayPostDesription = function(postid) {
+var selectSliderImageByElem =  function(imageElement, scroll) {
+    console.log('selectSliderImageByElem IN', imageElement);
+    const slider = document.getElementById('imageSlider');
+
+    /* Remove classname from previously selected image */
+    //console.log('selectSliderImageByElem current g_selectedImageElem', g_selectedImageElem);
+    if (g_selectedImageElem) {
+        g_selectedImageElem.classList.remove('imgSelected');
+        g_selectedImageElem.classList.add('imgNotSelected');
+    }
+
+    /* Add classname to the selected image */
+    console.log('selectSliderImageByElem imageElement', imageElement);
+    if (imageElement) {
+        //console.log('slider ', slider);
+        imageElement.classList.remove('imgNotSelected');
+        imageElement.classList.add('imgSelected');
+        g_selectedImageElem = imageElement;
+
+        /* Scroll and center to the selected image */
+        if (scroll == true) {
+            centerInSlider(imageElement, slider);
+        }
+
+        //  remove prefix "slider-"
+        let postid = imageElement.id.substring(7);
+        displayPostDescription(postid);
+
+    }
+    else {
+        console.log('selectSliderImageBySrc NOT FOUND');
+    }
+};
+
+var displayPostDescription = function(postid) {
     // hide all descriptions
     let alldescs = document.querySelectorAll('.desc-all');
     for (let i = 0; i < alldescs.length; i++) {
@@ -106,10 +186,91 @@ var centerInSlider = function ( image, slider) {
     // console.log('element.offsetLeft ', element.offsetLeft);
 };
 
+var processClickOnTarget = function(elem) {
+    console.log('processClickOnTarget elem', elem);
+    
+    const img = elem.parentElement.parentElement.getElementsByTagName("img")[0];
+
+    const imageSrc = img.getAttribute('src');
+    g_selectedImageSrc = imageSrc; //  used
+    //console.log('gal.on click imageSrc = '+imageSrc);
+    selectSliderImageByElem(img, false);
+    animateMarkerByImage(img);
+};
+
+var processClickOnText = function( elem) {
+    //console.log('gal.on click elem', elem);
+    const img = elem.parentElement?.parentElement?.getElementsByTagName("img")[0];
+    if (img){
+        selectSliderImageByElem(img, false);
+    }
+}
+
+var animateMarkerByImage = function(img) {
+
+    console.log('animateMarkerByImage IN', img);
+    let imageSrc= img.getAttribute('src');
+
+    // animate the marker on the map
+    let layers = markers.getLayers();
+    //console.log( 'layers_', layers);
+    for (let i in layers) {
+        let layer = layers[i];
+        let iconUrl = layer?.options?.icon?.options?.iconUrl;
+        //console.log( 'iconUrl', layer.options.icon.options.iconUrl);
+        if (iconUrl != null && iconUrl == imageSrc) {
+            console.log( `FFOOUUNNDD iconUrl`, layer.options.icon.options.iconUrl);
+            let visibleOne = markers.getVisibleParent(layer);
+            if (visibleOne != null) {
+            
+                // move map only for user gallery, not for planet 
+                const imageSlider = document.getElementById("imageSlider");
+                if (imageSlider.classList.contains("gallery-slider")) {
+                    let position = visibleOne.getLatLng();
+                    //console.log('position', position);h
+                    g_map.setView(new L.latLng(position));
+                }
+
+                if (visibleOne._childCount != undefined) {
+                    console.log('THIS IS A CLUSTER',visibleOne);
+                    markers.refreshClusters(visibleOne);
+                }
+                else {
+                    console.log('THIS IS A MARKER', visibleOne);
+                    g_selectedImageSrc = null;
+                    //console.log( 'imageSelected NOT null');                        
+                    visibleOne.refreshIconOptions({
+                        /*shadowUrl: 'leaf-shadow.png',*/
+                        iconSize:     [100, 100],
+                    }, true); 
+                    //visibleOne._zIndex +=10000;
+                    // let savZIndex = visibleOne.zIndexOffset;
+                    // visibleOne.zIndexOffset = 999999;
+                    
+                    setTimeout(function(){
+                        // come back to normal size after timeout
+                        visibleOne.refreshIconOptions({
+                            /*shadowUrl: 'leaf-shadow.png',*/
+                            iconSize:     [60, 60],
+                        }, true);
+                        //visibleOne._zIndex -=10000;
+                        // visibleOne.zIndexOffset = savZIndex;
+                    }, 400);
+                }
+            }
+            else {
+                // TODO display "dezoom to show the image on the map"
+                console.log( `parent not visible`);
+            }
+        }
+    }
+};
+
+
+
 (function( $ ) {
 	'use strict';	
 	//$(document).ready(function(){     
-    //console.log('COUCOU ready map.js', toto);
     g_selectedImageElem = null;
     g_selectedImageSrc = null; /*image clicked in the slider */
 
@@ -163,7 +324,7 @@ var centerInSlider = function ( image, slider) {
     /* when clicked on marker */
     markers.on('click', function (a) {
         console.log('marker ', a.layer.options.icon.options.iconUrl);
-        selectSliderImage(a.layer.options.icon.options.iconUrl, true); 
+        selectSliderImageBySrc(a.layer.options.icon.options.iconUrl, true); 
         let visibleOne = markers.getVisibleParent(a.layer);
         console.log('visibleOne', visibleOne);
     });
@@ -181,127 +342,41 @@ var centerInSlider = function ( image, slider) {
         /*markers.refreshClusters(visibleOne);*/
     });            
 
-    // var gal = document.getElementById('imageSlider');
-    // console.log('gal:', gal);
-
-    function animateMarkerByImage(img) {
-
-        console.log('animateMarkerByImage IN', img);
-        let imageSrc= img.getAttribute('src');
-
-        // animate the marker on the map
-        let layers = markers.getLayers();
-        //console.log( 'layers_', layers);
-        for (let i in layers) {
-            let layer = layers[i];
-            let iconUrl = layer?.options?.icon?.options?.iconUrl;
-            //console.log( 'iconUrl', layer.options.icon.options.iconUrl);
-            if (iconUrl != null && iconUrl == imageSrc) {
-                console.log( `FFOOUUNNDD iconUrl`, layer.options.icon.options.iconUrl);
-                let visibleOne = markers.getVisibleParent(layer);
-                if (visibleOne != null) {
-                
-                    // move map only for user gallery, not for planet 
-                    if ($("#imageSlider").hasClass("gallery-slider")) {
-                        console.log('visibleOne', visibleOne);
-                        let position = visibleOne.getLatLng();
-                        //console.log('position', position);h
-                        g_map.setView(new L.latLng(position));
-                    }
-
-                    if (visibleOne._childCount != undefined) {
-                        console.log('THIS IS A CLUSTER',visibleOne);
-                        markers.refreshClusters(visibleOne);
-                    }
-                    else {
-                        console.log('THIS IS A MARKER', visibleOne);
-                        g_selectedImageSrc = null;
-                        //console.log( 'imageSelected NOT null');                        
-                        visibleOne.refreshIconOptions({
-                            /*shadowUrl: 'leaf-shadow.png',*/
-                            iconSize:     [100, 100],
-                        }, true); 
-                        //visibleOne._zIndex +=10000;
-                        // let savZIndex = visibleOne.zIndexOffset;
-                        // visibleOne.zIndexOffset = 999999;
-                        
-                        setTimeout(function(){
-                            // come back to normal size after timeout
-                            visibleOne.refreshIconOptions({
-                                /*shadowUrl: 'leaf-shadow.png',*/
-                                iconSize:     [60, 60],
-                            }, true);
-                            //visibleOne._zIndex -=10000;
-                            // visibleOne.zIndexOffset = savZIndex;
-                        }, 400);
-                    }
-                }
-                else {
-                    // TODO display "dezoom to show the image on the map"
-                    console.log( `parent not visible`);
-                }
-            }
-        }
-    }
-
-    /* When user clicked on the slider gallery */
+    /* When user clicked on the target area */
     $(".slider-overlay-circle").on('click', function(event){
-        //event.preventDefault();
-        console.log('gal.on click event ', event);
-        console.log('gal.on click target parent', event.target.parentElement.parentElement);
-        console.log('gal.on click src', event.target.attributes.src);
-        const img = event.target.parentElement.parentElement.getElementsByTagName("img")[0];
-        console.log('gal.on click img', img);
-        const imageSrc = img.getAttribute('src');
-        g_selectedImageSrc = imageSrc; // imageSelected used
-        console.log('gal.on click imageSrc = '+imageSrc);
-        selectSliderImage(imageSrc, false);
-        animateMarkerByImage(img);
-
+        console.log('gal.on click target', event.target);
+        event.preventDefault();
+        processClickOnTarget( event.target);
     });
 
 
-    /* When user clicked on the slider gallery */
+    /* When user clicked on the text icon */
     $(".slider-overlay-text").on('click', function(event){
         //event.preventDefault();
-        console.log('gal.on click target parent', event.target.parentElement.parentElement);
-        console.log('gal.on click src', event.target.attributes.src);
-        const img = event.target.parentElement?.parentElement?.getElementsByTagName("img")[0];
-        if (img){
-            console.log('gal.on click img', img);
-            const imageSrc = img.getAttribute('src');
-            selectSliderImage(imageSrc, false);
-
-            // setSliderPhotoCss(img, 'imgSelected');
-            // var slider = document.getElementById('imageSlider');
-            // centerInSlider(img, slider);
-            // let postid = img.id.substring(7);
-            // displayPostDesription(postid);
-        }
-
-        //animateMarkerByImage(img);
-
+        //console.log('gal.on click target parent', event.target.parentElement.parentElement);
+        event.preventDefault();
+        processClickOnText( event.target);
     });
 
      // Process when user click on step-forward or step-backward
     // and when user click on angle-double-right or angle-double-left
     $(document).find('.show-gallery-option').on('click', function(e){
-        console.log("show-gallery-option click", e);
+        //console.log("show-gallery-option click", e);
         e.preventDefault();
+        let selected = false;
         if (g_selectedImageElem) {
             setSliderPhotoCss(g_selectedImageElem, 'imgNotSelected');
-            let selected = false;
 
             if (e.target.classList.contains("fa-step-forward")) {
-                console.log("show-gallery-option forward");
+                //console.log("show-gallery-option forward");
                 // find the following image
                 const nextImage = g_selectedImageElem?.parentElement?.nextElementSibling?.children[0];
                 console.log("show-gallery-option forward", nextImage);
                 if (nextImage){
                     g_selectedImageElem = nextImage;
                     g_selectedImageSrc = g_selectedImageElem.getAttribute('src');
-                    selectSliderImage(g_selectedImageSrc, true);
-                    animateMarkerByImage(g_selectedImageElem);
+                    selectSliderImageByElem(nextImage, true);
+                    animateMarkerByImage(nextImage);
                     selected = true;
                 }
                 else {
@@ -310,22 +385,22 @@ var centerInSlider = function ( image, slider) {
                     if (firstImage) {
                         g_selectedImageElem = firstImage;
                         g_selectedImageSrc = g_selectedImageElem.getAttribute('src');
-                        selectSliderImage(g_selectedImageSrc, true);
-                        animateMarkerByImage(g_selectedImageElem);
+                        selectSliderImageByElem(firstImage, true);
+                        animateMarkerByImage(firstImage);
                         selected = true;
                     }
                 }
             }
             else if (e.target.classList.contains("fa-step-backward")) {
-                console.log("show-gallery-option backward g_selectedImageElem", g_selectedImageElem);
+                //console.log("show-gallery-option backward g_selectedImageElem", g_selectedImageElem);
                 // find the following image
                 const previousImage = g_selectedImageElem?.parentElement?.previousElementSibling?.children[0];
                 console.log("show-gallery-option backward", previousImage);
                 if (previousImage){
                     g_selectedImageElem = previousImage;
                     g_selectedImageSrc = g_selectedImageElem.getAttribute('src');
-                    selectSliderImage(g_selectedImageSrc, true);
-                    animateMarkerByImage(g_selectedImageElem);
+                    selectSliderImageByElem(previousImage, true);
+                    animateMarkerByImage(previousImage);
                     selected = true;
                 }
                 else {
@@ -334,42 +409,43 @@ var centerInSlider = function ( image, slider) {
                     if (lastImage) {
                         g_selectedImageElem = lastImage;
                         g_selectedImageSrc = g_selectedImageElem.getAttribute('src');
-                        selectSliderImage(g_selectedImageSrc, true);
-                        animateMarkerByImage(g_selectedImageElem);
+                        selectSliderImageByElem(lastImage, true);
+                        animateMarkerByImage(lastImage);
                         selected = true;
                     }
                 }
             }
             else if (e.target.classList.contains("fa-angle-double-right")) {
-                console.log("show-gallery-option right");
+                //console.log("show-gallery-option right");
                 // find the following image
                 const nextImage = g_selectedImageElem?.parentElement?.nextElementSibling?.children[0];
-                console.log("show-gallery-option right", nextImage);
+                console.log("show-gallery-option right = ", nextImage);
                 if (nextImage){
                     g_selectedImageElem = nextImage;
-                    const imageSrc = g_selectedImageElem.getAttribute('src');
-                    selectSliderImage(imageSrc, true);
+                    g_selectedImageSrc = g_selectedImageElem.getAttribute('src');
+                    selectSliderImageByElem(nextImage, true);
                     selected = true;
                 } else {
+                    console.log("show-gallery-option right not found");
                     // go to the first image
                     const firstImage = g_selectedImageElem?.parentElement?.parentElement?.firstElementChild?.children[0];
                     if (firstImage) {
                         g_selectedImageElem = firstImage;
                         g_selectedImageSrc = g_selectedImageElem.getAttribute('src');
-                        selectSliderImage(g_selectedImageSrc, true);
+                        selectSliderImageByElem(firstImage, true);
                         selected = true;
                     }
                 }
 
             }
             else if (e.target.classList.contains("fa-angle-double-left")) {
-                console.log("show-gallery-option left");
+                //console.log("show-gallery-option left");
                 // find the following image
                 const previousImage = g_selectedImageElem?.parentElement?.previousElementSibling?.children[0];
                 if (previousImage){
                     g_selectedImageElem = previousImage;
-                    const imageSrc = g_selectedImageElem.getAttribute('src');
-                    selectSliderImage(imageSrc, true);
+                    g_selectedImageSrc = g_selectedImageElem.getAttribute('src');
+                    selectSliderImageByElem(previousImage, true);
                     selected = true;
                 }else {
                     // go to the last image
@@ -377,19 +453,27 @@ var centerInSlider = function ( image, slider) {
                     if (lastImage) {
                         g_selectedImageElem = lastImage;
                         g_selectedImageSrc = g_selectedImageElem.getAttribute('src');
-                        selectSliderImage(g_selectedImageSrc, true);
+                        selectSliderImageByElem(lastImage, true);
                         selected = true;
                     }
                 }
             }
-
-            if (!selected) {
-                displayPostDesription(null);
-            }
-
         }
         else {
             console.log("show-gallery-option nothing selected");
+            const slider = document.getElementById('imageSlider');
+            //console.log("show-gallery-option slider", slider);
+            const firstImage = slider.firstElementChild?.children[0];
+            //console.log("show-gallery-option firstImage", firstImage);
+            if (firstImage) {
+                g_selectedImageElem = firstImage;
+                g_selectedImageSrc = g_selectedImageElem.getAttribute('src');
+                selectSliderImageByElem(firstImage, true);
+                selected = true;
+            }            
+        }
+        if (!selected) {
+            displayPostDescription(null);
         }
 
     });
@@ -483,14 +567,72 @@ function getImagesFromBB(ne_lat, ne_lng, sw_lat, sw_lng, zoom) {
 
 function updateSlider(datas) {
     console.log("updateSlider IN", datas);
+    console.log("updateSlider g_lightbox", g_lightbox);
     const slider = document.getElementById('imageSlider');
+    const descr = document.getElementById('imageDescr');
     slider.innerHTML="";
+    descr.innerHTML="";
+    console.log("updateSlider descr avant", descr);
+    //g_lightbox.destroy();
+    //let newHtml="";
     if (datas) {
+        let num=0;
         datas.forEach(function(image) {
             //console.log("updateSlider image", image);
-            const img = createImageElement(image.url);
+            let sliderHtml = "<div class='slider-item'>";
+            sliderHtml +=    "<img src='"+image.url_medium+"' id='slider-"+image.id+"' alt="+image.alt+"' class='imgNotSelected' data-full='"+image.url_full+"'>";
+            sliderHtml +=    "<div class='slider-overlay-circle'>";
+            sliderHtml +=        "<i class='far fa-dot-circle slider-icon' data-num='"+ num +"'></i>";
+            sliderHtml +=    "</div>";
+            sliderHtml +=    "<div class='slider-overlay-text'>";
+            sliderHtml +=        "<i class='fas fa-align-center slider-icon' data-num='"+ num +"'></i>";
+            sliderHtml +=    "</div>";
+            sliderHtml += "</div>";
+            num = num + 1;            
+            //console.log("updateSlider image", image);
+            /*const img = createImageElement(image.url);
             slider.appendChild(img);
+            num = num + 1;*/
+            //console.log("updateSlider newHtml", newHtml);
+            slider.innerHTML += sliderHtml;
+
+            const unescapedAddress = image.address_json.replace(/\\/g, '');
+            //console.log("updateSlider unescapedAddress", unescapedAddress);
+            const address = JSON.parse(unescapedAddress);
+            //console.log("updateSlider address", address);
+            const small_address = address.country + " " + address.county + " " + address.village;
+            //console.log("updateSlider small_address", small_address);
+
+            let descrHtml = "<div id='desc-"+image.id+"' class='desc-all'>";
+            descrHtml += "<h4 class='desc-title'>" + image.title + "</h4>";
+            descrHtml += "<p class='desc-description'>" + small_address + "</p>";
+            descrHtml += "</div>";
+            console.log("updateSlider descrHtml", descrHtml);
+            descr.innerHTML += descrHtml;
+
         });
+        console.log("updateSlider descr après", descr);
+        const div_targets = slider.querySelectorAll('.slider-overlay-circle');
+        div_targets.forEach(el => el.addEventListener('click', event => {
+            processClickOnTarget(event.target);
+            event.preventDefault();
+        }));
+
+        const div_texts = slider.querySelectorAll('.slider-overlay-text');
+        div_texts.forEach(el => el.addEventListener('click', event => {
+            processClickOnText(event.target);
+            event.preventDefault();
+        }));
+
+
+        g_lightbox.refresh();
+        // g_lightbox = new SimpleLightbox('#imageSlider img', {
+        //     sourceAttr: 'data-full'
+        // });
+        // $(".slider-overlay-circle").on('click', function(event){
+        //     console.log('gal.on click COUCOU target', event.target);
+        // });
+    
     }
 
 }

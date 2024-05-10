@@ -174,7 +174,6 @@ jQuery(document).find('#single-upload').on('click', function(event){
     const formData = new FormData();
     formData.append('action', 'download_single_photo');
     formData.append('nonce', nonce);
-    formData.append('title', 'my Title');
     formData.append('lat', latitudeValue);
     formData.append('lon', longitudeValue);
     formData.append('is_exif', false);
@@ -405,7 +404,9 @@ jQuery(document).find('#multiple-upload').on('click', function(e){
         formData.append('lat', file.pgpg.lat);
         formData.append('lon', file.pgpg.lon);
         formData.append('is_exif', file.pgpg.is_exif);
+        formData.append('altitude', file.pgpg.altitude);
         formData.append('address', file.pgpg.address);
+        formData.append('address_json', file.pgpg.address_json);
         formData.append('country_code', file.pgpg.country_code);
         formData.append('date', file.pgpg.date);
         formData.append('file', file);
@@ -530,12 +531,11 @@ function downloadMultiplePhotos(files) {
                     <div class="download-error"><i class="fas fa-times" style="color: red;"></i></div>
                     <div class="flex-container" style="margin-top:0px" data-valid="ok">
                         <img src="${src}" class="full-miniature"></img>
-                        <div class="full-photo-text-container" style="background-color: lightyellow; flex: 10 0 200px;">
+                        <div class="full-photo-text-container" style="flex: 10 0 200px;">
                             <div class="photo-title">Fichier : ${name}</div>
-                            <div class="photo-text"><i class="fas fa-map-marker-alt" style="color: green;">
-                                </i> géolocalisation OK<br/>Date : ${date}${zoomHtml}</div>
+                            <div class="photo-text">Localisation OK<br/>Date : ${date}${zoomHtml}</div>
                         </div>
-                        <div class="flex-options-3" style="background-color: lightgreen">
+                        <div class="flex-options-3" style="background-color: lightblue">
                             <div data-id="'.$id.'">
                                 <div class="download-photo-option pointer-icon fas fa-trash" aria-hidden="true" onclick='removeDownloadPhoto(this.parentNode.parentNode)'></div>
                             </div>
@@ -550,7 +550,7 @@ function downloadMultiplePhotos(files) {
                     <div class="download-error"><i class="fas fa-times" style="color: red;"></i></div>
                     <div class="flex-container" style="margin-top:0px">
                         <img src="${src}" class="full-miniature"></img>
-                            <div class="full-photo-text-container" style="background-color: lightyellow; flex: 10 0 200px;">
+                            <div class="full-photo-text-container" style="flex: 10 0 200px;">
                                 <div class="photo-title">Fichier : ${name}</div>
                                 <div class="photo-text" style="color:red;">
                                     <i class="fas fa-map-marker-alt"></i>
@@ -614,6 +614,7 @@ function downloadMultiplePhotos(files) {
                     file.pgpg.date = date;
                     if (geocod) {
                         file.pgpg.address = geocod.address;
+                        file.pgpg.address_json = geocod.address_json;
                         file.pgpg.country_code = geocod.country_code;
                     }
                 }
@@ -697,6 +698,7 @@ async function reverseGeocoding(lat, lon) {
     console.log('reverseGeocoding url=', url);
 
     // Url for the request
+    let address_json='';
     let address='';
     let country_code = '';
     
@@ -711,12 +713,12 @@ async function reverseGeocoding(lat, lon) {
                 console.log('reverseGeocoding BINGO');
                 country_code = json.address.country_code
                 address = json.display_name;
+                address_json = JSON.stringify(json.address);
             }
             // Printing our field of our response
             //console.log(`Title of our response : ${string.title}`);
         })
         .catch(errorMsg => { console.log(errorMsg); });
     console.log('reverseGeocoding out=', {country_code, address});
-    return {country_code, address};
-
+    return {country_code, address, address_json};
 }

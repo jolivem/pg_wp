@@ -25,10 +25,10 @@
 // TODO renommer les fichiers, les variables, les tables, etc..
 class Glp_User_Galleries_Public {
 
-    //const PAGE_ID_EDIT_GALLERY = 11;
-    const PAGE_ID_EDIT_GALLERY = 189;
-    //const PAGE_ID_SHOW_GALLERY = 36;
-    const PAGE_ID_SHOW_GALLERY = 272;
+    const PAGE_ID_EDIT_GALLERY = 11;
+    //const PAGE_ID_EDIT_GALLERY = 189;
+    const PAGE_ID_SHOW_GALLERY = 36;
+    //const PAGE_ID_SHOW_GALLERY = 272;
 
     /**
      * The ID of this plugin.
@@ -114,6 +114,9 @@ class Glp_User_Galleries_Public {
         
         $user_id = get_current_user_id();
         error_log("pg_show_page IN user_id: ".$user_id);
+        if ($user_id == 0) {
+            return "";
+        }
 
         $edit_gallery_url = get_permalink(self::PAGE_ID_EDIT_GALLERY); // TODO move 186 to a global constant or get by Title
 
@@ -167,6 +170,7 @@ class Glp_User_Galleries_Public {
             $image_ids = $this->pg_get_images_by_id($item["id"]);
             $img_src1 = "";
             $img_src2 = "";
+            $img_src3 = "";
             if (count($image_ids) >= 1) {
                 // get the image source
                 $url_img = wp_get_attachment_image_src($image_ids[0], "thumbnail");

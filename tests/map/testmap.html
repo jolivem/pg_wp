@@ -66,7 +66,15 @@
             /* Adjust the border style for selected images */
             opacity: 0.6;
         }
+        /* Apply grab cursor when hovering over the slider */
+        .slider:hover {
+            cursor: grab;
+        }
 
+        /* Apply grabbing cursor while dragging */
+        .slider.dragging {
+            cursor: grabbing;
+        }
         /* .leaflet-marker-icon{
                 border-radius: 30%;
                 border: 3px solid #fff;
@@ -109,6 +117,45 @@
     </div>
 
     <script>
+
+        /* Add scrolling */
+        const slider = document.getElementById('imageSlider');
+
+        let isDragging = false;
+        let startPos = 0;
+        let scrollLeft = 0;
+
+        // Add mousedown event listener to start dragging
+        slider.addEventListener('mousedown', (event) => {
+            isDragging = true;
+            startPos = event.clientX;
+            scrollLeft = slider.scrollLeft;
+            slider.classList.add('dragging');
+        });
+
+        // Add mousemove event listener to track movement
+        slider.addEventListener('mousemove', (event) => {
+            if (!isDragging) return;
+            const distance = event.clientX - startPos;
+            slider.scrollLeft = scrollLeft - distance;
+        });
+
+        // Add mouseup event listener to stop dragging
+        slider.addEventListener('mouseup', () => {
+            isDragging = false;
+            slider.classList.remove('dragging');
+        });
+
+        // Add mouseleave event listener to stop dragging when mouse leaves the slider
+        slider.addEventListener('mouseleave', () => {
+            isDragging = false;
+            slider.classList.remove('dragging');
+        });
+
+        // Prevent default behavior of mouse events
+        slider.addEventListener('dragstart', (event) => event.preventDefault());        
+
+
         /*
         the script mus be loaded after the map div is defined,
         otherwise this will not work. Therefore the script is below

@@ -136,8 +136,8 @@ class Pg_Show_User_Map_Public {
             return "";
         }
         $id = $gallery["id"];
-        $title = $gallery["title"];
-        $description = $gallery["description"];
+        $gtitle = $gallery["title"];
+        $gdescription = $gallery["description"];
         if(!$gallery){
             error_log("pg_show_page Gallery not found");
             return "";
@@ -147,13 +147,17 @@ class Pg_Show_User_Map_Public {
 
         if ($medias != null) {
             $html_slider = $this->render_slider($medias);
-            $html_descr = $this->render_descriptions($medias);
+            $html_descr = $this->render_medias_descriptions($medias);
         }
   
         //$markers_js = $this->define_markers();
 
         $html_code = "
         <div class='container'>
+            <div>
+                <h4 class='desc-title'>$gtitle</h4>
+                <p class='desc-description'>$gdescription</p>
+            </div>
             <div id='map' style='height:300px;'></div>
             <div class='flex-container-slider'>
                 <div class='slider-options-left' style='background-color: lightgreen'>
@@ -172,7 +176,7 @@ class Pg_Show_User_Map_Public {
                     </div>
                 </div>
             </div>
-            <div>
+            <div  id='imageDescr'>
                 $html_descr
             </div>
          </div>";
@@ -185,7 +189,7 @@ class Pg_Show_User_Map_Public {
 
        // render all the images 
     function render_slider($medias){
-        //error_log("render_images IN images=".print_r($medias, true));
+        error_log("render_images IN images=".print_r($medias, true));
         $html='';
         $num=0;
         // loop for each media
@@ -197,29 +201,30 @@ class Pg_Show_User_Map_Public {
             $url_img = wp_get_attachment_image_src($id, "medium");
             if ($url_img != false) {
                 $img_src_medium = $url_img[0];
-            }
+                
 
-            $url_img = wp_get_attachment_image_src($id, "full");
-            if ($url_img != false) {
-                $img_src_full = $url_img[0];
-            }
+                $url_img = wp_get_attachment_image_src($id, "full");
+                if ($url_img != false) {
+                    $img_src_full = $url_img[0];
+                }
 
-            $html.="
-            <div class='slider-item'>
-                <img src='$img_src_medium' id='slider-$id' alt='Image 1' class='imgNotSelected' data-full='$img_src_full'>
-                <div class='slider-overlay-circle'>
-                    <i class='far fa-dot-circle slider-icon' data-num='$num'></i>
-                </div>
-                <div class='slider-overlay-text'>
-                    <i class='fas fa-align-center slider-icon' data-num='$num'></i>
-                </div>
-            </div>";
-            $num = $num + 1;
+                $html.="
+                <div class='slider-item'>
+                    <img src='$img_src_medium' id='slider-$id' alt='Image 1' class='imgNotSelected' data-full='$img_src_full'>
+                    <div class='slider-overlay-circle'>
+                        <i class='far fa-dot-circle slider-icon' data-num='$num'></i>
+                    </div>
+                    <div class='slider-overlay-text'>
+                        <i class='fas fa-align-center slider-icon' data-num='$num'></i>
+                    </div>
+                </div>";
+                $num = $num + 1;
+            }
         }
         return $html;
     }
  
-    function render_descriptions($medias){
+    function render_medias_descriptions($medias){
         //error_log("render_images IN images=".print_r($medias, true));
         $html='</br>';
         
@@ -227,14 +232,16 @@ class Pg_Show_User_Map_Public {
         foreach($medias as $id){
 
             $post = get_post($id);
-            $content = $post->post_content;
-            $title = $post->post_title;
+            if ($post != null) {
+                $content = $post->post_content;
+                $title = $post->post_title;
 
-            $html.="
-            <div id='desc-$id' class='desc-all'>
-                <h4 class='desc-title'>$title</h4>
-                <p class='desc-description'>$content</p>
-            </div>";
+                $html.="
+                <div id='desc-$id' class='desc-all'>
+                    <h4 class='desc-title'>$title</h4>
+                    <p class='desc-description'>$content</p>
+                </div>";
+            }
         }
         return $html;
     }
@@ -294,7 +301,7 @@ class Pg_Show_User_Map_Public {
                             
                             //$img_tag ="<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "' onload='console.log(\"ID=".$image_ids[$key]."\")'>";
                             $map_js .= "icon = new LeafIcon({iconUrl: '". $img_src ."'});";
-                            //$map_js .= "markers.addLayer(L.marker([".strval($latitude).", ".strval($longitude)."], {icon: icon}).addTo(map).bindPopup('I am a green leaf.'));";
+                            //$map_js .= "markers.addLayer(L.marker([".strval($latitude).", ".strval($longitude)."], {icon: icon}).addTo(g_map).bindPopup('I am a green leaf.'));";
                             $map_js .= "markers.addLayer(L.marker([".strval($latitude).", ".strval($longitude)."], {icon: icon}).addTo(g_map));";
                         }
                     }
@@ -320,19 +327,14 @@ class Pg_Show_User_Map_Public {
                 console.log('INIT map', g_map);
                 
                 /* add lightbox */ 
-                let bobo = document.querySelectorAll('#imageSlider img');
-                console.log('INIT SimpleLightbox with', bobo);
-                var lightbox = new SimpleLightbox('#imageSlider img', {
+                g_lightbox = new SimpleLightbox('#imageSlider img', {
                     sourceAttr: 'data-full'
                 });
-                lightbox.on('close.simplelightbox', function (e) {
+                /*g_lightbox.on('close.simplelightbox', function (e) {
                     console.log('show.simplelightbox e', e);
                     const imgElem = e.target;
-                    const imageSrc = imgElem.getAttribute('src');
-                    selectSliderImage(imageSrc, 'imgSelected');
-                    /*let data=this.getLighboxData();
-                    console.log('show.simplelightbox data', data);*/
-                });
+                    selectSliderImageByElem(imgElem, true);
+                });*/
             })
         })(jQuery);
         </script>";

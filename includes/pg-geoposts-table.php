@@ -96,15 +96,15 @@ class Pg_Geoposts_Table {
     }
 
     /**
-     * Delete a customer record.
+     * Delete an image.
      *
-     * @param int $id customer ID
+     * @param int $id post ID
      */
     public static function delete_post( int $id ) {
         global $wpdb;
         $wpdb->delete(
             "{$wpdb->prefix}glp_geo_posts",
-            array( "id" => $id ),
+            array( "post_id" => $id ),
             array( "%d" )
         );
     }

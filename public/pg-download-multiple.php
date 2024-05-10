@@ -239,6 +239,7 @@ class Pg_Download_Multiple_Public {
         else {
 
             $address = sanitize_text_field( $_REQUEST['address'] );
+            $address_json = sanitize_text_field( $_REQUEST['address_json'] );
             error_log("download_multiple_photos address = $address");
             $country_code = sanitize_text_field( $_REQUEST['country_code'] );
             $title = sanitize_text_field( $_REQUEST['title'] );
@@ -252,8 +253,10 @@ class Pg_Download_Multiple_Public {
                     array(
                         'guid'           => $movefile[ 'url' ],
                         'post_mime_type' => $movefile[ 'type' ],
-                        'post_title'     => basename( $movefile[ 'file' ] ),
-                        'post_content'   => '',
+                        'post_title'     => '', // reserved for user title
+                        'post_content'   => '', // reserved for user description
+                        'post_excerpt'   => $address_json,
+                        'post_name'      => $address,
                         'post_status'    => 'inherit',
                     ),
                     $movefile[ 'file' ]
@@ -273,7 +276,6 @@ class Pg_Download_Multiple_Public {
 
                 update_post_meta($attachment_id , 'latitude', $_REQUEST['lat']);
                 update_post_meta($attachment_id , 'longitude', $_REQUEST['lon']);
-                //update_post_meta($attachment_id , 'is_exif', $_REQUEST['is_exif']);
                 update_post_meta($attachment_id , 'altitude', $_REQUEST['altitude']);
                 update_post_meta($attachment_id , 'date', $_REQUEST['date']); // date of shooting
 

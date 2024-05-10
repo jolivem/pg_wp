@@ -134,89 +134,94 @@ class Pg_Edit_Photo_Public {
         error_log("pg_show_page IN photo id = ".$id);
         
         global $wpdb;
-        // TODO check if user id is a valid user
-        $latitude = get_post_meta($id, 'latitude', true);
-        $longitude = get_post_meta($id, 'longitude', true);
-        $vignette = get_post_meta($id, 'vignette', true);
-        $user_status_checked = "";
-        $user_status = self::USER_STATUS_PRIVATE;
-        if (get_post_meta($id, 'user_status', true) == self::USER_STATUS_PUBLIC) {
-            $user_status_checked = " checked";
-            $user_status = self::USER_STATUS_PUBLIC;
-        }
-
         $post = get_post($id);
-        $content = $post->post_content;
-        $title = $post->post_title;
+        if ($post != null) {
+            // TODO check if user id is a valid user
+            $latitude = get_post_meta($id, 'latitude', true);
+            $longitude = get_post_meta($id, 'longitude', true);
+            $vignette = get_post_meta($id, 'vignette', true);
+            $user_status_checked = "";
+            $user_status = self::USER_STATUS_PRIVATE;
+            if (get_post_meta($id, 'user_status', true) == self::USER_STATUS_PUBLIC) {
+                $user_status_checked = " checked";
+                $user_status = self::USER_STATUS_PUBLIC;
+            }
 
-        error_log("pg_show_page latitude=$latitude, longitude=$longitude, vignette=$vignette, user_status=$user_status");
+            $content = $post->post_content;
+            $title = $post->post_title;
 
-        //$vignette_dropdown = '<select id="select-country" name="attachments[' . $post->ID . '][vignette]">';
-        $vignette_options = $this->get_vignette_options();
-        $html_options = '';
-        foreach ($vignette_options as $key => $label) {
-            $html_options .= '<option value="' . esc_attr($key) . '" ' . selected($vignette, $key, false) . '>' . esc_html($label) . '</option>';
-        }
+            error_log("pg_show_page latitude=$latitude, longitude=$longitude, vignette=$vignette, user_status=$user_status");
 
-        $admin_ajax_url = admin_url('admin-ajax.php');
-        $nonce = wp_create_nonce('edit_photo');
-        error_log("pg_show_page single admin_ajax_url=".$admin_ajax_url);
+            //$vignette_dropdown = '<select id="select-country" name="attachments[' . $post->ID . '][vignette]">';
+            $vignette_options = $this->get_vignette_options();
+            $html_options = '';
+            foreach ($vignette_options as $key => $label) {
+                $html_options .= '<option value="' . esc_attr($key) . '" ' . selected($vignette, $key, false) . '>' . esc_html($label) . '</option>';
+            }
 
-        $url_img = wp_get_attachment_image_src($id, "medium");
-        if ($url_img != false) {
-            $img_src = $url_img[0];
-        }
-        // TODO check url_img is OK, add try catch
-        $html_code = "
-        <input type='hidden' id='latitude' value='$latitude'/>
-        <input type='hidden' id='longitude' value='$longitude'/>
-        <input type='hidden' id='vignette' value='$vignette'/>
-        <input type='hidden' id='post_id' value='$id'/>
-        <input type='hidden' id='pg_admin_ajax_url' value='$admin_ajax_url'/>
-        <input type='hidden' id='pg_nonce' value='$nonce'/>
-        <div class='toast-container position-fixed bottom-0 end-0 p-3'>
-            <div id='save-photo-success' class='toast align-items-center text-white bg-success bg-gradient border-0' role='alert' aria-live='assertive' aria-atomic='true'>
-                <div class='d-flex'>
-                    <div class='toast-body'>
-                        Enregistré !
+            $admin_ajax_url = admin_url('admin-ajax.php');
+            $nonce = wp_create_nonce('edit_photo');
+            error_log("pg_show_page single admin_ajax_url=".$admin_ajax_url);
+
+            $url_img = wp_get_attachment_image_src($id, "medium");
+            if ($url_img != false) {
+                $img_src = $url_img[0];
+            }
+            // TODO check url_img is OK, add try catch
+            $html_code = "
+            <input type='hidden' id='latitude' value='$latitude'/>
+            <input type='hidden' id='longitude' value='$longitude'/>
+            <input type='hidden' id='vignette' value='$vignette'/>
+            <input type='hidden' id='post_id' value='$id'/>
+            <input type='hidden' id='pg_admin_ajax_url' value='$admin_ajax_url'/>
+            <input type='hidden' id='pg_nonce' value='$nonce'/>
+            <div class='toast-container position-fixed bottom-0 end-0 p-3'>
+                <div id='save-photo-success' class='toast align-items-center text-white bg-success bg-gradient border-0' role='alert' aria-live='assertive' aria-atomic='true'>
+                    <div class='d-flex'>
+                        <div class='toast-body'>
+                            Enregistré !
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class='container'>
-            <div style='display:flex; justify-content: center;'>
-                <img style='height:200px; width:auto; border: 1px solid #BBB; padding:3px; border-radius: 4px' src='$img_src' alt=''>
-            </div>
-            <br>
-            <div class='form-floating mb-3'>
-                <input type='text' class='form-control' id='photo-title' aria-describedby='titleHelp' placeholder='' value='$title'>
-                <label for='photo-title'>Titre</label>
-            </div>
-            <div class='form-floating mb-3'>
-                <textarea rows='5' style='height:100%;' class='form-control' placeholder='' id='photo-description'>$content</textarea>
-                <label for='photo-description'>Description</label>                        
-            </div>
-            <div class='edit-photo-flex-container'>
-                <div class='edit-photo-select'>
-                    <select id='select-country' class='form-select mb-3' aria-label=''>
-                        <option selected>Sélectionner la zone</option>$html_options
-                    </select>
+            <div class='container'>
+                <div style='display:flex; justify-content: center;'>
+                    <img style='height:200px; width:auto; border: 1px solid #BBB; padding:3px; border-radius: 4px' src='$img_src' alt=''>
                 </div>
-                <div id='leaflet-map' class='edit-photo-map'></div>
-            </div>
-                
-            <div class='form-check form-switch'>
-                <input class='form-check-input' type='checkbox' role='switch' id='user_status' value='$user_status'$user_status_checked>
-                <label class='form-check-label' for='user_status'>Autoriser l'affichage sur la carte mondiale</label>
-            </div>
-            <br>
-            <div>
-                <a href='javascript:history.back()'>Retour</a>
-                <button type='button' class='btn btn-primary' id='save-photo' style='float: inline-end;'>Enregistrer</button>
-            </div>
-        </div>";
-
-        return $html_code;
+                <br>
+                <div class='form-floating mb-3'>
+                    <input type='text' class='form-control' id='photo-title' aria-describedby='titleHelp' placeholder='' value='$title'>
+                    <label for='photo-title'>Titre</label>
+                </div>
+                <div class='form-floating mb-3'>
+                    <textarea rows='5' style='height:100%;' class='form-control' placeholder='' id='photo-description'>$content</textarea>
+                    <label for='photo-description'>Description</label>                        
+                </div>
+                <div class='edit-photo-flex-container'>
+                    <div class='edit-photo-select'>
+                        <select id='select-country' class='form-select mb-3' aria-label=''>
+                            <option selected>Sélectionner la zone</option>$html_options
+                        </select>
+                    </div>
+                    <div id='leaflet-map' class='edit-photo-map'></div>
+                </div>
+                    
+                <div class='form-check form-switch'>
+                    <input class='form-check-input' type='checkbox' role='switch' id='user_status' value='$user_status'$user_status_checked>
+                    <label class='form-check-label' for='user_status'>Autoriser l'affichage sur la carte mondiale</label>
+                </div>
+                <br>
+                <div>
+                    <a href='javascript:history.back()'>Retour</a>
+                    <button type='button' class='btn btn-primary' id='save-photo' style='float: inline-end;'>Enregistrer</button>
+                </div>
+            </div>";
+            return $html_code;
+        }
+        else {
+            return "";
+        }
+        
     } // end ays_show_galery()
 
     public function ays_gallery_replace_message_variables($content, $data){
@@ -342,8 +347,6 @@ class Pg_Edit_Photo_Public {
                 'ID' => $post_id,
                 // Set image Title to sanitized title
                 'post_title' => $title,
-                // Set image Caption (Excerpt) to sanitized title
-                'post_excerpt' => $title,
                 // Set image Description (Content) to sanitized title
                 'post_content' => $desc
             );

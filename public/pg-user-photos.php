@@ -34,8 +34,8 @@ class Glp_User_Photos_Public {
      */
     private $plugin_name;
 
-    //const PAGE_ID_EDIT_GALLERY = 11;
-    const PAGE_ID_EDIT_GALLERY = 189;
+    const PAGE_ID_EDIT_GALLERY = 11;
+    //const PAGE_ID_EDIT_GALLERY = 189;
 
     /**
      * The version of this plugin.
@@ -135,6 +135,7 @@ class Glp_User_Photos_Public {
         global $wpdb;
         
         $user_id = get_current_user_id();
+        error_log("Glp_User_Photos_Public::pg_show_page user_id =$user_id");
         $medias = $this->pg_get_medias_by_user($user_id);
         if(!$medias){
             // TODO add a link the the gallery creationAdd gal
@@ -225,7 +226,7 @@ class Glp_User_Photos_Public {
     // }
 
     public function pg_get_medias_by_user( $user_id ) {
-
+        //error_log("pg_get_medias_by_user: $user_id");
         $args = array(
             'author'         => $user_id,
             'post_type'      => 'attachment',
@@ -302,6 +303,9 @@ class Glp_User_Photos_Public {
 
         wp_delete_attachment( $pid, true );
         wp_delete_post( $pid, true);
+
+        // delete also in Geoposts table
+        Pg_Geoposts_Table::delete_post($pid);
 
         error_log( "user_delete_photo Respond success");
         wp_send_json_success( null, 200);

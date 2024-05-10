@@ -34,8 +34,6 @@ class Glp_Check_Photos_Public {
      */
     private $plugin_name;
 
-    //const PAGE_ID_EDIT_GALLERY = 189;
-
     /**
      * The version of this plugin.
      *

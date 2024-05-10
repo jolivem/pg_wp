@@ -74,6 +74,7 @@ class Pg_Show_Planet_Map_Public {
         wp_enqueue_style( 'MarkerCluster', '"https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css', array(), $this->version, 'all' );
         wp_enqueue_style( 'gpg-fontawesome', 'https://use.fontawesome.com/releases/v5.4.1/css/all.css', array(), $this->version, 'all');
 
+        wp_enqueue_style( $this->plugin_name."-simple-lightbox.css", plugin_dir_url( __FILE__ ) . 'css/simple-lightbox.css', array(), $this->version, 'all' );
         wp_enqueue_style( $this->plugin_name."-public.css", plugin_dir_url( __FILE__ ) . 'css/glp-public.css', array(), $this->version, 'all' );
         wp_enqueue_style( $this->plugin_name."-map.css", plugin_dir_url( __FILE__ ) . 'css/pg-map.css', array(), $this->version, 'all' );
         //wp_enqueue_style('leaflet.css', 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css');
@@ -93,6 +94,7 @@ class Pg_Show_Planet_Map_Public {
         wp_enqueue_script( $this->plugin_name.'-leaflet.js', 'https://unpkg.com/leaflet@1.0.3/dist/leaflet-src.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-markercluster.js', 'https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js', array( 'jquery' ), $this->version, true );
 
+        wp_enqueue_script( $this->plugin_name.'-simple-lightbox.js', plugin_dir_url( __FILE__ ) . 'js/simple-lightbox.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-pg-map.js', plugin_dir_url( __FILE__ ) . 'js/pg-map.js', array( 'jquery' ), $this->version, true );
         wp_localize_script($this->plugin_name.'-pg-map.js', 'ays_vars', array('base_url' => GLP_BASE_URL));
 
@@ -126,6 +128,7 @@ class Pg_Show_Planet_Map_Public {
         $medias = Pg_Geoposts_Table::get_all_public_images();
         //error_log("pg_show_page ".print_r($medias, true));
         $html_slider = $this->render_slider($medias);
+        $html_addresses = $this->render_medias_address($medias);
         $admin_ajax_url = admin_url('admin-ajax.php');
         $nonce = wp_create_nonce('show_planet');
 
@@ -141,7 +144,7 @@ class Pg_Show_Planet_Map_Public {
                 <button type='button' id='searchButton' class='btn btn-primary'>Rechercher</button>
             </form>
             <div id='map' style='height:300px;'></div>
-            <div class='flex-container-slider'>
+            <div class='flex-container-slider' style='height: 150px;'>
                 <div class='slider-options-left' style='background-color: lightgreen'>
                     <div>
                         <div class='show-gallery-option fas fa-step-backward' style='padding-bottom:38px;' aria-hidden='true'></div>
@@ -157,7 +160,8 @@ class Pg_Show_Planet_Map_Public {
                         <div class='show-gallery-option fas fa-angle-double-right' aria-hidden='true'></div>
                     </div>
                 </div>
-            </div>            
+            </div>   
+            <div id='imageDescr'>$html_addresses</div>
          </div>";
 
         $js = $this->script_map($medias);
@@ -166,22 +170,76 @@ class Pg_Show_Planet_Map_Public {
         return $html_code;
     } // end ays_show_galery()
 
-       // render all the images 
+    // render all the images 
+    // medias is an array of array with 'post_id'
     function render_slider($medias){
-        //error_log("render_images IN images=".print_r($medias, true));
+        //error_log("render_slider IN images=".print_r($medias, true));
         $html='';
+        $num=0;
         // loop for each media
         foreach($medias as $media){
-            error_log("render_images id:".$media['post_id']);
+            $id=$media['post_id'];
+            //error_log("render_images id:".$id);
             //$img_src = $item->guid;
-            $url_img = wp_get_attachment_image_src($media['post_id'], "medium");
+            $img_src_medium = "";
+            $img_src_full = "";
+            $url_img = wp_get_attachment_image_src($id, "medium");
+            
             if ($url_img != false) {
-                $html.="<img src='$url_img[0]' alt='Image 1' class='imgNotSelected'>";
+                error_log("render_slider ".print_r($url_img, true));
+                $img_src_medium = $url_img[0];
+            
+                $url_img = wp_get_attachment_image_src($id, "full");
+                if ($url_img != false) {
+                    $img_src_full = $url_img[0];
+                }
+
+                $html.="
+                <div class='slider-item'>
+                    <img src='$img_src_medium' id='slider-$id' alt='Image 1' class='imgNotSelected' data-full='$img_src_full'>
+                    <div class='slider-overlay-circle'>
+                        <i class='far fa-dot-circle slider-icon' data-num='$num'></i>
+                    </div>
+                    <div class='slider-overlay-text'>
+                        <i class='fas fa-align-center slider-icon' data-num='$num'></i>
+                    </div>
+                </div>";
+                $num = $num + 1;
+            }
+        }
+        return $html;
+    } 
+
+    // medias is an array of array with 'post_id'
+    function render_medias_address($medias){
+        //error_log("render_medias_address IN images=".print_r($medias, true));
+        $html='</br>';
+        
+        // loop for each media
+        foreach($medias as $media){
+            $id = $media['post_id'];
+            $post = get_post($id);
+            if ($post != null) {
+                //$address_json = $post->post_excerpt;
+                $title = $post->post_title;
+                //$address = $post->post_name;
+                $addr = json_decode($post->post_excerpt, true);
+                error_log("render_medias_address address=".print_r($addr, true));
+                $small_address = $addr['country']." ".$addr['county']." ". $addr['village'];
+
+                $html.="
+                <div id='desc-$id' class='desc-all'>
+                    <h4 class='desc-title'>$title</h4>
+                    <p class='desc-description'>$small_address</p>
+                </div>";
             }
         }
         return $html;
     }
- 
+
+    // create map, markers and lightbox
+    // and fill them with images
+    ///////////////////////////////////
     private function script_map($medias) {
 
         // Javascript part
@@ -194,13 +252,7 @@ class Pg_Show_Planet_Map_Public {
             $(window).ready(function(){
 
                 g_map.setView([0,0], 1);
-                /*console.log('COUCOU script_map');
-                g_map.on('movestart', function(e) {
-                    console.log('movestart',e);
-                });
-                g_map.on('zoomstart', function(e) {
-                    console.log('zoomstart',e);
-                });*/
+ 
                 g_map.on('moveend', function(e) {
                     console.log('movend',e);
                     console.log('movend',g_map.getBounds());
@@ -213,7 +265,10 @@ class Pg_Show_Planet_Map_Public {
                 g_map.on('zoomend', function(e) {
                     console.log('zoomend',e);
                     console.log('zoomST_end',g_map.getBounds());
-                    getImagesFromBB(g_map.getBounds().getNorthEast(), g_map.getBounds().getSouthWest());
+                    const ne = g_map.getBounds().getNorthEast();
+                    const sw = g_map.getBounds().getSouthWest();
+                    const zoom = g_map.getZoom();
+                    getImagesFromBB(ne.lat, ne.lng, sw.lat, sw.lng, zoom);
                 });
                 let icon;";
  
@@ -225,7 +280,7 @@ class Pg_Show_Planet_Map_Public {
         
                 foreach($medias as $media){
                     $id = $media['post_id'];
-                    error_log("render_images id:".$id);
+                    error_log("script_map id:".$id);
                     //$img_src = $item->guid;
                     $url_img = wp_get_attachment_image_src($id, "medium");
                     if ($url_img != false) {
@@ -246,17 +301,19 @@ class Pg_Show_Planet_Map_Public {
                             
                             //$img_tag ="<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "' onload='console.log(\"ID=".$image_ids[$key]."\")'>";
                             $map_js .= "icon = new LeafIcon({iconUrl: '". $img_src ."'});";
-                            //$map_js .= "markers.addLayer(L.marker([".strval($latitude).", ".strval($longitude)."], {icon: icon}).addTo(map).bindPopup('I am a green leaf.'));";
-                            $map_js .= "markers.addLayer(L.marker([".strval($latitude).", ".strval($longitude)."], {icon: icon}).addTo(map));";
+                            //$map_js .= "markers.addLayer(L.marker([".strval($latitude).", ".strval($longitude)."], {icon: icon}).addTo(g_map).bindPopup('I am a green leaf.'));";
+                            $map_js .= "markers.addLayer(L.marker([".strval($latitude).", ".strval($longitude)."], {icon: icon}).addTo(g_map));";
                         }
                     }
                 } // end foreach image
 
                 $map_js .= "
                 g_map.addLayer(markers);
-                /*const bbox = [[$minlat,$minlng],[$maxlat,$maxlng]];
-                L.rectangle(bbox).addTo(g_map);
-                g_map.fitBounds(bbox);*/
+                
+                /* add lightbox */ 
+                g_lightbox = new SimpleLightbox('#imageSlider img', {
+                    sourceAttr: 'data-full'
+                });
 
             })
         })(jQuery);
@@ -296,14 +353,25 @@ class Pg_Show_Planet_Map_Public {
             $data = array();
 
             foreach($results as $resu){
-                $url_img = wp_get_attachment_image_src($resu['post_id'], "medium");
-                if ($url_img != false) {
-                    $image = (object) [
-                        'id' => $resu['post_id'],
-                        'url' => $url_img[0],
-                    ];
-
-                    $data[] = $image;
+                $pid = $resu['post_id'];
+                $post = get_post($pid);
+                if ($post != null) {
+                    //error_log("get_bb_images post=".print_r($post, true));
+                    $url_img_medium = wp_get_attachment_image_src($pid, "medium");
+                    $url_img_full = wp_get_attachment_image_src($pid, "full");
+                    if ($url_img_medium != false) {
+                        $image = (object) [
+                            'id'            => $pid,
+                            'url_medium'    => $url_img_medium[0],
+                            'url_full'      => $url_img_full[0],
+                            'address'       => $post->post_name,
+                            'title'         => $post->post_title,
+                            'address_json'  => $post->post_excerpt
+                        ];
+                        
+                        //error_log("get_bb_images image=".print_r($image, true));
+                        $data[] = $image;
+                    }
                 }
             }
         } 

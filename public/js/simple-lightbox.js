@@ -183,6 +183,7 @@
           this.domNodes.wrapper.appendChild(this.domNodes.spinner);
         }
         this.addEventListener(this.elements, 'click.' + this.eventNamespace, function (event) {
+          console.log("simple-lightbox click");
           if (_this.isValidLink(event.currentTarget)) {
             event.preventDefault();
             if (_this.isAnimating) {
