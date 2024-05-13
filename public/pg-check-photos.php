@@ -133,7 +133,7 @@ class Glp_Check_Photos_Public {
         $admin_ajax_url = admin_url('admin-ajax.php');
         //$admin_post_url = admin_url('admin-post.php');
         $nonce = wp_create_nonce('admin_check');
-        $edit_photo_url = get_permalink(Pg_Edit_Gallery_Public::PAGE_ID_EDIT_PHOTO); // TODO move 186 to a global constant or get by Title
+        $edit_photo_url = Glp_User_Galleries_Public::get_page_url_from_slug(Pg_Edit_Gallery_Public::PAGE_SLUG_EDIT_PHOTO); // TODO move 186 to a global constant or get by Title
 
 
         $html_code = "

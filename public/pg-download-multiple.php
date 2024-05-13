@@ -149,7 +149,7 @@ class Pg_Download_Multiple_Public {
                 <div class="modal-content">
                     <div class="container">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="multipleDowloadModalLabel">Sélection multiple de photos</h5>
+                            <h5 class="modal-title" id="multipleDowloadModalLabel">Sélection de photos 5 par 5</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>                            
                         <div class="modal-body">
@@ -157,7 +157,7 @@ class Pg_Download_Multiple_Public {
                                 <input type="hidden" id="pg_admin_ajax_url" value="'.$admin_ajax_url.'"/>
                                 <input type="hidden" id="download_nonce" value="'.$nonce.'"/>
                                 <label for="fileInput" class="custom-file-upload">
-                                    Select photos...
+                                    Selectionner les photos...
                                 </label>
                                 <br/>
                                 <input type="file" id="fileInput" name="custom-file[]" multiple>

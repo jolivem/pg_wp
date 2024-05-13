@@ -48,9 +48,10 @@ class Pg_Edit_Gallery_Public {
     private $countries = array();
 
 
-    const PAGE_ID_EDIT_PHOTO = 33;
-    //const PAGE_ID_EDIT_PHOTO = 186;
-    const PAGE_ID_USER_GALLERIES = 20;
+    const PAGE_SLUG_EDIT_GALLERY = "edit-gallery";
+    const PAGE_SLUG_SHOW_GALLERY = "show-gallery";
+    const PAGE_SLUG_EDIT_PHOTO     = "edit-photo";
+    const PAGE_SLUG_USER_GALLERIES = "user-galleries";
 
     /**
      * Initialize the class and set its properties.
@@ -177,8 +178,8 @@ class Pg_Edit_Gallery_Public {
                 $html_images = $this->render_images($medias);
             }
         }
-        $user_galleries_url = get_permalink(self::PAGE_ID_USER_GALLERIES);
-        $edit_photo_url = get_permalink(self::PAGE_ID_EDIT_PHOTO); // TODO move 186 to a global constant or get by Title
+        $user_galleries_url = Glp_User_Galleries_Public::get_page_url_from_slug(self::PAGE_SLUG_USER_GALLERIES);
+        $edit_photo_url = Glp_User_Galleries_Public::get_page_url_from_slug(self::PAGE_SLUG_EDIT_PHOTO); // TODO move 186 to a global constant or get by Title
 
         $admin_ajax_url = admin_url('admin-ajax.php');
         //$admin_post_url = admin_url('admin-post.php');

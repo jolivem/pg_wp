@@ -25,11 +25,6 @@
 // TODO renommer les fichiers, les variables, les tables, etc..
 class Glp_User_Galleries_Public {
 
-    const PAGE_ID_EDIT_GALLERY = 11;
-    //const PAGE_ID_EDIT_GALLERY = 189;
-    const PAGE_ID_SHOW_GALLERY = 36;
-    //const PAGE_ID_SHOW_GALLERY = 272;
-
     /**
      * The ID of this plugin.
      *
@@ -109,6 +104,16 @@ class Glp_User_Galleries_Public {
         return str_replace(array("\r\n", "\n", "\r"), '', ob_get_clean());
     }
 
+    static public function get_page_url_from_slug($slug) {
+        $page = get_page_by_path($slug);
+        error_log("get_page_url_from_slug slug: ".print_r($page, true));
+        $result = get_permalink($page->ID);
+        if ($result == false) {
+            error_log("get_page_url_from_slug: ERROR not found");
+        }
+        return $result;
+    }
+    
     // attr should have the user id
     public function pg_show_page(){
         
@@ -117,8 +122,9 @@ class Glp_User_Galleries_Public {
         if ($user_id == 0) {
             return "";
         }
-
-        $edit_gallery_url = get_permalink(self::PAGE_ID_EDIT_GALLERY); // TODO move 186 to a global constant or get by Title
+        $page = get_page_by_path("edit-photo");
+        error_log("pg_show_page page from slug: ".print_r($page, true));
+        $edit_gallery_url = Glp_User_Galleries_Public::get_page_url_from_slug(Pg_Edit_Gallery_Public::PAGE_SLUG_EDIT_GALLERY); // TODO move 186 to a global constant or get by Title
 
         $html_code = "";
         $galleries = $this->pg_get_galleries_by_user_id($user_id);
@@ -133,7 +139,7 @@ class Glp_User_Galleries_Public {
         }
 
         //$edit_gallery_url = substr($edit_gallery_url, 0, -1);
-        $show_gallery_url = get_permalink(self::PAGE_ID_SHOW_GALLERY); // TODO move 186 to a global constant or get by Title
+        $show_gallery_url = Glp_User_Galleries_Public::get_page_url_from_slug(Pg_Edit_Gallery_Public::PAGE_SLUG_SHOW_GALLERY); // TODO move 186 to a global constant or get by Title
         //$show_gallery_url = substr($show_gallery_url, 0, -1);
         $nonce = wp_create_nonce('user_galleries');
         $admin_ajax_url = admin_url('admin-ajax.php');

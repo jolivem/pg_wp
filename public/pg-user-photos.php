@@ -34,9 +34,6 @@ class Glp_User_Photos_Public {
      */
     private $plugin_name;
 
-    const PAGE_ID_EDIT_GALLERY = 11;
-    //const PAGE_ID_EDIT_GALLERY = 189;
-
     /**
      * The version of this plugin.
      *
@@ -139,7 +136,7 @@ class Glp_User_Photos_Public {
         $medias = $this->pg_get_medias_by_user($user_id);
         if(!$medias){
             // TODO add a link the the gallery creationAdd gal
-            $edit_gallery_url = get_permalink(self::PAGE_ID_EDIT_GALLERY); // TODO move 186 to a global constant or get by Title
+            $edit_gallery_url = Glp_User_Galleries_Public::get_page_url_from_slug(Pg_Edit_Gallery_Public::PAGE_SLUG_EDIT_GALLERY); // TODO move 186 to a global constant or get by Title
             $edit_gallery_url .= "?gid=-1";
             //<input type='hidden' id='pg_edit_gallery_url' value='$edit_gallery_url'/>
             $html_code = "
@@ -150,7 +147,7 @@ class Glp_User_Photos_Public {
         $admin_ajax_url = admin_url('admin-ajax.php');
         //$admin_post_url = admin_url('admin-post.php');
         $nonce = wp_create_nonce('user_photos');
-        $edit_photo_url = get_permalink(Pg_Edit_Gallery_Public::PAGE_ID_EDIT_PHOTO); // TODO move 186 to a global constant or get by Title
+        $edit_photo_url = Glp_User_Galleries_Public::get_page_url_from_slug(Pg_Edit_Gallery_Public::PAGE_SLUG_EDIT_PHOTO); // TODO move 186 to a global constant or get by Title
 
 
         $html_code = "

@@ -224,7 +224,7 @@ class Pg_Show_Planet_Map_Public {
                 $title = $post->post_title;
                 //$address = $post->post_name;
                 $addr = json_decode($post->post_excerpt, true);
-                error_log("render_medias_address address=".print_r($addr, true));
+                //error_log("render_medias_address address=".print_r($addr, true));
                 $small_address = $addr['country']." ".$addr['county']." ". $addr['village'];
 
                 $html.="
@@ -280,7 +280,7 @@ class Pg_Show_Planet_Map_Public {
         
                 foreach($medias as $media){
                     $id = $media['post_id'];
-                    error_log("script_map id:".$id);
+                    //error_log("script_map id:".$id);
                     //$img_src = $item->guid;
                     $url_img = wp_get_attachment_image_src($id, "medium");
                     if ($url_img != false) {
@@ -288,7 +288,7 @@ class Pg_Show_Planet_Map_Public {
                     
                         $latitude = get_post_meta($id, 'latitude', true);
                         $longitude = get_post_meta($id, 'longitude', true);
-                        error_log("latitude=".$latitude."longitude=".$longitude);
+                        //error_log("latitude=".$latitude."longitude=".$longitude);
                         if ($latitude && $longitude) {
 
                             // keep min and max
@@ -296,7 +296,7 @@ class Pg_Show_Planet_Map_Public {
                             $maxlat = max($maxlat, $latitude);
                             $minlng = min($minlng, $longitude);
                             $maxlng = max($maxlng, $longitude);
-                            error_log("minlat=".$minlat.", maxlat=".$maxlat.",minlng=".$minlng.", maxlng=".$maxlng);
+                            //error_log("minlat=".$minlat.", maxlat=".$maxlat.",minlng=".$minlng.", maxlng=".$maxlng);
         
                             
                             //$img_tag ="<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "' onload='console.log(\"ID=".$image_ids[$key]."\")'>";
@@ -330,8 +330,8 @@ class Pg_Show_Planet_Map_Public {
     // TODO, used elsewhere, to be defined in a static method
     public function get_bb_images() {
 
-        error_log("get_bb_images IN");
-        error_log("get_bb_images REQUEST ".print_r($_REQUEST, true));
+        //error_log("get_bb_images IN");
+        //error_log("get_bb_images REQUEST ".print_r($_REQUEST, true));
         //error_log("download_single_photo FILES ".print_r($_FILES, true));
 
         if( ! isset( $_REQUEST['nonce'] ) or 

@@ -280,7 +280,7 @@ class Pg_Show_User_Map_Public {
                 $maxlng = -180.0;
         
                 foreach($medias as $id){
-                    error_log("render_images id:".$id);
+                    //error_log("render_images id:".$id);
                     //$img_src = $item->guid;
                     $url_img = wp_get_attachment_image_src($id, "medium");
                     if ($url_img != false) {
@@ -288,7 +288,7 @@ class Pg_Show_User_Map_Public {
                     
                         $latitude = get_post_meta($id, 'latitude', true);
                         $longitude = get_post_meta($id, 'longitude', true);
-                        error_log("latitude=".$latitude."longitude=".$longitude);
+                        //error_log("latitude=".$latitude."longitude=".$longitude);
                         if ($latitude && $longitude) {
 
                             // keep min and max
@@ -296,7 +296,7 @@ class Pg_Show_User_Map_Public {
                             $maxlat = max($maxlat, $latitude);
                             $minlng = min($minlng, $longitude);
                             $maxlng = max($maxlng, $longitude);
-                            error_log("minlat=".$minlat.", maxlat=".$maxlat.",minlng=".$minlng.", maxlng=".$maxlng);
+                            //error_log("minlat=".$minlat.", maxlat=".$maxlat.",minlng=".$minlng.", maxlng=".$maxlng);
         
                             
                             //$img_tag ="<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "' onload='console.log(\"ID=".$image_ids[$key]."\")'>";

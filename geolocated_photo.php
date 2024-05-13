@@ -15,9 +15,9 @@ ob_start();
  * @wordpress-plugin
  * Plugin Name:       Planet Gallery
  * Plugin URI:        https://glp-plugin.com/wordpress/photo-gallery
- * Description:       Display geolocation vignettes on photos.
- * Version:           1.0.1
- * Author:            Photo Gallery Team
+ * Description:       Plugin for Planet-Gallery.org.
+ * Version:           1.0.2
+ * Author:            Planet Gallery Team
  * Author URI:        https://glp-plugin.com/
  * License:           GPL-2.0+
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.txt
@@ -54,8 +54,8 @@ if( ! defined( 'GLP_BASENAME' ) )
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'GLP_GALLERY_VERSION', '1.0.1' );
-define( 'GLP_GALLERY_NAME_VERSION', '5.3.7' );
+define( 'GLP_GALLERY_VERSION', '1.0.2' );
+define( 'GLP_GALLERY_NAME_VERSION', 'V1.0.2' );
 define( 'GLP_GALLERY_NAME', 'geolocated-photo' );
 
 /**

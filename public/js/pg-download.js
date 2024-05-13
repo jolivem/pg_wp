@@ -325,8 +325,6 @@ function downloadASinglePhoto(files) {
                         document.getElementById("latitudeHelp").style.display = "none";
                         document.getElementById("longitudeHelp").style.display = "none";
 
-
-
                         file.pgpg = {};
                         file.pgpg.lat = latitude;
                         file.pgpg.lon = longitude;
@@ -513,16 +511,17 @@ function downloadMultiplePhotos(files) {
         }
   
         function renderItemMultiple(src, name, lat, lon, date, zoomRatio) {
-            console.log('renderItemMultiple zoomRatio', zoomRatio);
+            console.log('renderItemMultiple IN', name);
             const list = document.getElementById('modal-item-list');
             const listItem = document.createElement('div');
             listItem.className = 'full-item';
             if (lat != undefined) {
+                // Localisation OK
                 let zoomHtml='';
                 if (zoomRatio != '1') {
                     zoomHtml = `<br>Zoom: *${zoomRatio}`;                    
                 }
-                console.log('renderItemMultiple zoomHtml', zoomHtml);
+                //console.log('renderItemMultiple zoomHtml', zoomHtml);
 
                 listItem.innerHTML = `
                 <div style="position: relative;">
@@ -532,7 +531,7 @@ function downloadMultiplePhotos(files) {
                     <div class="flex-container" style="margin-top:0px" data-valid="ok">
                         <img src="${src}" class="full-miniature"></img>
                         <div class="full-photo-text-container" style="flex: 10 0 200px;">
-                            <div class="photo-title">Fichier : ${name}</div>
+                            <div class="photo-title">${name}</div>
                             <div class="photo-text">Localisation OK<br/>Date : ${date}${zoomHtml}</div>
                         </div>
                         <div class="flex-options-3" style="background-color: lightblue">
@@ -545,6 +544,7 @@ function downloadMultiplePhotos(files) {
                 </div>`;
             }
             else {
+                // Localisation not found
                 listItem.innerHTML = `
                 <div style="position: relative;">
                     <div class="download-error"><i class="fas fa-times" style="color: red;"></i></div>
@@ -581,7 +581,7 @@ function downloadMultiplePhotos(files) {
             EXIF.getData(file, async function() {
                 console.log( "file: ", file);
                 const exifData = EXIF.getAllTags(this);
-                console.log('EXIF Data:', exifData);
+                //console.log('EXIF Data:', exifData);
 
                 const lat = EXIF.getTag(this, 'GPSLatitude');
                 const lon = EXIF.getTag(this, 'GPSLongitude');
@@ -601,7 +601,7 @@ function downloadMultiplePhotos(files) {
                     }
 
                     let geocod = await reverseGeocoding(latitude, longitude);
-                    console.log( "onload geocod", geocod);
+                    //console.log( "onload geocod", geocod);
                     renderItemMultiple(event.target.result, file.name, latitude, longitude, date, zoomRatio);
 
                     file.pgpg = {};
@@ -692,10 +692,9 @@ function isNumber(st) {
     return resu;
 }
 
-
 async function reverseGeocoding(lat, lon) {
     const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`;
-    console.log('reverseGeocoding url=', url);
+    //console.log('reverseGeocoding url=', url);
 
     // Url for the request
     let address_json='';
@@ -707,10 +706,10 @@ async function reverseGeocoding(lat, lon) {
         .then(Result => Result.json())
         .then(json => {
 
-            console.log('reverseGeocoding json=', json);
+            //console.log('reverseGeocoding json=', json);
             // Printing our response 
             if (json.address) {
-                console.log('reverseGeocoding BINGO');
+                //console.log('reverseGeocoding BINGO');
                 country_code = json.address.country_code
                 address = json.display_name;
                 address_json = JSON.stringify(json.address);
@@ -719,6 +718,6 @@ async function reverseGeocoding(lat, lon) {
             //console.log(`Title of our response : ${string.title}`);
         })
         .catch(errorMsg => { console.log(errorMsg); });
-    console.log('reverseGeocoding out=', {country_code, address});
+    //console.log('reverseGeocoding out=', {country_code, address});
     return {country_code, address, address_json};
 }

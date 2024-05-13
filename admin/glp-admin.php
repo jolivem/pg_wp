@@ -134,7 +134,7 @@ class GLP_Admin {
             wp_enqueue_script( $this->plugin_name . '-adminjs', plugin_dir_url( __FILE__ ) . 'js/admin.js', array( 'jquery' ), $this->version, true );
             wp_localize_script($this->plugin_name . '-adminjs',  'glp_admin_ajax', array('ajax_url' => admin_url('admin-ajax.php')));
         }
-        wp_enqueue_script('leaflet', 'https://unpkg.com/leaflet/dist/leaflet.js', array('jquery'), '1.7.1', true);
+        //wp_enqueue_script('leaflet', 'https://unpkg.com/leaflet/dist/leaflet.js', array('jquery'), '1.7.1', true);
 
         // if(false === strpos($hook_suffix, $this->plugin_name)){
         //     echo "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR ".$hook_suffix;
@@ -186,12 +186,6 @@ class GLP_Admin {
             'errorMsg'           => __( "Error", $this->plugin_name )
         ) );
         
-        // $cats = $this->ays_get_gallery_categories();
-        // wp_localize_script($this->plugin_name . "admin",  'glp_admin', array(
-        //     'categories' => $cats,
-        //     'nextGalleryPage' => __( 'Are you sure you want to go to the next gallery page?', $this->plugin_name),
-        //     'prevGalleryPage' => __( 'Are you sure you want to go to the previous gallery page?', $this->plugin_name),
-        // ));
         wp_enqueue_script( $this->plugin_name.'-wp-color-picker-alpha', plugin_dir_url( __FILE__ ) . 'js/wp-color-picker-alpha.min.js',array( 'wp-color-picker' ),$this->version, true );
 
         $color_picker_strings = array(
@@ -266,49 +260,7 @@ class GLP_Admin {
             array($this, 'display_galleries_page')
         );
         add_action( "load-$hook_gallery", array( $this, 'screen_option_gallery' ) );
-
-        $hook_gallery = add_submenu_page(
-            $this->plugin_name,
-            __('Maps', $this->plugin_name),
-            __('Maps', $this->plugin_name),
-            'manage_options',
-            $this->plugin_name . '-maps',
-            array($this, 'display_maps_page')
-        );
-        add_action( "load-$hook_gallery", array( $this, 'screen_option_map' ) );
-
-        // add_submenu_page(
-        //     $this->plugin_name,
-        //     __('Add new', $this->plugin_name),
-        //     __('Add new', $this->plugin_name),
-        //     'manage_options',
-        //     $this->plugin_name . '-add-new',
-        //     array($this, 'display_plugin_add_new_gallery_page')
-        // );
-
-        // $hook_gallery_categories = add_submenu_page(
-        //     $this->plugin_name,
-        //     __('Categories', $this->plugin_name),
-        //     __('Categories', $this->plugin_name),
-        //     'manage_options',
-        //     $this->plugin_name . '-categories',
-        //     array($this, 'display_categories_page')
-        // );
-
-        // add_action("load-$hook_gallery_categories", array($this, 'screen_option_category'));
-
-        // $hook_settings = add_submenu_page( $this->plugin_name,
-        //     __('General Settings', $this->plugin_name),
-        //     __('General Settings', $this->plugin_name),
-        //     'manage_options',
-        //     $this->plugin_name . '-settings',
-        //     array($this, 'display_plugin_gallery_settings_page') 
-        // );
-        // add_action("load-$hook_settings", array($this, 'screen_option_settings'));        
-
-
     }
-
     /**
      * Add settings action link to the plugins page.
      *
@@ -359,43 +311,6 @@ class GLP_Admin {
         }
     }
 
-    public function display_maps_page() {
-        $this->settings_obj = new Gallery_Settings_Actions($this->plugin_name);
-        $action = (isset($_GET['action'])) ? sanitize_text_field( $_GET['action'] ) : '';
-        switch ( $action ) {
-            case 'add':
-                include_once( 'partials/glp-maps-actions.php' );
-                break;
-            case 'edit':
-                include_once( 'partials/glp-maps-actions.php' );
-                break;
-            default:
-                include_once( 'partials/glp-maps-display.php' );
-        }
-    }
-
-    // public function display_categories_page(){
-    //     $action = (isset($_GET['action'])) ? sanitize_text_field($_GET['action']) : '';
-
-    //     switch ($action) {
-    //         case 'add':
-    //             include_once('partials/glp-categories-actions.php');
-    //             break;
-    //         case 'edit':
-    //             include_once('partials/glp-categories-actions.php');
-    //             break;
-    //         default:
-    //             include_once('partials/glp-categories-display.php');
-    //     }
-    // }    
-
-    // public function screen_option_settings() {
-    //     $this->settings_obj = new Gallery_Settings_Actions($this->plugin_name);
-    // }
-
-    // public function display_plugin_gallery_settings_page(){
-    //     include_once('partials/settings/glp-settings.php');
-    // }
 
     public static function set_screen( $status, $option, $value ) {
         return $value;
@@ -412,30 +327,6 @@ class GLP_Admin {
         add_screen_option( $option, $args );
         $this->gallery_obj = new Glp_Galleries_List_Table($this->plugin_name);
     }
-
-    public function screen_option_map() {
-        $option = 'per_page';
-        $args   = [
-            'label'   => __('Maps', $this->plugin_name),
-            'default' => 20,
-            'option'  => 'maps_per_page'
-        ];
-
-        add_screen_option( $option, $args );
-        $this->map_obj = new Glp_Maps_List_Table($this->plugin_name);
-    }
-
-    // public function screen_option_category() {
-    //     $option = 'per_page';
-    //     $args   = array(
-    //         'label'   => __('Categories', $this->plugin_name),
-    //         'default' => 5,
-    //         'option'  => 'gallery_categories_per_page',
-    //     );
-
-    //     add_screen_option($option, $args);
-    //     $this->cats_obj = new Glp_Categories_List_Table($this->plugin_name);
-    // }
 
     public static function ays_get_categories(){
 
@@ -728,42 +619,7 @@ class GLP_Admin {
         return $results;
 
     }    
-    // public function get_next_or_prev_gallery_cat_by_id( $id, $type = "next" ) {
-    //     global $wpdb;
-
-    //     $gallery_cat_table = esc_sql( $wpdb->prefix . "glp_gallery_categories" );
-
-    //     $where = array();
-    //     $where_condition = "";
-
-    //     $id     = (isset( $id ) && $id != "" && absint($id) != 0) ? absint( sanitize_text_field( $id ) ) : null;
-    //     $type   = (isset( $type ) && $type != "") ? sanitize_text_field( $type ) : "next";
-
-    //     if ( is_null( $id ) || $id == 0 ) {
-    //         return null;
-    //     }
-
-    //     switch ( $type ) {            
-    //         case 'prev':
-    //             $where[] = ' `id` < ' . $id . ' ORDER BY `id` DESC ';
-    //             break;
-    //         case 'next':
-    //         default:
-    //             $where[] = ' `id` > ' . $id;
-    //             break;
-    //     }
-
-    //     if( ! empty($where) ){
-    //         $where_condition = " WHERE " . implode( " AND ", $where );
-    //     }
-
-    //     $sql = "SELECT `id` FROM {$gallery_cat_table} ". $where_condition ." LIMIT 1;";
-    //     $results = $wpdb->get_row( $sql, 'ARRAY_A' );
-
-    //     return $results;
-
-    // }
-
+ 
     public function glp_author_user_search() {
         $search = isset($_REQUEST['search']) && $_REQUEST['search'] != '' ? sanitize_text_field( $_REQUEST['search'] ) : null;
         $checked = isset($_REQUEST['val']) && $_REQUEST['val'] !='' ? sanitize_text_field( $_REQUEST['val'] ) : null;
@@ -909,307 +765,5 @@ class GLP_Admin {
         return $get_glp_banner_time;
     }
 
-    // HANDLE CUSTOM MEDIA ATTRIBUTES: latitude, longitude and vignette
-        
-    function get_vignette_options() {
 
-        // Afficher le chemin
-        // echo $directory_courant;
-        // echo GLP_DIR;
-    
-        $dict = array();
-        // Add None
-        $dict["None"] = "None";
-
-        $worldfile = GLP_DIR . 'assets/world.json';
-        //echo $worldfile;
-        // // Utiliser glob pour obtenir la liste des fichiers dans le dossier
-        //$files = glob($directory . '/*');
-        $json = file_get_contents($worldfile); 
-        if ($json === false) {
-            // deal with error...
-        }
-        
-        $json_a = json_decode($json, true);
-        if ($json_a === null) {
-            // deal with error...
-        }
-        
-        foreach ($json_a as $country) {
-            $file = $country['file'];
-            //$str = json_encode($country);
-            //echo $str
-            $option = str_replace('_', ' ', $file);
-            $option = str_replace('.geojson', '', $option);
-            $dict[$file] = $option;
-        }
-
-        return $dict;
-
-    }
-
- 
-    // TODO can be removed, not used
-    // function get_all_categories() {
-
-    //     // Afficher le chemin
-    //     // echo $directory_courant;
-    //     // echo GLP_DIR;
-    
-    //     $dict = array();
-    //     // Add None
-    //     $dict["None"] = "None";
-
-    //     $worldfile = GLP_DIR . 'assets/world.json';
-    //     //echo $worldfile;
-    //     // // Utiliser glob pour obtenir la liste des fichiers dans le dossier
-    //     //$files = glob($directory . '/*');
-    //     $json = file_get_contents($worldfile); 
-    //     if ($json === false) {
-    //         // deal with error...
-    //     }
-        
-    //     $json_a = json_decode($json, true);
-    //     if ($json_a === null) {
-    //         // deal with error...
-    //     }
-        
-    //     foreach ($json_a as $country) {
-    //         $file = $country['file'];
-    //         //$str = json_encode($country);
-    //         //echo $str
-    //         $option = str_replace('_', ' ', $file);
-    //         $option = str_replace('.geojson', '', $option);
-    //         $dict[$file] = $option;
-    //     }
-
-    //     return $dict;
-    // }
-
-    // function other_way_to_get_countries() {
-    
-    //     $directory_courant = ABSPATH;
-
-    //     // Afficher le chemin
-    //     // echo $directory_courant;
-    //     // echo GLP_DIR;
-    
-    //     $dict = array();
-    //     $directory = GLP_DIR . 'assets/geojson';
-    //     // echo $directory;
-    //     // // Utiliser glob pour obtenir la liste des fichiers dans le dossier
-    //     $files = glob($directory . '/*');
-
-    //     // Add None
-    //     $dict["None"] = "None";
-
-    //     // Get file list
-    //     foreach ($files as $file) {
-    //         //echo $file;
-    //         if (is_file($file)) {
-    //             $option = str_replace('_', ' ', $file);
-    //             $option = str_replace('.geojson', '', $option);
-    //             $option = str_replace($directory . '/', '', $option);
-    //             $dict[$file] = $option;
-    //         }
-    //     }
-
-    //     return $dict;
-    // }
-
-    // Add custom field to media edit screen
-    public function add_custom_fields_to_media_edit_screen($form_fields, $post) {
-
-        $latitude_value = get_post_meta($post->ID, 'latitude', true);
-        $longitude_value = get_post_meta($post->ID, 'longitude', true);
-        $vignette_value = get_post_meta($post->ID, 'vignette', true);
-        $category_value = get_post_meta($post->ID, 'category', true);
-
-        // echo $vignette_value;
-        echo "vignette value=". $vignette_value;
-        // echo $longitude_value;
-        
-        $form_fields['latitude'] = array(
-            'label' => 'Latitude',
-            'input' => 'text',
-            'value' => $latitude_value,
-            'show_in_edit' => true,
-        );
-
-        $form_fields['longitude'] = array(
-            'label' => 'Longitude',
-            'input' => 'text',
-            'value' => $longitude_value,
-            'show_in_edit' => true,
-        );
-
-        // display vignette selection
-        $vignette_options = $this->get_vignette_options();
-
-        $vignette_dropdown = '<select id="select-country" name="attachments[' . $post->ID . '][vignette]">';
-        foreach ($vignette_options as $key => $label) {
-            $vignette_dropdown .= '<option value="' . esc_attr($key) . '" ' . selected($vignette_value, $key, false) . '>' . esc_html($label) . '</option>';
-        }
-        $vignette_dropdown .= '</select>';
-        
-        $form_fields['vignette'] = array(
-            'label' => 'Vignette',
-            'input' => 'text',
-            'input' => 'html',
-            'html' => $vignette_dropdown,
-            'show_in_edit' => true,
-        );
-
-        // display categories selection
-        $listterms = $this->ays_get_categories();
-        //error_log("gallery_categories ".print_r($listterms, true));
-
-        $categories_dropdown = '<select id="select-categories" name="attachments[' . $post->ID . '][category]">';
-
-        //$gal_cats_ids = $category_value;
-        //$gal_cats_ids = array();
-        if (!isset($category_value) || $category_value == '') {
-            $category_value = "1";
-        }
-       // error_log("add_custom_fields_to_media_edit_screen: IN category actual value ".$category_value);
-        foreach ( $listterms as $term ) {
-            //error_log("add_custom_fields_to_media_edit_screen term id=".$term->term_id." name=".$term->name);
-            $checked = $term->term_id == $category_value ? "selected" : "";
-            $categories_dropdown .= "<option value='".$term->term_id."' ".$checked.">".$term->name."</option>";
-        }  
-        $categories_dropdown .= '</select>';
-        
-        $form_fields['category'] = array(
-            'label' => 'Category',
-            'input' => 'text',
-            'input' => 'html',
-            'html' => $categories_dropdown,
-            'show_in_edit' => true,
-        );
-        
-        return $form_fields;
-    }
-    // TODO add the category "uncategorized" and hide it from the list of categories
-    // hook callback for saving custom field value
-    public function save_custom_fields_value($post, $attachment) {
-        error_log("save attachment: IN ".print_r($attachment, true));
-        if (isset($attachment['latitude'])) {
-            update_post_meta($post['ID'], 'latitude', $attachment['latitude']);
-        }
-        if (isset($attachment['longitude'])) {
-            update_post_meta($post['ID'], 'longitude', $attachment['longitude']);
-        }
-
-        if (isset($attachment['vignette'])) {
-            update_post_meta($post['ID'], 'vignette', $attachment['vignette']);
-        }
-
-        if (isset($attachment['category'])) {
-            update_post_meta($post['ID'], 'category', $attachment['category']);
-        }
-
-        return $post;
-    }
-
-    /**
-     * Convert GPS longitude from EXIF data to decimal longitude.
-     *
-     * @param array $gps_longitude
-     * @param string $longitude_ref
-     * @return float|false Decimal longitude or false on failure
-     */
-    function convert_gps_longitude_to_decimal($gps_longitude, $longitude_ref) {
-        if (!is_array($gps_longitude) || empty($longitude_ref)) {
-            return false;
-        }
-        
-        // Calculate the decimal longitude
-        $degrees = $this->make_division($gps_longitude[0]);
-        $minutes = $this->make_division($gps_longitude[1]);
-        $seconds = $this->make_division($gps_longitude[2]);
-
-        $decimal_longitude = $degrees + ($minutes / 60) + ($seconds / 3600);
-
-        // Check the hemisphere (east or west)
-        $longitude_ref = strtoupper($longitude_ref);
-        if ($longitude_ref == 'W') {
-            $decimal_longitude *= -1;
-        }
-
-        return $decimal_longitude;
-    }
-
-    /**
-     * Convert GPS latitude from EXIF data to decimal latitude.
-     *
-     * @param array $gps_latitude
-     * @param string $latitude_ref
-     * @return float|false Decimal latitude or false on failure
-     */
-    function convert_gps_latitude_to_decimal($gps_latitude, $latitude_ref) {
-        if (!is_array($gps_latitude) || empty($latitude_ref)) {
-            return false;
-        }
-        
-        // Calculate the decimal latitude
-        $degrees = $this->make_division($gps_latitude[0]);
-        $minutes = $this->make_division($gps_latitude[1]);
-        $seconds = $this->make_division($gps_latitude[2]);
-
-        $decimal_latitude = $degrees + ($minutes / 60) + ($seconds / 3600);
-
-        // Check the hemisphere (north or south)
-        $latitude_ref = strtoupper($latitude_ref);
-        if ($latitude_ref == 'S') {
-            $decimal_latitude *= -1;
-        }
-
-        return $decimal_latitude;
-    }    
-    
-    function make_division($fraction){
-
-        // Split the fraction into numerator and denominator
-        list($numerator, $denominator) = explode('/', $fraction);
-        
-        // Convert numerator and denominator to integers
-        $numerator = (int)$numerator;
-        $denominator = (int)$denominator;
-        
-        // Perform the division to get the decimal value
-        $decimal_value = $numerator / $denominator;
-        
-        return $decimal_value; // Output: 20.705519        
-    }
-
-    public function extract_exif_data($attachment_id) {
-        $file = get_attached_file($attachment_id);
-        
-        // Check if the file exists and is an image
-        if (file_exists($file) && wp_attachment_is_image($attachment_id)) {
-            // Read EXIF data
-            $exif_data = exif_read_data($file);
-            
-            // You can now access EXIF data and do whatever you want with it
-            if ($exif_data !== false) {
-                // Example: Print out all EXIF data
-                //error_log("extract_exif_data: ".print_r($exif_data, true));
-                // Example: Get specific EXIF data
-                // $camera_model = $exif_data['Model'];
-                // $image_size = $exif_data['COMPUTED']['Width'] . 'x' . $exif_data['COMPUTED']['Height'];
-                // error_log("extract_exif_data: camera_model=".$camera_model." image_size=".$image_size);
-                // Example: Save specific EXIF data to post meta
-                //update_post_meta($attachment_id, 'camera_model', $camera_model);
-                //update_post_meta($attachment_id, 'image_size', $image_size);
-                $lat = $this->convert_gps_latitude_to_decimal($exif_data['GPSLatitude'], $exif_data['GPSLatitudeRef']);
-                $lon = $this->convert_gps_longitude_to_decimal($exif_data['GPSLongitude'], $exif_data['GPSLongitudeRef']);
-                update_post_meta($attachment_id, '_latitude', $lat);
-                update_post_meta($attachment_id, '_longitude', $lon);
-                error_log("extract_exif_data: lat=".$lat." lon=".$lon);
-            } else {
-                // No EXIF data found or error occurred
-                echo 'No EXIF data found for the uploaded image.';
-            }
-        }
-    }
 }

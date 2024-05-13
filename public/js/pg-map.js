@@ -566,13 +566,13 @@ function getImagesFromBB(ne_lat, ne_lng, sw_lat, sw_lng, zoom) {
 }
 
 function updateSlider(datas) {
-    console.log("updateSlider IN", datas);
-    console.log("updateSlider g_lightbox", g_lightbox);
+    //console.log("updateSlider IN", datas);
+    //console.log("updateSlider g_lightbox", g_lightbox);
     const slider = document.getElementById('imageSlider');
     const descr = document.getElementById('imageDescr');
     slider.innerHTML="";
     descr.innerHTML="";
-    console.log("updateSlider descr avant", descr);
+    //console.log("updateSlider descr avant", descr);
     //g_lightbox.destroy();
     //let newHtml="";
     if (datas) {
@@ -607,11 +607,11 @@ function updateSlider(datas) {
             descrHtml += "<h4 class='desc-title'>" + image.title + "</h4>";
             descrHtml += "<p class='desc-description'>" + small_address + "</p>";
             descrHtml += "</div>";
-            console.log("updateSlider descrHtml", descrHtml);
+            //console.log("updateSlider descrHtml", descrHtml);
             descr.innerHTML += descrHtml;
 
         });
-        console.log("updateSlider descr après", descr);
+        //console.log("updateSlider descr après", descr);
         const div_targets = slider.querySelectorAll('.slider-overlay-circle');
         div_targets.forEach(el => el.addEventListener('click', event => {
             processClickOnTarget(event.target);

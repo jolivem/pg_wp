@@ -120,8 +120,8 @@
         return version_compare ( ( string ) $_fv, ( string ) $_sv, $operator );
     }
 
-    if(function_exists("register_block_type")){
+    /*if(function_exists("register_block_type")){
             // Hook scripts function into block editor hook
         add_action( 'enqueue_block_editor_assets', 'glp_gutenberg_scripts' );
         add_action( 'init', 'glp_gutenberg_block_register' );
-    }
+    }*/
