@@ -176,9 +176,7 @@ class Pg_Show_User_Map_Public {
                     </div>
                 </div>
             </div>
-            <div  id='imageDescr'>
-                $html_descr
-            </div>
+            <div id='imageDescr' class='desc-block'>$html_descr</div> 
          </div>";
 
         $js = $this->script_map($medias);
@@ -199,9 +197,9 @@ class Pg_Show_User_Map_Public {
             $img_src_medium = "";
             $img_src_full = "";
             $url_img = wp_get_attachment_image_src($id, "medium");
-            if ($url_img != false) {
+            $post = get_post($id);
+            if ($post != null && $url_img != false) {
                 $img_src_medium = $url_img[0];
-                
 
                 $url_img = wp_get_attachment_image_src($id, "full");
                 if ($url_img != false) {
@@ -210,7 +208,17 @@ class Pg_Show_User_Map_Public {
 
                 $html.="
                 <div class='slider-item'>
-                    <img src='$img_src_medium' id='slider-$id' alt='Image 1' class='imgNotSelected' data-full='$img_src_full'>
+                    <div class='toto' data-full='$img_src_full'>
+                        <img src='$img_src_medium' id='slider-$id' class='imgNotSelected' data-full='$img_src_full'>";
+                // description of the photo INSIDE the lightbox
+                if ($post->post_content != '') {
+                    $html.="
+                        <div class='slider-descr'>
+                            <div class='desc-lightbox-title'>$post->post_content</div>
+                        </div>";
+                }
+                $html.="
+                    </div>
                     <div class='slider-overlay-circle'>
                         <i class='far fa-dot-circle slider-icon' data-num='$num'></i>
                     </div>
@@ -218,7 +226,7 @@ class Pg_Show_User_Map_Public {
                         <i class='fas fa-align-center slider-icon' data-num='$num'></i>
                     </div>
                 </div>";
-                $num = $num + 1;
+               $num = $num + 1;
             }
         }
         return $html;
@@ -236,11 +244,11 @@ class Pg_Show_User_Map_Public {
                 $content = $post->post_content;
                 $title = $post->post_title;
 
-                $html.="
-                <div id='desc-$id' class='desc-all'>
-                    <h4 class='desc-title'>$title</h4>
-                    <p class='desc-description'>$content</p>
-                </div>";
+                if ($content != "") {
+                    $html.="<div id='desc-$id' class='desc-slider desc-display'>
+                                <div class='desc-slider-title'>$content</div>
+                            </div>";
+                }
             }
         }
         return $html;
@@ -271,7 +279,6 @@ class Pg_Show_User_Map_Public {
         (function($) {
             'use strict';
             $(window).ready(function(){
-                console.log('COUCOU IN script_map');
                 let icon;";
         
                 $minlat = 90.0; 
@@ -301,14 +308,14 @@ class Pg_Show_User_Map_Public {
                             
                             //$img_tag ="<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "' onload='console.log(\"ID=".$image_ids[$key]."\")'>";
                             $map_js .= "icon = new LeafIcon({iconUrl: '". $img_src ."'});";
-                            //$map_js .= "markers.addLayer(L.marker([".strval($latitude).", ".strval($longitude)."], {icon: icon}).addTo(g_map).bindPopup('I am a green leaf.'));";
-                            $map_js .= "markers.addLayer(L.marker([".strval($latitude).", ".strval($longitude)."], {icon: icon}).addTo(g_map));";
+                            //$map_js .= "g_markers.addLayer(L.marker([".strval($latitude).", ".strval($longitude)."], {icon: icon}).addTo(g_map).bindPopup('I am a green leaf.'));";
+                            $map_js .= "g_markers.addLayer(L.marker([".strval($latitude).", ".strval($longitude)."], {icon: icon}).addTo(g_map));";
                         }
                     }
                 } // end foreach image
 
                 $map_js .= "
-                g_map.addLayer(markers);
+                g_map.addLayer(g_markers);
                 const bbox = [[$minlat,$minlng],[$maxlat,$maxlng]];
                 /*L.rectangle(bbox).addTo(g_map);*/
                 g_map.fitBounds(bbox);
@@ -327,14 +334,12 @@ class Pg_Show_User_Map_Public {
                 console.log('INIT map', g_map);
                 
                 /* add lightbox */ 
-                g_lightbox = new SimpleLightbox('#imageSlider img', {
-                    sourceAttr: 'data-full'
+                g_lightbox = new SimpleLightbox('#imageSlider .toto', {
+                    sourceAttr: 'data-full',
+                    captionSelector: '.slider-descr',
+                    captionType: 'text',
+                    captionPosition: 'top'
                 });
-                /*g_lightbox.on('close.simplelightbox', function (e) {
-                    console.log('show.simplelightbox e', e);
-                    const imgElem = e.target;
-                    selectSliderImageByElem(imgElem, true);
-                });*/
             })
         })(jQuery);
         </script>";

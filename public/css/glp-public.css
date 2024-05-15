@@ -863,7 +863,7 @@ body {
     opacity: 0;
 }
 
-.desc-all {
+.desc-display {
     display: none;
 }
 
@@ -877,4 +877,39 @@ body {
 
 .desc-address {
     text-align: center;
+}
+
+.desc-block {
+    display: flex;
+    justify-content: center;
+}
+
+.desc-slider {
+    border: 2px solid #bbb;
+    border-radius: 7px;
+    margin-top: 10px;
+    max-width: 600px;
+    padding: 5px;
+}
+
+.desc-slider-title {
+    text-align: center;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #303030;
+}
+
+.desc-slider-address {
+    font-size: small;
+    font-weight: 500;
+}
+
+.desc-lightbox-title {
+    text-align: center;
+    font-size: 1rem;
+}
+
+.desc-lightbox-address {
+    font-size: small;
+    font-weight: lighter;
 }

@@ -195,7 +195,7 @@
         let nonce = document.getElementById('pg_nonce').value;
         let admin_url = document.getElementById('pg_admin_ajax_url').value;
 
-        const title = document.getElementById('photo-title').value;
+        //const title = document.getElementById('photo-title').value; no more title
         const description = document.getElementById('photo-description').value;
         const user_status = document.getElementById('user_status').value;
         const vignette = document.getElementById("select-country").value;
@@ -204,7 +204,7 @@
         formData.append('action', 'user_edit_photo');
         formData.append('nonce', nonce);
         formData.append('post_id', post_id);
-        formData.append('title', title);
+        //formData.append('title', title);
         formData.append('desc', description);
         formData.append('vignette', vignette);
         formData.append('user_status', user_status);

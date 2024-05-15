@@ -183,7 +183,6 @@
           this.domNodes.wrapper.appendChild(this.domNodes.spinner);
         }
         this.addEventListener(this.elements, 'click.' + this.eventNamespace, function (event) {
-          console.log("simple-lightbox click");
           if (_this.isValidLink(event.currentTarget)) {
             event.preventDefault();
             if (_this.isAnimating) {
@@ -439,8 +438,18 @@
             if (_this2.options.htmlClass && _this2.options.htmlClass !== '') {
               document.querySelector('html').classList.remove(_this2.options.htmlClass);
             }
-            document.body.removeChild(_this2.domNodes.wrapper);
-            if (_this2.options.overlay) {
+            console.log('simplelightbox domNodes', _this2.domNodes);
+            console.log('simplelightbox childNodes', _this2.domNodes.childNodes);
+            console.log('simplelightbox children', _this2.domNodes.children);
+            console.log('simplelightbox domNodes.wrapper', _this2.domNodes.wrapper);
+            console.log('simplelightbox domNodes.wrapper.parentNode', _this2.domNodes.wrapper.parentNode);
+            console.log('simplelightbox domNodes.overlay.parentNode', _this2.domNodes.overlay.parentNode);
+            // console.log('simplelightbox domNodes.wrapper.parent.childNodes', _this2.domNodes.wrapper.parentNode.childNodes);
+            // console.log('simplelightbox domNodes.wrapper.parent.children', _this2.domNodes.wrapper.parentNode.children);
+            if (_this2.domNodes.wrapper.parentNode != null) { // MJO add condition on parent
+                document.body.removeChild(_this2.domNodes.wrapper);
+            }
+            if (_this2.options.overlay && _this2.options.overlay.parentNode) {
               document.body.removeChild(_this2.domNodes.overlay);
             }
             _this2.domNodes.additionalHtml = null;
@@ -584,7 +593,8 @@
               imageWidth /= ratio;
               imageHeight /= ratio;
             }
-            _this5.domNodes.image.style.top = (window.innerHeight - imageHeight) / 2 + 'px';
+            _this5.domNodes.image.style.top = (window.innerHeight - imageHeight) / 2 - 10 + 'px';
+            //_this5.domNodes.image.style.top = '10px'; //MJO
             _this5.domNodes.image.style.left = (window.innerWidth - imageWidth - _this5.globalScrollbarWidth) / 2 + 'px';
             _this5.domNodes.image.style.width = imageWidth + 'px';
             _this5.domNodes.image.style.height = imageHeight + 'px';
@@ -1151,6 +1161,9 @@
           if (this.options.overlay) {
             document.body.appendChild(this.domNodes.overlay);
           }
+          console.log('simplelightbox openImage domNodes.wrapper.parentNode', this.domNodes.wrapper.parentNode);
+          console.log('simplelightbox openImage domNodes.overlay.parentNode', this.domNodes.overlay.parentNode);
+
           this.relatedElements = this.getRelated(element.rel);
           if (this.options.showCounter) {
             if (this.relatedElements.length == 1 && this.domNodes.wrapper.contains(this.domNodes.counter)) {
@@ -1564,6 +1577,8 @@
           this.removeEventListener(window, 'hashchange.' + this.eventNamespace);
           this.close();
           if (this.isOpen) {
+            console.log('simplelightbox domNodes.wrapper.parentNode', _this2.domNodes.wrapper.parentNode);
+            console.log('simplelightbox domNodes.overlay.parentNode', _this2.domNodes.overlay.parentNode);
             document.body.removeChild(this.domNodes.wrapper);
             document.body.removeChild(this.domNodes.overlay);
           }
@@ -1575,6 +1590,7 @@
           if (!this.initialSelector) {
             throw 'refreshing only works when you initialize using a selector!';
           }
+          console.log("simple-lightbox refresh");
           var options = this.options,
             selector = this.initialSelector;
           this.destroy();

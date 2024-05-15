@@ -39,14 +39,14 @@
 div.gallery-slider {
     overflow: hidden;
     white-space: nowrap;
-    padding: 4px;
+    /*padding: 4px;*/
     display: ruby;
 }
 
 div.gallery-slider img {
     display: ruby;
-    padding: 2px;
-    height: 120px;
+    padding-bottom: 2px;
+    height: 122px;
     cursor: pointer;
     /* Add cursor pointer for better usability */
     /*border: 2px solid transparent; /*Initial border style */
@@ -57,45 +57,23 @@ div.gallery-slider img {
 div.planet-slider {
     overflow: hidden;
     white-space: nowrap;
-    padding: 4px;
+    /*padding: 4px;*/
     display: ruby;
 }
 
 div.planet-slider img {
     display: ruby;
-    padding: 2px;
-    height: 140px;
+    padding-bottom: 2px;
+    height: 150px;
     cursor: pointer;
     /* Add cursor pointer for better usability */
     /*border: 2px solid transparent; /*Initial border style */
 }
 
 
-/* Apply grab cursor when hovering over the slider 
-div.slider:hover {
-    cursor: grab;
-}*/
-
-/* Apply grabbing cursor while dragging 
-div.slider.dragging {
-    cursor: grabbing;
-}*/
-
-/*div.planet-slider {
-    overflow: hidden;
-    white-space: nowrap;
-    padding: 4px;
-}
-
-div.planet-slider img {
-    padding: 2px;
-    height: 140px;
-    cursor: pointer;
-}*/
-
 .imgSelected {
     /*border: 2px solid red;*/
-    border-bottom: 2px solid red;
+    border-bottom: 4px solid #707070;
     /* Adjust the border style for selected images */
     opacity: 1;
 }
@@ -151,4 +129,8 @@ div.planet-slider img {
 
 .slider-item:hover .slider-overlay-text {
     opacity: 1;
+}
+
+.slider-descr {
+    display: none;
 }

@@ -127,8 +127,12 @@ class Pg_Show_Planet_Map_Public {
         //$medias = $this->pg_get_medias_by_gallery($id);
         $medias = Pg_Geoposts_Table::get_all_public_images();
         //error_log("pg_show_page ".print_r($medias, true));
-        $html_slider = $this->render_slider($medias);
-        $html_addresses = $this->render_medias_address($medias);
+        //[$html_slider, $html_descr] = $this->render_slider($medias);
+        $html_slider = "";
+        $html_descr = "";
+        error_log("pg_show_page html_slider = $html_slider");
+        error_log("pg_show_page html_descr = $html_descr");
+        //$html_addresses = $this->render_medias_address($medias);
         $admin_ajax_url = admin_url('admin-ajax.php');
         $nonce = wp_create_nonce('show_planet');
 
@@ -161,7 +165,7 @@ class Pg_Show_Planet_Map_Public {
                     </div>
                 </div>
             </div>   
-            <div id='imageDescr'>$html_addresses</div>
+           <div id='imageDescr' class='desc-block'>$html_descr</div> 
          </div>";
 
         $js = $this->script_map($medias);
@@ -172,20 +176,41 @@ class Pg_Show_Planet_Map_Public {
 
     // render all the images 
     // medias is an array of array with 'post_id'
-    function render_slider($medias){
+/*    function render_slider($medias){
         //error_log("render_slider IN images=".print_r($medias, true));
-        $html='';
+        $html_slider='';
+        $html_descr='';    // description in page, under the slider
         $num=0;
         // loop for each media
         foreach($medias as $media){
             $id=$media['post_id'];
-            //error_log("render_images id:".$id);
-            //$img_src = $item->guid;
-            $img_src_medium = "";
-            $img_src_full = "";
+            $post = get_post($id);
             $url_img = wp_get_attachment_image_src($id, "medium");
-            
-            if ($url_img != false) {
+            if ($post != null && $url_img != false) {
+                //$address_json = $post->post_excerpt;
+                $content = $post->post_content;
+                //$address = $post->post_name;
+                $address = $post->post_title;
+                error_log("render_medias_address post=".print_r($post, true));
+                //$small_address = $addr['country']." ".$addr['county']." ". $addr['village'];
+                $meta = get_post_meta($id);
+                $metadate = $meta['date'][0];
+                $date = $date = Pg_Edit_Gallery_Public::get_photo_date($metadate);
+                $user = get_user_by( 'ID', $post->post_author );
+        
+                // Description of the photo below the slider
+                $html_descr.="<div id='desc-$id' class='desc-slider desc-display'>";
+                if ($content != "") {
+                    $html_descr.="<div class='desc-slider-title'>$content</div>";
+                }
+                $html_descr.="<div class='desc-slider-address'>Prise de vue : $address</div>";
+                $html_descr.="</div>";            
+
+                //error_log("render_images id:".$id);
+                //$img_src = $item->guid;
+                $img_src_medium = "";
+                $img_src_full = "";
+
                 error_log("render_slider ".print_r($url_img, true));
                 $img_src_medium = $url_img[0];
             
@@ -194,9 +219,30 @@ class Pg_Show_Planet_Map_Public {
                     $img_src_full = $url_img[0];
                 }
 
-                $html.="
+                $html_slider.="
                 <div class='slider-item'>
-                    <img src='$img_src_medium' id='slider-$id' alt='Image 1' class='imgNotSelected' data-full='$img_src_full'>
+                    <div class='toto' data-full='$img_src_full'>
+                        <img src='$img_src_medium' id='slider-$id' class='imgNotSelected'>
+                        <div class='slider-descr'>";
+                
+                // description of the photo INSIDE the lightbox
+                if ($content != "") {
+                    $html_slider.="
+                            <div class='desc-lightbox-title'>$content</div>";
+                }
+                $html_slider.="
+                            <div class='desc-lightbox-address'>Prise de vue : $address</div>";
+                if ($user->display_name != "") {
+                    $html_slider.="
+                    <div class='desc-lightbox-address'>Photographe : <b>$user->display_name</b>, le $date</div>";
+                }
+                else {
+                    $html_slider.="
+                    <div class='desc-lightbox-address'>Prise le $date</div>";
+                }
+                $html_slider.="
+                        </div>
+                    </div>
                     <div class='slider-overlay-circle'>
                         <i class='far fa-dot-circle slider-icon' data-num='$num'></i>
                     </div>
@@ -205,38 +251,14 @@ class Pg_Show_Planet_Map_Public {
                     </div>
                 </div>";
                 $num = $num + 1;
+                
             }
         }
-        return $html;
-    } 
+        return [$html_slider, $html_descr];
+    } */
 
     // medias is an array of array with 'post_id'
-    function render_medias_address($medias){
-        //error_log("render_medias_address IN images=".print_r($medias, true));
-        $html='</br>';
-        
-        // loop for each media
-        foreach($medias as $media){
-            $id = $media['post_id'];
-            $post = get_post($id);
-            if ($post != null) {
-                //$address_json = $post->post_excerpt;
-                $title = $post->post_title;
-                //$address = $post->post_name;
-                $addr = json_decode($post->post_excerpt, true);
-                //error_log("render_medias_address address=".print_r($addr, true));
-                $small_address = $addr['country']." ".$addr['county']." ". $addr['village'];
-
-                $html.="
-                <div id='desc-$id' class='desc-all'>
-                    <h4 class='desc-title'>$title</h4>
-                    <p class='desc-description'>$small_address</p>
-                </div>";
-            }
-        }
-        return $html;
-    }
-
+ 
     // create map, markers and lightbox
     // and fill them with images
     ///////////////////////////////////
@@ -254,24 +276,26 @@ class Pg_Show_Planet_Map_Public {
                 g_map.setView([0,0], 1);
  
                 g_map.on('moveend', function(e) {
-                    console.log('movend',e);
-                    console.log('movend',g_map.getBounds());
-                    const ne = g_map.getBounds().getNorthEast();
-                    const sw = g_map.getBounds().getSouthWest();
-                    const zoom = g_map.getZoom();
-                    getImagesFromBB(ne.lat, ne.lng, sw.lat, sw.lng, zoom);
-                    /*console.log('movend',g_map.getZoom());*/
+                    const data = g_lightbox.getLighboxData();
+                    if (data.currentImage == undefined) {
+                        const ne = g_map.getBounds().getNorthEast();
+                        const sw = g_map.getBounds().getSouthWest();
+                        const zoom = g_map.getZoom();
+                        getImagesFromBB(ne.lat, ne.lng, sw.lat, sw.lng, zoom);
+                    }
                 });
                 g_map.on('zoomend', function(e) {
-                    console.log('zoomend',e);
-                    console.log('zoomST_end',g_map.getBounds());
-                    const ne = g_map.getBounds().getNorthEast();
-                    const sw = g_map.getBounds().getSouthWest();
-                    const zoom = g_map.getZoom();
-                    getImagesFromBB(ne.lat, ne.lng, sw.lat, sw.lng, zoom);
+                    const data = g_lightbox.getLighboxData();
+                    if (data.currentImage == undefined) {
+                        const ne = g_map.getBounds().getNorthEast();
+                        const sw = g_map.getBounds().getSouthWest();
+                        const zoom = g_map.getZoom();
+                        getImagesFromBB(ne.lat, ne.lng, sw.lat, sw.lng, zoom);
+                    }
                 });
-                let icon;";
- 
+                let icon;
+                getImagesFromBB(80.0, 180.0, -80.0, -180.0, 1);";
+
          
                 $minlat = 90.0; 
                 $maxlat = -90.0;
@@ -301,18 +325,20 @@ class Pg_Show_Planet_Map_Public {
                             
                             //$img_tag ="<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "' onload='console.log(\"ID=".$image_ids[$key]."\")'>";
                             $map_js .= "icon = new LeafIcon({iconUrl: '". $img_src ."'});";
-                            //$map_js .= "markers.addLayer(L.marker([".strval($latitude).", ".strval($longitude)."], {icon: icon}).addTo(g_map).bindPopup('I am a green leaf.'));";
-                            $map_js .= "markers.addLayer(L.marker([".strval($latitude).", ".strval($longitude)."], {icon: icon}).addTo(g_map));";
+                            //$map_js .= "g_markers.addLayer(L.marker([".strval($latitude).", ".strval($longitude)."], {icon: icon}).addTo(g_map).bindPopup('I am a green leaf.'));";
+                            $map_js .= "g_markers.addLayer(L.marker([".strval($latitude).", ".strval($longitude)."], {icon: icon}).addTo(g_map));";
                         }
                     }
                 } // end foreach image
 
                 $map_js .= "
-                g_map.addLayer(markers);
+                g_map.addLayer(g_markers);
                 
                 /* add lightbox */ 
-                g_lightbox = new SimpleLightbox('#imageSlider img', {
-                    sourceAttr: 'data-full'
+                g_lightbox = new SimpleLightbox('#imageSlider .toto', {
+                    sourceAttr: 'data-full',
+                    captionSelector: '.slider-descr',
+                    captionType: 'text'
                 });
 
             })
@@ -360,13 +386,19 @@ class Pg_Show_Planet_Map_Public {
                     $url_img_medium = wp_get_attachment_image_src($pid, "medium");
                     $url_img_full = wp_get_attachment_image_src($pid, "full");
                     if ($url_img_medium != false) {
+                        $meta = get_post_meta($pid);
+                        $metadate = $meta['date'][0];
+                        $date = $date = Pg_Edit_Gallery_Public::get_photo_date($metadate);
+                        $user = get_user_by( 'ID', $post->post_author );
+        
                         $image = (object) [
                             'id'            => $pid,
                             'url_medium'    => $url_img_medium[0],
                             'url_full'      => $url_img_full[0],
-                            'address'       => $post->post_name,
-                            'title'         => $post->post_title,
-                            'address_json'  => $post->post_excerpt
+                            'address'       => $post->post_title,
+                            'content'       => $post->content,
+                            'date'          => $date,
+                            'user'          => $user->display_name
                         ];
                         
                         //error_log("get_bb_images image=".print_r($image, true));

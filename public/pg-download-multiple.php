@@ -230,16 +230,16 @@ class Pg_Download_Multiple_Public {
         // compare url and guid and author and size and lon lat
         $found_id = $this->find_media_by_author_and_guid($user_id, $movefile[ 'url' ]);
         if ($found_id != 0) {
-            
+            // image already found in gallery, don not add twice !
             error_log( "File already present, id=$found_id");
-            $this->update_gallery_image($_REQUEST['galleryId'], $found_id);
+            //$this->update_gallery_image($_REQUEST['galleryId'], $found_id);
             $data=array('message' => 'found');
             wp_send_json_success( $data, 200);
         }
         else {
 
-            $address = sanitize_text_field( $_REQUEST['address'] );
-            $address_json = sanitize_text_field( $_REQUEST['address_json'] );
+            $address = $_REQUEST['address'];
+            $address_json = $_REQUEST['address_json'];
             error_log("download_multiple_photos address = $address");
             $country_code = sanitize_text_field( $_REQUEST['country_code'] );
             $title = sanitize_text_field( $_REQUEST['title'] );
@@ -253,10 +253,10 @@ class Pg_Download_Multiple_Public {
                     array(
                         'guid'           => $movefile[ 'url' ],
                         'post_mime_type' => $movefile[ 'type' ],
-                        'post_title'     => '', // reserved for user title
+                        'post_title'     => $address,
                         'post_content'   => '', // reserved for user description
                         'post_excerpt'   => $address_json,
-                        'post_name'      => $address,
+                        'post_name'      => basename( $movefile[ 'file' ] ), 
                         'post_status'    => 'inherit',
                     ),
                     $movefile[ 'file' ]

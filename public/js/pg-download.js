@@ -383,8 +383,9 @@ jQuery(document).find('#multiple-upload').on('click', function(e){
                 console.log("uploadPhotos ignore file=", file);
                 continue;
             }
-
+            console.log("uploadPhotos file_div=", file_div);
             let spinner = file_div.parentNode.getElementsByClassName('download-spinner');
+            console.log("uploadPhotos spinner=", spinner);
             spinner[0].style.display='block';
 
             //file_div.classList.add( 'opaque');
@@ -447,8 +448,7 @@ function find_div_from_file_name(filename) {
             let texts = children[i].getElementsByClassName( "full-photo-text-container");
             if (texts.length > 0) {
                 //console.log("find_div_from_file_name", texts[0].innerHTML);
-                substr = " " + filename;
-                if (texts[0].innerHTML.indexOf(substr) != -1) {
+                if (texts[0].innerHTML.indexOf(filename) != -1) {
                     console.log("find_div_from_file_name out", texts[0].parentNode);
                     // get the flex container
                     //let cont = children[i].
@@ -457,6 +457,7 @@ function find_div_from_file_name(filename) {
             }
         }
     }
+    console.log("find_div_from_file_name NOT found", filename);
     return null;
 }
 
@@ -518,7 +519,7 @@ function downloadMultiplePhotos(files) {
             if (lat != undefined) {
                 // Localisation OK
                 let zoomHtml='';
-                if (zoomRatio != '1') {
+                if (zoomRatio != undefined && zoomRatio != '1') {
                     zoomHtml = `<br>Zoom: *${zoomRatio}`;                    
                 }
                 //console.log('renderItemMultiple zoomHtml', zoomHtml);
@@ -581,7 +582,7 @@ function downloadMultiplePhotos(files) {
             EXIF.getData(file, async function() {
                 console.log( "file: ", file);
                 const exifData = EXIF.getAllTags(this);
-                //console.log('EXIF Data:', exifData);
+                console.log('EXIF Data:', exifData);
 
                 const lat = EXIF.getTag(this, 'GPSLatitude');
                 const lon = EXIF.getTag(this, 'GPSLongitude');
@@ -706,7 +707,7 @@ async function reverseGeocoding(lat, lon) {
         .then(Result => Result.json())
         .then(json => {
 
-            //console.log('reverseGeocoding json=', json);
+            console.log('reverseGeocoding json=', json);
             // Printing our response 
             if (json.address) {
                 //console.log('reverseGeocoding BINGO');

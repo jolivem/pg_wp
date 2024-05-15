@@ -148,7 +148,7 @@ class Pg_Edit_Photo_Public {
             }
 
             $content = $post->post_content;
-            $title = $post->post_title;
+            //$title = $post->post_title;
 
             error_log("pg_show_page latitude=$latitude, longitude=$longitude, vignette=$vignette, user_status=$user_status");
 
@@ -189,10 +189,6 @@ class Pg_Edit_Photo_Public {
                     <img style='height:200px; width:auto; border: 1px solid #BBB; padding:3px; border-radius: 4px' src='$img_src' alt=''>
                 </div>
                 <br>
-                <div class='form-floating mb-3'>
-                    <input type='text' class='form-control' id='photo-title' aria-describedby='titleHelp' placeholder='' value='$title'>
-                    <label for='photo-title'>Titre</label>
-                </div>
                 <div class='form-floating mb-3'>
                     <textarea rows='5' style='height:100%;' class='form-control' placeholder='' id='photo-description'>$content</textarea>
                     <label for='photo-description'>Description</label>                        
@@ -331,7 +327,7 @@ class Pg_Edit_Photo_Public {
         }
 
         $post_id = sanitize_text_field( $_REQUEST['post_id'] );
-        $title = sanitize_text_field( $_REQUEST['title'] );
+        //$title = sanitize_text_field( $_REQUEST['title'] );
         $desc = sanitize_text_field( $_REQUEST['desc'] );
         $vignette = sanitize_text_field( $_REQUEST['vignette'] );
         $user_status = sanitize_text_field( $_REQUEST['user_status'] );
@@ -345,8 +341,6 @@ class Pg_Edit_Photo_Public {
             $my_image_meta = array(
                 // Specify the image (ID) to be updated
                 'ID' => $post_id,
-                // Set image Title to sanitized title
-                'post_title' => $title,
                 // Set image Description (Content) to sanitized title
                 'post_content' => $desc
             );
