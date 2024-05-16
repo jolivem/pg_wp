@@ -106,7 +106,7 @@ class Glp_User_Galleries_Public {
 
     static public function get_page_url_from_slug($slug) {
         $page = get_page_by_path($slug);
-        error_log("get_page_url_from_slug slug: ".print_r($page, true));
+        error_log("get_page_url_from_slug slug=".$slug);
         $result = get_permalink($page->ID);
         if ($result == false) {
             error_log("get_page_url_from_slug: ERROR not found");
@@ -123,7 +123,7 @@ class Glp_User_Galleries_Public {
             return "";
         }
         $page = get_page_by_path("edit-photo");
-        error_log("pg_show_page page from slug: ".print_r($page, true));
+        //error_log("pg_show_page page from slug: ".print_r($page, true));
         $edit_gallery_url = Glp_User_Galleries_Public::get_page_url_from_slug(Pg_Edit_Gallery_Public::PAGE_SLUG_EDIT_GALLERY); // TODO move 186 to a global constant or get by Title
 
         $html_code = "";
@@ -220,7 +220,16 @@ class Glp_User_Galleries_Public {
                     <div class="flex-options-2">
                         <div class="user-gallery-option pointer-icon fas fa-edit" aria-hidden="true" data-galid="'.$item["id"].'"></div>
                         <div class="user-gallery-option pointer-icon fas fa-eye" aria-hidden="true" data-galuuid="'.$item["uuid"].'"></div>
-                        <div class="user-gallery-option pointer-icon fas fa-share-alt" aria-hidden="true" data-galid="'.$item["id"].'"></div>
+                        <div class="user-gallery-option pointer-icon fas fa-share-alt" aria-hidden="true" data-galuuid="'.$item["uuid"].'"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                <div id="copy-to-clipboard" class="toast align-items-center text-white bg-success bg-gradient border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            Adresse copiée dans le presse-papier !
+                        </div>
                     </div>
                 </div>
             </div>';

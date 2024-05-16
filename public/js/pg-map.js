@@ -3,7 +3,7 @@ var g_selectedImageSrc = null; /*image src when clicked in the slider target*/
 var g_map;
 var g_lightbox;
 var g_markers;
-var LeafIcon = L.Icon.extend({
+var g_LeafIcon = L.Icon.extend({
     options: {
         iconSize:     [60, 60],
         shadowSize:   [50, 64],
@@ -211,13 +211,13 @@ var processClickOnText = function( elem) {
 
 var animateMarkerByImage = function(img) {
 
-    console.log('animateMarkerByImage IN', img);
+    //console.log('animateMarkerByImage IN', img);
     console.log('animateMarkerByImage g_markers', g_markers);
     let imageSrc= img.getAttribute('src');
 
     // animate the marker on the map
     let layers = g_markers.getLayers();
-    console.log( 'animateMarkerByImage layers', layers);
+    //console.log( 'animateMarkerByImage layers', layers);
     for (let i in layers) {
         let layer = layers[i];
         //console.log( 'animateMarkerByImage loop on layers', {i, layer});
@@ -238,7 +238,7 @@ var animateMarkerByImage = function(img) {
                     g_map.setView(new L.latLng(position));
                 }
                 //console.log('animateMarkerByImage YYYYYYYYYYYYYYYYYYYYYYY  _childCount',visibleOne._childCount);
-                console.log('animateMarkerByImage THIS IS A MARKER visibleone', visibleOne);
+                //console.log('animateMarkerByImage THIS IS A MARKER visibleone', visibleOne);
                 //g_selectedImageSrc = null;
                 //console.log( 'imageSelected NOT null');
                 
@@ -251,6 +251,7 @@ var animateMarkerByImage = function(img) {
                 if (g_selectedImageSrc != null) {
                     //iconCreateFunction has not been called
                     // it is a single image without cluster
+                    console.log('animateMarkerByImage Animate the visible marker');
 
                     visibleOne.refreshIconOptions({
                         iconSize:     [100, 100],
@@ -287,12 +288,17 @@ var animateMarkerByImage = function(img) {
         zoomToBoundsOnClick: true,
         iconCreateFunction: function(cluster) {
             console.log('iconCreateFunction IN XXXXXXXXXXXXXXXXXXXXXXXX cluster:', cluster);
-            console.log('iconCreateFunction getChildCount', cluster.getChildCount());
+            //console.log('iconCreateFunction getChildCount', cluster.getChildCount());
 
+            /*var markers = cluster.getAllChildMarkers();
+            var html = '<div class="circle">' + markers.length + '</div>';
+            return L.divIcon({ html: html, className: 'mycluster', iconSize: L.point(32, 32) });
+            */
             var children = cluster.getAllChildMarkers()[0];
 
             console.log('icon', children.options.icon);
             var iicoon = new L.Icon(children.options.icon.options);
+            console.log('iicoon', iicoon);
             var count = cluster.getChildCount();
             if (count < 6) {
                 iicoon.options.className = 'mydivmarker6';    
@@ -317,11 +323,11 @@ var animateMarkerByImage = function(img) {
                 }, 400);                        
             }
 
-            /*iicoon.options.className = 'mydivmarker';*/
-            //console.log('iicoon', iicoon);
-            /*return L.divIcon({ html: '<b>' + cluster.getChildCount() + '</b>' });*/
             return iicoon;
-        }
+        },
+        spiderfyOnMaxZoom: false, 
+        showCoverageOnHover: true, 
+        zoomToBoundsOnClick: false 
     }); 
 
     /*map = L.map('map').setView([0,0], zoom);*/
@@ -383,9 +389,9 @@ var animateMarkerByImage = function(img) {
             return;
         }
 
-        console.log("show-gallery-option imageSlider", slider);
+        //console.log("show-gallery-option imageSlider", slider);
         let selected = false;
-        console.log("show-gallery-option IN g_selectedImageElem", g_selectedImageElem);
+        //console.log("show-gallery-option IN g_selectedImageElem", g_selectedImageElem);
         // if selection exists
         if (g_selectedImageElem) {
             setSliderPhotoCss(g_selectedImageElem, 'imgNotSelected');
@@ -416,7 +422,7 @@ var animateMarkerByImage = function(img) {
             }
         }
         else {
-            console.log("show-gallery-option nothing selected");
+            //console.log("show-gallery-option nothing selected");
             //console.log("show-gallery-option slider", slider);
             g_selectedImageElem = slider.querySelectorAll('img')[0];
             selected = true;

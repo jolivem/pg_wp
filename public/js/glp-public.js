@@ -80,10 +80,6 @@
                         toastElList.map(function(toastEl) {
                             return new bootstrap.Toast(toastEl)
                         })
-                        
-                        // var myToastEl = document.getElementById('delete-photo-success')
-                        // var myToast = bootstrap.Toast.getInstance(myToastEl);
-                        // myToast.show();
         
                     }
                     // TODO handle error
@@ -126,10 +122,6 @@
                         toastElList.map(function(toastEl) {
                             return new bootstrap.Toast(toastEl)
                         })
-                        
-                        // var myToastEl = document.getElementById('delete-photo-success')
-                        // var myToast = bootstrap.Toast.getInstance(myToastEl);
-                        // myToast.show();
         
                     }
                     // TODO handle error
@@ -218,14 +210,28 @@
                 edit_gallery_url += galuuid;
                 window.location = edit_gallery_url;
             }
-            // else if (e.target.classList.contains("fa-trash")) {
-            //     const galid = e.target.dataset.galid;
-            //     console.log("user-gallery-option trash galid=", galid);
-            //     document.getElementById('modal-delete-gallery').dataset.galid=galid;
-            //     // call the modal for delete 
-            //     deleteConfirModal = new bootstrap.Modal(document.getElementById('deleteConfirModal'), {});
-            //     deleteConfirModal.toggle();
-            // }
+            else if (e.target.classList.contains("fa-share-alt")) {
+                const galuuid = e.target.dataset.galuuid;
+                console.log("user-gallery-option view galuuid=", galuuid);
+                let edit_gallery_url = document.getElementById('pg_show_gallery_url').value;
+                edit_gallery_url += "?guuid=";
+                edit_gallery_url += galuuid;
+
+                navigator.clipboard.writeText(edit_gallery_url).then(() => {
+                    // display a toast
+                    var toastElList = [].slice.call(document.querySelectorAll('.toast'));
+                    console.log("user-gallery-option toastElList=", toastElList);
+                    toastElList.map(function(toastEl) {
+                        console.log("user-gallery-option toastEl=", toastEl);
+                        return new bootstrap.Toast(toastEl);
+                    });
+
+                    var myToastEl = document.getElementById('copy-to-clipboard');
+                    var myToast = bootstrap.Toast.getInstance(myToastEl);
+                    myToast.show();                
+                });
+
+            }
             e.preventDefault();
         });
 
@@ -416,7 +422,7 @@ async function ays_add_vignette_to_image( lmapId,jfile,lat,lon,zoom) {
         fillOpacity: 2,
         weight: 1
     }
-    var myIconClass = L.Icon.extend({
+    let myIconClass = L.Icon.extend({
         options: {
             iconSize:     [4, 4],
             iconAnchor:   [2, 2]
@@ -433,7 +439,7 @@ async function ays_add_vignette_to_image( lmapId,jfile,lat,lon,zoom) {
     // elemDiv.style.borderColor = 'lightgray';
     //select.appendChild(elemDiv);
     
-    var mark = new myIconClass ({iconUrl: ays_vars.base_url + 'assets/markpoint.png'});
+    let mark = new myIconClass ({iconUrl: ays_vars.base_url + 'assets/markpoint.png'});
     
     let lmap = L.map(lmapId, props);
     //console.log("ays_add_vignette_to_image AA created lmap", {lmapId, lmap});

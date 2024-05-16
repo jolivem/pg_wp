@@ -1,4 +1,7 @@
 
+var g_filesArray = null;
+const maxFile=5;
+
 //
 // SINGLE UPLOAD
 //
@@ -193,7 +196,7 @@ jQuery(document).find('#single-upload').on('click', function(event){
     });
 });
 
-
+/*
 function downloadASinglePhoto(files) {
 
     console.log('downloadASinglePhoto IN');
@@ -215,12 +218,12 @@ function downloadASinglePhoto(files) {
     document.getElementById("latitudeHelp").style.display = "block";
     document.getElementById("longitudeHelp").style.display = "block";
 
-    const filesArray = Array.from(files);
-    if (filesArray.length == 1) {
-        const file = filesArray[0];
+     g_filesArray = Array.from(files);
+    if (g_filesArray.length == 1) {
+        const file = g_filesArray[0];
         const reader = new FileReader();
 
-        console.log('filesArray.length', filesArray.length);
+        console.log('g_filesArray.length', g_filesArray.length);
 
         function renderItemSingle(src, name, latitude, longitude) {
             const photo = document.getElementById('photo-to-download');
@@ -344,7 +347,7 @@ function downloadASinglePhoto(files) {
         reader.readAsDataURL(file);
     };
 }
-
+*/
 //
 // MULTIPLE UPLOAD
 //
@@ -355,6 +358,7 @@ jQuery(document).find('#close-multiple-modal').on('click', function(e){
     location.reload();
 });
 
+// When clicking on "Download"
 jQuery(document).find('#multiple-upload').on('click', function(e){
     console.log("uploadPhotos IN", e);
     e.preventDefault();
@@ -367,10 +371,11 @@ jQuery(document).find('#multiple-upload').on('click', function(e){
     const galleryId = document.getElementById('gallery-id')?.value;
     // progressContainer.innerHTML = '';
     // progressContainer.style.display = 'block';
-    const files = Array.from(fileInput.files)
-    for (let i = 0 ; i < files.length ; i ++) {
+    console.log("uploadPhotos g_filesArray.length=", g_filesArray.length);
+    //const files = Array.from(fileInput.files)
+    for (let i = 0 ; i < g_filesArray.length ; i ++) {
     //Array.from(files).forEach(file => {
-        const file = files[i];
+        const file = g_filesArray[i];
         console.log("uploadPhotos file=", file);
         //const progressBarContainer = document.createElement('div');
 
@@ -383,9 +388,9 @@ jQuery(document).find('#multiple-upload').on('click', function(e){
                 console.log("uploadPhotos ignore file=", file);
                 continue;
             }
-            console.log("uploadPhotos file_div=", file_div);
+            //console.log("uploadPhotos file_div=", file_div);
             let spinner = file_div.parentNode.getElementsByClassName('download-spinner');
-            console.log("uploadPhotos spinner=", spinner);
+            //console.log("uploadPhotos spinner=", spinner);
             spinner[0].style.display='block';
 
             //file_div.classList.add( 'opaque');
@@ -464,49 +469,72 @@ function find_div_from_file_name(filename) {
 // Function to remove the list item
 function removeDownloadPhoto(item) {
     //item.remove(); // Remove the corresponding list item
+    //console.log("removeDownloadPhoto item", item);
     let ancestor = item.parentNode.parentNode.parentNode;
+    let title = ancestor.getElementsByClassName('photo-title')[0].innerHTML;
+    //console.log("removeDownloadPhoto title=", title);
+    // remove the assocaited file in g_filesArray
+    for (let i = 0 ; i < g_filesArray.length ; i ++) {
+        //Array.from(files).forEach(file => {
+        //const file = g_filesArray[i];
+        //console.log("removeDownloadPhoto file.name=", g_filesArray[i].name);
+        if (g_filesArray[i].name == title) {
+            //console.log("removeDownloadPhoto FOUND");
+            g_filesArray.splice(i, 1);
+            break;
+        }
+    }
+    console.log('updateDownloadMultipleModal IN');
+    
+    
     ancestor.style.animationDuration = '.35s';
     ancestor.style.animationName = 'slideOutLeft';
 
     setTimeout(() => {
         ancestor.remove(); // Remove the corresponding list item after animation
     }, 300); // Duration of the animation    
+
+    // remove from g_filesArray
+
 }     
 
-const maxFile=5;
 
-function downloadMultiplePhotos(files) {
-
-    const filesArray = Array.from(files);
+function updateDownloadMultipleModal(files) {
+    console.log('updateDownloadMultipleModal IN');
+    
+    const newFiles= Array.from(files);
 
     const list = document.getElementById('modal-item-list');
     const button = document.getElementById('multiple-upload');
-
-    console.log('downloadMultiplePhotos button.disabled', button.disabled);
+    const spinner = document.getElementById('selection-spinner');
+    console.log('updateDownloadMultipleModal button.disabled', button.disabled);
+    console.log('updateDownloadMultipleModal spinner', spinner);
+    const fileInput = document.getElementById("fileInput");
+    console.log('updateDownloadMultipleModal current files', fileInput.files);
     
     // delete previous list
     if (button.disabled == true) {
         // the previous list has been uploaded, remove it
         list.innerHTML = "";
     }
-
+    spinner.style.display = "block";
     button.disabled = false;
 
-    if (filesArray.length > 0) {
+    if (newFiles.length > 0) {
         button.style.display = "block";
     }
     else {
         button.style.display = "none";
+        
     }
+    console.log('html-list.length', list.childElementCount);
+    console.log('newFiles.length', newFiles.length);
 
-    for (let i = 0; i < filesArray.length ; i ++) {
-        const file = filesArray[i];
+    for (let i = 0; i < newFiles.length ; i ++) {
+        const file = newFiles[i];
         const reader = new FileReader();
         
-        console.log('list.length', list.childElementCount);
-        console.log('filesArray.length', filesArray.length);
         if ( list.childElementCount == maxFile) {
-            const fileInput = document.getElementById("fileInput");
             fileInput.disabled = true;
             break;
         }
@@ -518,10 +546,10 @@ function downloadMultiplePhotos(files) {
             listItem.className = 'full-item';
             if (lat != undefined) {
                 // Localisation OK
-                let zoomHtml='';
-                if (zoomRatio != undefined && zoomRatio != '1') {
-                    zoomHtml = `<br>Zoom: *${zoomRatio}`;                    
-                }
+                // let zoomHtml='';
+                // if (zoomRatio != undefined && zoomRatio != '1') {
+                //     zoomHtml = `<br>Zoom: *${zoomRatio}`;
+                // }
                 //console.log('renderItemMultiple zoomHtml', zoomHtml);
 
                 listItem.innerHTML = `
@@ -570,9 +598,12 @@ function downloadMultiplePhotos(files) {
             }
             //list.appendChild(spinner);
             list.appendChild(listItem);
+            console.log('renderItemMultiple OUT');
         }
 
         reader.onload = function(event) {
+            console.log( "onload IN");
+        
             const img = document.createElement('img');
             img.src = event.target.result;
             img.className = 'thumbnail';
@@ -580,71 +611,85 @@ function downloadMultiplePhotos(files) {
     
             // Extract EXIF data
             EXIF.getData(file, async function() {
-                console.log( "file: ", file);
-                const exifData = EXIF.getAllTags(this);
-                console.log('EXIF Data:', exifData);
 
-                const lat = EXIF.getTag(this, 'GPSLatitude');
-                const lon = EXIF.getTag(this, 'GPSLongitude');
-                const altitude = EXIF.getTag(this, 'GPSAltitude');
+                //console.log( "EXIF.getData IN file", file);
+                //const exifData = EXIF.getAllTags(this);
+                //console.log('EXIF Data:', exifData);
+
+                const lat = await EXIF.getTag(this, 'GPSLatitude');
+                const lon = await EXIF.getTag(this, 'GPSLongitude');
+                const altitude = await EXIF.getTag(this, 'GPSAltitude');
         
                 if (lat && lon) {
-                    const latRef = EXIF.getTag(this, 'GPSLatitudeRef') || 'N';
-                    const lonRef = EXIF.getTag(this, 'GPSLongitudeRef') || 'E';
+                    const latRef = await EXIF.getTag(this, 'GPSLatitudeRef') || 'N';
+                    const lonRef = await EXIF.getTag(this, 'GPSLongitudeRef') || 'E';
         
                     const latitude = convertDMSToDDExif(lat[0], lat[1], lat[2], latRef);
                     const longitude = convertDMSToDDExif(lon[0], lon[1], lon[2], lonRef);
 
-                    const date = EXIF.getTag(this, 'DateTimeOriginal');
-                    let zoomRatio = EXIF.getTag(this, 'DigitalZoomRation');
+                    const date = await EXIF.getTag(this, 'DateTimeOriginal');
+                    let zoomRatio = await EXIF.getTag(this, 'DigitalZoomRation');
                     if (zoomRatio) {
                         zoomRatio = zoomRatio.toString();
                     }
 
                     let geocod = await reverseGeocoding(latitude, longitude);
-                    //console.log( "onload geocod", geocod);
-                    renderItemMultiple(event.target.result, file.name, latitude, longitude, date, zoomRatio);
 
-                    file.pgpg = {};
-                    file.pgpg.lat = latitude;
-                    file.pgpg.lon = longitude;
-                    file.pgpg.altitude = altitude; // atltide to calculate with denominator
-                    file.pgpg.is_exif = true;
-                    //TODO calculate and fill zoom value
-                    file.pgpg.zoom = zoomRatio;
-                    file.pgpg.date = date;
-                    if (geocod) {
-                        file.pgpg.address = geocod.address;
-                        file.pgpg.address_json = geocod.address_json;
-                        file.pgpg.country_code = geocod.country_code;
+                    if (g_filesArray == null) {
+                        // first files 
+                        g_filesArray = [];
+                    }
+                    if (g_filesArray.length < maxFile) {
+                        
+                        //console.log( "onload geocod", geocod);
+                        renderItemMultiple(event.target.result, file.name, latitude, longitude, date, zoomRatio);
+
+                        file.pgpg = {};
+                        file.pgpg.lat = latitude;
+                        file.pgpg.lon = longitude;
+                        file.pgpg.altitude = altitude; // atltide to calculate with denominator
+                        file.pgpg.is_exif = true;
+                        //TODO calculate and fill zoom value
+                        file.pgpg.zoom = zoomRatio;
+                        file.pgpg.date = date;
+                        if (geocod) {
+                            file.pgpg.address = geocod.address;
+                            file.pgpg.address_json = geocod.address_json;
+                            file.pgpg.country_code = geocod.country_code;
+                        }
+                    
+                        console.log('updateDownloadMultipleModal push file', file);
+                        g_filesArray.push(file);
                     }
                 }
                 else {
+                    // render with error because no EXIF data
                     renderItemMultiple(event.target.result, file.name);
                 }
             });
+            const spinner = document.getElementById('selection-spinner');
+            spinner.style.display = "none";
         };
     
         reader.readAsDataURL(file);
     };
+    console.log('updateDownloadMultipleModal OUT');
 }
 
 // Display thumbnails after selecting files
 // Display thumbnails after selecting files and extract EXIF data
 document.getElementById('fileInput').addEventListener('change', function(event) {
-    console.log('event.target', event.target);
-    const files = event.target.files;
+    //console.log('event.target', event.target);
+    //const files = event.target.files;
 
     if (event.target.multiple == true) {
         // multiple downloads
-        downloadMultiplePhotos(event.target.files);
+        updateDownloadMultipleModal(event.target.files);
     }
     else {
         // single download
         downloadASinglePhoto(event.target.files);
     }
-
-
 });
   
 // Function to convert degrees, minutes, and seconds to decimal degrees

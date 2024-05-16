@@ -163,6 +163,7 @@ class Pg_Download_Multiple_Public {
                                 <input type="file" id="fileInput" name="custom-file[]" multiple>
                                 <div id="modal-item-list"></div>
                                 <br/>
+                                <div id="selection-spinner" class="spinner-border text-primary download-spinner" style="display:none;"></div>
                                 <button type="submit" id="multiple-upload" class="btn btn-primary" style="display: none">Télécharger</button>
                             </form>
                         </div>
@@ -232,7 +233,7 @@ class Pg_Download_Multiple_Public {
         if ($found_id != 0) {
             // image already found in gallery, don not add twice !
             error_log( "File already present, id=$found_id");
-            //$this->update_gallery_image($_REQUEST['galleryId'], $found_id);
+            //$this->add_image_to_gallery($_REQUEST['galleryId'], $found_id);
             $data=array('message' => 'found');
             wp_send_json_success( $data, 200);
         }
@@ -295,7 +296,7 @@ class Pg_Download_Multiple_Public {
                     $_REQUEST['date']);
                 
                 // if gallery id , add to gallery
-                $this->update_gallery_image($_REQUEST['galleryId'], $attachment_id);
+                $this->add_image_to_gallery($_REQUEST['galleryId'], $attachment_id);
 
                 error_log( "Respond success");
                 //wp_send_json_success( "downloaded", 200);
@@ -319,27 +320,36 @@ class Pg_Download_Multiple_Public {
 
     // $gallery_id = id of the gallery
     // $images = array of image id
-    function update_gallery_image($gallery_id, $image_id){
-        error_log("update_gallery_image IN gallery_id=".$gallery_id.", image_id=".$image_id);
+    function add_image_to_gallery($gallery_id, $image_id){
+        error_log("add_image_to_gallery IN gallery_id=".$gallery_id.", image_id=".$image_id);
         global $wpdb;
         $gallery_table = $wpdb->prefix . "glp_gallery";
 
         if( isset($image_id) && $image_id != '' && isset($gallery_id) && $gallery_id != '') {
 
             // first get actual list of images ids
-            $image_ids = $this->pg_get_medias_by_gallery($gallery_id);
-            if ($image_ids != null ) {
-                // add to array
-                $image_ids[] = $image_id;
+            $wpdb->query('START TRANSACTION');
+            $sql = "SELECT * FROM {$gallery_table} WHERE id={$gallery_id} FOR UPDATE";
+            $result = $wpdb->get_results( $sql, "ARRAY_A" );
+            if ( is_null( $result ) || empty( $result ) ) {
+                error_log("add_image_to_gallery OUT null");
+                return null;
+            }
+            error_log("add_image_to_gallery images_id=".$result[0]["images_ids"]);
+            $tab_ids = explode( "***", $result[0]["images_ids"]);
+
+            if ($tab_ids != null ) {
+                // add the given to the array
+                $tab_ids[] = $image_id;
             }
             else {
                 // create array
-                $image_ids = array($image_id);
+                $tab_ids = array($image_id);
             }
 
             // then update the gallery
-            $images = sanitize_text_field( implode( "***", array_filter($image_ids)) );
-            //error_log("update_gallery_image ");
+            $images = sanitize_text_field( implode( "***", array_filter($tab_ids)) );
+            //error_log("add_image_to_gallery ");
             $gallery_result = $wpdb->update(
                 $gallery_table,
                 array("images_ids" => $images),
@@ -347,7 +357,60 @@ class Pg_Download_Multiple_Public {
                 array( "%s" ),
                 array( "%d" )
             );
-            error_log("update_gallery_image OUT");
+            $wpdb->query('COMMIT');
+            error_log("add_image_to_gallery OUT");
+        }
+    }
+
+    // $gallery_id = id of the gallery
+    // $image_id
+    function remove_image_from_gallery($gallery_id, $image_id){
+        error_log("remove_image_from_gallery IN gallery_id=".$gallery_id.", image_id=".$image_id);
+        global $wpdb;
+        $gallery_table = $wpdb->prefix . "glp_gallery";
+
+        if( isset($image_id) && $image_id != '' && isset($gallery_id) && $gallery_id != '') {
+
+            // first get actual list of images ids
+            $wpdb->query('START TRANSACTION');
+            $sql = "SELECT * FROM {$gallery_table} WHERE id={$gallery_id} FOR UPDATE";
+            $result = $wpdb->get_results( $sql, "ARRAY_A" );
+            if ( is_null( $result ) || empty( $result ) ) {
+                error_log("remove_image_from_gallery OUT null");
+                return null;
+            }
+            error_log("remove_image_from_gallery images_id=".$result[0]["images_ids"]);
+            $tab_ids = explode( "***", $result[0]["images_ids"]);
+
+            if ($tab_ids == null ) {
+                // no ids
+                $wpdb->query('ROLLBACK');
+                return;
+            }
+
+            // find the element
+            $pos = array_search($image_id, $tab_ids);
+            if ($pos == false) {
+                // no ids
+                $wpdb->query('ROLLBACK');
+                return;
+            }
+
+            // remove the element
+            unset($tab_ids[$pos]);
+
+            // then update the gallery
+            $images = sanitize_text_field( implode( "***", array_filter($tab_ids)) );
+            //error_log("remove_image_from_gallery ");
+            $gallery_result = $wpdb->update(
+                $gallery_table,
+                array("images_ids" => $images),
+                array( "id" => $gallery_id ),
+                array( "%s" ),
+                array( "%d" )
+            );
+            $wpdb->query('COMMIT');
+            error_log("remove_image_from_gallery OUT");
         }
     }
 
