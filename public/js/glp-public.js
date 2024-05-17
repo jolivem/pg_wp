@@ -129,6 +129,59 @@
             }
         });
 
+
+        // Process when user click on step-forward or step-backward
+        // and when user click on angle-double-right or angle-double-left
+        $(document).find('.edit-photo-option').on('click', function(e){
+            console.log("edit-photo-option click", e);
+            e.preventDefault();
+            let images_id = document.getElementById("images_id").value;
+            let images = images_id.split(',');
+            console.log("edit-photo-option images", images);
+            if (images.length > 1) {
+                const postid = e.target.dataset.postid;
+                console.log("edit-photo-option postid", postid);
+                const isNumber = (element) => element == postid;
+                const index = images.findIndex(isNumber);
+                if (index != -1) {
+                    console.log("edit-photo-option index", index);
+
+                    if (e.target.classList.contains("fa-angle-double-right")) {
+                        // find the following image
+                        if (index < images.length -1) {
+                            let next_id = images[index + 1];
+                            console.log("edit-photo-option next_id", next_id);
+                            let edit_photo_url = document.getElementById('pg_edit_photo_url').value;
+                            edit_photo_url += "?pid=";
+                            edit_photo_url += next_id;
+                            const gallery_id = document.getElementById('gallery-id').value;
+                            edit_photo_url += "&gid=";
+                            edit_photo_url += gallery_id;
+                            console.log("edit-photo-option edit_photo_url", edit_photo_url);
+                            window.location = edit_photo_url;
+                        }
+                    }
+                    else if (e.target.classList.contains("fa-angle-double-left")) {
+                        // find the previous image
+                        if (index > 0) {
+                            let previous_id = images[index - 1];
+                            console.log("edit-photo-option previous_id", previous_id);
+                            let edit_photo_url = document.getElementById('pg_edit_photo_url').value;
+                            edit_photo_url += "?pid=";
+                            edit_photo_url += previous_id;
+                            const gallery_id = document.getElementById('gallery-id').value;
+                            edit_photo_url += "&gid=";
+                            edit_photo_url += gallery_id;
+                            console.log("edit-photo-option edit_photo_url", edit_photo_url);
+                            window.location = edit_photo_url;
+                        }
+                    }
+                }
+            }
+            console.log("edit-photo-option OUT");
+
+        });  
+
         $(document).find('.user-photo-option').on('click', function(e){
             console.log("user-photo-option click", e);
             e.preventDefault();
@@ -278,6 +331,9 @@
                 let edit_photo_url = document.getElementById('pg_edit_photo_url').value;
                 edit_photo_url += "?pid=";
                 edit_photo_url += postid;
+                const gallery_id = document.getElementById('gallery-id').value;
+                edit_photo_url += "&gid=";
+                edit_photo_url += gallery_id;
                 window.location = edit_photo_url;
             }
             if (e.target.classList.contains("fa-trash")) {

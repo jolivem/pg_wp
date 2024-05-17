@@ -78,7 +78,8 @@ class Pg_Edit_Photo_Public {
 
         wp_enqueue_style( 'ays_pb_bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css', array(), $this->version, 'all' );
         wp_enqueue_style('leaflet.css', 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css');
-    }
+        wp_enqueue_style( 'gpg-fontawesome', 'https://use.fontawesome.com/releases/v5.4.1/css/all.css', array(), $this->version, 'all');
+    }        
 
     /**
      * Register the JavaScript for the public-facing side of the site.
@@ -118,34 +119,43 @@ class Pg_Edit_Photo_Public {
         ob_start();
 
         //use the post ID provided in the URL
-        $id=$_GET['pid']; 
+        $pid=$_GET['pid']; 
+
+        // gid is optional, it is present when editing the gallery photos
+        $gid=$_GET['gid']; 
 
         $this->enqueue_styles();
         $this->enqueue_scripts();
 
-        echo $this->pg_show_page( $id );
+        echo $this->pg_show_page( $pid, $gid );
 
         return str_replace(array("\r\n", "\n", "\r"), '', ob_get_clean());
     }
 
     // attr should have the user id
-    public function pg_show_page( $id ){
+    public function pg_show_page( $pid, $gid ){
 
-        error_log("pg_show_page IN photo id = ".$id);
+        error_log("pg_show_page IN photo id = $pid, gid = $gid");
         
         global $wpdb;
-        $post = get_post($id);
+        $post = get_post($pid);
         if ($post != null) {
             // TODO check if user id is a valid user
-            $latitude = get_post_meta($id, 'latitude', true);
-            $longitude = get_post_meta($id, 'longitude', true);
-            $vignette = get_post_meta($id, 'vignette', true);
+            $latitude = get_post_meta($pid, 'latitude', true);
+            $longitude = get_post_meta($pid, 'longitude', true);
+            $vignette = get_post_meta($pid, 'vignette', true);
             $user_status_checked = "";
             $user_status = self::USER_STATUS_PRIVATE;
-            if (get_post_meta($id, 'user_status', true) == self::USER_STATUS_PUBLIC) {
+            if (get_post_meta($pid, 'user_status', true) == self::USER_STATUS_PUBLIC) {
                 $user_status_checked = " checked";
                 $user_status = self::USER_STATUS_PUBLIC;
             }
+
+            $images_str='';
+            if (!empty($gid)) {
+                $images_id = Pg_Edit_Gallery_Public::pg_get_medias_by_gallery( $gid );
+                $images_str = implode(",", $images_id);
+            }            
 
             $content = $post->post_content;
             //$title = $post->post_title;
@@ -163,16 +173,23 @@ class Pg_Edit_Photo_Public {
             $nonce = wp_create_nonce('edit_photo');
             error_log("pg_show_page single admin_ajax_url=".$admin_ajax_url);
 
-            $url_img = wp_get_attachment_image_src($id, "medium");
+            $url_img = wp_get_attachment_image_src($pid, "medium");
             if ($url_img != false) {
                 $img_src = $url_img[0];
             }
+
+            $edit_photo_url = Glp_User_Galleries_Public::get_page_url_from_slug(Pg_Edit_Gallery_Public::PAGE_SLUG_EDIT_PHOTO); // TODO move 186 to a global constant or get by Title
+
             // TODO check url_img is OK, add try catch
             $html_code = "
             <input type='hidden' id='latitude' value='$latitude'/>
             <input type='hidden' id='longitude' value='$longitude'/>
             <input type='hidden' id='vignette' value='$vignette'/>
-            <input type='hidden' id='post_id' value='$id'/>
+            <input type='hidden' id='images_id' value='$images_str'/>
+            <input type='hidden' id='gallery-id' value='$gid'/>
+            <input type='hidden' id='pg_admin_ajax_url' value='$admin_ajax_url'/>
+            <input type='hidden' id='pg_edit_photo_url' value='$edit_photo_url'/>
+            <input type='hidden' id='post_id' value='$pid'/>
             <input type='hidden' id='pg_admin_ajax_url' value='$admin_ajax_url'/>
             <input type='hidden' id='pg_nonce' value='$nonce'/>
             <div class='toast-container position-fixed bottom-0 end-0 p-3'>
@@ -184,13 +201,37 @@ class Pg_Edit_Photo_Public {
                     </div>
                 </div>
             </div>
-            <div class='container'>
+            <div class='container'>";
+            if (!empty($gid)) {
+                // add right and left buttons
+                $html_code .= "
+                <div class='flex-container-photo''>
+                    <div class='slider-options-left' style='background-color: #f1f1f1'>
+                        <div>
+                            <div class='edit-photo-option fas fa-angle-double-left' aria-hidden='true' data-postid='$pid'></div>
+                        </div>
+                    </div>
+                    <div style='display:flex; justify-content: center;'>
+                        <img style='height:200px; width:auto; border: 1px solid #BBB; padding:3px; border-radius: 4px' src='$img_src' alt=''>
+                    </div>
+                    <div class='slider-options-right' style='background-color: #f1f1f1'>
+                        <div>
+                            <div class='edit-photo-option fas fa-angle-double-right' aria-hidden='true' data-postid='$pid'></div>
+                        </div>
+                    </div>
+                </div>";
+                }
+            else {
+
+                $html_code .= "
                 <div style='display:flex; justify-content: center;'>
                     <img style='height:200px; width:auto; border: 1px solid #BBB; padding:3px; border-radius: 4px' src='$img_src' alt=''>
-                </div>
+                </div>";
+            }
+            $html_code .= "
                 <br>
                 <div class='form-floating mb-3'>
-                    <textarea rows='5' style='height:100%;' class='form-control' placeholder='' id='photo-description'>$content</textarea>
+                    <textarea rows='3' style='height:100%;' class='form-control' placeholder='' id='photo-description'>$content</textarea>
                     <label for='photo-description'>Description</label>                        
                 </div>
                 <div class='edit-photo-flex-container'>

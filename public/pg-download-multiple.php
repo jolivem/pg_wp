@@ -362,9 +362,10 @@ class Pg_Download_Multiple_Public {
         }
     }
 
+    // Remove the image from a given gallery
     // $gallery_id = id of the gallery
     // $image_id
-    function remove_image_from_gallery($gallery_id, $image_id){
+    public static function remove_image_from_gallery($gallery_id, $image_id){
         error_log("remove_image_from_gallery IN gallery_id=".$gallery_id.", image_id=".$image_id);
         global $wpdb;
         $gallery_table = $wpdb->prefix . "glp_gallery";
@@ -379,12 +380,14 @@ class Pg_Download_Multiple_Public {
                 error_log("remove_image_from_gallery OUT null");
                 return null;
             }
+            //error_log("remove_image_from_gallery gallery:".print_r($result[0], true));
             error_log("remove_image_from_gallery images_id=".$result[0]["images_ids"]);
             $tab_ids = explode( "***", $result[0]["images_ids"]);
 
             if ($tab_ids == null ) {
                 // no ids
                 $wpdb->query('ROLLBACK');
+                error_log("remove_image_from_gallery OUT not images");
                 return;
             }
 
@@ -393,6 +396,7 @@ class Pg_Download_Multiple_Public {
             if ($pos == false) {
                 // no ids
                 $wpdb->query('ROLLBACK');
+                error_log("remove_image_from_gallery OUT not found");
                 return;
             }
 
@@ -401,6 +405,7 @@ class Pg_Download_Multiple_Public {
 
             // then update the gallery
             $images = sanitize_text_field( implode( "***", array_filter($tab_ids)) );
+            error_log("remove_image_from_gallery new image list: ".$images);
             //error_log("remove_image_from_gallery ");
             $gallery_result = $wpdb->update(
                 $gallery_table,
@@ -414,7 +419,7 @@ class Pg_Download_Multiple_Public {
         }
     }
 
-    public function pg_get_medias_by_gallery( $id ) {
+/*    public function pg_get_medias_by_gallery( $id ) {
         error_log("pg_get_medias_by_gallery IN gallery_id=".$id);
         global $wpdb;
 
@@ -428,7 +433,7 @@ class Pg_Download_Multiple_Public {
         $image_ids = explode( "***", $result["images_ids"]);
         return $image_ids;
     }
-
+*/
     // Finf of the file already exists
     // return 0 if not exists
     // return the attachment id (>0) if exists
@@ -474,6 +479,30 @@ class Pg_Download_Multiple_Public {
         return 0;
     
     }
+
+    // $user_id : the user to which belong the galleries
+    // $image_id the post id
+    public static function remove_image_from_galleries($user_id, $image_id){
+        error_log("remove_image_from_galleries IN user_id=".$user_id.", image_id=".$image_id);
+        global $wpdb;
+        $gallery_table = $wpdb->prefix . "glp_gallery";
+
+        if( isset($image_id) && $image_id != '') {
+
+            $sql = "SELECT * FROM ".$gallery_table." WHERE user_id=$user_id";
+            //error_log("pg_get_galleries_by_user_id sql: ".$sql);
+            $results = $wpdb->get_results($sql, 'ARRAY_A');
+            
+            // loop on galleries
+            foreach($results as $gallery){
+                //error_log("remove_image_from_galleries gallery:".print_r($gallery, true));
+                // TODO optimize by giving the whole gallery dict
+                Pg_Download_Multiple_Public::remove_image_from_gallery($gallery['id'], $image_id);
+            }
+
+            error_log("remove_image_from_galleries OUT");
+        }
+    }    
 
     function join_paths() {
         $paths = array();

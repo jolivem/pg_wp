@@ -282,7 +282,7 @@ class Glp_User_Galleries_Public {
 
     // Get the first image of the gallery
     // Return the image id or null if none
-    function pg_get_images_by_id( $gallery_id ) {
+    static public function pg_get_images_by_id( $gallery_id ) {
         global $wpdb;
         //error_log("pg_get_first_image_by_id id: ".$gallery_id);
 
@@ -301,5 +301,4 @@ class Glp_User_Galleries_Public {
 
         // return null;
     }
-
 }

@@ -561,7 +561,7 @@ function updateDownloadMultipleModal(files) {
                         <img src="${src}" class="full-miniature"></img>
                         <div class="full-photo-text-container" style="flex: 10 0 200px;">
                             <div class="photo-title">${name}</div>
-                            <div class="photo-text">Localisation OK<br/>Date : ${date}${zoomHtml}</div>
+                            <div class="photo-text">Localisation OK<br/>Date : ${date}</div>
                         </div>
                         <div class="flex-options-3" style="background-color: lightblue">
                             <div data-id="'.$id.'">

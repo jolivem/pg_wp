@@ -144,6 +144,10 @@ class Glp_User_Photos_Public {
             return $html_code;    
         }
         error_log("Glp_User_Photos_Public::pg_show_page count image =". count($medias));
+
+
+        $medias_nb = $this->pg_get_nb_galleries_per_media($user_id);
+
         $admin_ajax_url = admin_url('admin-ajax.php');
         //$admin_post_url = admin_url('admin-post.php');
         $nonce = wp_create_nonce('user_photos');
@@ -165,14 +169,16 @@ class Glp_User_Photos_Public {
         </div>
         <div class='container' id='user-item-list'>";
 
-        $html_code .= $this->render_images($medias);
+        $html_code .= $this->render_images($medias, $medias_nb);
         $html_code .= 
         '</div>';
 
         return $html_code;
     } 
 
-    function render_images($medias){
+    // $medias = array with medias IDs
+    // $medias_nb = dictionnay of mediaID => nb galleries
+    function render_images($medias, $medias_nb){
         $html='';
 
         // loop for each media
@@ -188,6 +194,18 @@ class Glp_User_Photos_Public {
             $metadate = get_post_meta($item->ID, 'date', true);
             $date = Pg_Edit_Gallery_Public::get_photo_date($metadate);
             
+            $textnbgalleries='';
+            if (array_key_exists($item->ID, $medias_nb)) {
+                if ($medias_nb[$item->ID] == 1) {
+                    $textnbgalleries='1 gallerie';
+                }
+                else {
+                    $textnbgalleries=$medias_nb[$item->ID]." galleries";
+                }
+            }
+            else {
+                $textnbgalleries='Sans gallerie';
+            }
 
             //error_log("render_images url:".print_r($url_img, true));
             // TODO check url_img is OK, add try catch
@@ -195,11 +213,14 @@ class Glp_User_Photos_Public {
             '<div class="flex-container">
                 <div class="miniature" style="background-image: url('.$img_src.')"></div>
                 <div class="photo-text-container";>
-                    <div class="photo-title">'.$item->post_title.'</div>
                     <div class="photo-text-user">'.$item->post_content.'</div>
                     <div class="footer-edit-gallery">
-                        <div>Date : '.$date.'</div>
-                        <div>'.$statext.'</div>
+                        <div class="photo-text-date">'.$date.'</div>
+                        <div class="photo-text-date">'.$textnbgalleries.'</div>
+                    </div>
+                    <div class="footer-edit-gallery">
+                        <div class="photo-text-date">'.$item->post_name.'</div>
+                        <div class="photo-text-date">'.$statext.'</div>
                     </div>
                 </div>
                 <div class="options" style="background-color: lightblue">
@@ -301,6 +322,9 @@ class Glp_User_Photos_Public {
         wp_delete_attachment( $pid, true );
         wp_delete_post( $pid, true);
 
+        // delete also in galleries
+        Pg_Download_Multiple_Public::remove_image_from_galleries($user_id, $pid);
+        
         // delete also in Geoposts table
         Pg_Geoposts_Table::delete_post($pid);
 
@@ -308,5 +332,26 @@ class Glp_User_Photos_Public {
         wp_send_json_success( null, 200);
         wp_die();
         
-    }    
+    }
+
+    function pg_get_nb_galleries_per_media($user_id) {
+        
+        $medias_nb= [];
+        $galleries = Glp_User_Galleries_Public::pg_get_galleries_by_user_id($user_id);
+        foreach($galleries as $item){
+            
+            $image_ids = Glp_User_Galleries_Public::pg_get_images_by_id($item["id"]);
+            for( $iid = 0; $iid < count($image_ids); $iid++ ){
+                if (!array_key_exists($image_ids[$iid], $medias_nb)) {
+                    $medias_nb[$image_ids[$iid]] = 1;
+                }
+                else {
+                    $medias_nb[$image_ids[$iid]] += 1;
+                }
+            }               
+        }
+        error_log("pg_get_nb_galleries_per_media medias_nb:".print_r($medias_nb, true));
+        return $medias_nb;
+    }
+
 }

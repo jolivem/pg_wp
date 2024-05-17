@@ -253,7 +253,7 @@ class Pg_Edit_Gallery_Public {
 
     // $id = gallery id
     // return an array with image IDs
-    public function pg_get_medias_by_gallery( $id ) {
+    public static function pg_get_medias_by_gallery( $id ) {
         error_log("pg_get_medias_by_gallery IN gallery_id=".$id);
         global $wpdb;
 
@@ -289,7 +289,6 @@ class Pg_Edit_Gallery_Public {
                     $img_src = $url_img[0];
                 }
 
-                
                 //error_log("render_images content=".print_r($post, true));
                 $content = $post->post_content;
                 $title = $post->post_title;
@@ -299,7 +298,7 @@ class Pg_Edit_Gallery_Public {
                 $date = Pg_Edit_Gallery_Public::get_photo_date($metadate);
 
 
-                //TODO get title and text
+                //TODO get title and text  <div class="photo-text-date">'.$date.'</div>
                 //error_log("render_images url:".print_r($url_img, true));
                 // TODO check url_img is OK, add try catch
                 $html.=
@@ -307,11 +306,14 @@ class Pg_Edit_Gallery_Public {
                     <div class="flex-container" style="margin-top:0px">
                         <div class="miniature" style="background-image: url('.$img_src.')"></div>
                         <div class="photo-text-container">
-                            <div class="photo-title">'.$title.'</div>
                             <div class="photo-text-gallery">'.$content.'</div>
                             <div class="footer-edit-gallery">
-                                <div>Date : '.$date.'</div>
-                                <div>'.$statext.'</div>
+                                <div class="photo-text-date">'.$date.'</div>
+                                <div></div>
+                            </div>
+                            <div class="footer-edit-gallery">
+                                <div class="photo-text-date">'.$post->post_name.'</div>
+                                <div class="photo-text-date">'.$statext.'</div>
                             </div>
                         </div>
                         <div class="options-photo-gallery" data-id="'.$id.'" style="background-color: lightblue">
