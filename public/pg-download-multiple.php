@@ -207,6 +207,12 @@ class Pg_Download_Multiple_Public {
             return;
         }
 
+        if( $_REQUEST['lat'] == "NaN" ) {
+            error_log("download_multiple_photos Latitude = NaN ");
+            wp_send_json_error( "NOK.", 404 );
+            return;
+        }
+
         $user_id = get_current_user_id();
         if ($user_id == 0) {
             error_log("download_multiple_photos No USER");
