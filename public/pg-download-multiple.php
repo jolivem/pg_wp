@@ -94,25 +94,8 @@ class Pg_Download_Multiple_Public {
 
     public function enqueue_styles_early(){
 
-        $settings_options = Gallery_Settings_Actions::ays_get_setting('options');
-        if($settings_options){
-            $settings_options = json_decode(stripcslashes($settings_options), true);
-        }else{
-            $settings_options = array();
-        }
-
         // General CSS File
-        $settings_options['gpg_exclude_general_css'] = isset($settings_options['gpg_exclude_general_css']) ? esc_attr( $settings_options['gpg_exclude_general_css'] ) : 'off';
-        $gpg_exclude_general_css = (isset($settings_options['gpg_exclude_general_css']) && esc_attr( $settings_options['gpg_exclude_general_css'] ) == "on") ? true : false;
-
-        if ( ! $gpg_exclude_general_css ) {
-            wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/glp-public.css', array(), $this->version, 'all' );
-        }else {
-            if ( ! is_front_page() ) {
-                wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/glp-public.css', array(), $this->version, 'all' );
-            }
-        }
-        
+        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/glp-public.css', array(), $this->version, 'all' );
         wp_enqueue_script('jquery');
     }
     
@@ -237,10 +220,12 @@ class Pg_Download_Multiple_Public {
         // compare url and guid and author and size and lon lat
         $found_id = $this->find_media_by_author_and_guid($user_id, $movefile[ 'url' ]);
         if ($found_id != 0) {
-            // image already found in gallery, don not add twice !
-            error_log( "File already present, id=$found_id");
-            //$this->add_image_to_gallery($_REQUEST['galleryId'], $found_id);
-            $data=array('message' => 'found');
+            // image already found in media library !
+            error_log( "File already present in media library, id=$found_id");
+
+            // Add image to the current gallery if not already present
+            $this->add_image_to_gallery($_REQUEST['galleryId'], $found_id);
+            $data=array('message' => 'done');
             wp_send_json_success( $data, 200);
         }
         else {
@@ -338,6 +323,7 @@ class Pg_Download_Multiple_Public {
             $sql = "SELECT * FROM {$gallery_table} WHERE id={$gallery_id} FOR UPDATE";
             $result = $wpdb->get_results( $sql, "ARRAY_A" );
             if ( is_null( $result ) || empty( $result ) ) {
+                $wpdb->query('ROLLBACK');
                 error_log("add_image_to_gallery OUT null");
                 return null;
             }
@@ -345,7 +331,16 @@ class Pg_Download_Multiple_Public {
             $tab_ids = explode( "***", $result[0]["images_ids"]);
 
             if ($tab_ids != null ) {
-                // add the given to the array
+                // find if exists
+                $pos = array_search($image_id, $tab_ids);
+                if ($pos == true) {
+                    // no ids
+                    $wpdb->query('ROLLBACK');
+                    error_log("add_image_to_gallery image already in gallery");
+                    return;
+                }
+                
+                // add the given id to the array
                 $tab_ids[] = $image_id;
             }
             else {
@@ -383,6 +378,7 @@ class Pg_Download_Multiple_Public {
             $sql = "SELECT * FROM {$gallery_table} WHERE id={$gallery_id} FOR UPDATE";
             $result = $wpdb->get_results( $sql, "ARRAY_A" );
             if ( is_null( $result ) || empty( $result ) ) {
+                $wpdb->query('ROLLBACK');                
                 error_log("remove_image_from_gallery OUT null");
                 return null;
             }

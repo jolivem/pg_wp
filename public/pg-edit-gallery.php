@@ -172,8 +172,10 @@ class Pg_Edit_Gallery_Public {
                 error_log("pg_show_page Gallery not found");
                 return "";
             }
-            $title = $gallery["title"];
-            $description = $gallery["description"];
+            $title = stripslashes($gallery["title"]);
+            error_log("pg_show_page gallery['title'] = " . $gallery["title"]);
+            error_log("pg_show_page title = " .  $title);
+            $description = stripslashes($gallery["description"]);
             $medias = $this->pg_get_medias_by_gallery($id);
             if ($medias != null) {
                 $html_images = $this->render_images($medias);
@@ -205,13 +207,18 @@ class Pg_Edit_Gallery_Public {
                 </div>
             </div>
         </div>
-        <div class='container'>
+        <div class='pg-container'>
             <div class='tab-content'>
             
                 <div>
                     <div class='form-floating mb-3'>
-                        <input type='text' name='title' class='form-control' id='gallery-title' aria-describedby='titleHelp' placeholder='' value='$title'>
-                        <label for='gallery-title'>Titre de la galerie</label>
+                        <input type='text' name='title' class='form-control' id='gallery-title' aria-describedby='titleHelp' placeholder=''";
+                        
+        // display a quote between quotes is not possible
+        // th only way is to use value with double quotes
+        $html_code .= 'value="'.$title.'">';
+        $html_code .= "
+                        <label for='gallery-title'>Titre</label>
                     </div>
                     <div class='form-floating mb-3'>
                         <textarea rows='4' name='desc' style='height:100%;' class='form-control' placeholder='' id='gallery-description'>$description</textarea>
@@ -273,7 +280,8 @@ class Pg_Edit_Gallery_Public {
         return $image_ids;
     }
 
-    // render all the images 
+    // render all the images
+    // $medias = list od media ids
     function render_images($medias){
         //error_log("render_images IN images=".print_r($medias, true));
         $html='<div class="sortable-list" id="item-list">';
@@ -291,8 +299,8 @@ class Pg_Edit_Gallery_Public {
                 }
 
                 //error_log("render_images content=".print_r($post, true));
-                $content = $post->post_content;
-                $title = $post->post_title;
+                $content = stripslashes($post->post_content);
+                $title = stripslashes($post->post_title);
 
                 $statext = $this->get_photo_status($id);
                 $metadate = get_post_meta($id, 'date', true);
@@ -304,7 +312,7 @@ class Pg_Edit_Gallery_Public {
                 // TODO check url_img is OK, add try catch
                 $html.=
                 '<li class="item" draggable="true" data-id="'.$id.'">
-                    <div class="flex-container" style="margin-top:0px">
+                    <div class="flex-container">
                         <div class="miniature" style="background-image: url('.$img_src.')"></div>
                         <div class="photo-text-container">
                             <div class="photo-text-gallery">'.$content.'</div>
@@ -622,8 +630,10 @@ class Pg_Edit_Gallery_Public {
         }
         error_log("image_ids ".$images_ids);
         $id = ( $data["gallery_id"] != NULL ) ? absint( intval( $data["gallery_id"] ) ) : null;
-        $title = (isset($data["title"]) && $data["title"] != '') ? stripslashes(sanitize_text_field( $data["title"] )) : '';
-        $description = !isset($data['desc']) ? '' : wp_kses_post( $data['desc'] );
+        // $title = (isset($data["title"]) && $data["title"] != '') ? stripslashes(sanitize_text_field( $data["title"] )) : '';
+        // $description = (isset($data["desc"]) && $data["desc"] != '') ? stripslashes(sanitize_text_field( $data["desc"] )) : '';
+        $title = (isset($data["title"]) && $data["title"] != '') ? sanitize_text_field( $data["title"] ) : '';
+        $description = (isset($data["desc"]) && $data["desc"] != '') ? sanitize_text_field( $data["desc"] ) : '';
 
         // TODO get current author
     
@@ -661,7 +671,7 @@ class Pg_Edit_Gallery_Public {
         <div class="modal fade" id="delete-confirmation" tabindex="-1" aria-labelledby="delete-confirmation-label" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="container">
+                    <div class="pg-container">
                         <div class="modal-header">
                             <h5 class="modal-title" id="delete-confirmation-label">Suppression de la galerie</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -681,37 +691,4 @@ class Pg_Edit_Gallery_Public {
         
         return $html_code;
     }
-
-    // public function remove_post_from_gallery($post_id, $gallery_id){
-    //     global $wpdb;
-    //     $gallery_table = $wpdb->prefix . "glp_gallery";
-
-    //     $gallery = $this->pg_get_gallery_by_id($gallery_id);
-    //     if ($gallery) {
-
-    //         $image_ids = explode( "***", $result["images_ids"]);
-
-    //         // search post_id and delete it
-    //         if(($key = array_search($post_id, $image_ids)) !== false) {
-    //             unset($image_ids[$key]);
-
-    //             // update table
-    //             $gallery_table = $wpdb->prefix . "glp_gallery";
-
-    //             $images = sanitize_text_field( implode( "***", array_filter($image_ids)) );
-    //             //error_log("remove_post_from_gallery");
-    //             $gallery_result = $wpdb->update(
-    //                 $gallery_table,
-    //                 array("images_ids" => $images),
-    //                 array( "id" => $gallery_id ),
-    //                 array( "%s" ),
-    //                 array( "%d" )
-    //             );
-    //             error_log("remove_post_from_gallery OUT");                
-            
-    //         }
-    //     }
-
-    // }
-
 }

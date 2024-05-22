@@ -93,25 +93,7 @@ class Glp_User_Photos_Public {
 
     public function enqueue_styles_early(){
 
-        $settings_options = Gallery_Settings_Actions::ays_get_setting('options');
-        if($settings_options){
-            $settings_options = json_decode(stripcslashes($settings_options), true);
-        }else{
-            $settings_options = array();
-        }
-
-        // General CSS File
-        $settings_options['gpg_exclude_general_css'] = isset($settings_options['gpg_exclude_general_css']) ? esc_attr( $settings_options['gpg_exclude_general_css'] ) : 'off';
-        $gpg_exclude_general_css = (isset($settings_options['gpg_exclude_general_css']) && esc_attr( $settings_options['gpg_exclude_general_css'] ) == "on") ? true : false;
-
-        if ( ! $gpg_exclude_general_css ) {
-            wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/glp-public.css', array(), $this->version, 'all' );
-        }else {
-            if ( ! is_front_page() ) {
-                wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/glp-public.css', array(), $this->version, 'all' );
-            }
-        }
-        
+        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/glp-public.css', array(), $this->version, 'all' );
         wp_enqueue_script('jquery');
     }
     
@@ -223,11 +205,9 @@ class Glp_User_Photos_Public {
                         <div class="photo-text-date">'.$statext.'</div>
                     </div>
                 </div>
-                <div class="options" style="background-color: lightblue">
-                    <div class="flex-options">
-                        <i class="user-photo-option pointer-icon fas fa-edit" aria-hidden="true" data-postid="'.$item->ID.'"></i>
-                        <i class="user-photo-option pointer-icon fas fa-trash" aria-hidden="true" data-postid="'.$item->ID.'"></i>
-                    </div>
+                <div class="options-photo-gallery" style="background-color: lightblue">
+                    <i class="user-photo-option pointer-icon fas fa-edit" aria-hidden="true" data-postid="'.$item->ID.'"></i>
+                    <i class="user-photo-option pointer-icon fas fa-trash" aria-hidden="true" data-postid="'.$item->ID.'"></i>
                 </div>
             </div>';
             

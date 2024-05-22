@@ -157,7 +157,7 @@ class Pg_Edit_Photo_Public {
                 $images_str = implode(",", $images_id);
             }            
 
-            $content = $post->post_content;
+            $content = stripslashes($post->post_content);
             //$title = $post->post_title;
 
             error_log("pg_show_page latitude=$latitude, longitude=$longitude, vignette=$vignette, user_status=$user_status");

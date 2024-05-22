@@ -287,7 +287,7 @@ var animateMarkerByImage = function(img) {
     g_markers = L.markerClusterGroup({
         zoomToBoundsOnClick: true,
         iconCreateFunction: function(cluster) {
-            console.log('iconCreateFunction IN XXXXXXXXXXXXXXXXXXXXXXXX cluster:', cluster);
+            //console.log('iconCreateFunction IN XXXXXXXXXXXXXXXXXXXXXXXX cluster:', cluster);
             //console.log('iconCreateFunction getChildCount', cluster.getChildCount());
 
             /*var markers = cluster.getAllChildMarkers();
@@ -296,9 +296,9 @@ var animateMarkerByImage = function(img) {
             */
             var children = cluster.getAllChildMarkers()[0];
 
-            console.log('icon', children.options.icon);
+            //console.log('icon', children.options.icon);
             var iicoon = new L.Icon(children.options.icon.options);
-            console.log('iicoon', iicoon);
+            //console.log('iicoon', iicoon);
             var count = cluster.getChildCount();
             if (count < 6) {
                 iicoon.options.className = 'mydivmarker6';    
@@ -309,7 +309,7 @@ var animateMarkerByImage = function(img) {
             else {
                 iicoon.options.className = 'mydivmarker12';    
             }
-            console.log( 'g_selectedImageSrc', g_selectedImageSrc);
+            //console.log( 'g_selectedImageSrc', g_selectedImageSrc);
             if (g_selectedImageSrc != null) {
                 iicoon.options.iconSize = [100,100];
                 iicoon.options.iconUrl = g_selectedImageSrc;
@@ -325,9 +325,9 @@ var animateMarkerByImage = function(img) {
 
             return iicoon;
         },
-        spiderfyOnMaxZoom: false, 
-        showCoverageOnHover: true, 
-        zoomToBoundsOnClick: false 
+        //spiderfyOnMaxZoom: false, 
+        //showCoverageOnHover: true
+        //zoomToBoundsOnClick: false 
     }); 
 
     /*map = L.map('map').setView([0,0], zoom);*/
@@ -338,7 +338,7 @@ var animateMarkerByImage = function(img) {
     }).addTo(g_map);    
 
     /* when clicked on marker */
-    g_markers.on('click BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB', function (a) {
+    g_markers.on('click', function (a) {
         console.log('click marker ', a.layer.options.icon.options.iconUrl);
         selectSliderImageBySrc(a.layer.options.icon.options.iconUrl, true); 
         let visibleOne = g_markers.getVisibleParent(a.layer);
@@ -350,7 +350,7 @@ var animateMarkerByImage = function(img) {
         console.log('clusterclick ', a);
         console.log('L ', L); */
         let visibleOne = g_markers.getVisibleParent(a.layer);
-        console.log('clusterclick BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB: visibleOne', visibleOne);
+        //console.log('clusterclick BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB: visibleOne', visibleOne);
         visibleOne.refreshIconOptions({
                     iconSize:     [100, 100],
                 }, true);

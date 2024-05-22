@@ -620,20 +620,21 @@ button.lg-icon {
     background-position: right;
     background-size: cover;
     border-left: 1px solid white;
-    flex-basis: 50px;
+    flex-basis: 30px;
 }
 
 .miniature3 {
     background-position: right;
     background-size: cover;
     border-left: 1px solid white;
-    flex-basis: 20px;
+    flex-basis: 15px;
 }
 
 .photo-text-container {
-    flex: 10 0 200px;
+    flex: 10 0 180px;
     padding: 5px;
     height: 100px;
+    font-size: small;
 }
 
 
@@ -871,7 +872,6 @@ body {
     list-style: none;
     cursor: move;
     margin-top: 10px;
-    border-radius: 10px;
 }
 
 .item.dragging {
@@ -917,7 +917,8 @@ body {
     border: 2px solid #e5e5e5;
     border-radius: 7px;
     margin-top: 10px;
-    max-width: 600px;
+    /* see pg-container */
+    max-width: 800px;
     min-width: 50%;
     padding: 5px;
     background-color: #f1f1f1;
@@ -943,4 +944,13 @@ body {
 .desc-lightbox-address {
     font-size: small;
     font-weight: lighter;
+}
+
+.pg-container {
+    max-width: 800px !important;
+    /* see desc-gallery */
+}
+
+.toast {
+    --bs-toast-max-width: 250px;
 }

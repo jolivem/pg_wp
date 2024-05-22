@@ -142,9 +142,9 @@ class Pg_Show_Planet_Map_Public {
         $html_code = "
         <input type='hidden' id='page_nonce' value='$nonce'/>
         <input type='hidden' id='pg_admin_ajax_url' value='$admin_ajax_url'/>
-        <div class='container'>
+        <div class='container pg-container'>
             <form id='searchForm' class='search-place'>
-                <input type='text' class='form-control' id='searchInput' placeholder='Entrez un lieu ou une adresse'>
+                <input type='text' class='form-control' id='searchInput' placeholder='Entrez un lieu'>
                 <button type='button' id='searchButton' class='btn btn-primary'>Rechercher</button>
             </form>
             <div id='map' style='height:300px;'></div>
@@ -176,87 +176,6 @@ class Pg_Show_Planet_Map_Public {
 
     // render all the images 
     // medias is an array of array with 'post_id'
-/*    function render_slider($medias){
-        //error_log("render_slider IN images=".print_r($medias, true));
-        $html_slider='';
-        $html_descr='';    // description in page, under the slider
-        $num=0;
-        // loop for each media
-        foreach($medias as $media){
-            $id=$media['post_id'];
-            $post = get_post($id);
-            $url_img = wp_get_attachment_image_src($id, "medium");
-            if ($post != null && $url_img != false) {
-                //$address_json = $post->post_excerpt;
-                $content = $post->post_content;
-                //$address = $post->post_name;
-                $address = $post->post_title;
-                error_log("render_medias_address post=".print_r($post, true));
-                //$small_address = $addr['country']." ".$addr['county']." ". $addr['village'];
-                $meta = get_post_meta($id);
-                $metadate = $meta['date'][0];
-                $date = $date = Pg_Edit_Gallery_Public::get_photo_date($metadate);
-                $user = get_user_by( 'ID', $post->post_author );
-        
-                // Description of the photo below the slider
-                $html_descr.="<div id='desc-$id' class='desc-slider desc-display'>";
-                if ($content != "") {
-                    $html_descr.="<div class='desc-slider-title'>$content</div>";
-                }
-                $html_descr.="<div class='desc-slider-address'>Prise de vue : $address</div>";
-                $html_descr.="</div>";            
-
-                //error_log("render_images id:".$id);
-                //$img_src = $item->guid;
-                $img_src_medium = "";
-                $img_src_full = "";
-
-                error_log("render_slider ".print_r($url_img, true));
-                $img_src_medium = $url_img[0];
-            
-                $url_img = wp_get_attachment_image_src($id, "full");
-                if ($url_img != false) {
-                    $img_src_full = $url_img[0];
-                }
-
-                $html_slider.="
-                <div class='slider-item'>
-                    <div class='toto' data-full='$img_src_full'>
-                        <img src='$img_src_medium' id='slider-$id' class='imgNotSelected'>
-                        <div class='slider-descr'>";
-                
-                // description of the photo INSIDE the lightbox
-                if ($content != "") {
-                    $html_slider.="
-                            <div class='desc-lightbox-title'>$content</div>";
-                }
-                $html_slider.="
-                            <div class='desc-lightbox-address'>Prise de vue : $address</div>";
-                if ($user->display_name != "") {
-                    $html_slider.="
-                    <div class='desc-lightbox-address'>Photographe : <b>$user->display_name</b>, le $date</div>";
-                }
-                else {
-                    $html_slider.="
-                    <div class='desc-lightbox-address'>Prise le $date</div>";
-                }
-                $html_slider.="
-                        </div>
-                    </div>
-                    <div class='slider-overlay-circle'>
-                        <i class='far fa-dot-circle slider-icon' data-num='$num'></i>
-                    </div>
-                    <div class='slider-overlay-text'>
-                        <i class='fas fa-align-center slider-icon' data-num='$num'></i>
-                    </div>
-                </div>";
-                $num = $num + 1;
-                
-            }
-        }
-        return [$html_slider, $html_descr];
-    } */
-
     // medias is an array of array with 'post_id'
  
     // create map, markers and lightbox

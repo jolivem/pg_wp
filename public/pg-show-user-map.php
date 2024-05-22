@@ -136,8 +136,8 @@ class Pg_Show_User_Map_Public {
             return "";
         }
         $id = $gallery["id"];
-        $gtitle = $gallery["title"];
-        $gdescription = $gallery["description"];
+        $gtitle = stripslashes($gallery["title"]);
+        $gdescription = stripslashes($gallery["description"]);
         if(!$gallery){
             error_log("pg_show_page Gallery not found");
             return "";
@@ -155,7 +155,7 @@ class Pg_Show_User_Map_Public {
         <div class='desc-slider-title'>$content</div>
     </div>";*/
         $html_code = "
-        <div class='container'>
+        <div class='pg-container'>
             <div class='desc-block'>
                 <div class='desc-gallery'>
                     <h4 class='desc-title'>$gtitle</h4>

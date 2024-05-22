@@ -72,7 +72,7 @@ class Glp_User_Galleries_Public {
         wp_enqueue_style( 'gpg-fontawesome', 'https://use.fontawesome.com/releases/v5.4.1/css/all.css', array(), $this->version, 'all');
         wp_enqueue_style( 'ays_pb_bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css', array(), $this->version, 'all' );
 		wp_enqueue_style( 'animate.css', plugin_dir_url( __FILE__ ) . 'css/animate.css', array(), $this->version, 'all' );
-    }
+        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/glp-public.css', array(), $this->version, 'all' );    }
 
     /**
      * Register the JavaScript for the public-facing side of the site.
@@ -87,8 +87,6 @@ class Glp_User_Galleries_Public {
     }
 
     public function enqueue_styles_early(){
-
-        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/glp-public.css', array(), $this->version, 'all' );
         wp_enqueue_script('jquery');
     }
     
@@ -149,7 +147,7 @@ class Glp_User_Galleries_Public {
         <input type='hidden' id='pg_show_gallery_url' value='$show_gallery_url'/>
         <input type='hidden' id='pg_admin_ajax_url' value='$admin_ajax_url'/>
         <input type='hidden' id='pg_nonce' value='$nonce'/>
-        <div class='container' id='user-item-list'>
+        <div class='pg-container' id='user-item-list'>
             <br/>
             <div class='tab-pane fade show active' id='nav-photos' role='tabpanel' aria-labelledby='nav-photos-tab'>
                 <button type='button' class='btn btn-primary' id='user-galleries-create'>
@@ -171,6 +169,8 @@ class Glp_User_Galleries_Public {
         // loop for each media
         foreach($galleries as $item){
             error_log("render_galleries item:".print_r($item, true));
+            $title = stripslashes($item["title"]);
+            $desc = stripslashes($item["description"]);
             
             // get the first image og the gallery
             $image_ids = $this->pg_get_images_by_id($item["id"]);
@@ -212,16 +212,14 @@ class Glp_User_Galleries_Public {
                 <div class="miniature2" style="background-image: url('.$img_src2.')"></div>
                 <div class="miniature3" style="background-image: url('.$img_src3.')"></div>
                 <div class="photo-text-container">
-                    <div class="gallery-title">'.$item["title"].'</div>
-                    <div class="gallery-text">'.$item["description"].'</div>
+                    <div class="gallery-title">'.$title.'</div>
+                    <div class="gallery-text">'.$desc.'</div>
                     <div class="footer-user-galleries">Modifiée le '.$date.'</div>
                 </div>
-                <div class="options" style="background-color: lightgreen">
-                    <div class="flex-options-2">
-                        <div class="user-gallery-option pointer-icon fas fa-edit" aria-hidden="true" data-galid="'.$item["id"].'"></div>
-                        <div class="user-gallery-option pointer-icon fas fa-eye" aria-hidden="true" data-galuuid="'.$item["uuid"].'"></div>
-                        <div class="user-gallery-option pointer-icon fas fa-share-alt" aria-hidden="true" data-galuuid="'.$item["uuid"].'"></div>
-                    </div>
+                <div class="options-photo-gallery" style="background-color: lightgreen">
+                    <div class="user-gallery-option pointer-icon fas fa-edit" aria-hidden="true" data-galid="'.$item["id"].'"></div>
+                    <div class="user-gallery-option pointer-icon fas fa-eye" aria-hidden="true" data-galuuid="'.$item["uuid"].'"></div>
+                    <div class="user-gallery-option pointer-icon fas fa-share-alt" aria-hidden="true" data-galuuid="'.$item["uuid"].'"></div>
                 </div>
             </div>
             <div class="toast-container position-fixed bottom-0 end-0 p-3">

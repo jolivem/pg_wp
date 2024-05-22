@@ -539,7 +539,7 @@ function updateDownloadMultipleModal(files) {
             break;
         }
   
-        function renderItemMultiple(src, name, lat, lon, date, zoomRatio) {
+        function renderItemMultiple(src, name, lat, lon, date) {
             console.log('renderItemMultiple IN', name);
             const list = document.getElementById('modal-item-list');
             const listItem = document.createElement('div');
@@ -628,9 +628,10 @@ function updateDownloadMultipleModal(files) {
                     const longitude = convertDMSToDDExif(lon[0], lon[1], lon[2], lonRef);
 
                     const date = await EXIF.getTag(this, 'DateTimeOriginal');
-                    let zoomRatio = await EXIF.getTag(this, 'DigitalZoomRation');
-                    if (zoomRatio) {
-                        zoomRatio = zoomRatio.toString();
+                    let zoomRatio = '';
+                    let zoomExif = await EXIF.getTag(this, 'DigitalZoomRation');
+                    if (zoomExif) {
+                        zoomRatio = zoomExif.toString();
                     }
 
                     let geocod = await reverseGeocoding(latitude, longitude);
@@ -642,7 +643,7 @@ function updateDownloadMultipleModal(files) {
                     if (g_filesArray.length < maxFile) {
                         
                         //console.log( "onload geocod", geocod);
-                        renderItemMultiple(event.target.result, file.name, latitude, longitude, date, zoomRatio);
+                        renderItemMultiple(event.target.result, file.name, latitude, longitude, date);
 
                         file.pgpg = {};
                         file.pgpg.lat = latitude;
@@ -663,7 +664,7 @@ function updateDownloadMultipleModal(files) {
                     }
                 }
                 else {
-                    // render with error because no EXIF data
+                    // render without lat,lon -> error because no EXIF data
                     renderItemMultiple(event.target.result, file.name);
                 }
             });
