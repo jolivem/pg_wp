@@ -122,7 +122,9 @@ class Glp_User_Photos_Public {
             $edit_gallery_url .= "?gid=-1";
             //<input type='hidden' id='pg_edit_gallery_url' value='$edit_gallery_url'/>
             $html_code = "
-            <div>Aucune photo dans la bibliothèque. <a href='$edit_gallery_url'>Créez une galerie</a> et ajoutez des photos.<div>";
+            <div class='pg-container'>
+                <div>Aucune photo dans la bibliothèque. <a href='$edit_gallery_url'>Créez une galerie</a> et ajoutez des photos.<div>
+            </div>";
             return $html_code;    
         }
         error_log("Glp_User_Photos_Public::pg_show_page count image =". count($medias));
@@ -149,7 +151,7 @@ class Glp_User_Photos_Public {
                 </div>
             </div>
         </div>
-        <div class='container' id='user-item-list'>";
+        <div class='pg-container' id='user-item-list'>";
 
         $html_code .= $this->render_images($medias, $medias_nb);
         $html_code .= 
@@ -196,11 +198,11 @@ class Glp_User_Photos_Public {
                 <div class="miniature" style="background-image: url('.$img_src.')"></div>
                 <div class="photo-text-container";>
                     <div class="photo-text-user">'.$item->post_content.'</div>
-                    <div class="footer-edit-gallery">
+                    <div class="footer-edit-gallery footer-desc-font">
                         <div class="photo-text-date">'.$date.'</div>
                         <div class="photo-text-date">'.$textnbgalleries.'</div>
                     </div>
-                    <div class="footer-edit-gallery">
+                    <div class="footer-edit-gallery footer-desc-font">
                         <div class="photo-text-date">'.$item->post_name.'</div>
                         <div class="photo-text-date">'.$statext.'</div>
                     </div>

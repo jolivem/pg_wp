@@ -142,7 +142,7 @@ class Pg_Show_Planet_Map_Public {
         $html_code = "
         <input type='hidden' id='page_nonce' value='$nonce'/>
         <input type='hidden' id='pg_admin_ajax_url' value='$admin_ajax_url'/>
-        <div class='container pg-container'>
+        <div class='pg-container'>
             <form id='searchForm' class='search-place'>
                 <input type='text' class='form-control' id='searchInput' placeholder='Entrez un lieu'>
                 <button type='button' id='searchButton' class='btn btn-primary'>Rechercher</button>

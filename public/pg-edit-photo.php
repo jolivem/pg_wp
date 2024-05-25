@@ -201,7 +201,7 @@ class Pg_Edit_Photo_Public {
                     </div>
                 </div>
             </div>
-            <div class='container'>";
+            <div class='pg-container'>";
             if (!empty($gid)) {
                 // add right and left buttons
                 $html_code .= "

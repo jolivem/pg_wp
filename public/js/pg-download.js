@@ -558,10 +558,10 @@ function updateDownloadMultipleModal(files) {
                     <div class="download-success"><i class="fas fa-check" style="color: green;"></i></div>
                     <div class="download-error"><i class="fas fa-times" style="color: red;"></i></div>
                     <div class="flex-container" style="margin-top:0px" data-valid="ok">
-                        <img src="${src}" class="full-miniature"></img>
-                        <div class="full-photo-text-container" style="flex: 10 0 200px;">
-                            <div class="photo-title">${name}</div>
-                            <div class="photo-text">Localisation OK<br/>Date : ${date}</div>
+                        <img src="${src}" class="full-miniature" style="max-width: 135px;"></img>
+                        <div class="full-photo-text-container" style="flex: 10 10 150px;">
+                            <div class="photo-title footer-desc-font">${name}</div>
+                            <div class="photo-text footer-desc-font">Localisation OK<br/>${date}</div>
                         </div>
                         <div class="flex-options-3" style="background-color: lightblue">
                             <div data-id="'.$id.'">
@@ -580,8 +580,8 @@ function updateDownloadMultipleModal(files) {
                     <div class="flex-container" style="margin-top:0px">
                         <img src="${src}" class="full-miniature"></img>
                             <div class="full-photo-text-container" style="flex: 10 0 200px;">
-                                <div class="photo-title">Fichier : ${name}</div>
-                                <div class="photo-text" style="color:red;">
+                                <div class="photo-title footer-desc-font">Fichier : ${name}</div>
+                                <div class="photo-text footer-desc-font" style="color:red;">
                                     <i class="fas fa-map-marker-alt"></i>
                                     Absence de coordonnées GPS<br/> Utiliser le chargement manuel TODO link
                                 </div>

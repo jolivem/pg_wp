@@ -316,11 +316,11 @@ class Pg_Edit_Gallery_Public {
                         <div class="miniature" style="background-image: url('.$img_src.')"></div>
                         <div class="photo-text-container">
                             <div class="photo-text-gallery">'.$content.'</div>
-                            <div class="footer-edit-gallery">
+                            <div class="footer-edit-gallery footer-desc-font">
                                 <div class="photo-text-date">'.$date.'</div>
                                 <div></div>
                             </div>
-                            <div class="footer-edit-gallery">
+                            <div class="footer-edit-gallery footer-desc-font">
                                 <div class="photo-text-date">'.$post->post_name.'</div>
                                 <div class="photo-text-date">'.$statext.'</div>
                             </div>

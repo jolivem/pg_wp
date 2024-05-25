@@ -174,15 +174,13 @@ class Glp_Check_Photos_Public {
 
             //error_log("render_images url:".print_r($url_img, true));
             // TODO check url_img is OK, add try catch
-            //<div class="full-miniature" style="background-image: url('.$img_src.')"></div>
             $html.=
             '<div class="flex-container">
                 
                 <img src="'.$img_src.'" class="full-miniature"></img>
                 <div class="photo-text-container" style="background-color: lightyellow";>
-                    <div class="photo-title">'.$item->post_title.'</div>
-                    <div class="photo-text-user">'.$item->post_content.'</div>
-                    <div class="footer-edit-gallery">
+                    <div class="photo-title footer-desc-font">'.$item->post_title.'</div>
+                    <div class="footer-edit-gallery footer-desc-font">
                         <div>Date : '.$item->post_date.'</div>
                         <div>'.$statext.'</div>
                     </div>

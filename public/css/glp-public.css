@@ -655,21 +655,22 @@ button.lg-icon {
 
 .full-photo-text-container {
     padding: 5px;
-    height: 110px;
+    flex: 1 10 100px;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .photo-title {
-    line-height: 20px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    height: 20px;
+    overflow: visible;
+    height: 40px;
 }
 
 .photo-text {
     line-height: 26px;
     text-overflow: ellipsis;
     overflow: hidden;
-    height: 70px;
+    height: 50px;
 }
 
 .photo-text-user {
@@ -705,18 +706,16 @@ button.lg-icon {
     height: 40px;
 }
 
-.footer {
+/*.footer {
     position: relative;
     top: 12px;
     font-size: 10px;
     color: #666
-}
+}*/
 
 .footer-user-galleries {
     position: relative;
     top: 18px;
-    font-size: 10px;
-    color: #666
 }
 
 .footer-edit-gallery {
@@ -724,6 +723,9 @@ button.lg-icon {
     display: flex;
     justify-content: space-between;
     top: 12px;
+}
+
+.footer-desc-font {
     font-size: 10px;
     color: #666
 }
@@ -756,7 +758,7 @@ button.lg-icon {
 }
 
 .flex-options-3 {
-    flex-basis: 40px;
+    flex: 0 0 26px;
     display: flex;
     align-items: center;
     border-radius: 0 8px 8px 0;
@@ -948,6 +950,8 @@ body {
 
 .pg-container {
     max-width: 800px !important;
+    padding-left: 12px;
+    padding-right: 12px;
     /* see desc-gallery */
 }
 

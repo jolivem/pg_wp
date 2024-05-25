@@ -132,7 +132,9 @@ class Glp_User_Galleries_Public {
             $edit_gallery_url .= "?gid=-1";
             //<input type='hidden' id='pg_edit_gallery_url' value='$edit_gallery_url'/>
             $html_code = "
-            <div>Aucune galerie. <a href='$edit_gallery_url'>Créez votre première galerie</a> et ajoutez des photos.<div>";
+            <div class='pg-container'>
+                <div>Aucune galerie. <a href='$edit_gallery_url'>Créez votre première galerie</a> et ajoutez des photos.<div>
+            </div>";
             return $html_code;    
         }
 
@@ -214,7 +216,7 @@ class Glp_User_Galleries_Public {
                 <div class="photo-text-container">
                     <div class="gallery-title">'.$title.'</div>
                     <div class="gallery-text">'.$desc.'</div>
-                    <div class="footer-user-galleries">Modifiée le '.$date.'</div>
+                    <div class="footer-user-galleries footer-desc-font">Modifiée le '.$date.'</div>
                 </div>
                 <div class="options-photo-gallery" style="background-color: lightgreen">
                     <div class="user-gallery-option pointer-icon fas fa-edit" aria-hidden="true" data-galid="'.$item["id"].'"></div>
