@@ -653,6 +653,14 @@ button.lg-icon {
     border-right: solid 1px #888
 }
 
+.full-miniature-big {
+    float: left;
+    max-height: 400px;
+    width: auto;
+    padding: 4px;
+    border-right: solid 1px #888
+}
+
 .full-photo-text-container {
     padding: 5px;
     flex: 1 10 100px;
@@ -727,6 +735,11 @@ button.lg-icon {
 
 .footer-desc-font {
     font-size: 10px;
+    color: #666
+}
+
+.footer-desc-font {
+    font-size: medium;
     color: #666
 }
 
@@ -955,6 +968,12 @@ body {
     /* see desc-gallery */
 }
 
+.pg-map {
+    border: solid #eee;
+    border-radius: 7px;
+    border-width: 0px 16px;
+    /* see desc-gallery */
+}
 .toast {
     --bs-toast-max-width: 250px;
 }

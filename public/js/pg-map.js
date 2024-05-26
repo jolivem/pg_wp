@@ -541,7 +541,7 @@ function updatePlanetSlider(datas) {
     const descr = document.getElementById('imageDescr');
     slider.innerHTML="";
     descr.innerHTML="";
-    //console.log("updatePlanetSlider descr avant", descr);
+        //console.log("updatePlanetSlider descr avant", descr);
     //g_lightbox.destroy();
     //let newHtml="";
     if (datas) {
@@ -550,7 +550,7 @@ function updatePlanetSlider(datas) {
             //console.log("updatePlanetSlider image", image);
             
             let sliderHtml = "<div class='slider-item'>";
-            sliderHtml +=       "<div class='toto' data-full='"+image.url_full+"'>";
+            sliderHtml +=       "<div class='slider-lb' data-full='"+image.url_full+"'>";
             sliderHtml +=           "<img src='"+image.url_medium+"' id='slider-"+image.id+"' class='imgNotSelected'>";
             sliderHtml +=           "<div class='slider-descr'>";
             
@@ -558,12 +558,12 @@ function updatePlanetSlider(datas) {
             if (image.content != "") {
                 sliderHtml +=           "<div class='desc-lightbox-title'>"+image.content+"</div>";
             }
-            sliderHtml +=               "<div class='desc-lightbox-address'>Prise de vue à "+image.address+"</div>";
+            sliderHtml +=               "<div class='desc-lightbox-address'><i class='fas fa-map-marker-alt'></i>"+image.address+"</div>";
             if (image.user != "") {
-                sliderHtml +=           "<div class='desc-lightbox-address'>Photographie par <b>"+image.user+"</b>, le "+image.date+"</div>";
+                sliderHtml +=           "<div class='desc-lightbox-address'><i class='fas fa-user'></i> <b>"+image.user+"</b>, "+image.date+"</div>";
             }
             else {
-                sliderHtml +=           "<div class='desc-lightbox-address'>Prise le "+image.date+"</div>";
+                sliderHtml +=           "<div class='desc-lightbox-address'>"+image.date+"</div>";
             }
             sliderHtml +=           "</div>";
             sliderHtml +=       "</div>";
@@ -583,7 +583,7 @@ function updatePlanetSlider(datas) {
             if (image.content != "") {
                 descrHtml +="<div class='desc-slider-title'>"+image.content+"</div>";
             }
-            descrHtml +="<div class='desc-slider-address'>Prise de vue : "+image.address+"</div>";
+            descrHtml +="<div class='desc-slider-address'><i class='fas fa-map-marker-alt'>"+image.address+"</div>";
             descrHtml +="</div>";            
 
             descr.innerHTML += descrHtml;

@@ -213,7 +213,7 @@ class Pg_Show_User_Map_Public {
 
                 $html.="
                 <div class='slider-item'>
-                    <div class='toto' data-full='$img_src_full'>
+                    <div class='slider-lb' data-full='$img_src_full'>
                         <img src='$img_src_medium' id='slider-$id' class='imgNotSelected' data-full='$img_src_full'>";
                 // description of the photo INSIDE the lightbox
                 if ($post->post_content != '') {
@@ -340,10 +340,11 @@ class Pg_Show_User_Map_Public {
                 g_markers.refreshClusters();
                 
                 /* add lightbox */ 
-                g_lightbox = new SimpleLightbox('#imageSlider .toto', {
+                g_lightbox = new SimpleLightbox('#imageSlider .slider-lb', {
                     sourceAttr: 'data-full',
                     captionSelector: '.slider-descr',
                     captionType: 'text',
+                    widthRatio: 0.9,
                     captionPosition: 'top'
                 });
             })

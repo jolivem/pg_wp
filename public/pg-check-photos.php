@@ -165,7 +165,7 @@ class Glp_Check_Photos_Public {
         foreach($medias as $item){
             //error_log("render_images item:".print_r($item, true));
             $img_src = $item->guid;
-            $url_img = wp_get_attachment_image_src($item->ID, "medium");
+            $url_img = wp_get_attachment_image_src($item->ID, "large");
             if ($url_img != false) {
                 $img_src = $url_img[0];
             }
@@ -177,12 +177,11 @@ class Glp_Check_Photos_Public {
             $html.=
             '<div class="flex-container">
                 
-                <img src="'.$img_src.'" class="full-miniature"></img>
-                <div class="photo-text-container" style="background-color: lightyellow";>
-                    <div class="photo-title footer-desc-font">'.$item->post_title.'</div>
-                    <div class="footer-edit-gallery footer-desc-font">
+                <img src="'.$img_src.'" class="full-miniature-big"></img>
+                <div class="photo-text-container">
+                    <div class="footer-desc-font" style="overflow: visible;">'.$item->post_title.'</div>
+                    <div class="footer-edit-gallery footer-desc-font-medium">
                         <div>Date : '.$item->post_date.'</div>
-                        <div>'.$statext.'</div>
                     </div>
                 </div>
                 <div class="options" style="background-color: lightgreen">
