@@ -236,7 +236,7 @@ class Pg_Edit_Gallery_Public {
             <br/>
             <div>
                 <button type='button' class='btn btn-primary align-left' data-bs-toggle='modal' data-bs-target='#delete-confirmation'>
-                    Supprimer la gallerie
+                    Supprimer la galerie
                 </button>";
         // The photos added are automatically saved in the gallery
         // if ($html_images != "") {
@@ -315,13 +315,13 @@ class Pg_Edit_Gallery_Public {
                     <div class="flex-container">
                         <div class="miniature" style="background-image: url('.$img_src.')"></div>
                         <div class="photo-text-container">
-                            <div class="photo-text-gallery">'.$content.'</div>
-                            <div class="footer-edit-gallery footer-desc-font">
+                            <div class="photo-text-gallery footer-desc-font">'.$content.'</div>
+                            <div class="footer-edit-gallery desc-font-small">
                                 <div class="photo-text-date">'.$date.'</div>
                                 <div></div>
                             </div>
-                            <div class="footer-edit-gallery footer-desc-font">
-                                <div class="photo-text-date">'.$post->post_name.'</div>
+                            <div class="footer-edit-gallery desc-font-small">
+                                <div class="photo-text-file">'.$post->post_name.'</div>
                                 <div class="photo-text-date">'.$statext.'</div>
                             </div>
                         </div>

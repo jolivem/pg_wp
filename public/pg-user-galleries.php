@@ -153,7 +153,7 @@ class Glp_User_Galleries_Public {
             <br/>
             <div class='tab-pane fade show active' id='nav-photos' role='tabpanel' aria-labelledby='nav-photos-tab'>
                 <button type='button' class='btn btn-primary' id='user-galleries-create'>
-                    Ajouter une gallerie...
+                    Ajouter une galerie...
                 </button>
             </div>";
 
@@ -214,9 +214,9 @@ class Glp_User_Galleries_Public {
                 <div class="miniature2" style="background-image: url('.$img_src2.')"></div>
                 <div class="miniature3" style="background-image: url('.$img_src3.')"></div>
                 <div class="photo-text-container">
-                    <div class="gallery-title">'.$title.'</div>
-                    <div class="gallery-text">'.$desc.'</div>
-                    <div class="footer-user-galleries footer-desc-font">Modifiée le '.$date.'</div>
+                    <div class="user-gallery-title footer-desc-font">'.$title.'</div>
+                    <div class="user-gallery-text footer-desc-font">'.$desc.'</div>
+                    <div class="desc-font-small">'.$date.'</div>
                 </div>
                 <div class="options-photo-gallery" style="background-color: lightgreen">
                     <div class="user-gallery-option pointer-icon fas fa-edit" aria-hidden="true" data-galid="'.$item["id"].'"></div>

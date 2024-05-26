@@ -163,7 +163,9 @@ class Pg_Show_User_Map_Public {
                 </div>
             </div>
             </br>
-            <div id='map' style='height:300px;'></div>
+            <div class='pg-map'>
+                <div id='map' style='height:300px;'></div>
+            </div>
             <div class='flex-container-slider'>
                 <div class='slider-options-left' style='background-color: lightgreen'>
                     <div>

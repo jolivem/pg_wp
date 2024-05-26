@@ -471,7 +471,7 @@ function removeDownloadPhoto(item) {
     //item.remove(); // Remove the corresponding list item
     //console.log("removeDownloadPhoto item", item);
     let ancestor = item.parentNode.parentNode.parentNode;
-    let title = ancestor.getElementsByClassName('photo-title')[0].innerHTML;
+    let title = ancestor.getElementsByClassName('download-photo-title')[0].innerHTML;
     //console.log("removeDownloadPhoto title=", title);
     // remove the assocaited file in g_filesArray
     for (let i = 0 ; i < g_filesArray.length ; i ++) {
@@ -560,8 +560,8 @@ function updateDownloadMultipleModal(files) {
                     <div class="flex-container" style="margin-top:0px" data-valid="ok">
                         <img src="${src}" class="full-miniature" style="max-width: 135px;"></img>
                         <div class="full-photo-text-container" style="flex: 10 10 150px;">
-                            <div class="photo-title footer-desc-font">${name}</div>
-                            <div class="photo-text footer-desc-font">Localisation OK<br/>${date}</div>
+                            <div class="download-photo-title footer-desc-font">${name}</div>
+                            <div class="download-photo-text footer-desc-font">Localisation OK<br/>${date}</div>
                         </div>
                         <div class="flex-options-3" style="background-color: lightblue">
                             <div data-id="'.$id.'">
@@ -580,8 +580,8 @@ function updateDownloadMultipleModal(files) {
                     <div class="flex-container" style="margin-top:0px">
                         <img src="${src}" class="full-miniature"></img>
                             <div class="full-photo-text-container" style="flex: 10 0 200px;">
-                                <div class="photo-title footer-desc-font">Fichier : ${name}</div>
-                                <div class="photo-text footer-desc-font" style="color:red;">
+                                <div class="download-photo-title footer-desc-font">Fichier : ${name}</div>
+                                <div class="download-photo-text footer-desc-font" style="color:red;">
                                     <i class="fas fa-map-marker-alt"></i>
                                     Absence de coordonnées GPS<br/> Utiliser le chargement manuel TODO link
                                 </div>

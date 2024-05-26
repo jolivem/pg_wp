@@ -147,7 +147,9 @@ class Pg_Show_Planet_Map_Public {
                 <input type='text' class='form-control' id='searchInput' placeholder='Entrez un lieu'>
                 <button type='button' id='searchButton' class='btn btn-primary'>Rechercher</button>
             </form>
-            <div id='map' class='pg-map' style='height:350px;'></div>
+            <div class='pg-map'>
+                <div id='map' style='height:350px;'></div>
+            </div>
             <div class='flex-container-slider' style='height: 150px;'>
                 <div class='slider-options-left' style='background-color: lightgreen'>
                     <div>

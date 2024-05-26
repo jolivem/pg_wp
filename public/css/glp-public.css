@@ -633,7 +633,7 @@ button.lg-icon {
 .photo-text-container {
     flex: 10 0 180px;
     padding: 5px;
-    height: 100px;
+    height: 104px;
     font-size: small;
 }
 
@@ -647,7 +647,7 @@ button.lg-icon {
 
 .full-miniature {
     float: left;
-    max-height: 110px;
+    max-height: 100px;
     width: auto;
     padding: 4px;
     border-right: solid 1px #888
@@ -669,12 +669,13 @@ button.lg-icon {
     flex-direction: column;
 }
 
-.photo-title {
+.download-photo-title {
     overflow: visible;
     height: 40px;
+    line-height: 20px;
 }
 
-.photo-text {
+.download-photo-text {
     line-height: 26px;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -692,55 +693,56 @@ button.lg-icon {
     overflow: hidden;
     height: 16px;
 }
+.photo-text-file {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: 16px;
+    flex: 1;
+}
 
+/* page Edit gallery */
 .photo-text-gallery {
-    line-height: 26px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    height: 48px;
-}
-
-.gallery-title {
     line-height: 20px;
     text-overflow: ellipsis;
     overflow: hidden;
-    height: 20px;
+    height: 64px;
 }
-
-.gallery-text {
-    line-height: 20px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    height: 40px;
-}
-
-/*.footer {
-    position: relative;
-    top: 12px;
-    font-size: 10px;
-    color: #666
-}*/
-
-.footer-user-galleries {
-    position: relative;
-    top: 18px;
-}
-
 .footer-edit-gallery {
     position: relative;
     display: flex;
     justify-content: space-between;
-    top: 12px;
 }
 
-.footer-desc-font {
-    font-size: 10px;
-    color: #666
+
+/* page My galleries */
+.user-gallery-title {
+    line-height: 20px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: 26px;
+}
+.user-gallery-text {
+    line-height: 22px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: 50px;
+}
+.user-gallery-option {
+    cursor: pointer;
+    flex-basis: 300px;
+    flex: 10 0 20px;
+    padding: 7px;
 }
 
 .footer-desc-font {
     font-size: medium;
     color: #666
+}
+
+.desc-font-small {
+    font-size: small;
+    color: #666;
+    line-height: 16px;;
 }
 
 .flex-options {
@@ -815,13 +817,6 @@ button.lg-icon {
 .show-gallery-option {
     cursor: pointer;
     padding: 4px;
-}
-
-.user-gallery-option {
-    cursor: pointer;
-    flex-basis: 300px;
-    flex: 10 0 20px;
-    padding: 7px;
 }
 
 /* EDIT photos */

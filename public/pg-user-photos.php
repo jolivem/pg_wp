@@ -181,14 +181,14 @@ class Glp_User_Photos_Public {
             $textnbgalleries='';
             if (array_key_exists($item->ID, $medias_nb)) {
                 if ($medias_nb[$item->ID] == 1) {
-                    $textnbgalleries='1 gallerie';
+                    $textnbgalleries='1 galerie';
                 }
                 else {
                     $textnbgalleries=$medias_nb[$item->ID]." galleries";
                 }
             }
             else {
-                $textnbgalleries='Sans gallerie';
+                $textnbgalleries='Sans galerie';
             }
 
             //error_log("render_images url:".print_r($url_img, true));
@@ -197,13 +197,13 @@ class Glp_User_Photos_Public {
             '<div class="flex-container">
                 <div class="miniature" style="background-image: url('.$img_src.')"></div>
                 <div class="photo-text-container";>
-                    <div class="photo-text-user">'.$item->post_content.'</div>
-                    <div class="footer-edit-gallery footer-desc-font">
-                        <div class="photo-text-date">'.$date.'</div>
+                    <div class="photo-text-gallery footer-desc-font">'.$item->post_content.'</div>
+                    <div class="footer-edit-gallery desc-font-small">
+                        <div class="photo-text-file">'.$date.'</div>
                         <div class="photo-text-date">'.$textnbgalleries.'</div>
                     </div>
-                    <div class="footer-edit-gallery footer-desc-font">
-                        <div class="photo-text-date">'.$item->post_name.'</div>
+                    <div class="footer-edit-gallery desc-font-small">
+                        <div class="photo-text-file">'.$item->post_name.'</div>
                         <div class="photo-text-date">'.$statext.'</div>
                     </div>
                 </div>
