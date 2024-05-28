@@ -180,15 +180,13 @@ class Glp_Check_Photos_Public {
                 <img src="'.$img_src.'" class="full-miniature-big"></img>
                 <div class="photo-text-container">
                     <div class="footer-desc-font" style="overflow: visible;">'.$item->post_title.'</div>
-                    <div class="footer-edit-gallery footer-desc-font-medium">
+                    <div class="footer-edit-gallery">
                         <div>Date : '.$item->post_date.'</div>
                     </div>
                 </div>
-                <div class="options" style="background-color: lightgreen">
-                    <div class="flex-options">
-                        <i class="admin-photo-option fas fa-thumbs-up" aria-hidden="true" data-postid="'.$item->ID.'"></i>
-                        <i class="admin-photo-option fas fa-thumbs-down" aria-hidden="true" data-postid="'.$item->ID.'"></i>
-                    </div>
+                <div class="options-photo-gallery" style="background-color: lightgreen">
+                    <i class="admin-photo-option fas fa-thumbs-up" aria-hidden="true" data-postid="'.$item->ID.'"></i>
+                    <i class="admin-photo-option fas fa-thumbs-down" aria-hidden="true" data-postid="'.$item->ID.'"></i>
                 </div>
             </div>';
             

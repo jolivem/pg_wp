@@ -128,7 +128,7 @@ var selectSliderImageByElem =  function(imageElement, scroll) {
         imageElement.classList.remove('imgNotSelected');
         imageElement.classList.add('imgSelected');
         g_selectedImageElem = imageElement;
-        g_selectedImageSrc = g_selectedImageElem.getAttribute('src');
+        //g_selectedImageSrc = g_selectedImageElem.getAttribute('src');
 
         /* Scroll and center to the selected image */
         if (scroll == true) {
@@ -211,8 +211,8 @@ var processClickOnText = function( elem) {
 
 var animateMarkerByImage = function(img) {
 
-    //console.log('animateMarkerByImage IN', img);
-    console.log('animateMarkerByImage g_markers', g_markers);
+    console.log('animateMarkerByImage IN', g_selectedImageSrc);
+    //console.log('animateMarkerByImage g_markers', g_markers);
     let imageSrc= img.getAttribute('src');
 
     // animate the marker on the map
@@ -226,54 +226,76 @@ var animateMarkerByImage = function(img) {
         let iconUrl = layer?.options?.icon?.options?.iconUrl;
         //console.log( 'iconUrl', layer.options.icon.options.iconUrl);
         if (iconUrl != null && iconUrl == imageSrc) {
-            console.log( `animateMarkerByImage FFOOUUNNDD iconUrl`, layer.options.icon.options.iconUrl);
-            let visibleOne = g_markers.getVisibleParent(layer);
-            if (visibleOne != null) {
-            
-                // move map only for user gallery, not for planet 
-                const imageSlider = document.getElementById("imageSlider");
-                if (imageSlider.classList.contains("gallery-slider")) {
-                    let position = visibleOne.getLatLng();
-                    //console.log('position', position);
-                    g_map.setView(new L.latLng(position));
-                }
-                //console.log('animateMarkerByImage YYYYYYYYYYYYYYYYYYYYYYY  _childCount',visibleOne._childCount);
-                //console.log('animateMarkerByImage THIS IS A MARKER visibleone', visibleOne);
+            // console.log( `animateMarkerByImage FFOOUUNNDD layer`, layer);
+            // console.log( `animateMarkerByImage iconUrl`, layer.options.icon.options.iconUrl);
+            // console.log( `animateMarkerByImage options`, layer.options);
+            //console.log( `animateMarkerByImage iconUrl FOUND`);
+            if (layer._icon != null) {
+
+                layer._icon.style.width="100px";
+                layer._icon.style.height="100px";
+                layer._icon.style.zIndex += 1000;
+                console.log( 'animateMarkerByImage layer._icon FOUND for iconUrl');
                 //g_selectedImageSrc = null;
-                //console.log( 'imageSelected NOT null');
-                
-                // leads to call iconCreateFunction for cluster
-                // iconCreateFunction set g_selectedImageSrc=null
-                visibleOne.refreshIconOptions({
-                     iconSize:     [60, 60],
-                }, true);
-
-                if (g_selectedImageSrc != null) {
-                    //iconCreateFunction has not been called
-                    // it is a single image without cluster
-                    console.log('animateMarkerByImage Animate the visible marker');
-
-                    visibleOne.refreshIconOptions({
-                        iconSize:     [100, 100],
-                    }, true); 
-                    
-                    setTimeout(function(){
-                        // come back to normal size after timeout
-                        visibleOne.refreshIconOptions({
-                            iconSize:     [60, 60],
-                        }, true);
+                setTimeout(function(){
+                    // come back to normal size after timeout
+                    layer._icon.style.width="60px";
+                    layer._icon.style.height="60px";
+                    layer._icon.style.zIndex -= 1000;
                     }, 400);
-                }
-
-                console.log('animateMarkerByImage break OUT');
-                return; 
             }
             else {
-                // TODO display "dezoom to show the image on the map"
-                console.log( `parent not visible`);
+                let visibleOne = g_markers.getVisibleParent(layer);
+                if (visibleOne != null) {
+                
+                    // move map only for user gallery, not for planet 
+                    const imageSlider = document.getElementById("imageSlider");
+                    if (imageSlider.classList.contains("gallery-slider")) {
+                        let position = visibleOne.getLatLng();
+                        //console.log('position', position);
+                        g_map.setView(new L.latLng(position));
+                    }
+                    //console.log('animateMarkerByImage YYYYYYYYYYYYYYYYYYYYYYY  _childCount',visibleOne._childCount);
+                    //console.log('animateMarkerByImage THIS IS A MARKER visibleone', visibleOne);
+                    //g_selectedImageSrc = null;
+                    console.log( 'animateMarkerByImage visibleOne FOUND BBBBBBBBBBBBBBBBBB');
+                    
+                    // leads to call iconCreateFunction for cluster
+                    // iconCreateFunction set g_selectedImageSrc=null
+                    visibleOne.refreshIconOptions({
+                        iconSize:     [60, 60],
+                    }, true);
+
+                    /*if (g_selectedImageSrc != null) {
+                        //iconCreateFunction has not been called
+                        // it is a single image without cluster
+                        console.log('animateMarkerByImage Animate the visible marker', visibleOne);
+
+                        visibleOne.refreshIconOptions({
+                            iconSize:     [100, 100],
+                        }, true); 
+                        console.log( 'animateMarkerByImage FFFFFFFFFFFFFFFF ');
+                        setTimeout(function(){
+                            // come back to normal size after timeout
+                            visibleOne.refreshIconOptions({
+                                iconSize:     [60, 60],
+                            }, true);
+                        }, 400);
+                    }*/
+                    
+
+                    //console.log('animateMarkerByImage break OUT');
+                    //return; 
+                }
             }
+            // else {
+            //     // TODO display "dezoom to show the image on the map"
+            //     //console.log( `parent not visible`);
+            // }
         }
     }
+    g_selectedImageSrc = null;
+    console.log('animateMarkerByImage break OUT', g_selectedImageSrc);
 };
 
 
@@ -287,7 +309,8 @@ var animateMarkerByImage = function(img) {
     g_markers = L.markerClusterGroup({
         zoomToBoundsOnClick: true,
         iconCreateFunction: function(cluster) {
-            //console.log('iconCreateFunction IN XXXXXXXXXXXXXXXXXXXXXXXX cluster:', cluster);
+            // Called on zoom end and move end
+            console.log('iconCreateFunction IN ');
             //console.log('iconCreateFunction getChildCount', cluster.getChildCount());
 
             /*var markers = cluster.getAllChildMarkers();
@@ -311,10 +334,11 @@ var animateMarkerByImage = function(img) {
             }
             //console.log( 'g_selectedImageSrc', g_selectedImageSrc);
             if (g_selectedImageSrc != null) {
+                console.log( 'iconCreateFunction AAAAAAAA g_selectedImageSrc not null');
                 iicoon.options.iconSize = [100,100];
                 iicoon.options.iconUrl = g_selectedImageSrc;
                 g_selectedImageSrc = null;
-                console.log( 'g_selectedImageSrc = null');
+                
                 setTimeout(function(){
                     cluster.refreshIconOptions({
                         //shadowUrl: 'leaf-shadow.png',
@@ -429,9 +453,9 @@ var animateMarkerByImage = function(img) {
         }
 
         if (selected) {
-            g_selectedImageSrc = g_selectedImageElem.getAttribute('src');
             selectSliderImageByElem(g_selectedImageElem, true);
             if (e.target.classList.contains("fa-step-forward") || e.target.classList.contains("fa-step-backward")) {
+                g_selectedImageSrc = g_selectedImageElem.getAttribute('src');
                 animateMarkerByImage(g_selectedImageElem);
             }
         }
@@ -558,9 +582,9 @@ function updatePlanetSlider(datas) {
             if (image.content != "") {
                 sliderHtml +=           "<div class='desc-lightbox-title'>"+image.content+"</div>";
             }
-            sliderHtml +=               "<div class='desc-lightbox-address'><i class='fas fa-map-marker-alt'></i>"+image.address+"</div>";
+            sliderHtml +=               "<div class='desc-lightbox-address'><i class='fas fa-map-marker-alt'></i>   "+image.address+"</div>";
             if (image.user != "") {
-                sliderHtml +=           "<div class='desc-lightbox-address'><i class='fas fa-user'></i> <b>"+image.user+"</b>, "+image.date+"</div>";
+                sliderHtml +=           "<div class='desc-lightbox-address'><i class='fas fa-user'></i>   <b>"+image.user+"</b>, "+image.date+"</div>";
             }
             else {
                 sliderHtml +=           "<div class='desc-lightbox-address'>"+image.date+"</div>";
@@ -583,7 +607,7 @@ function updatePlanetSlider(datas) {
             if (image.content != "") {
                 descrHtml +="<div class='desc-slider-title'>"+image.content+"</div>";
             }
-            descrHtml +="<div class='desc-slider-address'><i class='fas fa-map-marker-alt'>"+image.address+"</div>";
+            descrHtml +="<div class='desc-slider-address'><i class='fas fa-map-marker-alt'></i> "+image.address+"</div>";
             descrHtml +="</div>";            
 
             descr.innerHTML += descrHtml;

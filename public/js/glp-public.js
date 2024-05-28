@@ -66,7 +66,7 @@
                         //console.log("valid success");
 
                         // remove the photo from list with animation
-                        let ancestor = e.target.parentNode.parentNode.parentNode;
+                        let ancestor = e.target.parentNode.parentNode;
                         //console.log("valid success ancestor", ancestor);
                         ancestor.style.animationDuration = '.35s';
                         ancestor.style.animationName = 'slideOutRight';
@@ -108,7 +108,7 @@
                         //console.log("delete success");
 
                         // remove the photo from list with animation
-                        let ancestor = e.target.parentNode.parentNode.parentNode;
+                        let ancestor = e.target.parentNode.parentNode;
                         //console.log("delete success ancestor", ancestor);
                         ancestor.style.animationDuration = '.35s';
                         ancestor.style.animationName = 'slideOutLeft';

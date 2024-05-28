@@ -484,7 +484,7 @@ function removeDownloadPhoto(item) {
             break;
         }
     }
-    console.log('updateDownloadMultipleModal IN');
+    console.log('removeDownloadPhoto IN');
     
     
     ancestor.style.animationDuration = '.35s';
@@ -516,6 +516,7 @@ function updateDownloadMultipleModal(files) {
     if (button.disabled == true) {
         // the previous list has been uploaded, remove it
         list.innerHTML = "";
+        g_filesArray = null;
     }
     spinner.style.display = "block";
     button.disabled = false;
@@ -659,7 +660,7 @@ function updateDownloadMultipleModal(files) {
                             file.pgpg.country_code = geocod.country_code;
                         }
                     
-                        console.log('updateDownloadMultipleModal push file', file);
+                        console.log('updateDownloadMultipleModal onload push file', file);
                         g_filesArray.push(file);
                     }
                 }

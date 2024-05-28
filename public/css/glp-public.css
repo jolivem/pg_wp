@@ -693,6 +693,7 @@ button.lg-icon {
     overflow: hidden;
     height: 16px;
 }
+
 .photo-text-file {
     text-overflow: ellipsis;
     overflow: hidden;
@@ -707,6 +708,7 @@ button.lg-icon {
     overflow: hidden;
     height: 64px;
 }
+
 .footer-edit-gallery {
     position: relative;
     display: flex;
@@ -721,12 +723,14 @@ button.lg-icon {
     overflow: hidden;
     height: 26px;
 }
+
 .user-gallery-text {
     line-height: 22px;
     text-overflow: ellipsis;
     overflow: hidden;
     height: 50px;
 }
+
 .user-gallery-option {
     cursor: pointer;
     flex-basis: 300px;
@@ -742,7 +746,8 @@ button.lg-icon {
 .desc-font-small {
     font-size: small;
     color: #666;
-    line-height: 16px;;
+    line-height: 16px;
+    ;
 }
 
 .flex-options {
@@ -969,6 +974,7 @@ body {
     border-width: 0px 16px;
     /* see desc-gallery */
 }
+
 .toast {
     --bs-toast-max-width: 250px;
 }
