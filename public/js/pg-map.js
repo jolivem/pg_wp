@@ -572,6 +572,7 @@ function updatePlanetSlider(datas) {
         let num=0;
         datas.forEach(function(image) {
             //console.log("updatePlanetSlider image", image);
+
             
             let sliderHtml = "<div class='slider-item'>";
             sliderHtml +=       "<div class='slider-lb' data-full='"+image.url_full+"'>";
@@ -582,9 +583,20 @@ function updatePlanetSlider(datas) {
             if (image.content != "") {
                 sliderHtml +=           "<div class='desc-lightbox-title'>"+image.content+"</div>";
             }
-            sliderHtml +=               "<div class='desc-lightbox-address'><i class='fas fa-map-marker-alt'></i>   "+image.address+"</div>";
+            if (image.address != "") {
+                sliderHtml +=           "<div class='desc-lightbox-address'><i class='fas fa-map-marker-alt pg-tab'></i>"+image.address+"</div>";
+            }
             if (image.user != "") {
-                sliderHtml +=           "<div class='desc-lightbox-address'><i class='fas fa-user'></i>   <b>"+image.user+"</b>, "+image.date+"</div>";
+                if (image.user_url != "") {
+                    let domain= new URL(image.user_url).origin
+                    sliderHtml +=       "<div class='desc-lightbox-user'>";
+                    sliderHtml +=           "<div class='desc-lightbox-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b>, "+image.date+"</div>";
+                    sliderHtml +=           "<div class='desc-lightbox-address'><i class='fas fa-globe pg-tab'></i><a style='color: white;' href='"+image.user_url+"'>"+domain+"</a></div>";
+                    sliderHtml +=       "</div>";
+                }
+                else {
+                    sliderHtml +=       "<div class='desc-lightbox-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b>, "+image.date+"</div>";
+                }
             }
             else {
                 sliderHtml +=           "<div class='desc-lightbox-address'>"+image.date+"</div>";

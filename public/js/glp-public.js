@@ -32,6 +32,62 @@
             }
         }); 
 
+        // from the Edit Gallery page
+        $(document).find('#gallery_help').on('change', function(event) {
+            let hide=false;
+            if (event.target.checked) {
+                console.log('Checkbox is checked');
+                hide = true;
+            }
+
+            let admin_url = document.getElementById('pg_admin_ajax_url').value;
+            let nonce = document.getElementById('pg_nonce').value;
+
+            const formData = new FormData();
+            formData.append('action', 'hide_gallery_help');
+            formData.append('nonce', nonce);
+            formData.append('hide', hide);
+
+            jQuery.ajax({
+                method: 'POST',
+                url: admin_url,
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(){
+                    console.log("hide_gallery_help success");
+                }
+            });       
+        });
+        
+        // from the My Galleries page
+        $(document).find('#galleries_help').on('change', function(event) {
+            let hide=false;
+            if (event.target.checked) {
+                console.log('Checkbox is checked');
+                hide = true;
+            }
+
+            let admin_url = document.getElementById('pg_admin_ajax_url').value;
+            let nonce = document.getElementById('pg_nonce').value;
+
+            const formData = new FormData();
+            formData.append('action', 'hide_galleries_help');
+            formData.append('nonce', nonce);
+            formData.append('hide', hide);
+
+            jQuery.ajax({
+                method: 'POST',
+                url: admin_url,
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(){
+                    console.log("hide_galleries_help success");
+                }
+            });       
+        });
+        
         $(document).find('#user-galleries-create').on('click', function(e){
             //console.log("user-galleries-create click", e);
             let edit_gallery_url = document.getElementById('pg_edit_gallery_url').value;
@@ -43,19 +99,93 @@
         $(document).find('.admin-photo-option').on('click', function(e){
             console.log("admin-photo-option click", e);
             e.preventDefault();
-            if (e.target.classList.contains("fa-thumbs-up")) {
-                const postid = e.target.dataset.postid;
-                //console.log("admin-photo-option thumbs-up postid=", postid)
-
-                //let post_id = document.getElementById('post_id').value;
-                let nonce = document.getElementById('pg_nonce').value;
-                let admin_url = document.getElementById('pg_admin_ajax_url').value;
-        
-                const formData = new FormData();
-                formData.append('action', 'admin_valid_photo');
-                formData.append('nonce', nonce);
-                formData.append('pid', postid);
+            const postid = e.target.dataset.postid;
+            //console.log("admin-photo-option thumbs-up postid=", postid)
+            let nonce = document.getElementById('pg_nonce').value;
+            let admin_url = document.getElementById('pg_admin_ajax_url').value;
     
+            const formData = new FormData();
+            formData.append('nonce', nonce);
+            formData.append('pid', postid);
+            if (e.target.classList.contains("fa-thumbs-up")) {
+    
+                formData.append('action', 'admin_valid_photo');
+
+                jQuery.ajax({
+                    method: 'POST',
+                    url: admin_url,
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response){
+                        //console.log("valid success");
+                        // remove the photo from list with animation
+                        let ancestor = e.target.parentNode.parentNode;
+                        ancestor.style.animationDuration = '.35s';
+                        ancestor.style.animationName = 'slideOutRight';
+                    
+                        setTimeout(() => {
+                            ancestor.remove(); // Remove the corresponding list item after animation
+                        }, 300); // Duration of the animation    
+        
+                        // display a toast
+                        var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+                        toastElList.map(function(toastEl) {
+                            return new bootstrap.Toast(toastEl)
+                        })
+                    }
+                    // TODO handle error
+                });                          
+            }
+            if (e.target.classList.contains("fa-thumbs-down")) {
+        
+                formData.append('action', 'admin_reject_photo');
+    
+                jQuery.ajax({
+                    method: 'POST',
+                    url: admin_url,
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response){
+                        //console.log("delete success");
+                        // remove the photo from list with animation
+                        let ancestor = e.target.parentNode.parentNode;
+                        ancestor.style.animationDuration = '.35s';
+                        ancestor.style.animationName = 'slideOutLeft';
+                    
+                        setTimeout(() => {
+                            ancestor.remove(); // Remove the corresponding list item after animation
+                        }, 300); // Duration of the animation    
+        
+                        // display a toast
+                        var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+                        toastElList.map(function(toastEl) {
+                            return new bootstrap.Toast(toastEl)
+                        })
+        
+                    }
+                    // TODO handle error
+                });                         
+            }
+        });
+
+        // click ti valid or not the user web site
+        $(document).find('.admin-url-option').on('click', function(e){
+            console.log("admin-url-option click", e);
+            e.preventDefault();
+            const userid = e.target.dataset.userid;
+            let nonce = document.getElementById('pg_nonce').value;
+            let admin_url = document.getElementById('pg_admin_ajax_url').value;
+    
+            const formData = new FormData();
+            formData.append('nonce', nonce);
+            formData.append('uid', userid);
+
+            if (e.target.classList.contains("fa-thumbs-up")) {
+    
+                formData.append('action', 'admin_valid_url');
+
                 jQuery.ajax({
                     method: 'POST',
                     url: admin_url,
@@ -86,18 +216,9 @@
                 });                          
             }
             if (e.target.classList.contains("fa-thumbs-down")) {
-                const postid = e.target.dataset.postid;
-                //console.log("admin-photo-option thumbs-down postid=", postid)
 
-                //let post_id = document.getElementById('post_id').value;
-                let nonce = document.getElementById('pg_nonce').value;
-                let admin_url = document.getElementById('pg_admin_ajax_url').value;
-        
-                const formData = new FormData();
-                formData.append('action', 'admin_reject_photo');
-                formData.append('nonce', nonce);
-                formData.append('pid', postid);
-    
+                formData.append('action', 'admin_reject_url');
+
                 jQuery.ajax({
                     method: 'POST',
                     url: admin_url,

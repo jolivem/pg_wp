@@ -531,6 +531,68 @@ function updateDownloadMultipleModal(files) {
     console.log('html-list.length', list.childElementCount);
     console.log('newFiles.length', newFiles.length);
 
+    function renderItemMultiple_gps(src, name, date) {
+        console.log('renderItemMultiple_gps IN', name);
+        const list = document.getElementById('modal-item-list');
+        const listItem = document.createElement('div');
+        listItem.className = 'full-item';
+
+        listItem.innerHTML = `
+        <div style="position: relative;">
+            <div class="spinner-border text-primary download-spinner" style="display:none;"></div>
+            <div class="download-success"><i class="fas fa-check" style="color: green;"></i></div>
+            <div class="download-error"><i class="fas fa-times" style="color: red;"></i></div>
+            <div class="flex-container" style="margin-top:0px" data-valid="ok">
+                <img src="${src}" class="full-miniature" style="max-width: 135px;"></img>
+                <div class="full-photo-text-container" style="flex: 10 10 150px;">
+                    <div class="download-photo-title footer-desc-font">${name}</div>
+                    <div class="download-photo-text footer-desc-font">Localisation OK<br/>${date}</div>
+                </div>
+                <div class="flex-options-3" style="background-color: lightblue">
+                    <div data-id="'.$id.'">
+                        <div class="download-photo-option pointer-icon fas fa-trash" aria-hidden="true" onclick='removeDownloadPhoto(this.parentNode.parentNode)'></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>`;
+
+        //list.appendChild(spinner);
+        list.appendChild(listItem);
+        console.log('renderItemMultiple_gps OUT');
+    }
+
+    function renderItemMultiple_error(src, name, error) {
+        console.log('renderItemMultiple_error IN', name);
+        const list = document.getElementById('modal-item-list');
+        const listItem = document.createElement('div');
+        listItem.className = 'full-item';
+            // Localisation not found
+        listItem.innerHTML = `
+        <div style="position: relative;">
+            <div class="download-error"><i class="fas fa-times" style="color: red;"></i></div>
+            <div class="flex-container" style="margin-top:0px">
+                <img src="${src}" class="full-miniature"></img>
+                    <div class="full-photo-text-container" style="flex: 10 0 200px;">
+                        <div class="download-photo-title footer-desc-font">Fichier : ${name}</div>
+                        <div class="download-photo-text footer-desc-font" style="color:red;">
+                            ${error}
+                        </div>
+                    </div>
+                    <div class="flex-options-3" style="background-color: lightblue">
+                        <div data-id="'.$id.'">
+                            <div class="download-photo-option pointer-icon fas fa-trash" aria-hidden="true" onclick='removeDownloadPhoto(this.parentNode.parentNode)'></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+
+        //list.appendChild(spinner);
+        list.appendChild(listItem);
+        console.log('renderItemMultiple_error OUT');
+    }
+
     for (let i = 0; i < newFiles.length ; i ++) {
         const file = newFiles[i];
         const reader = new FileReader();
@@ -540,68 +602,6 @@ function updateDownloadMultipleModal(files) {
             break;
         }
   
-        function renderItemMultiple(src, name, lat, lon, date) {
-            console.log('renderItemMultiple IN', name);
-            const list = document.getElementById('modal-item-list');
-            const listItem = document.createElement('div');
-            listItem.className = 'full-item';
-            if (lat != undefined) {
-                // Localisation OK
-                // let zoomHtml='';
-                // if (zoomRatio != undefined && zoomRatio != '1') {
-                //     zoomHtml = `<br>Zoom: *${zoomRatio}`;
-                // }
-                //console.log('renderItemMultiple zoomHtml', zoomHtml);
-
-                listItem.innerHTML = `
-                <div style="position: relative;">
-                    <div class="spinner-border text-primary download-spinner" style="display:none;"></div>
-                    <div class="download-success"><i class="fas fa-check" style="color: green;"></i></div>
-                    <div class="download-error"><i class="fas fa-times" style="color: red;"></i></div>
-                    <div class="flex-container" style="margin-top:0px" data-valid="ok">
-                        <img src="${src}" class="full-miniature" style="max-width: 135px;"></img>
-                        <div class="full-photo-text-container" style="flex: 10 10 150px;">
-                            <div class="download-photo-title footer-desc-font">${name}</div>
-                            <div class="download-photo-text footer-desc-font">Localisation OK<br/>${date}</div>
-                        </div>
-                        <div class="flex-options-3" style="background-color: lightblue">
-                            <div data-id="'.$id.'">
-                                <div class="download-photo-option pointer-icon fas fa-trash" aria-hidden="true" onclick='removeDownloadPhoto(this.parentNode.parentNode)'></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                </div>`;
-            }
-            else {
-                // Localisation not found
-                listItem.innerHTML = `
-                <div style="position: relative;">
-                    <div class="download-error"><i class="fas fa-times" style="color: red;"></i></div>
-                    <div class="flex-container" style="margin-top:0px">
-                        <img src="${src}" class="full-miniature"></img>
-                            <div class="full-photo-text-container" style="flex: 10 0 200px;">
-                                <div class="download-photo-title footer-desc-font">Fichier : ${name}</div>
-                                <div class="download-photo-text footer-desc-font" style="color:red;">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    Absence de coordonnées GPS<br/> Utiliser le chargement manuel TODO link
-                                </div>
-                            </div>
-                            <div class="options" style="background-color: lightgreen">
-                                <div data-id="'.$id.'">
-                                    <div class="download-photo-option pointer-icon fas fa-trash" aria-hidden="true" onclick='removeDownloadPhoto(this.parentNode.parentNode)'></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>`;
-
-            }
-            //list.appendChild(spinner);
-            list.appendChild(listItem);
-            console.log('renderItemMultiple OUT');
-        }
-
         reader.onload = function(event) {
             console.log( "onload IN");
         
@@ -614,59 +614,69 @@ function updateDownloadMultipleModal(files) {
             EXIF.getData(file, async function() {
 
                 //console.log( "EXIF.getData IN file", file);
-                //const exifData = EXIF.getAllTags(this);
-                //console.log('EXIF Data:', exifData);
+                const exifData = EXIF.getAllTags(this);
+                console.log('EXIF Data:', exifData);
 
-                const lat = await EXIF.getTag(this, 'GPSLatitude');
-                const lon = await EXIF.getTag(this, 'GPSLongitude');
-                const altitude = await EXIF.getTag(this, 'GPSAltitude');
-        
-                if (lat && lon) {
-                    const latRef = await EXIF.getTag(this, 'GPSLatitudeRef') || 'N';
-                    const lonRef = await EXIF.getTag(this, 'GPSLongitudeRef') || 'E';
-        
-                    const latitude = convertDMSToDDExif(lat[0], lat[1], lat[2], latRef);
-                    const longitude = convertDMSToDDExif(lon[0], lon[1], lon[2], lonRef);
+                const gpsInfo = await EXIF.getTag(this, 'GPSInfoIFDPointer');
+                if (gpsInfo) {
+                    const lat = await EXIF.getTag(this, 'GPSLatitude');
+                    const lon = await EXIF.getTag(this, 'GPSLongitude');
+                    const altitude = await EXIF.getTag(this, 'GPSAltitude');
+            
+                    if (lat && lon) {
+                        const latRef = await EXIF.getTag(this, 'GPSLatitudeRef') || 'N';
+                        const lonRef = await EXIF.getTag(this, 'GPSLongitudeRef') || 'E';
+            
+                        const latitude = convertDMSToDDExif(lat[0], lat[1], lat[2], latRef);
+                        const longitude = convertDMSToDDExif(lon[0], lon[1], lon[2], lonRef);
 
-                    const date = await EXIF.getTag(this, 'DateTimeOriginal');
-                    let zoomRatio = '';
-                    let zoomExif = await EXIF.getTag(this, 'DigitalZoomRation');
-                    if (zoomExif) {
-                        zoomRatio = zoomExif.toString();
-                    }
-
-                    let geocod = await reverseGeocoding(latitude, longitude);
-
-                    if (g_filesArray == null) {
-                        // first files 
-                        g_filesArray = [];
-                    }
-                    if (g_filesArray.length < maxFile) {
-                        
-                        //console.log( "onload geocod", geocod);
-                        renderItemMultiple(event.target.result, file.name, latitude, longitude, date);
-
-                        file.pgpg = {};
-                        file.pgpg.lat = latitude;
-                        file.pgpg.lon = longitude;
-                        file.pgpg.altitude = altitude; // atltide to calculate with denominator
-                        file.pgpg.is_exif = true;
-                        //TODO calculate and fill zoom value
-                        file.pgpg.zoom = zoomRatio;
-                        file.pgpg.date = date;
-                        if (geocod) {
-                            file.pgpg.address = geocod.address;
-                            file.pgpg.address_json = geocod.address_json;
-                            file.pgpg.country_code = geocod.country_code;
+                        const date = await EXIF.getTag(this, 'DateTimeOriginal');
+                        let zoomRatio = '';
+                        let zoomExif = await EXIF.getTag(this, 'DigitalZoomRation');
+                        if (zoomExif) {
+                            zoomRatio = zoomExif.toString();
                         }
-                    
-                        console.log('updateDownloadMultipleModal onload push file', file);
-                        g_filesArray.push(file);
+
+                        let geocod = await reverseGeocoding(latitude, longitude);
+
+                        if (g_filesArray == null) {
+                            // first files 
+                            g_filesArray = [];
+                        }
+                        if (g_filesArray.length < maxFile) {
+                            
+                            //console.log( "onload geocod", geocod);
+                            renderItemMultiple_gps(event.target.result, file.name, date);
+
+                            file.pgpg = {};
+                            file.pgpg.lat = latitude;
+                            file.pgpg.lon = longitude;
+                            file.pgpg.altitude = altitude; // atltide to calculate with denominator
+                            file.pgpg.is_exif = true;
+                            //TODO calculate and fill zoom value
+                            file.pgpg.zoom = zoomRatio;
+                            file.pgpg.date = date;
+                            if (geocod) {
+                                file.pgpg.address = geocod.address;
+                                file.pgpg.address_json = geocod.address_json;
+                                file.pgpg.country_code = geocod.country_code;
+                            }
+                        
+                            console.log('updateDownloadMultipleModal onload push file', file);
+                            g_filesArray.push(file);
+                        }
                     }
+                    else {
+                        // render without lat,lon -> error because no EXIF data
+                        renderItemMultiple_error(event.target.result, file.name, 
+                            "Coordonnées GPS absentes.<br/>Consultez les conseils.");
+                    }
+    
                 }
                 else {
                     // render without lat,lon -> error because no EXIF data
-                    renderItemMultiple(event.target.result, file.name);
+                    renderItemMultiple_error(event.target.result, file.name, 
+                        "Coordonnées GPS absentes.<br/>Consultez les conseils.");
                 }
             });
             const spinner = document.getElementById('selection-spinner');

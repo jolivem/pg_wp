@@ -117,7 +117,7 @@ class Pg_Geoposts_Table {
         $sql = "SELECT post_id FROM ".$table." WHERE visible = 1";
 
         $result = $wpdb->get_results( $sql, "ARRAY_A");
-        error_log("get_all_public_images: ".print_r($result, true));
+        //error_log("get_all_public_images: ".print_r($result, true));
         return $result;
     }
 

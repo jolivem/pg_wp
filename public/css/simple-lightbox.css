@@ -197,25 +197,25 @@ body.hidden-scroll {
     }
 }
 
-.sl-wrapper .sl-image .sl-caption {
+.sl-wrapper .sl-caption {
     display: none;
     padding: 10px;
     color: #fff;
     /*background: rgba(0, 0, 0, 0.8);MJO*/
     background-color: rgb(40, 40, 40, 0.5);
     font-size: 0.8rem;
-    /*position: absolute;
+    position: fixed;
     bottom: 0;
     left: 0;
-    right: 0;MJO*/
+    width: 100%;
+    z-index: 11000;
 }
 
-.sl-wrapper .sl-image .sl-caption.pos-top {
-    bottom: auto;
-    top: 0;
+.sl-wrapper .sl-caption.pos-bottom {
+    /*border: 3px solid #73AD21;*/
 }
 
-.sl-wrapper .sl-image .sl-caption.pos-outside {
+.sl-wrapper .sl-caption.pos-outside {
     bottom: auto;
 }
 

@@ -143,6 +143,7 @@ class Glp_User_Galleries_Public {
         //$show_gallery_url = substr($show_gallery_url, 0, -1);
         $nonce = wp_create_nonce('user_galleries');
         $admin_ajax_url = admin_url('admin-ajax.php');
+        $hide_help = get_user_meta( $user_id, 'hide_galleries_help', true); 
 
         $html_code .= "
         <input type='hidden' id='pg_edit_gallery_url' value='$edit_gallery_url'/>
@@ -150,7 +151,22 @@ class Glp_User_Galleries_Public {
         <input type='hidden' id='pg_admin_ajax_url' value='$admin_ajax_url'/>
         <input type='hidden' id='pg_nonce' value='$nonce'/>
         <div class='pg-container' id='user-item-list'>
-            <br/>
+            <h2>Mes galeries</h2>";
+        if ($hide_help != 'true') {
+            $html_code .= "
+            <div class='alert alert-info' role='alert'>
+                <div><i class='fas fa-edit pg-tab'></i> pour modifier la galerie.</div>
+                <div><i class='fas fa-eye pg-tab'></i> pour visualiser la galerie quand elle est partagée.</div>
+                <div><i class='fas fa-share-alt pg-tab'></i> pour copier le lien de la galerie en vue de la partager.</div>
+                </br>
+                <div class='form-check form-switch'>
+                    <input  id='galleries_help' class='form-check-input' type='checkbox' role='switch'>
+                    <label class='form-check-label' for='galleries_help'>Ne plus afficher</label>
+                </div>
+            </div>
+            <br/>";
+        }
+        $html_code .= "
             <div class='tab-pane fade show active' id='nav-photos' role='tabpanel' aria-labelledby='nav-photos-tab'>
                 <button type='button' class='btn btn-primary' id='user-galleries-create'>
                     Ajouter une galerie...
@@ -301,4 +317,41 @@ class Glp_User_Galleries_Public {
 
         // return null;
     }
+    
+    // callback on Ajax request
+    public function hide_galleries_help() {
+        error_log("hide_galleries_help IN");
+        error_log("hide_galleries_help REQUEST ".print_r($_REQUEST, true));
+        //error_log("download_single_photo FILES ".print_r($_FILES, true));
+
+        // TODO test current user is gallery user
+
+        $user_id = get_current_user_id();
+        if ($user_id == 0) {
+            error_log("hide_galleries_help No USER");
+            // TODO 404 NOT FOUND
+            wp_send_json_error( "NOK.", 401 );
+            return;
+        }
+
+        if( ! isset( $_REQUEST['nonce'] ) or 
+            ! wp_verify_nonce( $_REQUEST['nonce'], 'user_galleries' ) ) {
+            error_log("hide_galleries_help nonce not found");
+            wp_send_json_error( "NOK.", 403 );
+            wp_die();
+            return;
+        }
+
+        if( isset( $_REQUEST['hide'] ) and $_REQUEST['hide'] == 'true') {
+            add_user_meta( $user_id, 'hide_galleries_help', 'true', false);
+        }
+        else {
+            delete_user_meta( $user_id, 'hide_galleries_help');
+        }
+
+        error_log( "Respond success");
+        wp_send_json_success( null, 200);
+        wp_die();
+        
+    }    
 }

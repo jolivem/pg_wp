@@ -533,8 +533,8 @@
                 if (_this4.loadedImages.indexOf(element.getAttribute(_this4.options.sourceAttr)) === -1) {
                   _this4.show(_this4.domNodes.spinner);
                 }
-                if (_this4.domNodes.image.contains(_this4.domNodes.caption)) {
-                  _this4.domNodes.image.removeChild(_this4.domNodes.caption);
+                if (_this4.domNodes.wrapper.contains(_this4.domNodes.caption)) {
+                  _this4.domNodes.wrapper.removeChild(_this4.domNodes.caption);
                 }
                 _this4.adjustImage(slideDirection);
                 if (_this4.options.preloading) _this4.preload();
@@ -1113,9 +1113,9 @@
             var _ref;
             var property = ((_ref = allowHTML !== null && allowHTML !== void 0 ? allowHTML : this.options.captionHTML) !== null && _ref !== void 0 ? _ref : true) ? 'innerHTML' : 'innerText';
             this.hide(this.domNodes.caption);
-            this.domNodes.caption.style.width = imageWidth + 'px';
+            //this.domNodes.caption.style.width = imageWidth + 'px'; MJO set tp 100%
             this.domNodes.caption[property] = captionText;
-            this.domNodes.image.appendChild(this.domNodes.caption);
+            this.domNodes.wrapper.appendChild(this.domNodes.caption);
             setTimeout(function () {
               _this7.fadeIn(_this7.domNodes.caption, _this7.options.fadeSpeed);
             }, this.options.captionDelay);

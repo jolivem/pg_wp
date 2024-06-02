@@ -226,7 +226,6 @@ class Pg_Show_Planet_Map_Public {
                 foreach($medias as $media){
                     $id = $media['post_id'];
                     //error_log("script_map id:".$id);
-                    //$img_src = $item->guid;
                     $url_img = wp_get_attachment_image_src($id, "medium");
                     if ($url_img != false) {
                         $img_src = $url_img[0];
@@ -244,9 +243,7 @@ class Pg_Show_Planet_Map_Public {
                             //error_log("minlat=".$minlat.", maxlat=".$maxlat.",minlng=".$minlng.", maxlng=".$maxlng);
         
                             
-                            //$img_tag ="<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "' onload='console.log(\"ID=".$image_ids[$key]."\")'>";
                             $map_js .= "icon = new g_LeafIcon({iconUrl: '". $img_src ."'});";
-                            //$map_js .= "g_markers.addLayer(L.marker([".strval($latitude).", ".strval($longitude)."], {icon: icon}).addTo(g_map).bindPopup('I am a green leaf.'));";
                             $map_js .= "g_markers.addLayer(L.marker([".strval($latitude).", ".strval($longitude)."], {icon: icon}));";
                         }
                     }
@@ -312,7 +309,14 @@ class Pg_Show_Planet_Map_Public {
                         $metadate = $meta['date'][0];
                         $date = $date = Pg_Edit_Gallery_Public::get_photo_date($metadate);
                         $user = get_user_by( 'ID', $post->post_author );
-        
+
+                        $user_url='';
+                        $url_checked = get_user_meta( $post->post_author, 'user_url', true);
+                        if ($url_checked == 'OK') {
+                            $user_url = $user->user_url;
+                        }
+                        //error_log("get_bb_images user_url=".$user_url);
+
                         $image = (object) [
                             'id'            => $pid,
                             'url_medium'    => $url_img_medium[0],
@@ -320,7 +324,8 @@ class Pg_Show_Planet_Map_Public {
                             'address'       => $post->post_title,
                             'content'       => $post->content,
                             'date'          => $date,
-                            'user'          => $user->display_name
+                            'user'          => $user->display_name,
+                            'user_url'      => $user_url
                         ];
                         
                         //error_log("get_bb_images image=".print_r($image, true));
@@ -335,5 +340,5 @@ class Pg_Show_Planet_Map_Public {
 
         wp_send_json_success( $data, 200 );
         wp_die();
-}
+    }
 }

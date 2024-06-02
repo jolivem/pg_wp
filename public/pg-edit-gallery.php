@@ -106,7 +106,6 @@ class Pg_Edit_Gallery_Public {
         // TODO check that the gallery belongs to the current user
         // TODO check that the gallery belongs to the current user
 
-        //Test with ID=67
         if (! isset($_GET['gid'])) {
             error_log("Pg_Edit_Gallery_Public::pg_generate_page Missing parameters");
             // TODO return 404
@@ -142,7 +141,13 @@ class Pg_Edit_Gallery_Public {
     // attr should have the user id
     public function pg_show_page( $id ){
 
-        error_log("Pg_Edit_Gallery_Public::pg_show_page IN id=$id");
+        error_log("Pg_Edit_Gallery_Public::pg_show_page IN gallery id=$id");
+
+        $user_id = get_current_user_id();
+        //error_log("pg_show_page IN user_id: ".$user_id);
+        if ($user_id == 0) {
+            return "";
+        }        
         
         if ($id == -1) {
             // create a new gallery
@@ -163,7 +168,6 @@ class Pg_Edit_Gallery_Public {
             // $title = "";
             // $description = "";
             // $html_images = "";
-
         }
         else {
             // get an existing gallery
@@ -188,6 +192,8 @@ class Pg_Edit_Gallery_Public {
         //$admin_post_url = admin_url('admin-post.php');
         $nonce = wp_create_nonce('edit_gallery');
         error_log("pg_show_page single admin_ajax_url=".$admin_ajax_url);
+
+        $hide_help = get_user_meta( $user_id, 'hide_gallery_help', true); 
 
         //error_log("render_images url:".print_r($url_img, true));
         // TODO check url_img is OK, add try catch
@@ -224,7 +230,26 @@ class Pg_Edit_Gallery_Public {
                         <textarea rows='4' name='desc' style='height:100%;' class='form-control' placeholder='' id='gallery-description'>$description</textarea>
                         <label for='gallery-description'>Description</label>                        
                     </div>
+                </div>";
+        if ($hide_help != 'true') {
+            $html_code .= "
+                <div class='alert alert-info' role='alert'>
+                    <div><i class='fas fa-edit pg-tab'></i> pour modifier la description et le caractère publique / privé de la photo.</div>
+                    <div><i class='fas fa-trash pg-tab'></i> pour supprimer la photo de la gallerie, elle est toujours pésente votre phototèque.</div>
+                    </br>
+                    <div>- Une photo notée 'Non vérifiée' est publique et en attente de vérification par le modérateur.</div>
+                    <div>- Une photo notée 'Privée' n'est pas affichée sur la galerie mondiale et n'est pas vérifiée par le modérateur.</div>
+                    <div>- Une photo notée 'Publique' est affichée sur la galerie mondiale.</div>
+                    </br>
+                    <div class='form-check form-switch'>
+                        <input  id='gallery_help' class='form-check-input' type='checkbox' role='switch'>
+                        <label class='form-check-label' for='galleries_help'>Ne plus afficher</label>
+                    </div>
                 </div>
+                <br/>";
+        }
+        
+        $html_code .= "
                 <div>
                     <button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#multipleDowloadModal'>
                         Ajouter des photos...
@@ -235,7 +260,11 @@ class Pg_Edit_Gallery_Public {
             </div>
             <br/>
             <div>
-                <button type='button' class='btn btn-primary align-left' data-bs-toggle='modal' data-bs-target='#delete-confirmation'>
+                <a href='$user_galleries_url'>Retour à Mes galeries</a>
+            </div>
+            </br>
+            <div>
+                <button type='button' class='btn btn-secondary align-left' data-bs-toggle='modal' data-bs-target='#delete-confirmation'>
                     Supprimer la galerie
                 </button>";
         // The photos added are automatically saved in the gallery
@@ -467,30 +496,6 @@ class Pg_Edit_Gallery_Public {
         
     }    
 
-
-    // callback on request to submit gallery settings
-    // public function user_remove_photo() {
-    //     error_log("user_remove_photo IN");
-    //     //error_log("user_remove_photo REQUEST ".print_r($_REQUEST, true));
-    //     //error_log("download_single_photo FILES ".print_r($_FILES, true));
-
-    //     if( ! isset( $_REQUEST['nonce'] ) or 
-    //         ! wp_verify_nonce( $_REQUEST['nonce'], 'edit_gallery' ) ) {
-    //         error_log("user_remove_photo nonce not found");
-    //         wp_send_json_error( "NOK.", 403 );
-    //     }
-
-    //     $gallery_id = sanitize_text_field( $_REQUEST['gid'] );
-    //     $post_id = sanitize_text_field( $_REQUEST['postid'] );
-
-
-    //     $this->remove_post_from_gallery($post_id, $gallery_id);
-
-    //     error_log( "Respond success");
-    //     wp_send_json_success( null, 200);
-    //     wp_die();
-    // }
-
     function pg_get_gallery_by_id( $id ) {
         global $wpdb;
         error_log( "pg_get_gallery_by_id IN id=".$id);
@@ -691,4 +696,42 @@ class Pg_Edit_Gallery_Public {
         
         return $html_code;
     }
+
+    
+    // callback on Ajax request
+    public function hide_gallery_help() {
+        error_log("hide_gallery_help IN");
+        error_log("hide_gallery_help REQUEST ".print_r($_REQUEST, true));
+        //error_log("download_single_photo FILES ".print_r($_FILES, true));
+
+        // TODO test current user is gallery user
+
+        $user_id = get_current_user_id();
+        if ($user_id == 0) {
+            error_log("hide_gallery_help No USER");
+            // TODO 404 NOT FOUND
+            wp_send_json_error( "NOK.", 401 );
+            return;
+        }
+
+        if( ! isset( $_REQUEST['nonce'] ) or 
+            ! wp_verify_nonce( $_REQUEST['nonce'], 'edit_gallery' ) ) {
+            error_log("hide_gallery_help nonce not found");
+            wp_send_json_error( "NOK.", 403 );
+            wp_die();
+            return;
+        }
+
+        if( isset( $_REQUEST['hide'] ) and $_REQUEST['hide'] == 'true') {
+            add_user_meta( $user_id, 'hide_gallery_help', 'true', false);
+        }
+        else {
+            delete_user_meta( $user_id, 'hide_gallery_help');
+        }
+
+        error_log( "Respond success");
+        wp_send_json_success( null, 200);
+        wp_die();
+        
+    }        
 }

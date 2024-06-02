@@ -179,12 +179,20 @@
     let selectedValue = $('#select-country').val();
     ays_handle_country(selectedValue);
 
-    
     // When changing 
     $('#user_status').on('change', function(e) {
-        e.stopPropagation();
         this.value = this.checked ? "public" : "private";
-      });
+        //console.log("on user_status change", e.target);
+        
+        if (this.checked) {
+            document.getElementById('user_status_label').textContent = 'Affichage autorisé sur la galerie mondiale';
+        }
+        else {
+            document.getElementById('user_status_label').textContent = 'Photo privée';
+        }
+        e.stopPropagation();
+        
+    });
     
     // When clicked on submit button
     $(document).find('#save-photo').on('click', function(event){
@@ -197,7 +205,7 @@
 
         const description = document.getElementById('photo-description').value;
         const user_status = document.getElementById('user_status').value;
-        const vignette = document.getElementById("select-country").value;
+        //const vignette = document.getElementById("select-country").value;
 
         const formData = new FormData();
         formData.append('action', 'user_edit_photo');
@@ -205,7 +213,7 @@
         formData.append('post_id', post_id);
         //formData.append('title', title);
         formData.append('desc', description);
-        formData.append('vignette', vignette);
+        //formData.append('vignette', vignette);
         formData.append('user_status', user_status);
         jQuery.ajax({
             method: 'POST',

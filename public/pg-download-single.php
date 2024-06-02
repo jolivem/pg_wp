@@ -141,7 +141,7 @@ class Pg_Download_Single_Public {
         $html_code = '
         <div class="container">
             <form id="upload-single-form">
-                <label for="fileInput" class="custom-file-upload">
+                <label for="fileInput" class="btn-primary">
                     Select Photo
                 </label>
                 <input type="file" id="fileInput" name="custom-file[]">

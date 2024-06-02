@@ -139,7 +139,7 @@ class Pg_Download_Multiple_Public {
                             <form id="custom-upload-form" style="text-align=center;">
                                 <input type="hidden" id="pg_admin_ajax_url" value="'.$admin_ajax_url.'"/>
                                 <input type="hidden" id="download_nonce" value="'.$nonce.'"/>
-                                <label for="fileInput" class="custom-file-upload">
+                                <label for="fileInput" class="btn btn-primary">
                                     Selectionner les photos...
                                 </label>
                                 <br/>
@@ -274,7 +274,7 @@ class Pg_Download_Multiple_Public {
                 update_post_meta($attachment_id , 'user_status', Pg_Edit_Photo_Public::USER_STATUS_PUBLIC); // user_status enable by default
                 update_post_meta($attachment_id , 'admin_status', Pg_Edit_Photo_Public::ADMIN_STATUS_NOT_SEEN); // 0 = image not checked
 
-                $vignette = Pg_Edit_Photo_Public::get_vignette_from_country_code($country_code);
+                $vignette = $this->get_vignette_from_country_code($country_code);
                 if ($vignette != null) {
                     update_post_meta($attachment_id , 'vignette', $vignette);
                 }
@@ -308,6 +308,45 @@ class Pg_Download_Multiple_Public {
         wp_die();
         
     }
+
+    public function get_vignette_from_country_code($country_code) {
+
+        // Afficher le chemin
+        // echo $directory_courant;
+        // echo GLP_DIR;
+
+        if ($country_code == null || $country_code == '') {
+            return null;
+        }
+    
+        $uppercode = strtoupper($country_code);
+
+        // Add None
+        $worldfile = GLP_DIR . 'assets/world.json';
+        //echo $worldfile;
+        // // Utiliser glob pour obtenir la liste des fichiers dans le dossier
+        //$files = glob($directory . '/*');
+        $json = file_get_contents($worldfile); 
+        if ($json === false) {
+            // deal with error...
+            return null;
+        }
+        
+        $json_a = json_decode($json, true);
+        if ($json_a === null) {
+            // deal with error...
+            return null;
+        }
+        
+        foreach ($json_a as $country) {
+            if ($country['code'] === $uppercode) {
+                error_log("get_vignette_from_country_code Found: ".$country['file']);
+                return $country['file'];
+            }
+        }
+        error_log("get_vignette_from_country_code $country_code not Found");
+        return null;
+    }    
 
     // $gallery_id = id of the gallery
     // $images = array of image id
@@ -515,4 +554,6 @@ class Pg_Download_Multiple_Public {
     
         return preg_replace('#/+#','/',join('/', $paths));
     }
+
+
 }

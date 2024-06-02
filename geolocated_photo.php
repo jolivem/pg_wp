@@ -16,7 +16,7 @@ ob_start();
  * Plugin Name:       Planet Gallery
  * Plugin URI:        https://glp-plugin.com/wordpress/photo-gallery
  * Description:       Plugin for Planet-Gallery.org.
- * Version:           1.0.7
+ * Version:           1.0.8
  * Author:            Planet Gallery Team
  * Author URI:        https://glp-plugin.com/
  * License:           GPL-2.0+
@@ -54,8 +54,8 @@ if( ! defined( 'GLP_BASENAME' ) )
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'GLP_GALLERY_VERSION', '1.0.7' );
-define( 'GLP_GALLERY_NAME_VERSION', 'V1.0.7' );
+define( 'GLP_GALLERY_VERSION', '1.0.8' );
+define( 'GLP_GALLERY_NAME_VERSION', 'V1.0.8' );
 define( 'GLP_GALLERY_NAME', 'geolocated-photo' );
 
 /**
@@ -129,5 +129,49 @@ function glp_gallery_activation_redirect_method( $plugin ) {
         exit( wp_redirect( admin_url( 'admin.php?page=' . GLP_GALLERY_NAME ) ) );
     }
 }
+
+// Hook into profile_update event
+add_action('profile_update', 'pg_profile_update', 10, 2);
+
+// Hook into user_register event
+add_action('user_register', 'pg_user_register', 10, 1);
+
+/**
+ * Function to handle profile update
+ *
+ * @param int $user_id The ID of the user being updated.
+ * @param WP_User $old_user_data The old user object.
+ */
+function pg_profile_update($user_id, $old_user_data) {
+    // Your custom code here
+    // For example, logging the update
+    //error_log("User with ID $user_id has updated their profile.");
+    //error_log("old_user_data ".print_r($old_user_data->data->user_url, true));
+
+    $new_user_data = get_userdata($user_id);
+    //error_log("new_user_data ".print_r($new_user_data->data->user_url, true));
+    if ($new_user_data->data->user_url != $old_user_data->data->user_url)
+    {
+        update_user_meta( $user_id, 'user_url', 'to_be_checked');
+    }
+
+}
+
+/**
+ * Function to handle user registration
+ *
+ * @param int $user_id The ID of the newly registered user.
+ */
+function pg_user_register($user_id) {
+    // Your custom code here
+    // For example, sending a welcome email
+    $user_info = get_userdata($user_id);
+
+    error_log("pg_user_register data ".print_r($user_info->data, true));
+    if ($user_info->data->user_url != ''){
+        update_user_meta( $user_id, 'user_url', 'to_be_checked');
+    }
+}
+
 
 run_gallery_photo_gallery();

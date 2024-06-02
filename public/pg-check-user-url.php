@@ -23,7 +23,7 @@
 // TODO le rendu du nomber de colonne ne tient pas compte de la bordure de l'image
 // TODO probleme de responsive sur les images
 // TODO renommer les fichiers, les variables, les tables, etc..
-class Glp_Check_Photos_Public {
+class Glp_Check_User_Url_Public {
 
     /**
      * The ID of this plugin.
@@ -59,7 +59,7 @@ class Glp_Check_Photos_Public {
         $this->plugin_name = $plugin_name;
         $this->version = $version;
         // $this->settings = new Gallery_Settings_Actions($this->plugin_name);
-        add_shortcode( 'glp_check_photos', array($this, 'pg_generate_page') );
+        add_shortcode( 'glp_check_user_url', array($this, 'pg_generate_page') );
     }
 
     /**
@@ -100,7 +100,7 @@ class Glp_Check_Photos_Public {
     
     public function pg_generate_page( $attr ){
         ob_start();
-        error_log("Glp_Check_Photos_Public::pg_generate_page IN ".print_r($attr, true));
+        error_log("Glp_Check_User_Url_Public::pg_generate_page IN ".print_r($attr, true));
         $this->enqueue_styles();
         $this->enqueue_scripts();
 
@@ -115,61 +115,47 @@ class Glp_Check_Photos_Public {
         global $wpdb;
         $id = ( isset($attr['id']) ) ? absint( intval( $attr['id'] ) ) : null;
         
-        $user_id = get_current_user_id();
-        $medias = $this->pg_get_medias_to_be_checked();
-        if(!$medias){
+        $users = $this->get_users_by_meta('user_url', 'to_be_checked');
+        if(!$users){
             $html_code = "
-            <div>Aucune photo à vérifier.<div>";
+            <div>Aucune url à vérifier.<div>";
             return $html_code;    
         }
 
         $admin_ajax_url = admin_url('admin-ajax.php');
         //$admin_post_url = admin_url('admin-post.php');
         $nonce = wp_create_nonce('admin_check');
-        $edit_photo_url = Glp_User_Galleries_Public::get_page_url_from_slug(Pg_Edit_Gallery_Public::PAGE_SLUG_EDIT_PHOTO); // TODO move 186 to a global constant or get by Title
-
 
         $html_code = "
         <input type='hidden' id='pg_admin_ajax_url' value='$admin_ajax_url'/>
         <input type='hidden' id='pg_nonce' value='$nonce'/>
         <div class='container' id='user-item-list'>";
 
-        $html_code .= $this->render_images($medias);
+        $html_code .= $this->render_user_urls($users);
         $html_code .= 
         '</div>';
 
         return $html_code;
     } 
 
-    function render_images($medias){
+    function render_user_urls($users){
         $html='';
 
         // loop for each media
-        foreach($medias as $item){
+        foreach($users as $user){
             //error_log("render_images item:".print_r($item, true));
-            $img_src = $item->guid;
-            $url_img = wp_get_attachment_image_src($item->ID, "large");
-            if ($url_img != false) {
-                $img_src = $url_img[0];
-            }
-
-            $statext = Pg_Edit_Gallery_Public::get_photo_status($item->ID);
-
+            
             //error_log("render_images url:".print_r($url_img, true));
             // TODO check url_img is OK, add try catch
             $html.=
             '<div class="flex-container">
-                
-                <img src="'.$img_src.'" class="full-miniature-big"></img>
-                <div class="photo-text-container">
-                    <div class="footer-desc-font" style="overflow: visible;">'.$item->post_title.'</div>
-                    <div class="footer-edit-gallery">
-                        <div>Date : '.$item->post_date.'</div>
-                    </div>
+                <div>'.$user->user_login.'</br>'.$user->user_email.'</br>ID='.$user->ID.'</div>
+                <div class="url-text-container">
+                    <a href="'.$user->user_url.'">'.$user->user_url.'</a>
                 </div>
                 <div class="options-photo-gallery" style="background-color: lightgreen">
-                    <i class="admin-photo-option fas fa-thumbs-up" aria-hidden="true" data-postid="'.$item->ID.'"></i>
-                    <i class="admin-photo-option fas fa-thumbs-down" aria-hidden="true" data-postid="'.$item->ID.'"></i>
+                    <i class="admin-url-option fas fa-thumbs-up" aria-hidden="true" data-userid="'.$user->ID.'"></i>
+                    <i class="admin-url-option fas fa-thumbs-down" aria-hidden="true" data-userid="'.$user->ID.'"></i>
                 </div>
             </div>';
             
@@ -178,52 +164,33 @@ class Glp_Check_Photos_Public {
         return $html;
     }
 
-    // public function ays_gallery_replace_message_variables($content, $data){
-    //     foreach($data as $variable => $value){
-    //         $content = str_replace("%%".$variable."%%", $value, $content);
-    //     }
-    //     return $content;
-    // }
-
-    public function pg_get_medias_to_be_checked(  ) {
-
-
+    function get_users_by_meta($meta_key, $meta_value) {
         $args = array(
-            //'author'         => $user_id,
-            'post_type'      => 'attachment',
-            'post_status'    => 'inherit,private', // Adjust post status as needed
-            'posts_per_page' => -1, // Retrieve all attachments
-            'meta_query'     => array(
-                'relation' => 'AND',
-                array(
-                    'key'   => 'user_status', 
-                    'value' => Pg_Edit_Photo_Public::USER_STATUS_PUBLIC, 
-                    'compare' => '='
-                ),
-                array(
-                    'key'   => 'admin_status',
-                    'value' => Pg_Edit_Photo_Public::ADMIN_STATUS_NOT_SEEN,
-                    'compare' => '=',
-                )
-            ),            
+            'meta_key'   => $meta_key,
+            'meta_value' => $meta_value,
+            'number'     => -1 // Get all users
         );
-        
-        $query = new WP_Query( $args );
-        $medias = $query->get_posts();
-
-        return $medias;
+    
+        $user_query = new WP_User_Query($args);
+    
+        // Check for results
+        if (!empty($user_query->get_results())) {
+            return $user_query->get_results();
+        } else {
+            return array();
+        }
     }
 
     // callback on request to delete a photo
-    public function admin_valid_photo() {
-        error_log("admin_valid_photo IN REQUEST ".print_r($_REQUEST, true));
+    public function admin_valid_url() {
+        error_log("admin_valid_url IN REQUEST ".print_r($_REQUEST, true));
         //error_log("download_single_photo FILES ".print_r($_FILES, true));
 
         // TODO test current user is gallery user
 
         if( ! isset( $_REQUEST['nonce'] ) or 
             ! wp_verify_nonce( $_REQUEST['nonce'], 'admin_check' ) ) {
-            error_log("admin_valid_photo nonce not found");
+            error_log("admin_valid_url nonce not found");
             wp_send_json_error( "NOK.", 403 );
             wp_die();
             return;
@@ -231,39 +198,38 @@ class Glp_Check_Photos_Public {
 
         $user_id = get_current_user_id();
         if ($user_id!== 1) {
-            error_log("admin_valid_photo No ADMIN");
+            error_log("admin_valid_url No ADMIN");
             // TODO 404 NOT FOUND
             wp_send_json_error( "NOK.", 401 );
             return;
         }
 
-        if( ! isset( $_REQUEST['pid'] )){
-            error_log("admin_valid_photo no pid");
+        if( ! isset( $_REQUEST['uid'] )){
+            error_log("admin_valid_url no uid");
             wp_send_json_error( "NOT Found", 404 );
             wp_die();
             return;
         }
 
-        $pid = sanitize_text_field($_REQUEST['pid']);
+        $uid = sanitize_text_field($_REQUEST['uid']);
 
-        update_post_meta($pid , 'admin_status', Pg_Edit_Photo_Public::ADMIN_STATUS_PUBLIC_OK);
-        $this->update_visibility($pid, Pg_Edit_Photo_Public::ADMIN_STATUS_PUBLIC_OK);
+        update_user_meta($uid , 'user_url', 'OK');
         
-        error_log( "admin_valid_photo Respond success");
+        error_log( "admin_valid_url Respond success");
         wp_send_json_success( null, 200);
         wp_die();
         
     } 
 
-    public function admin_reject_photo() {
-        error_log("admin_reject_photo IN REQUEST ".print_r($_REQUEST, true));
+    public function admin_reject_url() {
+        error_log("admin_reject_url IN REQUEST ".print_r($_REQUEST, true));
         //error_log("download_single_photo FILES ".print_r($_FILES, true));
 
         // TODO test current user is gallery user
 
         if( ! isset( $_REQUEST['nonce'] ) or 
             ! wp_verify_nonce( $_REQUEST['nonce'], 'admin_check' ) ) {
-            error_log("admin_reject_photo nonce not found");
+            error_log("admin_reject_url nonce not found");
             wp_send_json_error( "NOK.", 403 );
             wp_die();
             return;
@@ -271,41 +237,26 @@ class Glp_Check_Photos_Public {
 
         $user_id = get_current_user_id();
         if ($user_id != 1) {
-            error_log("admin_reject_photo No ADMIN");
+            error_log("admin_reject_url No ADMIN");
             // TODO 404 NOT FOUND
             wp_send_json_error( "NOK.", 401 );
             return;
         }
 
-        if( ! isset( $_REQUEST['pid'] )){
-            error_log("admin_reject_photo no pid");
+        if( ! isset( $_REQUEST['uid'] )){
+            error_log("admin_reject_url no uid");
             wp_send_json_error( "NOT Found", 404 );
             wp_die();
             return;
         }
 
-        $pid = sanitize_text_field($_REQUEST['pid']);
-        update_post_meta($pid , 'admin_status', Pg_Edit_Photo_Public::ADMIN_STATUS_NOT_OK);
-        $this->update_visibility($pid, Pg_Edit_Photo_Public::ADMIN_STATUS_NOT_OK);
+        $uid = sanitize_text_field($_REQUEST['uid']);
+        update_user_meta($uid , 'user_url', 'NOK');
+        //$this->update_visibility($pid, Pg_Edit_Photo_Public::ADMIN_STATUS_NOT_OK);
 
-        error_log( "admin_reject_photo Respond success");
+        error_log( "admin_reject_url Respond success");
         wp_send_json_success( null, 200);
         wp_die();
     }
-
-    private function update_visibility($post_id, $admin_status) {
-        error_log("update_visibility IN id=$post_id admin_status=$admin_status");
-
-        $user_status = get_post_meta($post_id, 'user_status', true);
-        error_log("update_visibility user_status=$user_status");
-
-        if ($user_status == Pg_Edit_Photo_Public::USER_STATUS_PUBLIC && $admin_status == Pg_Edit_Photo_Public::ADMIN_STATUS_PUBLIC_OK) {
-            Pg_Geoposts_Table::update_visible($post_id, Pg_Geoposts_Table::PUBLIC_VISIBLE);
-        }
-        else {
-            Pg_Geoposts_Table::update_visible($post_id, Pg_Geoposts_Table::PUBLIC_HIDDEN);
-        }
-    }
-
 }
 

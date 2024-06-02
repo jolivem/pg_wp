@@ -140,15 +140,14 @@ class Pg_Edit_Photo_Public {
         global $wpdb;
         $post = get_post($pid);
         if ($post != null) {
-            // TODO check if user id is a valid user
-            $latitude = get_post_meta($pid, 'latitude', true);
-            $longitude = get_post_meta($pid, 'longitude', true);
-            $vignette = get_post_meta($pid, 'vignette', true);
+
             $user_status_checked = "";
+            $user_status_label ="Photo privée";
             $user_status = self::USER_STATUS_PRIVATE;
             if (get_post_meta($pid, 'user_status', true) == self::USER_STATUS_PUBLIC) {
                 $user_status_checked = " checked";
                 $user_status = self::USER_STATUS_PUBLIC;
+                $user_status_label ="Affichage autorisé sur la galerie mondiale";
             }
 
             $images_str='';
@@ -158,16 +157,6 @@ class Pg_Edit_Photo_Public {
             }            
 
             $content = stripslashes($post->post_content);
-            //$title = $post->post_title;
-
-            error_log("pg_show_page latitude=$latitude, longitude=$longitude, vignette=$vignette, user_status=$user_status");
-
-            //$vignette_dropdown = '<select id="select-country" name="attachments[' . $post->ID . '][vignette]">';
-            $vignette_options = $this->get_vignette_options();
-            $html_options = '';
-            foreach ($vignette_options as $key => $label) {
-                $html_options .= '<option value="' . esc_attr($key) . '" ' . selected($vignette, $key, false) . '>' . esc_html($label) . '</option>';
-            }
 
             $admin_ajax_url = admin_url('admin-ajax.php');
             $nonce = wp_create_nonce('edit_photo');
@@ -179,12 +168,11 @@ class Pg_Edit_Photo_Public {
             }
 
             $edit_photo_url = Glp_User_Galleries_Public::get_page_url_from_slug(Pg_Edit_Gallery_Public::PAGE_SLUG_EDIT_PHOTO); // TODO move 186 to a global constant or get by Title
+            $edit_gallery_url = Glp_User_Galleries_Public::get_page_url_from_slug(Pg_Edit_Gallery_Public::PAGE_SLUG_EDIT_GALLERY); // TODO move 186 to a global constant or get by Title
+            $edit_gallery_url .= "?gid=$gid";
 
             // TODO check url_img is OK, add try catch
             $html_code = "
-            <input type='hidden' id='latitude' value='$latitude'/>
-            <input type='hidden' id='longitude' value='$longitude'/>
-            <input type='hidden' id='vignette' value='$vignette'/>
             <input type='hidden' id='images_id' value='$images_str'/>
             <input type='hidden' id='gallery-id' value='$gid'/>
             <input type='hidden' id='pg_admin_ajax_url' value='$admin_ajax_url'/>
@@ -206,7 +194,7 @@ class Pg_Edit_Photo_Public {
                 // add right and left buttons
                 $html_code .= "
                 <div class='flex-container-photo''>
-                    <div class='slider-options-left' style='background-color: #f1f1f1'>
+                    <div class='slider-options-left' style='background-color: lightblue'>
                         <div>
                             <div class='edit-photo-option fas fa-angle-double-left' aria-hidden='true' data-postid='$pid'></div>
                         </div>
@@ -214,7 +202,7 @@ class Pg_Edit_Photo_Public {
                     <div style='display:flex; justify-content: center;'>
                         <img style='height:200px; width:auto; border: 1px solid #BBB; padding:3px; border-radius: 4px' src='$img_src' alt=''>
                     </div>
-                    <div class='slider-options-right' style='background-color: #f1f1f1'>
+                    <div class='slider-options-right' style='background-color: lightblue'>
                         <div>
                             <div class='edit-photo-option fas fa-angle-double-right' aria-hidden='true' data-postid='$pid'></div>
                         </div>
@@ -234,22 +222,13 @@ class Pg_Edit_Photo_Public {
                     <textarea rows='3' style='height:100%;' class='form-control' placeholder='' id='photo-description'>$content</textarea>
                     <label for='photo-description'>Description</label>                        
                 </div>
-                <div class='edit-photo-flex-container'>
-                    <div class='edit-photo-select'>
-                        <select id='select-country' class='form-select mb-3' aria-label=''>
-                            <option selected>Sélectionner la zone</option>$html_options
-                        </select>
-                    </div>
-                    <div id='leaflet-map' class='edit-photo-map'></div>
-                </div>
-                    
                 <div class='form-check form-switch'>
                     <input class='form-check-input' type='checkbox' role='switch' id='user_status' value='$user_status'$user_status_checked>
-                    <label class='form-check-label' for='user_status'>Autoriser l'affichage sur la carte mondiale</label>
+                    <label class='form-check-label' for='user_status' id='user_status_label'>$user_status_label</label>
                 </div>
                 <br>
                 <div>
-                    <a href='javascript:history.back()'>Retour</a>
+                    <a href='$edit_gallery_url'>Retour à la galerie</a>
                     <button type='button' class='btn btn-primary' id='save-photo' style='float: inline-end;'>Enregistrer</button>
                 </div>
             </div>";
@@ -267,82 +246,6 @@ class Pg_Edit_Photo_Public {
         }
         return $content;
     }
- 
-    function get_vignette_options() {
-
-        // Afficher le chemin
-        // echo $directory_courant;
-        // echo GLP_DIR;
-    
-        $dict = array();
-        // Add None
-        $dict["None"] = "None";
-
-        $worldfile = GLP_DIR . 'assets/world.json';
-        //echo $worldfile;
-        // // Utiliser glob pour obtenir la liste des fichiers dans le dossier
-        //$files = glob($directory . '/*');
-        $json = file_get_contents($worldfile); 
-        if ($json === false) {
-            // deal with error...
-        }
-        
-        $json_a = json_decode($json, true);
-        if ($json_a === null) {
-            // deal with error...
-        }
-        
-        foreach ($json_a as $country) {
-            $file = $country['file'];
-            //$str = json_encode($country);
-            //echo $str
-            $option = str_replace('_', ' ', $file);
-            $option = str_replace('.geojson', '', $option);
-            $dict[$file] = $option;
-        }
-
-        return $dict;
-
-    }
-
-    static public function get_vignette_from_country_code($country_code) {
-
-        // Afficher le chemin
-        // echo $directory_courant;
-        // echo GLP_DIR;
-
-        if ($country_code == null || $country_code == '') {
-            return null;
-        }
-    
-        $uppercode = strtoupper($country_code);
-
-        // Add None
-        $worldfile = GLP_DIR . 'assets/world.json';
-        //echo $worldfile;
-        // // Utiliser glob pour obtenir la liste des fichiers dans le dossier
-        //$files = glob($directory . '/*');
-        $json = file_get_contents($worldfile); 
-        if ($json === false) {
-            // deal with error...
-            return null;
-        }
-        
-        $json_a = json_decode($json, true);
-        if ($json_a === null) {
-            // deal with error...
-            return null;
-        }
-        
-        foreach ($json_a as $country) {
-            if ($country['code'] === $uppercode) {
-                error_log("get_vignette_from_country_code Found: ".$country['file']);
-                return $country['file'];
-            }
-        }
-        error_log("get_vignette_from_country_code $country_code not Found");
-        return null;
-    }    
 
     //
     // callback on request to download photos
@@ -370,7 +273,7 @@ class Pg_Edit_Photo_Public {
         $post_id = sanitize_text_field( $_REQUEST['post_id'] );
         //$title = sanitize_text_field( $_REQUEST['title'] );
         $desc = sanitize_text_field( $_REQUEST['desc'] );
-        $vignette = sanitize_text_field( $_REQUEST['vignette'] );
+        //$vignette = sanitize_text_field( $_REQUEST['vignette'] );
         $user_status = sanitize_text_field( $_REQUEST['user_status'] );
 
         if ( wp_attachment_is_image( $post_id ) ) {
@@ -393,7 +296,7 @@ class Pg_Edit_Photo_Public {
             //update_post_meta( $post_id, '_wp_attachment_image_alt', $title );
 
             // Set the country
-            update_post_meta($post_id , 'vignette', $vignette);
+            //update_post_meta($post_id , 'vignette', $vignette);
 
             // Set the 'user_status'
             update_post_meta($post_id , 'user_status', $user_status);

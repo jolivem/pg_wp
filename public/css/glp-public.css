@@ -637,6 +637,12 @@ button.lg-icon {
     font-size: small;
 }
 
+.url-text-container {
+    flex: 10 0 180px;
+    padding: 5px;
+    height: 104px;
+    font-size: x-large;
+}
 
 .full-item {
     margin-top: 10px;
@@ -819,6 +825,13 @@ button.lg-icon {
     padding-top: 20px;
 }
 
+.admin-url-option {
+    cursor: pointer;
+    flex-basis: 300px;
+    flex: 10 0 20px;
+    padding: 7px;
+    padding-top: 20px;
+}
 .show-gallery-option {
     cursor: pointer;
     padding: 4px;
@@ -903,6 +916,7 @@ body {
 
 .desc-title {
     text-align: center;
+    font-size: larger;
 }
 
 .desc-description {
@@ -941,8 +955,6 @@ body {
 
 .desc-slider-title {
     text-align: center;
-    font-size: 1rem;
-    font-weight: bold;
     color: #303030;
 }
 
@@ -960,6 +972,12 @@ body {
     font-size: small;
     font-weight: lighter;
 }
+.desc-lightbox-user {
+    font-size: small;
+    font-weight: lighter;
+    display: flex;
+    justify-content: space-between;
+}
 
 .pg-container {
     max-width: 800px !important;
@@ -973,6 +991,11 @@ body {
     border-radius: 7px;
     border-width: 0px 16px;
     /* see desc-gallery */
+}
+
+.pg-tab {
+    padding-right: 8px;
+    line-height: inherit;
 }
 
 .toast {

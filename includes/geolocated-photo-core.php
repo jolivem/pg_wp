@@ -141,6 +141,8 @@ class Geolocated_Photo {
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-check-photos.php';
 
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-check-user-url.php';
+
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-show-user-map.php';
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-show-planet-map.php';
@@ -260,15 +262,23 @@ class Geolocated_Photo {
 
 		$plugin_user_photos_public = new Glp_User_Photos_Public( $this->get_plugin_name(), $this->get_version() );
         $this->loader->add_action( 'wp_ajax_user_delete_photo', $plugin_user_photos_public, 'user_delete_photo');
-        $this->loader->add_action( 'wp_ajax_nopriv_user_delete_photo', $plugin_user_photos_public, 'user_delete_photo'); // TODO be removed
+        //$this->loader->add_action( 'wp_ajax_nopriv_user_delete_photo', $plugin_user_photos_public, 'user_delete_photo'); // TODO be removed
 		
+		$plugin_check_urls_public = new Glp_Check_User_Url_Public( $this->get_plugin_name(), $this->get_version() );
+        $this->loader->add_action( 'wp_ajax_admin_valid_url', $plugin_check_urls_public, 'admin_valid_url');
+        //$this->loader->add_action( 'wp_ajax_nopriv_admin_valid_url', $plugin_check_urls_public, 'admin_valid_url'); // TODO be removed
+        $this->loader->add_action( 'wp_ajax_admin_reject_url', $plugin_check_urls_public, 'admin_reject_url');
+        //$this->loader->add_action( 'wp_ajax_nopriv_admin_reject_url', $plugin_check_urls_public, 'admin_reject_url'); // TODO be removed
+
 		$plugin_check_photos_public = new Glp_Check_Photos_Public( $this->get_plugin_name(), $this->get_version() );
         $this->loader->add_action( 'wp_ajax_admin_valid_photo', $plugin_check_photos_public, 'admin_valid_photo');
-        $this->loader->add_action( 'wp_ajax_nopriv_admin_valid_photo', $plugin_check_photos_public, 'admin_valid_photo'); // TODO be removed
+        //$this->loader->add_action( 'wp_ajax_nopriv_admin_valid_photo', $plugin_check_photos_public, 'admin_valid_photo'); // TODO be removed
         $this->loader->add_action( 'wp_ajax_admin_reject_photo', $plugin_check_photos_public, 'admin_reject_photo');
-        $this->loader->add_action( 'wp_ajax_nopriv_admin_reject_photo', $plugin_check_photos_public, 'admin_reject_photo'); // TODO be removed
+        //$this->loader->add_action( 'wp_ajax_nopriv_admin_reject_photo', $plugin_check_photos_public, 'admin_reject_photo'); // TODO be removed
 
 		$plugin_user_galleries = new Glp_User_Galleries_Public( $this->get_plugin_name(), $this->get_version() );
+        $this->loader->add_action( 'wp_ajax_hide_galleries_help', $plugin_user_galleries, 'hide_galleries_help');
+        //$this->loader->add_action( 'wp_ajax_nopriv_hide_galleries_help', $plugin_user_galleries, 'hide_galleries_help'); // TODO be removed
 
         //$plugin_map_public = new Glp_Map_Public( $this->get_plugin_name(), $this->get_version() );
 		$plugin_public_gallery_category = new Geolocated_Photo_Category( $this->get_plugin_name(), $this->get_version() );
@@ -281,27 +291,27 @@ class Geolocated_Photo {
 
 		$plugin_download_multiple = new Pg_Download_Multiple_Public( $this->get_plugin_name(), $this->get_version() );
         $this->loader->add_action( 'wp_ajax_download_multiple_photos', $plugin_download_multiple, 'download_multiple_photos');
-        $this->loader->add_action( 'wp_ajax_nopriv_download_multiple_photos', $plugin_download_multiple, 'download_multiple_photos'); // TODO be removed
+        //$this->loader->add_action( 'wp_ajax_nopriv_download_multiple_photos', $plugin_download_multiple, 'download_multiple_photos'); // TODO be removed
 
 		$plugin_download_single = new Pg_Download_Single_Public( $this->get_plugin_name(), $this->get_version() );
         $this->loader->add_action( 'wp_ajax_download_single_photo', $plugin_download_single, 'download_single_photo');
-        $this->loader->add_action( 'wp_ajax_nopriv_download_single_photo', $plugin_download_single, 'download_single_photo'); // TODO be removed
+        //$this->loader->add_action( 'wp_ajax_nopriv_download_single_photo', $plugin_download_single, 'download_single_photo'); // TODO be removed
 
 		$plugin_edit_photo = new Pg_Edit_Photo_Public( $this->get_plugin_name(), $this->get_version() );
         $this->loader->add_action( 'wp_ajax_user_edit_photo', $plugin_edit_photo, 'user_edit_photo');
-        $this->loader->add_action( 'wp_ajax_nopriv_user_edit_photo', $plugin_edit_photo, 'user_edit_photo'); // TODO be removed
+        //$this->loader->add_action( 'wp_ajax_nopriv_user_edit_photo', $plugin_edit_photo, 'user_edit_photo'); // TODO be removed
 
         $plugin_edit_gallery = new Pg_Edit_Gallery_Public( $this->get_plugin_name(), $this->get_version() );
         $this->loader->add_action( 'wp_ajax_user_edit_gallery', $plugin_edit_gallery, 'user_edit_gallery');
-        $this->loader->add_action( 'wp_ajax_nopriv_user_edit_gallery', $plugin_edit_gallery, 'user_edit_gallery'); // TODO be removed
+        //$this->loader->add_action( 'wp_ajax_nopriv_user_edit_gallery', $plugin_edit_gallery, 'user_edit_gallery'); // TODO be removed
         $this->loader->add_action( 'wp_ajax_user_delete_gallery', $plugin_edit_gallery, 'user_delete_gallery');
-        $this->loader->add_action( 'wp_ajax_nopriv_user_delete_gallery', $plugin_edit_gallery, 'user_delete_gallery'); // TODO be removed
-        // $this->loader->add_action( 'wp_ajax_user_remove_photo', $plugin_edit_gallery, 'user_remove_photo');
-        // $this->loader->add_action( 'wp_ajax_nopriv_user_remove_photo', $plugin_edit_gallery, 'user_remove_photo'); // TODO be removed
+        //$this->loader->add_action( 'wp_ajax_nopriv_user_delete_gallery', $plugin_edit_gallery, 'user_delete_gallery'); // TODO be removed
+        $this->loader->add_action( 'wp_ajax_hide_gallery_help', $plugin_edit_gallery, 'hide_gallery_help');
+        //$this->loader->add_action( 'wp_ajax_nopriv_hide_gallery_help', $plugin_edit_gallery, 'hide_gallery_help'); // TODO be removed
 
         $planet = new Pg_Show_Planet_Map_Public( $this->get_plugin_name(), $this->get_version() );
         $this->loader->add_action( 'wp_ajax_get_bb_images', $planet, 'get_bb_images');
-        $this->loader->add_action( 'wp_ajax_nopriv_get_bb_images', $planet, 'get_bb_images'); // TODO be removed
+        //$this->loader->add_action( 'wp_ajax_nopriv_get_bb_images', $planet, 'get_bb_images'); // TODO be removed
 
 		new Pg_Show_User_Map_Public( $this->get_plugin_name(), $this->get_version() );
         new Pg_Show_User_Gallery_Public( $this->get_plugin_name(), $this->get_version() );

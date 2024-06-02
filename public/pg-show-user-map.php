@@ -150,15 +150,11 @@ class Pg_Show_User_Map_Public {
             $html_descr = $this->render_medias_descriptions($medias);
         }
   
-        //$markers_js = $this->define_markers();
-        /*<div id='desc-$id' class='desc-slider desc-display'>
-        <div class='desc-slider-title'>$content</div>
-    </div>";*/
         $html_code = "
         <div class='pg-container'>
             <div class='desc-block'>
                 <div class='desc-gallery'>
-                    <h4 class='desc-title'>$gtitle</h4>
+                    <div class='desc-title'>$gtitle</div>
                     <p class='desc-description'>$gdescription</p>
                 </div>
             </div>
@@ -312,10 +308,7 @@ class Pg_Show_User_Map_Public {
                             $maxlng = max($maxlng, $longitude);
                             //error_log("minlat=".$minlat.", maxlat=".$maxlat.",minlng=".$minlng.", maxlng=".$maxlng);
         
-                            
-                            //$img_tag ="<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "' onload='console.log(\"ID=".$image_ids[$key]."\")'>";
                             $map_js .= "icon = new g_LeafIcon({iconUrl: '". $img_src ."'});";
-                            //$map_js .= "g_markers.addLayer(L.marker([".strval($latitude).", ".strval($longitude)."], {icon: icon}).addTo(g_map).bindPopup('I am a green leaf.'));";
                             $map_js .= "g_markers.addLayer(L.marker([".strval($latitude).", ".strval($longitude)."], {icon: icon}));";
                         }
                     }
@@ -347,7 +340,7 @@ class Pg_Show_User_Map_Public {
                     captionSelector: '.slider-descr',
                     captionType: 'text',
                     widthRatio: 0.9,
-                    captionPosition: 'top'
+                    captionPosition: 'bottom'
                 });
             })
         })(jQuery);
