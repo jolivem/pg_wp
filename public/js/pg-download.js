@@ -751,6 +751,42 @@ function isNumber(st) {
 }
 
 async function reverseGeocoding(lat, lon) {
+    try {
+        const geocoder = new google.maps.Geocoder();
+        const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`;
+        //console.log('reverseGeocoding url=', url);
+
+        // Url for the request
+        let address_json='';
+        let address='';
+        let country_code = '';
+
+        const latlng = {
+            lat: lat,
+            lng: lon,
+        };
+        console.log('before geocoder');
+        await geocoder
+            .geocode({ location: latlng })
+            .then((response) => {
+                if (response.results[0]) {
+                    console.log('reverseGeocoding BINGO', response.results);
+
+                    //infowindow.setContent(response.results[0].formatted_address);
+                } else {
+                    window.alert("No results found");
+                }
+        })
+        .catch((e) => window.alert("Geocoder failed due to: " + e));
+        //console.log('reverseGeocoding out=', {country_code, address});
+        return {country_code, address, address_json};
+    }
+    catch (e){
+        console.log('Exception in reverseGeocoding');
+    }
+}
+
+async function OsmReverseGeocoding(lat, lon) {
     const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`;
     //console.log('reverseGeocoding url=', url);
 
