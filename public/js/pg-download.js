@@ -800,18 +800,38 @@ async function reverseGeocoding(lat, lon) {
             lat: lat,
             lng: lon,
         };
-        console.log('reverseGeocoding IN', latlng);
+        //console.log('reverseGeocoding IN', latlng);
         console.log('before geocoder');
         await geocoder
             .geocode({ location: latlng })
             .then((response) => {
                 console.log('reverseGeocoding', response);
                 if (response?.results[0]) {
+
+                    for (var i = 0; i < response.results.length; i++){
+                        if (response.results[i].types[0] != 'plus_code') {
+                            address = response.results[i].formatted_address;
+                            console.log('reverseGeocoding', address);
+                            for (var j = 0; j < response.results[i].address_components.length; j++){
+                                const components = response.results[i].address_components[j];
+                                // find country
+                                //console.log('reverseGeocoding', components.types);
+                                const found = components.types.find((element) => element == 'country');
+                                if (found) {
+                                    country_code = components.short_name;
+                                    console.log('reverseGeocoding', country_code);
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                    }
                     console.log('reverseGeocoding BINGO', response.results);
+                    address_json = JSON.stringify(response.results);
 
                     //infowindow.setContent(response.results[0].formatted_address);
                 } else {
-                    window.alert("No results found");
+                    //console.log('reverseGeocoding', response);
                 }
         })
         .catch((e) => {
