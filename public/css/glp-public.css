@@ -591,9 +591,14 @@ button.lg-icon {
     margin-top: 10px;
     display: flex;
     align-items: stretch;
-    /*background-color: #f1f1f1;*/
-    /*border-radius: 10px;*/
+    background-color: #f7f7f7;
     justify-content: space-between;
+}
+
+.cpt-photo {
+    font-size: small;
+    text-align: center;
+    margin-bottom: 10px;
 }
 
 .list-item {
@@ -1010,4 +1015,11 @@ body {
     margin-top: .25rem;
     font-size: .875em;
     color: #dc3545;
+}
+
+.participate-info {
+    padding: 10px;
+    border-radius: 8px;
+    font-size: smaller;
+    background-color: #f1f1f1;
 }

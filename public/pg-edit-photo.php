@@ -77,7 +77,7 @@ class Pg_Edit_Photo_Public {
     public function enqueue_styles() {
 
         wp_enqueue_style( 'ays_pb_bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css', array(), $this->version, 'all' );
-        wp_enqueue_style('leaflet.css', 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css');
+        //wp_enqueue_style('leaflet.css', 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css');
         wp_enqueue_style( 'gpg-fontawesome', 'https://use.fontawesome.com/releases/v5.4.1/css/all.css', array(), $this->version, 'all');
     }        
 
@@ -89,12 +89,12 @@ class Pg_Edit_Photo_Public {
     public function enqueue_scripts() {
 
         //wp_enqueue_media();
-        wp_enqueue_script( $this->plugin_name.'-glp-public.js', plugin_dir_url( __FILE__ ) . 'js/glp-public.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-bootstrap.js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', array( 'jquery' ), $this->version, true );
-        wp_enqueue_script('leaflet', 'https://unpkg.com/leaflet/dist/leaflet.js', array('jquery'), '1.7.1', true);
+        //wp_enqueue_script('leaflet', 'https://unpkg.com/leaflet/dist/leaflet.js', array('jquery'), '1.7.1', true);
+        wp_enqueue_script( $this->plugin_name.'-glp-public.js', plugin_dir_url( __FILE__ ) . 'js/glp-public.js', array( 'jquery' ), $this->version, true );
 
-        wp_enqueue_script( $this->plugin_name.'-pg-vignette.js', plugin_dir_url( __FILE__ ) . 'js/pg-vignette.js', array( 'jquery' ), $this->version, true );
-        wp_localize_script($this->plugin_name.'-pg-vignette.js', 'ays_vars', array('base_url' => GLP_BASE_URL));
+        //wp_enqueue_script( $this->plugin_name.'-pg-vignette.js', plugin_dir_url( __FILE__ ) . 'js/pg-vignette.js', array( 'jquery' ), $this->version, true );
+        wp_localize_script($this->plugin_name.'-glp-public.js', 'ays_vars', array('base_url' => GLP_BASE_URL));
 
     }
 
@@ -154,7 +154,7 @@ class Pg_Edit_Photo_Public {
             if (!empty($gid)) {
                 $images_id = Pg_Edit_Gallery_Public::pg_get_medias_by_gallery( $gid );
                 $images_str = implode(",", $images_id);
-            }            
+            }       
 
             $content = stripslashes($post->post_content);
 
@@ -206,7 +206,8 @@ class Pg_Edit_Photo_Public {
                             <div class='edit-photo-option fas fa-angle-double-right' aria-hidden='true' data-postid='$pid'></div>
                         </div>
                     </div>
-                </div>";
+                </div>
+                <div id='cpt-photo' class='cpt-photo'></div>";
                 }
             else {
 
@@ -216,7 +217,6 @@ class Pg_Edit_Photo_Public {
                 </div>";
             }
             $html_code .= "
-                <br>
                 <div class='form-floating mb-3'>
                     <textarea rows='3' style='height:100%;' class='form-control' placeholder='' id='photo-description'>$content</textarea>
                     <label for='photo-description'>Description</label>                        

@@ -319,8 +319,8 @@ class Geolocated_Photo {
         $this->loader->add_action( 'wp_ajax_nopriv_get_bb_images', $planet, 'get_bb_images');
 
 		new Pg_Show_User_Map_Public( $this->get_plugin_name(), $this->get_version() );
-        new Pg_Show_User_Gallery_Public( $this->get_plugin_name(), $this->get_version() );
-        new Pg_Show_User_Gallery_Public( $this->get_plugin_name(), $this->get_version() );
+        //new Pg_Show_User_Gallery_Public( $this->get_plugin_name(), $this->get_version() );
+        //new Pg_Show_User_Gallery_Public( $this->get_plugin_name(), $this->get_version() );
         new Pg_Geoposts_Table( $this->get_plugin_name(), $this->get_version() );
     }
 

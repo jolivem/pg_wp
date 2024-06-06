@@ -1,8 +1,45 @@
 (function ($) {
+
+
     $(function () {
+        
         var flag = true;
         var tapped = false;
         var touchStartCoords;
+
+
+        // Update the photo counter on the edit-photo page
+        function updatePhotoCounter() {
+
+            let elem = document.getElementById("images_id");
+            if (elem) {
+
+                // set the photo counter
+                let images = elem.value.split(',');
+                console.log("edit-photo-option images", images);
+                if (images.length > 1) {
+                    const postid = document.getElementById("post_id").value;
+                    console.log("edit-photo-option postid", postid);
+                    const isNumber = (element) => element == postid;
+                    const index = images.findIndex(isNumber);
+                    if (index != -1) {
+                        let cpt = index+1;
+                        document.getElementById('cpt-photo').innerHTML = cpt + "/" + images.length;
+
+                        if (index == 0){
+                            $('.fa-angle-double-left').css('color', 'darkgray');
+                        }
+                        if (index == images.length-1){
+                            $('.fa-angle-double-right').css('color', 'darkgray');
+                        }
+                    }
+                }
+            }
+        }
+
+        // call the function when ready
+        updatePhotoCounter();
+
         $(document).on('touchstart', function (e){
             touchStartCoords = e.originalEvent.touches[0].clientY;
          });
@@ -250,7 +287,6 @@
             }
         });
 
-
         // Process when user click on step-forward or step-backward
         // and when user click on angle-double-right or angle-double-left
         $(document).find('.edit-photo-option').on('click', function(e){
@@ -297,6 +333,8 @@
                             window.location = edit_photo_url;
                         }
                     }
+                    let cpt = index+1;
+                    document.getElementById('cpt-photo').innerHTML = cpt + "/" + images.length;
                 }
             }
             console.log("edit-photo-option OUT");

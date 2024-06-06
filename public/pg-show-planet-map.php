@@ -167,7 +167,19 @@ class Pg_Show_Planet_Map_Public {
                     </div>
                 </div>
             </div>   
-           <div id='imageDescr' class='desc-block'>$html_descr</div> 
+            <div id='imageDescr' class='desc-block'>$html_descr</div>
+            </br>
+            </br>
+            </br>
+            <div class='participate-info'>
+                Participez au projet Planet-Gallery :
+                <ul>
+                    <li>Créez des galeries avec vos photos géolocalisées.</li>
+                    <li>Partagez les galeries et cartes avec vos proches.</li>
+                    <li>Sélectionnez les photos privées, celles qui restent publiques sont affichées sur la carte publique ci-dessus.</li>
+                </ul>
+                Tout est gratuit, inscrivez-vous dès maintenant !
+            </div>
          </div>";
 
         $js = $this->script_map($medias);
