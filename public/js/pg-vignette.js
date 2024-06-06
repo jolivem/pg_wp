@@ -295,11 +295,5 @@
         event.preventDefault();
         save_current_gallery();
     });
-    /*$(document).find('#edit-gallery-save-2').on('click', function(event){
-        console.log("edit-gallery-save-2 IN");
-        event.preventDefault();
-        save_current_gallery();
-    });*/
-
 
 })( jQuery );

@@ -218,13 +218,6 @@ class Glp_User_Photos_Public {
         return $html;
     }
 
-    // public function ays_gallery_replace_message_variables($content, $data){
-    //     foreach($data as $variable => $value){
-    //         $content = str_replace("%%".$variable."%%", $value, $content);
-    //     }
-    //     return $content;
-    // }
-
     public function pg_get_medias_by_user( $user_id ) {
         //error_log("pg_get_medias_by_user: $user_id");
         $args = array(

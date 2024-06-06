@@ -175,7 +175,6 @@ class Pg_Edit_Photo_Public {
             $html_code = "
             <input type='hidden' id='images_id' value='$images_str'/>
             <input type='hidden' id='gallery-id' value='$gid'/>
-            <input type='hidden' id='pg_admin_ajax_url' value='$admin_ajax_url'/>
             <input type='hidden' id='pg_edit_photo_url' value='$edit_photo_url'/>
             <input type='hidden' id='post_id' value='$pid'/>
             <input type='hidden' id='pg_admin_ajax_url' value='$admin_ajax_url'/>
@@ -240,12 +239,12 @@ class Pg_Edit_Photo_Public {
         
     } // end ays_show_galery()
 
-    public function ays_gallery_replace_message_variables($content, $data){
-        foreach($data as $variable => $value){
-            $content = str_replace("%%".$variable."%%", $value, $content);
-        }
-        return $content;
-    }
+    // public function ays_gallery_replace_message_variables($content, $data){
+    //     foreach($data as $variable => $value){
+    //         $content = str_replace("%%".$variable."%%", $value, $content);
+    //     }
+    //     return $content;
+    // }
 
     //
     // callback on request to download photos

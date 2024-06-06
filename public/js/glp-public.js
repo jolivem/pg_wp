@@ -442,7 +442,7 @@
                 // TODO handle error
             });            
         });
-
+        
         $(document).find('.gallery-photo-option').on('click', function(e){
             //console.log("gallery-photo-option click", e);
             e.preventDefault();
@@ -490,8 +490,70 @@
                 tapped = null;
             }                    
             e.preventDefault();
-        })
+        });
 
+        const validateEmail = (email) => {
+            return String(email)
+              .toLowerCase()
+              .match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+              );
+        };
+        
+        // When clicked on submit button of contact page
+        $(document).find('#contact-mail').on('click', function(event){
+            console.log("contact-mail IN");
+            event.preventDefault();
+            let valid=true;
+            $('.invalid-input').css('display', 'none');
+            //find('.invalid-input').css('display', 'block');
+
+    
+            const email = document.getElementById('email');
+            if (email.value == '' || !validateEmail(email.value)) {
+                // with jquery
+                $("#email").parent().find('.invalid-input').css('display', 'block');
+
+                valid = false;
+            }
+
+            const message = document.getElementById('contact-message');
+            if (message.value == '') {
+                $("#contact-message").parent().find('.invalid-input').css('display', 'block');
+                valid = false;
+            }
+    
+            if (valid == true) {
+                let nonce = document.getElementById('pg_nonce').value;
+                let admin_url = document.getElementById('pg_admin_ajax_url').value;
+
+                const formData = new FormData();
+                formData.append('action', 'contact_mail');
+                formData.append('nonce', nonce);
+                formData.append('email', email);
+                formData.append('msg', message);
+                jQuery.ajax({
+                    method: 'POST',
+                    url: admin_url,
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(){
+                        console.log("contact-mail success");
+                        var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+                        toastElList.map(function(toastEl) {
+                            return new bootstrap.Toast(toastEl)
+                        })
+                        
+                        var myToastEl = document.getElementById('contact-success')
+                        var myToast = bootstrap.Toast.getInstance(myToastEl);
+                        myToast.show();
+                    }
+                    // TODO handle error
+                });
+            }
+
+        });
     })
 })(jQuery)
 

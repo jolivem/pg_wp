@@ -139,6 +139,8 @@ class Geolocated_Photo {
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-edit-photo.php';
 
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-contact-mail.php';
+
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-check-photos.php';
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-check-user-url.php';
@@ -300,6 +302,9 @@ class Geolocated_Photo {
 		$plugin_edit_photo = new Pg_Edit_Photo_Public( $this->get_plugin_name(), $this->get_version() );
         $this->loader->add_action( 'wp_ajax_user_edit_photo', $plugin_edit_photo, 'user_edit_photo');
         //$this->loader->add_action( 'wp_ajax_nopriv_user_edit_photo', $plugin_edit_photo, 'user_edit_photo'); // TODO be removed
+
+        $plugin_contact_mail = new Pg_Contact_Mail_Public( $this->get_plugin_name(), $this->get_version() );
+        $this->loader->add_action( 'wp_ajax_contact_mail', $plugin_contact_mail, 'contact_mail');
 
         $plugin_edit_gallery = new Pg_Edit_Gallery_Public( $this->get_plugin_name(), $this->get_version() );
         $this->loader->add_action( 'wp_ajax_user_edit_gallery', $plugin_edit_gallery, 'user_edit_gallery');

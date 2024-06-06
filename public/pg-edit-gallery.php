@@ -215,7 +215,6 @@ class Pg_Edit_Gallery_Public {
         </div>
         <div class='pg-container'>
             <div class='tab-content'>
-            
                 <div>
                     <div class='form-floating mb-3'>
                         <input type='text' name='title' class='form-control' id='gallery-title' aria-describedby='titleHelp' placeholder=''";
@@ -255,7 +254,7 @@ class Pg_Edit_Gallery_Public {
                         Ajouter des photos...
                     </button>
                     <button type='button' class='btn btn-primary align-right' id='edit-gallery-save'>Enregistrer</button>
-            </div>
+                </div>
                 <div id='gallery-item-list'>$html_images</div>
             </div>
             <br/>
@@ -281,12 +280,12 @@ class Pg_Edit_Gallery_Public {
         return $html_code;
     } // end ays_show_galery()
 
-    public function ays_gallery_replace_message_variables($content, $data){
-        foreach($data as $variable => $value){
-            $content = str_replace("%%".$variable."%%", $value, $content);
-        }
-        return $content;
-    }
+    // public function ays_gallery_replace_message_variables($content, $data){
+    //     foreach($data as $variable => $value){
+    //         $content = str_replace("%%".$variable."%%", $value, $content);
+    //     }
+    //     return $content;
+    // }
 
     // $id = gallery id
     // return an array with image IDs

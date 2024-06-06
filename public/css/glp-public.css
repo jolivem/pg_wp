@@ -832,6 +832,7 @@ button.lg-icon {
     padding: 7px;
     padding-top: 20px;
 }
+
 .show-gallery-option {
     cursor: pointer;
     padding: 4px;
@@ -972,6 +973,7 @@ body {
     font-size: small;
     font-weight: lighter;
 }
+
 .desc-lightbox-user {
     font-size: small;
     font-weight: lighter;
@@ -1000,4 +1002,12 @@ body {
 
 .toast {
     --bs-toast-max-width: 250px;
+}
+
+.invalid-input {
+    display: none;
+    width: 100%;
+    margin-top: .25rem;
+    font-size: .875em;
+    color: #dc3545;
 }

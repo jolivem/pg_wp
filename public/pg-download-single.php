@@ -179,12 +179,12 @@ class Pg_Download_Single_Public {
         return $html_code;
     } // end ays_show_galery()
 
-    public function ays_gallery_replace_message_variables($content, $data){
-        foreach($data as $variable => $value){
-            $content = str_replace("%%".$variable."%%", $value, $content);
-        }
-        return $content;
-    }
+    // public function ays_gallery_replace_message_variables($content, $data){
+    //     foreach($data as $variable => $value){
+    //         $content = str_replace("%%".$variable."%%", $value, $content);
+    //     }
+    //     return $content;
+    // }
 
     // callback on request to download photos
     public function download_single_photo() {

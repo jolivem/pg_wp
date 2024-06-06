@@ -506,11 +506,9 @@ function updateDownloadMultipleModal(files) {
 
     const list = document.getElementById('modal-item-list');
     const button = document.getElementById('multiple-upload');
-    const spinner = document.getElementById('selection-spinner');
-    console.log('updateDownloadMultipleModal button.disabled', button.disabled);
-    console.log('updateDownloadMultipleModal spinner', spinner);
+    //const spinner = document.getElementById('selection-spinner');
     const fileInput = document.getElementById("fileInput");
-    console.log('updateDownloadMultipleModal current files', fileInput.files);
+    //console.log('updateDownloadMultipleModal current files', fileInput.files);
     
     // delete previous list
     if (button.disabled == true) {
@@ -518,7 +516,7 @@ function updateDownloadMultipleModal(files) {
         list.innerHTML = "";
         g_filesArray = null;
     }
-    spinner.style.display = "block";
+    //spinner.style.display = "block";
     button.disabled = false;
 
     if (newFiles.length > 0) {
@@ -679,8 +677,8 @@ function updateDownloadMultipleModal(files) {
                         "Coordonnées GPS absentes.<br/>Consultez les conseils.");
                 }
             });
-            const spinner = document.getElementById('selection-spinner');
-            spinner.style.display = "none";
+            //const spinner = document.getElementById('selection-spinner');
+            //spinner.style.display = "none";
         };
     
         reader.readAsDataURL(file);
