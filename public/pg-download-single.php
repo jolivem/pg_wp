@@ -86,13 +86,6 @@ class Pg_Download_Single_Public {
      */
     public function enqueue_scripts() {
 
-        // TODO clean all thi stuff
-        //wp_enqueue_script( 'jquery-effects-core' );
-        //wp_enqueue_script( 'jquery-ui-sortable' );
-        //wp_enqueue_media();
-        //wp_enqueue_script( $this->plugin_name.'-imagesloaded.min.js', 'https://unpkg.com/imagesloaded@4.1.4/imagesloaded.pkgd.min.js', array( 'jquery' ), null, true );
-        //wp_enqueue_script( $this->plugin_name.'-picturefill.min.js', plugin_dir_url( __FILE__ ) . 'js/picturefill.min.js', array( 'jquery' ), $this->version, true );
-        //wp_enqueue_script( $this->plugin_name.'-jquery.mousewheel.min.js', plugin_dir_url( __FILE__ ) . 'js/jquery.mousewheel.min.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-glp-public.js', plugin_dir_url( __FILE__ ) . 'js/glp-public.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-exif-js.js', plugin_dir_url( __FILE__ ) . 'js/exif-js.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-pg-download.js', plugin_dir_url( __FILE__ ) . 'js/pg-download.js', array( 'jquery' ), $this->version, true );
@@ -142,7 +135,7 @@ class Pg_Download_Single_Public {
         <div class="container">
             <form id="upload-single-form">
                 <label for="fileInput" class="btn-primary">
-                    Select Photo
+                    Selectionner la photo
                 </label>
                 <input type="file" id="fileInput" name="custom-file[]">
                 <input type="hidden" id="pg_admin_ajax_url" value="'.$admin_ajax_url.'"/>
@@ -196,7 +189,7 @@ class Pg_Download_Single_Public {
     // callback on request to download photos
     public function download_single_photo() {
         error_log("download_single_photo IN");
-        error_log("download_single_photo REQUEST ".print_r($_REQUEST, true));
+        //error_log("download_single_photo REQUEST ".print_r($_REQUEST, true));
         //error_log("download_single_photo FILES ".print_r($_FILES, true));
 
         if( ! isset( $_REQUEST['nonce'] ) or 

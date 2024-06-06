@@ -86,12 +86,12 @@ class Pg_Download_Multiple_Public {
         wp_enqueue_script( $this->plugin_name.'-exif-js.js', plugin_dir_url( __FILE__ ) . 'js/exif-js.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-pg-download.js', plugin_dir_url( __FILE__ ) . 'js/pg-download.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-bootstrap.js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', array( 'jquery' ), $this->version, true );
-        wp_enqueue_script( $this->plugin_name.'-geocoding.js', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyANlJ9pdMlkfsy3ZzheOWMKK35iqTHDu0o&v=weekly', array( 'jquery' ), $this->version, 
-        array(
-                'strategy' => 'defer'
-            )  );
         wp_localize_script($this->plugin_name, 'ays_vars', array('base_url' => GLP_BASE_URL));
         // wp_localize_script($this->plugin_name, 'gal_ajax_public', array('ajax_url' => admin_url('admin-ajax.php')));
+        wp_enqueue_script( $this->plugin_name.'-geocoding.js', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyANlJ9pdMlkfsy3ZzheOWMKK35iqTHDu0o&v=weekly', array( 'jquery' ), $this->version, 
+            array(
+                    'strategy' => 'defer'
+                )  );
 
     }
 

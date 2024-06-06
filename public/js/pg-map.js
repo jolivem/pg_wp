@@ -619,7 +619,9 @@ function updatePlanetSlider(datas) {
             if (image.content != "") {
                 descrHtml +="<div class='desc-slider-title'>"+image.content+"</div>";
             }
-            descrHtml +="<div class='desc-slider-address'><i class='fas fa-map-marker-alt'></i> "+image.address+"</div>";
+            if (image.address != "") {
+                descrHtml +="<div class='desc-slider-address'><i class='fas fa-map-marker-alt'></i> "+image.address+"</div>";
+            }
             descrHtml +="</div>";            
 
             descr.innerHTML += descrHtml;

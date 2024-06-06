@@ -311,7 +311,7 @@ class Geolocated_Photo {
 
         $planet = new Pg_Show_Planet_Map_Public( $this->get_plugin_name(), $this->get_version() );
         $this->loader->add_action( 'wp_ajax_get_bb_images', $planet, 'get_bb_images');
-        //$this->loader->add_action( 'wp_ajax_nopriv_get_bb_images', $planet, 'get_bb_images'); // TODO be removed
+        $this->loader->add_action( 'wp_ajax_nopriv_get_bb_images', $planet, 'get_bb_images');
 
 		new Pg_Show_User_Map_Public( $this->get_plugin_name(), $this->get_version() );
         new Pg_Show_User_Gallery_Public( $this->get_plugin_name(), $this->get_version() );

@@ -683,7 +683,7 @@ class Pg_Edit_Gallery_Public {
                         </div>                            
                         <div class="modal-body">
                             <p>La galerie va être supprimée définitivement.</p>
-                            <p>Note : Les photos de la galerie sont conservées et accessibles dans le menu TODO<p>
+                            <p>Note : Les photos de la galerie sont conservées et accessibles dans le menu <b>Mes photos<b><p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" id="close-modal" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

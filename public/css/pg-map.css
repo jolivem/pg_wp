@@ -72,8 +72,7 @@ div.planet-slider img {
 
 
 .imgSelected {
-    /*border: 2px solid red;*/
-    border-bottom: 4px solid #707070;
+    border-bottom: 4px solid #a2a6a8;
     /* Adjust the border style for selected images */
     opacity: 1;
 }

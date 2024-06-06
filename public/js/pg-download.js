@@ -750,11 +750,48 @@ function isNumber(st) {
     return resu;
 }
 
+async function GOGOreverseGeocoding(lat, lon) {
+    try {
+        //const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`;
+        //console.log('reverseGeocoding url=', url);
+        const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=AIzaSyANlJ9pdMlkfsy3ZzheOWMKK35iqTHDu0o`
+
+        // Url for the request
+        let address_json='';
+        let address='';
+        let country_code = '';
+
+        // Making our request 
+        await fetch(url, { method: 'GET' })
+            .then(Result => Result.json())
+            .then(json => {
+
+                console.log('reverseGeocoding json=', json);
+                // Printing our response 
+                if (json.address) {
+                    //console.log('reverseGeocoding BINGO');
+                    country_code = json.address.country_code
+                    address = json.display_name;
+                    address_json = JSON.stringify(json.address);
+                }
+                // Printing our field of our response
+                //console.log(`Title of our response : ${string.title}`);
+            })
+            .catch(errorMsg => { console.log(errorMsg); });
+        //console.log('reverseGeocoding out=', {country_code, address});
+        return {country_code, address, address_json};
+    }
+    catch (ex){
+        console.log('Exception in reverseGeocoding', ex);
+    }
+}
+
 async function reverseGeocoding(lat, lon) {
     try {
         const geocoder = new google.maps.Geocoder();
-        const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`;
+        //const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`;
         //console.log('reverseGeocoding url=', url);
+        //const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=AIzaSyANlJ9pdMlkfsy3ZzheOWMKK35iqTHDu0o`
 
         // Url for the request
         let address_json='';
@@ -765,11 +802,13 @@ async function reverseGeocoding(lat, lon) {
             lat: lat,
             lng: lon,
         };
+        console.log('reverseGeocoding IN', latlng);
         console.log('before geocoder');
         await geocoder
             .geocode({ location: latlng })
             .then((response) => {
-                if (response.results[0]) {
+                console.log('reverseGeocoding', response);
+                if (response?.results[0]) {
                     console.log('reverseGeocoding BINGO', response.results);
 
                     //infowindow.setContent(response.results[0].formatted_address);
@@ -777,12 +816,14 @@ async function reverseGeocoding(lat, lon) {
                     window.alert("No results found");
                 }
         })
-        .catch((e) => window.alert("Geocoder failed due to: " + e));
+        .catch((e) => {
+            console.log("Geocoder failed due to: ", e);
+        });
         //console.log('reverseGeocoding out=', {country_code, address});
         return {country_code, address, address_json};
     }
-    catch (e){
-        console.log('Exception in reverseGeocoding');
+    catch (ex){
+        console.log('Exception in reverseGeocoding', ex);
     }
 }
 
