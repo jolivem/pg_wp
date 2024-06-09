@@ -172,13 +172,13 @@ class Pg_Show_Planet_Map_Public {
             </br>
             </br>
             <div class='participate-info'>
-                Participez au projet Planet-Gallery :
+                Participez au projet Planet-Gallery !
                 <ul>
                     <li>Créez des galeries avec vos photos géolocalisées.</li>
-                    <li>Partagez les galeries et cartes avec vos proches.</li>
-                    <li>Sélectionnez les photos privées, celles qui restent publiques sont affichées sur la carte publique ci-dessus.</li>
+                    <li>Partagez des galeries et cartes inédites avec vos proches.</li>
+                    <li>Sélectionnez les photos privées, celles qui sont publiques sont affichées sur la carte ci-dessus.</li>
                 </ul>
-                Tout est gratuit, inscrivez-vous dès maintenant !
+                C'est un projet participatif, tout est gratuit. Inscrivez-vous dès maintenant !
             </div>
          </div>";
 

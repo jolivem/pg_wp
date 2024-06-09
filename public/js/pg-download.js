@@ -614,6 +614,7 @@ function updateDownloadMultipleModal(files) {
                 //console.log( "EXIF.getData IN file", file);
                 const exifData = EXIF.getAllTags(this);
                 console.log('EXIF Data:', exifData);
+                let geoloc_advise_url = document.getElementById('pg_geoloc_advise_url').value;
 
                 const gpsInfo = await EXIF.getTag(this, 'GPSInfoIFDPointer');
                 if (gpsInfo) {
@@ -621,7 +622,12 @@ function updateDownloadMultipleModal(files) {
                     const lon = await EXIF.getTag(this, 'GPSLongitude');
                     const altitude = await EXIF.getTag(this, 'GPSAltitude');
             
-                    if (lat && lon) {
+                    if (isNaN(lat)) {
+                        // render without lat,lon -> error because no EXIF data
+                        renderItemMultiple_error(event.target.result, file.name, 
+                            "Géolocalisation bloquée.<br/>Consultez <a href='"+geoloc_advise_url+"' target='_blank'>cette page</a>.");
+                    }
+                    else if (lat && lon) {
                         const latRef = await EXIF.getTag(this, 'GPSLatitudeRef') || 'N';
                         const lonRef = await EXIF.getTag(this, 'GPSLongitudeRef') || 'E';
             
@@ -667,14 +673,14 @@ function updateDownloadMultipleModal(files) {
                     else {
                         // render without lat,lon -> error because no EXIF data
                         renderItemMultiple_error(event.target.result, file.name, 
-                            "Coordonnées GPS absentes.<br/>Consultez les conseils.");
+                            "Géolocalisation bloquée.<br/>Consultez <a href='"+geoloc_advise_url+"' target='_blank'>cette page</a>.");
                     }
     
                 }
                 else {
                     // render without lat,lon -> error because no EXIF data
                     renderItemMultiple_error(event.target.result, file.name, 
-                        "Coordonnées GPS absentes.<br/>Consultez les conseils.");
+                        "Géolocalisation absente.<br/>Consultez <a href='"+geoloc_advise_url+"' target='_blank'>cette page</a>.");
                 }
             });
             //const spinner = document.getElementById('selection-spinner');

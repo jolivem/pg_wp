@@ -135,6 +135,8 @@ class Pg_Edit_Photo_Public {
     // attr should have the user id
     public function pg_show_page( $pid, $gid ){
 
+        // ig gid is empty, request comes from the page "My Photos"
+
         error_log("pg_show_page IN photo id = $pid, gid = $gid");
         
         global $wpdb;
@@ -167,8 +169,9 @@ class Pg_Edit_Photo_Public {
                 $img_src = $url_img[0];
             }
 
-            $edit_photo_url = Glp_User_Galleries_Public::get_page_url_from_slug(Pg_Edit_Gallery_Public::PAGE_SLUG_EDIT_PHOTO); // TODO move 186 to a global constant or get by Title
-            $edit_gallery_url = Glp_User_Galleries_Public::get_page_url_from_slug(Pg_Edit_Gallery_Public::PAGE_SLUG_EDIT_GALLERY); // TODO move 186 to a global constant or get by Title
+            $edit_photo_url = Glp_User_Galleries_Public::get_page_url_from_slug(Pg_Edit_Gallery_Public::PAGE_SLUG_EDIT_PHOTO);
+            $my_photo_url = Glp_User_Galleries_Public::get_page_url_from_slug(Pg_Edit_Gallery_Public::PAGE_SLUG_MY_PHOTOS); 
+            $edit_gallery_url = Glp_User_Galleries_Public::get_page_url_from_slug(Pg_Edit_Gallery_Public::PAGE_SLUG_EDIT_GALLERY);
             $edit_gallery_url .= "?gid=$gid";
 
             // TODO check url_img is OK, add try catch
@@ -214,8 +217,10 @@ class Pg_Edit_Photo_Public {
                 $html_code .= "
                 <div style='display:flex; justify-content: center;'>
                     <img style='height:200px; width:auto; border: 1px solid #BBB; padding:3px; border-radius: 4px' src='$img_src' alt=''>
-                </div>";
+                </div>
+                <br>";
             }
+
             $html_code .= "
                 <div class='form-floating mb-3'>
                     <textarea rows='3' style='height:100%;' class='form-control' placeholder='' id='photo-description'>$content</textarea>
@@ -226,8 +231,17 @@ class Pg_Edit_Photo_Public {
                     <label class='form-check-label' for='user_status' id='user_status_label'>$user_status_label</label>
                 </div>
                 <br>
-                <div>
-                    <a href='$edit_gallery_url'>Retour à la galerie</a>
+                <div>";
+            if (!empty($gid)) {
+                $html_code .= "
+                    <a href='$edit_gallery_url'>Retour à la galerie</a>";
+            }
+            else {
+                $html_code .= "
+                    Retour à <a href='$my_photo_url'>Mes photos</a>";
+
+            }
+            $html_code .= "
                     <button type='button' class='btn btn-primary' id='save-photo' style='float: inline-end;'>Enregistrer</button>
                 </div>
             </div>";

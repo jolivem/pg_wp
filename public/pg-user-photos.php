@@ -123,6 +123,8 @@ class Glp_User_Photos_Public {
             //<input type='hidden' id='pg_edit_gallery_url' value='$edit_gallery_url'/>
             $html_code = "
             <div class='pg-container'>
+                <h3>Mes photos</h3>
+                <br/>
                 <div>Aucune photo dans la bibliothèque. <a href='$edit_gallery_url'>Créez une galerie</a> et ajoutez des photos.<div>
             </div>";
             return $html_code;    
@@ -151,7 +153,8 @@ class Glp_User_Photos_Public {
                 </div>
             </div>
         </div>
-        <div class='pg-container' id='user-item-list'>";
+        <div class='pg-container' id='user-item-list'>
+            <h3>Mes photos</h3>";
 
         $html_code .= $this->render_images($medias, $medias_nb);
         $html_code .= 

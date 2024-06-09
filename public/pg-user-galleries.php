@@ -133,6 +133,8 @@ class Glp_User_Galleries_Public {
             //<input type='hidden' id='pg_edit_gallery_url' value='$edit_gallery_url'/>
             $html_code = "
             <div class='pg-container'>
+                <h3>Mes galeries</h3>
+                <br/>
                 <div>Aucune galerie. <a href='$edit_gallery_url'>Créez votre première galerie</a> et ajoutez des photos.<div>
             </div>";
             return $html_code;    
@@ -151,13 +153,13 @@ class Glp_User_Galleries_Public {
         <input type='hidden' id='pg_admin_ajax_url' value='$admin_ajax_url'/>
         <input type='hidden' id='pg_nonce' value='$nonce'/>
         <div class='pg-container' id='user-item-list'>
-            <h2>Mes galeries</h2>";
+            <h3>Mes galeries</h3>";
         if ($hide_help != 'true') {
             $html_code .= "
             <div class='alert alert-info' role='alert'>
-                <div><i class='fas fa-edit pg-tab'></i> pour modifier la galerie.</div>
-                <div><i class='fas fa-eye pg-tab'></i> pour visualiser la galerie quand elle est partagée.</div>
-                <div><i class='fas fa-share-alt pg-tab'></i> pour copier le lien de la galerie en vue de la partager.</div>
+                <div>Utilisez <i class='fas fa-edit pg-tab'></i> pour modifier la galerie.</div>
+                <div>Utilisez <i class='fas fa-eye pg-tab'></i> pour visualiser la galerie quand elle est partagée.</div>
+                <div>Utilisez <i class='fas fa-share-alt pg-tab'></i> pour copier le lien de la galerie en vue de la partager.</div>
                 </br>
                 <div class='form-check form-switch'>
                     <input  id='galleries_help' class='form-check-input' type='checkbox' role='switch'>

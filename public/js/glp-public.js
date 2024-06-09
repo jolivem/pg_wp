@@ -592,6 +592,125 @@
             }
 
         });
+
+
+        // When user changes photo status
+        $('#user_status').on('change', function(e) {
+            this.value = this.checked ? "public" : "private";
+            //console.log("on user_status change", e.target);
+            
+            if (this.checked) {
+                document.getElementById('user_status_label').textContent = 'Affichage autorisé sur la galerie mondiale';
+            }
+            else {
+                document.getElementById('user_status_label').textContent = 'Photo privée';
+            }
+            e.stopPropagation();
+            
+        });
+
+        // When clicked on submit button
+        $(document).find('#save-photo').on('click', function(event){
+            console.log("edit-photo IN");
+            event.preventDefault();
+            let error = false;
+            let post_id = document.getElementById('post_id').value;
+            let nonce = document.getElementById('pg_nonce').value;
+            let admin_url = document.getElementById('pg_admin_ajax_url').value;
+
+            const description = document.getElementById('photo-description').value;
+            const user_status = document.getElementById('user_status').value;
+            //const vignette = document.getElementById("select-country").value;
+
+            const formData = new FormData();
+            formData.append('action', 'user_edit_photo');
+            formData.append('nonce', nonce);
+            formData.append('post_id', post_id);
+            //formData.append('title', title);
+            formData.append('desc', description);
+            //formData.append('vignette', vignette);
+            formData.append('user_status', user_status);
+            jQuery.ajax({
+                method: 'POST',
+                url: admin_url,
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response){
+                    console.log("upload done");
+                    // come back to the previous page
+                    console.log("upload done");
+                    var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+                    toastElList.map(function(toastEl) {
+                        return new bootstrap.Toast(toastEl)
+                    })
+                    
+                    var myToastEl = document.getElementById('save-photo-success')
+                    var myToast = bootstrap.Toast.getInstance(myToastEl);
+                    myToast.show();                
+                    
+                }
+                // TODO handle error
+            });
+        });
+
+        function save_current_gallery() {
+
+            let gallery_id = document.getElementById('gallery-id').value;
+            let nonce = document.getElementById('pg_nonce').value;
+            let admin_url = document.getElementById('pg_admin_ajax_url').value;
+
+            const title = document.getElementById('gallery-title').value;
+            const description = document.getElementById('gallery-description').value;
+
+            // get the image list in the order of display
+            let images_id = [];
+
+            if (document.getElementById('item-list')){
+            const list = document.getElementById('item-list').children;
+            //console.log( "list", list);
+                for(let i = 0 ; i < list.length; i++){
+                    // Append them to a string
+                    //console.log( "list i", list[i]);
+                    images_id.push(list[i].dataset.id);
+                }
+            }
+
+            const formData = new FormData();
+            formData.append('action', 'user_edit_gallery');
+            formData.append('nonce', nonce);
+            formData.append('gallery_id', gallery_id);
+            formData.append('title', title);
+            formData.append('desc', description);
+            formData.append('images_id', images_id);
+            jQuery.ajax({
+                method: 'POST',
+                url: admin_url,
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response){
+                    console.log("upload done");
+                    var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+                    toastElList.map(function(toastEl) {
+                        return new bootstrap.Toast(toastEl)
+                    })
+                    
+                    var myToastEl = document.getElementById('save-gallery-success')
+                    var myToast = bootstrap.Toast.getInstance(myToastEl);
+                    myToast.show();
+                }
+                // TODO handle error
+            });
+
+        }
+        // When clicked on submit button of edit gallery page
+        $(document).find('#edit-gallery-save').on('click', function(event){
+            console.log("edit-gallery-save IN");
+            event.preventDefault();
+            save_current_gallery();
+        });
+
     })
 })(jQuery)
 
