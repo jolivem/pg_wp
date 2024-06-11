@@ -890,13 +890,13 @@ if (sortableList) {
 
     items.forEach(item => {
         item.addEventListener("dragstart", () => {
-            console.log("dragstart");
+            //console.log("dragstart");
             // Adding dragging class to item after a delay
             setTimeout(() => item.classList.add("dragging"), 0);
         });
         // Removing dragging class from item on dragend event
         item.addEventListener("dragend", () => item.classList.remove("dragging"));
-        console.log("set dragging to ", item);
+        //console.log("set dragging to ", item);
     });
 
     const initSortableList = (e) => {

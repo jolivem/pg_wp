@@ -237,12 +237,13 @@ class Pg_Edit_Gallery_Public {
         if ($hide_help != 'true') {
             $html_code .= "
                 <div class='alert alert-info' role='alert'>
-                    <div><i class='fas fa-edit pg-tab'></i> pour modifier la description et le caractère publique / privé de la photo.</div>
-                    <div><i class='fas fa-trash pg-tab'></i> pour supprimer la photo de la gallerie, elle est toujours pésente votre phototèque.</div>
+                    <div>Pour chaque photo :</div>
+                    <div>- Utilisez &nbsp<i class='fas fa-edit'></i>&nbsp pour modifier la description et le caractère <b>Publique</b> / <b>Privé</b> de la photo.</div>
+                    <div>- Utilisez &nbsp<i class='fas fa-trash'></i>&nbsp pour supprimer la photo de la gallerie, elle reste pésente votre phototèque.</div>
                     </br>
-                    <div>- Une photo notée 'Non vérifiée' est publique et en attente de vérification par le modérateur.</div>
-                    <div>- Une photo notée 'Privée' n'est pas affichée sur la galerie mondiale et n'est pas vérifiée par le modérateur.</div>
-                    <div>- Une photo notée 'Publique' est affichée sur la galerie mondiale.</div>
+                    <div>- Une photo notée <b>Non vérifiée</b> est publique, en attente de vérification par le modérateur.</div>
+                    <div>- Une photo notée <b>Privée</b> n'est pas affichée sur la galerie mondiale et n'est pas vérifiée par le modérateur.</div>
+                    <div>- Une photo notée <b>Publique</b> est affichée sur la galerie mondiale.</div>
                     </br>
                     <div class='form-check form-switch'>
                         <input  id='gallery_help' class='form-check-input' type='checkbox' role='switch'>
@@ -254,7 +255,7 @@ class Pg_Edit_Gallery_Public {
         
         $html_code .= "
                 <div>
-                    <button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#multipleDowloadModal'>
+                    <button type='button' class='btn btn-primary' style='margin-bottom: 10px;' data-bs-toggle='modal' data-bs-target='#multipleDowloadModal'>
                         Ajouter des photos...
                     </button>
                     <button type='button' class='btn btn-primary align-right' id='edit-gallery-save'>Enregistrer</button>
@@ -682,14 +683,14 @@ class Pg_Edit_Gallery_Public {
                     <div class="pg-container">
                         <div class="modal-header">
                             <h5 class="modal-title" id="delete-confirmation-label">Suppression de la galerie</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
                         </div>                            
                         <div class="modal-body">
                             <p>La galerie va être supprimée définitivement.</p>
                             <p>Note : Les photos de la galerie sont conservées et accessibles dans le menu <b>Mes photos<b>.<p>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" id="close-modal" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" id="close-modal" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
                             <button type="button" id="modal-delete-gallery" class="btn btn-primary">Confirmer</button>
                         </div>
                     </div>

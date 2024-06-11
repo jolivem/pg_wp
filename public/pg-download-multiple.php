@@ -135,18 +135,18 @@ class Pg_Download_Multiple_Public {
                 <div class="modal-content">
                     <div class="container">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="multipleDowloadModalLabel">Sélection de photos 5 par 5</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <h5 class="modal-title" id="multipleDowloadModalLabel">Sélection de photos géolocalisées, <br/>par groupe de 5 maximum.</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
                         </div>                            
                         <div class="modal-body">
                             <form id="custom-upload-form" style="text-align=center;">
                                 <input type="hidden" id="pg_admin_ajax_url" value="'.$admin_ajax_url.'"/>
                                 <input type="hidden" id="download_nonce" value="'.$nonce.'"/>
                                 <label for="fileInput" class="btn btn-primary">
-                                    Selectionner les photos...
+                                    Sélectionner...
                                 </label>
                                 <br/>
-                                <input type="file" id="fileInput" name="custom-file[]" multiple>
+                                <input type="file" id="fileInput" accept=".jpeg, .jpg, .tif" name="custom-file[]" multiple>
                                 <div id="modal-item-list"></div>
                                 <br/>
                                 <div id="selection-spinner" class="spinner-border text-primary download-spinner" style="display:none;"></div>
@@ -154,7 +154,7 @@ class Pg_Download_Multiple_Public {
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" id="close-multiple-modal" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" id="close-multiple-modal" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
                         </div>
                         <div id="progressContainer"></div>
                     </div>
@@ -174,7 +174,8 @@ class Pg_Download_Multiple_Public {
 
     // callback on request to download photos
     public function download_multiple_photos() {
-        error_log("download_multiple_photos IN REQUEST ".print_r($_REQUEST, true));
+        //error_log("download_multiple_photos IN REQUEST ".print_r($_REQUEST, true));
+        //error_log("download_multiple_photos IN FILES ".print_r($_FILES, true));
 
         if( ! isset( $_REQUEST['nonce'] ) or 
             ! wp_verify_nonce( $_REQUEST['nonce'], 'download_multiple_photos' ) ) {
@@ -214,6 +215,15 @@ class Pg_Download_Multiple_Public {
             wp_send_json_error( "NOK.", 404 );
             return;
         }
+
+        // $upload_dir = wp_upload_dir();
+        // //error_log("download_multiple_photos upload_dir ".print_r($upload_dir, true));
+        // $image_path = $upload_dir['path'] . "/" . $_FILES['file']['name'];
+        // //error_log("download_multiple_photos image_path ".$image_path);
+        // if ( file_exists( $image_path ) ) {
+        //     error_log("download_multiple_photos FILE EXISTS");
+        // }
+
         $uploadedfile = $_FILES['file'];
         $upload_overrides = array('test_form' => false);
         $movefile = wp_handle_upload($uploadedfile, $upload_overrides);
@@ -489,6 +499,7 @@ class Pg_Download_Multiple_Public {
         $filename = $path_parts['filename'];
 
         $suf = substr($path_parts['filename'], -2);
+        error_log("find_media_by_author_and_guid suf=$suf");
         if ($suf != "-1" && $suf != "-2" && $suf != "-3"){
             return 0;
         }

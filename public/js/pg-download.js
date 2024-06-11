@@ -1,5 +1,5 @@
 
-var g_filesArray = null;
+var g_filesArray = []; // only the files with exif data
 const maxFile=5;
 
 //
@@ -371,7 +371,7 @@ jQuery(document).find('#multiple-upload').on('click', function(e){
     const galleryId = document.getElementById('gallery-id')?.value;
     // progressContainer.innerHTML = '';
     // progressContainer.style.display = 'block';
-    console.log("uploadPhotos g_filesArray.length=", g_filesArray.length);
+    //console.log("uploadPhotos g_filesArray.length=", g_filesArray.length);
     //const files = Array.from(fileInput.files)
     for (let i = 0 ; i < g_filesArray.length ; i ++) {
     //Array.from(files).forEach(file => {
@@ -485,8 +485,14 @@ function removeDownloadPhoto(item) {
         }
     }
     console.log('removeDownloadPhoto IN');
-    
-    
+
+    const list = document.getElementById('modal-item-list');
+    console.log('removeDownloadPhoto list', list)
+    console.log('removeDownloadPhoto count', list.childElementCount)
+    if (list.childElementCount-1 < maxFile) {
+        document.getElementById("fileInput").disabled = false;
+    }
+
     ancestor.style.animationDuration = '.35s';
     ancestor.style.animationName = 'slideOutLeft';
 
@@ -514,7 +520,7 @@ function updateDownloadMultipleModal(files) {
     if (button.disabled == true) {
         // the previous list has been uploaded, remove it
         list.innerHTML = "";
-        g_filesArray = null;
+        g_filesArray = [];
     }
     //spinner.style.display = "block";
     button.disabled = false;
@@ -595,7 +601,7 @@ function updateDownloadMultipleModal(files) {
         const file = newFiles[i];
         const reader = new FileReader();
         
-        if ( list.childElementCount == maxFile) {
+        if (list.childElementCount >= maxFile) {
             fileInput.disabled = true;
             break;
         }
@@ -621,53 +627,53 @@ function updateDownloadMultipleModal(files) {
                     const lat = await EXIF.getTag(this, 'GPSLatitude');
                     const lon = await EXIF.getTag(this, 'GPSLongitude');
                     const altitude = await EXIF.getTag(this, 'GPSAltitude');
+                    console.log('EXIF lat', lat);
             
-                    if (isNaN(lat)) {
-                        // render without lat,lon -> error because no EXIF data
-                        renderItemMultiple_error(event.target.result, file.name, 
-                            "Géolocalisation bloquée.<br/>Consultez <a href='"+geoloc_advise_url+"' target='_blank'>cette page</a>.");
-                    }
-                    else if (lat && lon) {
+                    if (lat && lon) {
                         const latRef = await EXIF.getTag(this, 'GPSLatitudeRef') || 'N';
                         const lonRef = await EXIF.getTag(this, 'GPSLongitudeRef') || 'E';
             
                         const latitude = convertDMSToDDExif(lat[0], lat[1], lat[2], latRef);
                         const longitude = convertDMSToDDExif(lon[0], lon[1], lon[2], lonRef);
 
-                        const date = await EXIF.getTag(this, 'DateTimeOriginal');
-                        let zoomRatio = '';
-                        let zoomExif = await EXIF.getTag(this, 'DigitalZoomRation');
-                        if (zoomExif) {
-                            zoomRatio = zoomExif.toString();
+                        if (isNaN(latitude)) {
+                            // render without lat,lon -> error because no EXIF data
+                            renderItemMultiple_error(event.target.result, file.name, 
+                                "Géolocalisation bloquée.<br/>Consultez <a href='"+geoloc_advise_url+"' target='_blank'>cette page</a>.");
                         }
+                        else {
 
-                        let geocod = await reverseGeocoding(latitude, longitude);
-
-                        if (g_filesArray == null) {
-                            // first files 
-                            g_filesArray = [];
-                        }
-                        if (g_filesArray.length < maxFile) {
-                            
-                            //console.log( "onload geocod", geocod);
-                            renderItemMultiple_gps(event.target.result, file.name, date);
-
-                            file.pgpg = {};
-                            file.pgpg.lat = latitude;
-                            file.pgpg.lon = longitude;
-                            file.pgpg.altitude = altitude; // atltide to calculate with denominator
-                            file.pgpg.is_exif = true;
-                            //TODO calculate and fill zoom value
-                            file.pgpg.zoom = zoomRatio;
-                            file.pgpg.date = date;
-                            if (geocod) {
-                                file.pgpg.address = geocod.address;
-                                file.pgpg.address_json = geocod.address_json;
-                                file.pgpg.country_code = geocod.country_code;
+                            const date = await EXIF.getTag(this, 'DateTimeOriginal');
+                            let zoomRatio = '';
+                            let zoomExif = await EXIF.getTag(this, 'DigitalZoomRation');
+                            if (zoomExif) {
+                                zoomRatio = zoomExif.toString();
                             }
-                        
-                            console.log('updateDownloadMultipleModal onload push file', file);
-                            g_filesArray.push(file);
+
+                            let geocod = await reverseGeocoding(latitude, longitude);
+
+                            if (g_filesArray.length < maxFile) {
+                                
+                                //console.log( "onload geocod", geocod);
+                                renderItemMultiple_gps(event.target.result, file.name, date);
+
+                                file.pgpg = {};
+                                file.pgpg.lat = latitude;
+                                file.pgpg.lon = longitude;
+                                file.pgpg.altitude = altitude; // atltide to calculate with denominator
+                                file.pgpg.is_exif = true;
+                                //TODO calculate and fill zoom value
+                                file.pgpg.zoom = zoomRatio;
+                                file.pgpg.date = date;
+                                if (geocod) {
+                                    file.pgpg.address = geocod.address;
+                                    file.pgpg.address_json = geocod.address_json;
+                                    file.pgpg.country_code = geocod.country_code;
+                                }
+                            
+                                console.log('updateDownloadMultipleModal onload push file', file);
+                                g_filesArray.push(file);
+                            }
                         }
                     }
                     else {

@@ -732,14 +732,14 @@ button.lg-icon {
     line-height: 20px;
     text-overflow: ellipsis;
     overflow: hidden;
-    height: 26px;
+    height: 24px;
 }
 
 .user-gallery-text {
     line-height: 22px;
     text-overflow: ellipsis;
     overflow: hidden;
-    height: 50px;
+    height: 48px;
 }
 
 .user-gallery-option {
@@ -994,7 +994,7 @@ body {
 }
 
 .pg-map {
-    border: solid #eee;
+    border: solid #ddd;
     border-radius: 7px;
     border-width: 0px 16px;
     /* see desc-gallery */
@@ -1022,4 +1022,8 @@ body {
     border-radius: 8px;
     font-size: smaller;
     background-color: #f1f1f1;
+}
+
+.modal-header .btn-close {
+    display: none;
 }

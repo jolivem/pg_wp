@@ -157,9 +157,10 @@ class Glp_User_Galleries_Public {
         if ($hide_help != 'true') {
             $html_code .= "
             <div class='alert alert-info' role='alert'>
-                <div>Utilisez <i class='fas fa-edit pg-tab'></i> pour modifier la galerie.</div>
-                <div>Utilisez <i class='fas fa-eye pg-tab'></i> pour visualiser la galerie quand elle est partagée.</div>
-                <div>Utilisez <i class='fas fa-share-alt pg-tab'></i> pour copier le lien de la galerie en vue de la partager.</div>
+                <div>Vos galeries sont privées.</div>
+                <div> - Utilisez &nbsp<i class='fas fa-edit'></i>&nbsp pour modifier une galerie.</div>
+                <div> - Utilisez &nbsp<i class='fas fa-eye'></i>&nbsp pour visualiser une galerie quand elle est partagée.</div>
+                <div> - Utilisez &nbsp<i class='fas fa-share-alt'></i>&nbsp pour copier le lien d'une galerie en vue de la partager.</div>
                 </br>
                 <div class='form-check form-switch'>
                     <input  id='galleries_help' class='form-check-input' type='checkbox' role='switch'>
@@ -170,9 +171,10 @@ class Glp_User_Galleries_Public {
         }
         $html_code .= "
             <div class='tab-pane fade show active' id='nav-photos' role='tabpanel' aria-labelledby='nav-photos-tab'>
-                <button type='button' class='btn btn-primary' id='user-galleries-create'>
+                <button type='button' class='btn btn-primary' id='user-galleries-create' style='margin-bottom: 10px;'>
                     Ajouter une galerie...
                 </button>
+                <br/>
             </div>";
 
         $html_code .= $this->render_galleries($galleries);
