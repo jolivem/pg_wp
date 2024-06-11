@@ -174,8 +174,8 @@ class Pg_Download_Multiple_Public {
 
     // callback on request to download photos
     public function download_multiple_photos() {
-        //error_log("download_multiple_photos IN REQUEST ".print_r($_REQUEST, true));
-        //error_log("download_multiple_photos IN FILES ".print_r($_FILES, true));
+        error_log("download_multiple_photos IN REQUEST ".print_r($_REQUEST, true));
+        error_log("download_multiple_photos IN FILES ".print_r($_FILES, true));
 
         if( ! isset( $_REQUEST['nonce'] ) or 
             ! wp_verify_nonce( $_REQUEST['nonce'], 'download_multiple_photos' ) ) {
@@ -216,108 +216,111 @@ class Pg_Download_Multiple_Public {
             return;
         }
 
-        // $upload_dir = wp_upload_dir();
-        // //error_log("download_multiple_photos upload_dir ".print_r($upload_dir, true));
-        // $image_path = $upload_dir['path'] . "/" . $_FILES['file']['name'];
-        // //error_log("download_multiple_photos image_path ".$image_path);
-        // if ( file_exists( $image_path ) ) {
-        //     error_log("download_multiple_photos FILE EXISTS");
-        // }
+        $upload_dir = wp_upload_dir();
+        //error_log("download_multiple_photos upload_dir ".print_r($upload_dir, true));
+        $image_path = $upload_dir['path'] . "/" . $_FILES['file']['name'];
+        //error_log("download_multiple_photos image_path ".$image_path);
+        if ( file_exists( $image_path ) ) {
+            error_log("download_multiple_photos FILE EXISTS");
+
+            // check if it belongs to the same user and if it is the same date
+            $found_id = $this->find_media_by_author_and_name($user_id, $_FILES['file']['name']);
+            if ($found_id != 0) {
+                // image already found in media library !
+                error_log( "File already present in media library, id=$found_id");
+    
+                // Add image to the current gallery if not already present
+                $this->add_image_to_gallery($_REQUEST['galleryId'], $found_id);
+                $data=array('message' => 'done');
+                wp_send_json_success( $data, 200);
+            }
+    
+        }
 
         $uploadedfile = $_FILES['file'];
         $upload_overrides = array('test_form' => false);
         $movefile = wp_handle_upload($uploadedfile, $upload_overrides);
-        error_log("download_multiple_photos movefile ".print_r($movefile, true));
+        //error_log("download_multiple_photos movefile ".print_r($movefile, true));
 
         // check if the same photo is already in the mdeia library
         // compare url and guid and author and size and lon lat
-        $found_id = $this->find_media_by_author_and_guid($user_id, $movefile[ 'url' ]);
-        if ($found_id != 0) {
-            // image already found in media library !
-            error_log( "File already present in media library, id=$found_id");
 
-            // Add image to the current gallery if not already present
-            $this->add_image_to_gallery($_REQUEST['galleryId'], $found_id);
-            $data=array('message' => 'done');
+        $address = $_REQUEST['address'];
+        $address_json = $_REQUEST['address_json'];
+        //error_log("download_multiple_photos address = $address");
+        $country_code = sanitize_text_field( $_REQUEST['country_code'] );
+        $title = sanitize_text_field( $_REQUEST['title'] );
+
+        // echo $movefile['url'];
+        if ($movefile && !isset($movefile['error'])) {
+            error_log( "File Upload Successfully");
+
+            // it is time to add our uploaded image into WordPress media library
+            $attachment_id = wp_insert_attachment(
+                array(
+                    'guid'           => $movefile[ 'url' ],
+                    'post_mime_type' => $movefile[ 'type' ],
+                    'post_title'     => $address,
+                    'post_content'   => '', // reserved for user description
+                    'post_excerpt'   => '', 
+                    'post_name'      => basename( $movefile[ 'file' ] ), 
+                    'post_status'    => 'inherit',
+                ),
+                $movefile[ 'file' ]
+            );
+
+            if( is_wp_error( $attachment_id ) || ! $attachment_id ) {
+                return false;
+            }
+
+            // update medatata, regenerate image sizes
+            //require_once( ABSPATH . 'wp-admin/includes/image.php' );
+
+            wp_update_attachment_metadata(
+                $attachment_id,
+                wp_generate_attachment_metadata( $attachment_id, $movefile[ 'file' ] )
+            );
+
+            update_post_meta($attachment_id , 'latitude', $_REQUEST['lat']);
+            update_post_meta($attachment_id , 'longitude', $_REQUEST['lon']);
+            update_post_meta($attachment_id , 'altitude', $_REQUEST['altitude']);
+            update_post_meta($attachment_id , 'date', $_REQUEST['date']); // date of shooting
+            update_post_meta($attachment_id , 'address_json', $address_json); //multiple addresses
+
+            update_post_meta($attachment_id , 'user_status', Pg_Edit_Photo_Public::USER_STATUS_PUBLIC); // user_status enable by default
+            update_post_meta($attachment_id , 'admin_status', Pg_Edit_Photo_Public::ADMIN_STATUS_NOT_SEEN); // 0 = image not checked
+
+            $vignette = $this->get_vignette_from_country_code($country_code);
+            if ($vignette != null) {
+                update_post_meta($attachment_id , 'vignette', $vignette);
+            }
+
+            // insert with public=0
+            Pg_Geoposts_Table::insert_post( $attachment_id,
+                $_REQUEST['lat'],
+                $_REQUEST['lon'],
+                $_REQUEST['is_exif'],
+                $_REQUEST['date']);
+            
+            // if gallery id , add to gallery
+            $this->add_image_to_gallery($_REQUEST['galleryId'], $attachment_id);
+
+            error_log( "Respond success");
+            //wp_send_json_success( "downloaded", 200);
+            $data=array('message' => 'downloaded');
             wp_send_json_success( $data, 200);
+
+        } else {
+            /**
+             * Error generated by _wp_handle_upload()
+             * @see _wp_handle_upload() in wp-admin/includes/file.php
+             */
+            error_log( $movefile['error']);
+            //wp_send_json_success( "downloaded", 200);
+            $data=array('message' => $movefile['error']);
+            wp_send_json_success( $data, 500);
         }
-        else {
-
-            $address = $_REQUEST['address'];
-            $address_json = $_REQUEST['address_json'];
-            error_log("download_multiple_photos address = $address");
-            $country_code = sanitize_text_field( $_REQUEST['country_code'] );
-            $title = sanitize_text_field( $_REQUEST['title'] );
-    
-            // echo $movefile['url'];
-            if ($movefile && !isset($movefile['error'])) {
-                error_log( "File Upload Successfully");
-
-                // it is time to add our uploaded image into WordPress media library
-                $attachment_id = wp_insert_attachment(
-                    array(
-                        'guid'           => $movefile[ 'url' ],
-                        'post_mime_type' => $movefile[ 'type' ],
-                        'post_title'     => $address,
-                        'post_content'   => '', // reserved for user description
-                        'post_excerpt'   => $address_json,
-                        'post_name'      => basename( $movefile[ 'file' ] ), 
-                        'post_status'    => 'inherit',
-                    ),
-                    $movefile[ 'file' ]
-                );
-
-                if( is_wp_error( $attachment_id ) || ! $attachment_id ) {
-                    return false;
-                }
-
-                // update medatata, regenerate image sizes
-                //require_once( ABSPATH . 'wp-admin/includes/image.php' );
-
-                wp_update_attachment_metadata(
-                    $attachment_id,
-                    wp_generate_attachment_metadata( $attachment_id, $movefile[ 'file' ] )
-                );
-
-                update_post_meta($attachment_id , 'latitude', $_REQUEST['lat']);
-                update_post_meta($attachment_id , 'longitude', $_REQUEST['lon']);
-                update_post_meta($attachment_id , 'altitude', $_REQUEST['altitude']);
-                update_post_meta($attachment_id , 'date', $_REQUEST['date']); // date of shooting
-
-                update_post_meta($attachment_id , 'user_status', Pg_Edit_Photo_Public::USER_STATUS_PUBLIC); // user_status enable by default
-                update_post_meta($attachment_id , 'admin_status', Pg_Edit_Photo_Public::ADMIN_STATUS_NOT_SEEN); // 0 = image not checked
-
-                $vignette = $this->get_vignette_from_country_code($country_code);
-                if ($vignette != null) {
-                    update_post_meta($attachment_id , 'vignette', $vignette);
-                }
-
-                // insert with public=0
-                Pg_Geoposts_Table::insert_post( $attachment_id,
-                    $_REQUEST['lat'],
-                    $_REQUEST['lon'],
-                    $_REQUEST['is_exif'],
-                    $_REQUEST['date']);
-                
-                // if gallery id , add to gallery
-                $this->add_image_to_gallery($_REQUEST['galleryId'], $attachment_id);
-
-                error_log( "Respond success");
-                //wp_send_json_success( "downloaded", 200);
-                $data=array('message' => 'downloaded');
-                wp_send_json_success( $data, 200);
-
-            } else {
-                /**
-                 * Error generated by _wp_handle_upload()
-                 * @see _wp_handle_upload() in wp-admin/includes/file.php
-                 */
-                error_log( $movefile['error']);
-                //wp_send_json_success( "downloaded", 200);
-                $data=array('message' => $movefile['error']);
-                wp_send_json_success( $data, 500);
-                }
-        }
+        
         wp_die();
         
     }
@@ -491,24 +494,25 @@ class Pg_Download_Multiple_Public {
     // Finf of the file already exists
     // return 0 if not exists
     // return the attachment id (>0) if exists
-    private function find_media_by_author_and_guid($author_id, $guid) {
+    private function find_media_by_author_and_name($author_id, $name) {
         global $wpdb;
-        error_log("find_media_by_author_and_guid IN guid=$guid");
+        error_log("find_media_by_author_and_name IN name=$name");
+        $low_name = strtolower($name);
+        //$path_parts = pathinfo($guid);
+        //$filename = $path_parts['filename'];
 
-        $path_parts = pathinfo($guid);
-        $filename = $path_parts['filename'];
-
-        $suf = substr($path_parts['filename'], -2);
-        error_log("find_media_by_author_and_guid suf=$suf");
-        if ($suf != "-1" && $suf != "-2" && $suf != "-3"){
-            return 0;
-        }
+        // $suf = substr($path_parts['filename'], -2);
+        // error_log("find_media_by_author_and_name suf=$suf");
+        // if ($suf != "-1" && $suf != "-2" && $suf != "-3"){
+        //     return 0;
+        // }
 
         // build the initial name and find it in posts
-        $filename2 = substr($path_parts['filename'], 0, -2);
+//        $filename2 = substr($path_parts['filename'], 0, -2);
 
-        $guid2 = $path_parts['dirname'] . "/" . $filename2 . "." . $path_parts['extension'];
-        error_log("find_media_by_author_and_guid guid2=$guid2");
+//        $guid2 = $path_parts['dirname'] . "/" . $filename2 . "." . $path_parts['extension'];
+        $name2 = str_replace(".", "-", $low_name);
+        error_log("find_media_by_author_and_name name2=$name2");
 
         $table_name = $wpdb->prefix . 'posts';
         
@@ -516,21 +520,21 @@ class Pg_Download_Multiple_Public {
             "SELECT ID FROM $table_name 
             WHERE post_type = 'attachment' 
             AND post_author = %d 
-            AND guid = %s",
+            AND post_name = %s",
             $author_id, // Replace $author_id with the ID of the author
-            $guid2       // Replace $guid with the GUID of the image
+            $name2       // Replace $guid with the GUID of the image
         );
         
         $attachment_id = $wpdb->get_var($query);
         
         if ($attachment_id) {
             // Image 
-            error_log("find_media_by_author_and_guid found id=$attachment_id");
+            error_log("find_media_by_author_and_name found id=$attachment_id");
             return $attachment_id;
             
         } 
         // Image not found
-        error_log("find_media_by_author_and_guid not found");
+        error_log("find_media_by_author_and_name not found");
         return 0;
     
     }

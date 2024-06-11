@@ -238,7 +238,7 @@ class Pg_Edit_Photo_Public {
             }
             else {
                 $html_code .= "
-                    Retour à <a href='$my_photo_url'>Mes photos</a>";
+                    <a href='$my_photo_url'>Retour à Mes photos</a>";
 
             }
             $html_code .= "
