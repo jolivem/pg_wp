@@ -112,7 +112,8 @@ class Pg_Show_User_Map_Public {
 
         // TODO check that the photo belons to the current user
         if (! isset($_GET['guuid'])) {
-            return "";
+            my_custom_404();
+            wp_die();
         }
 
         $this->enqueue_styles();
@@ -133,18 +134,15 @@ class Pg_Show_User_Map_Public {
         $gallery = $this->pg_get_gallery_by_uuid($guuid);
         if(!$gallery){
             error_log("pg_show_page Gallery not found");
-            return "";
+            my_custom_404();
+            wp_die();
         }
+
         $id = $gallery["id"];
         $gtitle = stripslashes($gallery["title"]);
         $gdescription = stripslashes($gallery["description"]);
-        if(!$gallery){
-            error_log("pg_show_page Gallery not found");
-            return "";
-        }
   
         $medias = $this->pg_get_medias_by_gallery($id);
-
         if ($medias != null) {
             $html_slider = $this->render_slider($medias);
             $html_descr = $this->render_medias_descriptions($medias);

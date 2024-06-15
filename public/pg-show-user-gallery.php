@@ -117,7 +117,8 @@ class Pg_Show_User_Gallery_Public {
 
         // TODO check that the photo belons to the current user
         if (! isset($_GET['guuid'])) {
-            return "";
+            my_custom_404();
+            wp_die();
         }
 
         $this->enqueue_styles();
@@ -135,7 +136,8 @@ class Pg_Show_User_Gallery_Public {
         
         $gallery = $this->ays_get_gallery_by_uuid($uuid);
         if(!$gallery){
-            return;
+            my_custom_404();
+            wp_die();
         }
         /*
          * Gallery global settings

@@ -116,7 +116,7 @@ class Pg_Contact_Mail_Public {
         </div>
         <div class='pg-container'>
             </br>
-            <h4>Formulaire de contact</h4>
+            <h3>Formulaire de contact</h3>
             <div>
                 <div class='form-floating mb-3'>
                     <input type='text' name='email' class='form-control' id='email' aria-describedby='emailHelp' placeholder=''>
@@ -159,14 +159,20 @@ class Pg_Contact_Mail_Public {
         }
 
         $email = sanitize_text_field( $_REQUEST['email'] );
-        $msg = sanitize_text_field( $_REQUEST['msg'] );
+        $message = sanitize_text_field( $_REQUEST['msg'] );
 
-        $to = 'admin@planet-gallery.org';
-        $subject = "Contact from " .get_permalink($email);
-        $message = get_permalink($msg);
-        wp_mail($to, $subject, $message );
+        $to = 'contact@planet-gallery.org';
+        $subject = "Contact from $email";
+        //$message = get_permalink($msg);
+        error_log("contact_mail to=$to, subject=$subject");
+        #$headers[] = 'Content-type: text/plain; charset=utf-8';
+        $headers = 'From:planet.gallery@gmail.com';
+        $ret = wp_mail($to, $subject, $message, $headers);
+        $headers = 'From:planetgallery@gmail.com';
+        $ret = mail($to, $subject, $message, $headers);
+        error_log("contact_mail result=$ret");
 
-        error_log( "Respond success");
+        //error_log( "Respond success");
         wp_send_json_success( null, 200);
         wp_die();
         

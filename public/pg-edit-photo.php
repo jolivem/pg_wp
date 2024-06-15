@@ -113,7 +113,20 @@ class Pg_Edit_Photo_Public {
         // TODO check that gallery belongs to the current user
         
         if (! isset($_GET['pid'])) {
-            return "";
+            error_log("Pg_Edit_Photo_Public::pg_generate_page Missing parameters");
+            my_custom_404();
+            wp_die();
+        }
+
+        //use the post ID provided in the URL
+        $pid=$_GET['pid']; 
+        $post = get_post($pid);
+        $user_id = get_current_user_id();
+        if ($post->post_author() != $user_id) {
+            error_log("Pg_Edit_Photo_Public Not current user photo");
+            // TODO 404 NOT FOUND
+            my_custom_404();
+            wp_die();
         }
 
         ob_start();

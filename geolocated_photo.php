@@ -16,7 +16,7 @@ ob_start();
  * Plugin Name:       Planet Gallery
  * Plugin URI:        https://glp-plugin.com/wordpress/photo-gallery
  * Description:       Plugin for Planet-Gallery.org.
- * Version:           1.1.1
+ * Version:           1.1.8
  * Author:            Planet Gallery Team
  * Author URI:        https://glp-plugin.com/
  * License:           GPL-2.0+
@@ -54,8 +54,8 @@ if( ! defined( 'GLP_BASENAME' ) )
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'GLP_GALLERY_VERSION', '1.1.1' );
-define( 'GLP_GALLERY_NAME_VERSION', 'V1.1.1' );
+define( 'GLP_GALLERY_VERSION', '1.1.8' );
+define( 'GLP_GALLERY_NAME_VERSION', 'V1.1.8' );
 define( 'GLP_GALLERY_NAME', 'geolocated-photo' );
 
 /**
@@ -171,6 +171,34 @@ function pg_user_register($user_id) {
     if ($user_info->data->user_url != ''){
         update_user_meta( $user_id, 'user_url', 'to_be_checked');
     }
+}
+
+function my_custom_404() {
+    // Set the status to 404
+    error_log("my_custom_404 IN");
+
+
+    // Set the HTTP status header to 404
+    status_header(404);
+
+    // Construct the file path to the custom template in the plugin directory
+    $template = plugin_dir_path(__FILE__) . 'public/pg-404.php';
+
+    // Check if the custom template file exists
+    if (file_exists($template)) {
+        include($template);
+    } else {
+        // Fallback to the default 404 template
+        $default_404_template = get_404_template();
+        if ($default_404_template) {
+            include($default_404_template);
+        }
+    }
+
+    // Exit to ensure no further processing
+    exit;
+
+
 }
 
 

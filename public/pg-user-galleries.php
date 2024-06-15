@@ -300,6 +300,28 @@ class Glp_User_Galleries_Public {
         }
     }
 
+    // Get the list of galleries for a given user_id
+    // return empty array if none
+    static public function pg_is_current_user_gallery( $gal_id ){
+        global $wpdb;
+
+        $user_id = get_current_user_id();
+        error_log("pg_is_current_user_gallery id: ".$user_id);
+
+        $gallery_table = esc_sql($wpdb->prefix . "glp_gallery");
+
+        $sql = "SELECT id FROM ".$gallery_table." WHERE id=$gal_id AND user_id=$user_id";
+        $results = $wpdb->get_results($sql, 'ARRAY_A');
+        error_log("pg_is_current_user_gallery result: ".print_r($results, true));
+        if(count($results) == 1){
+            return true;
+        }
+        
+        return false;
+        
+    }
+
+
     // Get the first image of the gallery
     // Return the image id or null if none
     static public function pg_get_images_by_id( $gallery_id ) {

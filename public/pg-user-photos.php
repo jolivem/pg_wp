@@ -131,7 +131,6 @@ class Glp_User_Photos_Public {
         }
         error_log("Glp_User_Photos_Public::pg_show_page count image =". count($medias));
 
-
         $medias_nb = $this->pg_get_nb_galleries_per_media($user_id);
 
         $admin_ajax_url = admin_url('admin-ajax.php');

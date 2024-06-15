@@ -305,6 +305,7 @@ class Geolocated_Photo {
 
         $plugin_contact_mail = new Pg_Contact_Mail_Public( $this->get_plugin_name(), $this->get_version() );
         $this->loader->add_action( 'wp_ajax_contact_mail', $plugin_contact_mail, 'contact_mail');
+		$this->loader->add_action( 'wp_ajax_nopriv_contact_mail', $plugin_contact_mail, 'contact_mail');
 
         $plugin_edit_gallery = new Pg_Edit_Gallery_Public( $this->get_plugin_name(), $this->get_version() );
         $this->loader->add_action( 'wp_ajax_user_edit_gallery', $plugin_edit_gallery, 'user_edit_gallery');

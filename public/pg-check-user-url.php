@@ -99,6 +99,15 @@ class Glp_Check_User_Url_Public {
     }
     
     public function pg_generate_page( $attr ){
+
+        $user_id = get_current_user_id();
+        if ($user_id != 1) {
+            error_log("admin_reject_photo No ADMIN");
+            // TODO 404 NOT FOUND
+            my_custom_404();
+            wp_die();
+        }
+
         ob_start();
         error_log("Glp_Check_User_Url_Public::pg_generate_page IN ".print_r($attr, true));
         $this->enqueue_styles();

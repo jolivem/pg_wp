@@ -568,8 +568,8 @@
                 const formData = new FormData();
                 formData.append('action', 'contact_mail');
                 formData.append('nonce', nonce);
-                formData.append('email', email);
-                formData.append('msg', message);
+                formData.append('email', email.value);
+                formData.append('msg', message.value);
                 jQuery.ajax({
                     method: 'POST',
                     url: admin_url,

@@ -146,7 +146,7 @@ class Pg_Download_Multiple_Public {
                                     Sélectionner...
                                 </label>
                                 <br/>
-                                <input type="file" id="fileInput" accept=".jpeg, .jpg, .tif" name="custom-file[]" multiple>
+                                <input type="file" id="fileInput" name="custom-file[]" multiple>
                                 <div id="modal-item-list"></div>
                                 <br/>
                                 <div id="selection-spinner" class="spinner-border text-primary download-spinner" style="display:none;"></div>

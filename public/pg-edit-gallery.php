@@ -102,20 +102,29 @@ class Pg_Edit_Gallery_Public {
     }
     
     public function pg_generate_page( $attr ){
+
+        if (! isset($_GET['gid'])) {
+            error_log("Pg_Edit_Gallery_Public::pg_generate_page Missing parameters");
+            my_custom_404();
+            wp_die();
+        }
+
+        //use the post ID provided in the URL
+        $id=$_GET['gid']; 
+
+        $resu = Glp_User_Galleries_Public::pg_is_current_user_gallery($id);
+        if ($resu != true) {
+            error_log("pg_generate_page Not current user gallery");
+            // TODO 404 NOT FOUND
+            my_custom_404();
+            wp_die();
+        }
+
         ob_start();
         error_log("Pg_Edit_Gallery_Public::pg_generate_page IN GET ".print_r($_GET, true));
 
         // TODO check that the gallery belongs to the current user
         // TODO check that the gallery belongs to the current user
-
-        if (! isset($_GET['gid'])) {
-            error_log("Pg_Edit_Gallery_Public::pg_generate_page Missing parameters");
-            // TODO return 404
-            return "";
-        }
-
-        //use the post ID provided in the URL
-        $id=$_GET['gid']; 
 
         $this->enqueue_styles();
         $this->enqueue_scripts();
