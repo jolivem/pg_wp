@@ -112,12 +112,14 @@ class Pg_Edit_Gallery_Public {
         //use the post ID provided in the URL
         $id=$_GET['gid']; 
 
-        $resu = Glp_User_Galleries_Public::pg_is_current_user_gallery($id);
-        if ($resu != true) {
-            error_log("pg_generate_page Not current user gallery");
-            // TODO 404 NOT FOUND
-            my_custom_404();
-            wp_die();
+        if ($id != -1) {
+            $resu = Glp_User_Galleries_Public::pg_is_current_user_gallery($id);
+            if ($resu != true) {
+                error_log("pg_generate_page Not current user gallery");
+                // TODO 404 NOT FOUND
+                my_custom_404();
+                wp_die();
+            }
         }
 
         ob_start();
@@ -248,7 +250,7 @@ class Pg_Edit_Gallery_Public {
                 <div class='alert alert-info' role='alert'>
                     <div>Pour chaque photo :</div>
                     <div>- Utilisez &nbsp<i class='fas fa-edit'></i>&nbsp pour modifier la description et le caractère <b>Publique</b> / <b>Privé</b> de la photo.</div>
-                    <div>- Utilisez &nbsp<i class='fas fa-trash'></i>&nbsp pour supprimer la photo de la gallerie, elle reste pésente votre phototèque.</div>
+                    <div>- Utilisez &nbsp<i class='fas fa-trash'></i>&nbsp pour supprimer la photo de la galerie, elle reste présente dans votre phototèque.</div>
                     </br>
                     <div>- Une photo notée <b>Non vérifiée</b> est publique, en attente de vérification par le modérateur.</div>
                     <div>- Une photo notée <b>Privée</b> n'est pas affichée sur la galerie mondiale et n'est pas vérifiée par le modérateur.</div>

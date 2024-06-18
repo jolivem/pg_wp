@@ -1,7 +1,15 @@
 <?php
 get_header(); ?>
 
-<div id="primary" class="content-area">
+<style>
+.site-content .ast-container {
+    /* display: flex; */
+    display: block !important;
+}
+</style>
+
+
+<div id="primary" class="content-area" style="margin: 100px 100px 200px 100px;">
     <main id="main" class="site-main" role="main">
         <section class="error-404 not-found">
             <header class="page-header">

@@ -326,11 +326,8 @@ var animateMarkerByImage = function(img) {
             if (count < 6) {
                 iicoon.options.className = 'mydivmarker6';    
             }
-            else if (count < 20) {
-                iicoon.options.className = 'mydivmarker9';    
-            }
             else {
-                iicoon.options.className = 'mydivmarker12';    
+                iicoon.options.className = 'mydivmarker9';    
             }
             //console.log( 'g_selectedImageSrc', g_selectedImageSrc);
             if (g_selectedImageSrc != null) {

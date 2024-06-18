@@ -122,7 +122,7 @@ class Pg_Edit_Photo_Public {
         $pid=$_GET['pid']; 
         $post = get_post($pid);
         $user_id = get_current_user_id();
-        if ($post->post_author() != $user_id) {
+        if ($post->post_author != $user_id) {
             error_log("Pg_Edit_Photo_Public Not current user photo");
             // TODO 404 NOT FOUND
             my_custom_404();
@@ -130,9 +130,6 @@ class Pg_Edit_Photo_Public {
         }
 
         ob_start();
-
-        //use the post ID provided in the URL
-        $pid=$_GET['pid']; 
 
         // gid is optional, it is present when editing the gallery photos
         $gid=$_GET['gid']; 
@@ -168,6 +165,10 @@ class Pg_Edit_Photo_Public {
             $images_str='';
             if (!empty($gid)) {
                 $images_id = Pg_Edit_Gallery_Public::pg_get_medias_by_gallery( $gid );
+                if ($images_id == null) {
+                    my_custom_404();
+                    wp_die();
+                }
                 $images_str = implode(",", $images_id);
             }       
 

@@ -176,7 +176,7 @@ class Pg_Show_Planet_Map_Public {
                 <ul>
                     <li>Créez des galeries avec vos photos géolocalisées.</li>
                     <li>Partagez des galeries et cartes inédites avec vos proches.</li>
-                    <li>Sélectionnez les photos privées, celles qui sont publiques sont affichées sur la carte ci-dessus.</li>
+                    <li>Les photos publiques sont affichées sur la carte ci-dessus.</li>
                 </ul>
                 C'est un projet participatif, tout est gratuit. Inscrivez-vous dès maintenant !
             </div>
