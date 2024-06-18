@@ -96,7 +96,7 @@ jQuery(document).find('#longitude').on("input", (event) => {
 });
 
 // When clicked on Single Download select button
-jQuery(document).find('#single-upload').on('click', function(event){
+jQuery(document).find('#single-upload').on('click', async function(event){
     console.log("single-upload IN");
     event.preventDefault();
     let error = false;
@@ -142,12 +142,21 @@ jQuery(document).find('#single-upload').on('click', function(event){
         error = true;
     }
 
+    // If error get out
     if (error == true) {
         event.preventDefault();
         event.stopPropagation();
         return;
     }
 
+    // Get address from position
+    let geocod = await reverseGeocoding(latitudeValue, longitudeValue);
+    if (geocod) {
+        file.pgpg.address = geocod.address;
+        file.pgpg.address_json = geocod.address_json;
+        file.pgpg.country_code = geocod.country_code;
+    }
+    
     const progressContainer = document.getElementById('progressContainer');
 
     progressContainer.innerHTML = '';
@@ -172,15 +181,21 @@ jQuery(document).find('#single-upload').on('click', function(event){
 
     let admin_url = document.getElementById('pg_admin_ajax_url').value;
     let nonce = document.getElementById('download_nonce').value;
+    let galleryId = document.getElementById('gallery-id').value;
     //console.log("uploadPhotos admin_url=", admin_url);
 
     const formData = new FormData();
-    formData.append('action', 'download_single_photo');
+    formData.append('action', 'download_multiple_photos');
     formData.append('nonce', nonce);
     formData.append('lat', latitudeValue);
     formData.append('lon', longitudeValue);
     formData.append('is_exif', false);
+    formData.append('address', geocod?.address);
+    formData.append('address_json', geocod?.address_json);
+    formData.append('country_code', geocod?.country_code);
+    formData.append('date', file.pgpg.date);
     formData.append('file', file);
+    formData.append('galleryId', galleryId);
     jQuery.ajax({
         method: 'POST',
         url: admin_url,
@@ -191,12 +206,19 @@ jQuery(document).find('#single-upload').on('click', function(event){
             console.log("upload done");
             const button = document.getElementById('single-upload');
             button.disabled = true;
+            progressBar.style.backgroundColor= "limegreen";
+        },
+        error: function(response){
+            console.log("upload done");
+            const button = document.getElementById('single-upload');
+            button.disabled = true;
+            progressBar.style.backgroundColor= "red";
         }
         // TODO handle error
     });
 });
 
-/*
+
 function downloadASinglePhoto(files) {
 
     console.log('downloadASinglePhoto IN');
@@ -218,7 +240,7 @@ function downloadASinglePhoto(files) {
     document.getElementById("latitudeHelp").style.display = "block";
     document.getElementById("longitudeHelp").style.display = "block";
 
-     g_filesArray = Array.from(files);
+    g_filesArray = Array.from(files);
     if (g_filesArray.length == 1) {
         const file = g_filesArray[0];
         const reader = new FileReader();
@@ -301,8 +323,13 @@ function downloadASinglePhoto(files) {
                 const lat = EXIF.getTag(this, 'GPSLatitude');
                 const lon = EXIF.getTag(this, 'GPSLongitude');
 
+                const date = EXIF.getTag(this, 'DateTimeOriginal');
+                file.pgpg = {};
+                file.pgpg.date = date;
+
                 if (lat == undefined || lon == undefined) {
                     renderItemSingle(event.target.result, file.name);
+                    file.pgpg.is_exif = false;
                 }
                 else {
                     console.log('EXIF Data:', exifData);
@@ -316,8 +343,6 @@ function downloadASinglePhoto(files) {
                         const latitude = convertDMSToDDExif(lat[0], lat[1], lat[2], latRef);
                         const longitude = convertDMSToDDExif(lon[0], lon[1], lon[2], lonRef);
 
-                        const date = EXIF.getTag(this, 'DateTimeOriginal');
-
                         renderItemSingle(event.target.result, file.name, latitude, longitude);
 
                         // change title
@@ -328,17 +353,12 @@ function downloadASinglePhoto(files) {
                         document.getElementById("latitudeHelp").style.display = "none";
                         document.getElementById("longitudeHelp").style.display = "none";
 
-                        file.pgpg = {};
                         file.pgpg.lat = latitude;
                         file.pgpg.lon = longitude;
                         file.pgpg.altitude = altitude; // atltide to calculate with denominator
                         file.pgpg.is_exif = true;
                         //TODO calculate and fill zoom value
                         file.pgpg.zoom = 1;
-                        file.pgpg.date = date;
-            
-                        // const info = document.createElement('div');
-                        // info.textContent = `Latitude: ${latitude}, Longitude: ${longitude}`;
                     }
                 }
             });
@@ -347,7 +367,7 @@ function downloadASinglePhoto(files) {
         reader.readAsDataURL(file);
     };
 }
-*/
+
 //
 // MULTIPLE UPLOAD
 //

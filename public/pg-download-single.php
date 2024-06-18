@@ -104,22 +104,29 @@ class Pg_Download_Single_Public {
     }
     
     public function pg_generate_page( $attr ){
+
+        if (! isset($_GET['gid'])) {
+            error_log("Pg_Edit_Gallery_Public::pg_generate_page Missing parameters");
+            wp_die();
+        }
+
         ob_start();
         error_log("Pg_Download_Single_Public::pg_generate_page IN");
 
         $this->enqueue_styles();
         $this->enqueue_scripts();
 
-        echo $this->pg_show_page( $attr );
+        //use the post ID provided in the URL
+        $gid=$_GET['gid']; 
+        echo $this->pg_show_page( $gid );
 
         return str_replace(array("\r\n", "\n", "\r"), '', ob_get_clean());
     }
 
     // attr should have the user id
-    public function pg_show_page( $attr ){
+    public function pg_show_page( $gid ){
         
         global $wpdb;
-        $id = ( isset($attr['id']) ) ? absint( intval( $attr['id'] ) ) : null;
         
         // TODO check if user id is a valid user
         // $medias = 
@@ -128,20 +135,20 @@ class Pg_Download_Single_Public {
         //     return "[pg_download_single id='".$id."']";
         // }
         $admin_ajax_url = admin_url('admin-ajax.php');
-        $nonce = wp_create_nonce('download_single_photo');
+        $nonce = wp_create_nonce('download_multiple_photos');
         error_log("pg_show_page single admin_ajax_url=".$admin_ajax_url);
         //TODO remove input-group class
         $html_code = '
+        <input type="hidden" id="gallery-id" name="gallery-id" value="'.$gid.'"/>
+        <input type="hidden" id="pg_admin_ajax_url" value="'.$admin_ajax_url.'"/>
+        <input type="hidden" id="download_nonce" value="'.$nonce.'"/>
         <div class="container">
             <form id="upload-single-form">
-                <label for="fileInput" class="btn-primary">
+                <label for="fileInput" class="btn btn-primary">
                     Selectionner la photo
                 </label>
                 <input type="file" id="fileInput" name="custom-file[]">
-                <input type="hidden" id="pg_admin_ajax_url" value="'.$admin_ajax_url.'"/>
-                <input type="hidden" id="download_nonce" value="'.$nonce.'"/>
                 <div id="photo-to-download" style="display:flex; justify-content: center;"></div>
-                
                 <div id="download-single-block" style="display:none">
                     <h5 id="title-latlon">Saisir les coordonées GPS</h5>
                     <div class="input-group has-validation">
@@ -188,14 +195,28 @@ class Pg_Download_Single_Public {
 
     // callback on request to download photos
     public function download_single_photo() {
-        error_log("download_single_photo IN");
-        //error_log("download_single_photo REQUEST ".print_r($_REQUEST, true));
-        //error_log("download_single_photo FILES ".print_r($_FILES, true));
+        error_log("download_single_photo REQUEST ".print_r($_REQUEST, true));
+        error_log("download_single_photo FILES ".print_r($_FILES, true));
 
         if( ! isset( $_REQUEST['nonce'] ) or 
             ! wp_verify_nonce( $_REQUEST['nonce'], 'download_single_photo' ) ) {
             error_log("download_single_photo nonce not found");
             wp_send_json_error( "NOK.", 403 );
+            return;
+        }
+        if( ! isset( $_REQUEST['galleryId'] ) ) {
+            error_log("download_multiple_photos No gallery ");
+            wp_send_json_error( "NOK.", 403 );
+            return;
+        }
+        if( $_REQUEST['galleryId'] == -1 ) {
+            error_log("download_multiple_photos No gallery ");
+            wp_send_json_error( "NOK.", 404 );
+            return;
+        }
+        if( $_REQUEST['lat'] == "NaN" ) {
+            error_log("download_multiple_photos Latitude = NaN ");
+            wp_send_json_error( "NOK.", 404 );
             return;
         }
 
@@ -207,12 +228,49 @@ class Pg_Download_Single_Public {
             return;
         }
 
-        $title = sanitize_text_field( $_POST['title'] );
+        // check if gallery exists
+        $gallery = Glp_Galleries_List_Table::get_gallery_by_id($_REQUEST['galleryId']);
+        if (!$gallery) {
+            error_log("download_multiple_photos Gallery Not found ");
+            wp_send_json_error( "NOK.", 404 );
+            return;
+        }
+
+        $upload_dir = wp_upload_dir();
+        //error_log("download_multiple_photos upload_dir ".print_r($upload_dir, true));
+        $image_path = $upload_dir['path'] . "/" . $_FILES['file']['name'];
+        //error_log("download_multiple_photos image_path ".$image_path);
+        if ( file_exists( $image_path ) ) {
+            error_log("download_multiple_photos FILE EXISTS");
+
+            // check if it belongs to the same user and if it is the same date
+            $found_id = $this->find_media_by_author_and_name($user_id, $_FILES['file']['name']);
+            if ($found_id != 0) {
+                // image already found in media library !
+                error_log( "File already present in media library, id=$found_id");
+    
+                // Add image to the current gallery if not already present
+                $this->add_image_to_gallery($_REQUEST['galleryId'], $found_id);
+                $data=array('message' => 'done');
+                wp_send_json_success( $data, 200);
+            }
+    
+        }
+
+
+        //$title = sanitize_text_field( $_POST['title'] );
         $uploadedfile = $_FILES['file'];
         $upload_overrides = array('test_form' => false);
         $movefile = wp_handle_upload($uploadedfile, $upload_overrides);
         error_log("download_single_photo movefile ".print_r($movefile, true));
         // echo $movefile['url'];
+
+        $address = $_REQUEST['address'];
+        $address_json = $_REQUEST['address_json'];
+        //error_log("download_multiple_photos address = $address");
+        $country_code = sanitize_text_field( $_REQUEST['country_code'] );
+        $title = sanitize_text_field( $_REQUEST['title'] );
+
         if ($movefile && !isset($movefile['error'])) {
             error_log( "File Upload Successfully");
 

@@ -249,7 +249,8 @@ class Pg_Download_Multiple_Public {
         $address_json = $_REQUEST['address_json'];
         //error_log("download_multiple_photos address = $address");
         $country_code = sanitize_text_field( $_REQUEST['country_code'] );
-        $title = sanitize_text_field( $_REQUEST['title'] );
+        // no more title 
+        //$title = sanitize_text_field( $_REQUEST['title'] );
 
         // echo $movefile['url'];
         if ($movefile && !isset($movefile['error'])) {

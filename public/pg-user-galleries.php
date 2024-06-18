@@ -190,7 +190,7 @@ class Glp_User_Galleries_Public {
 
         // loop for each media
         foreach($galleries as $item){
-            error_log("render_galleries item:".print_r($item, true));
+            //error_log("render_galleries item:".print_r($item, true));
             $title = stripslashes($item["title"]);
             $desc = stripslashes($item["description"]);
             
