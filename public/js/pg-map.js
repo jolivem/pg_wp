@@ -258,7 +258,7 @@ var animateMarkerByImage = function(img) {
                     //console.log('animateMarkerByImage YYYYYYYYYYYYYYYYYYYYYYY  _childCount',visibleOne._childCount);
                     //console.log('animateMarkerByImage THIS IS A MARKER visibleone', visibleOne);
                     //g_selectedImageSrc = null;
-                    console.log( 'animateMarkerByImage visibleOne FOUND BBBBBBBBBBBBBBBBBB');
+                    //console.log( 'animateMarkerByImage visibleOne FOUND BBBBBBBBBBBBBBBBBB');
                     
                     // leads to call iconCreateFunction for cluster
                     // iconCreateFunction set g_selectedImageSrc=null
@@ -587,8 +587,10 @@ function updatePlanetSlider(datas) {
                 if (image.user_url != "") {
                     let domain= new URL(image.user_url).origin
                     sliderHtml +=       "<div class='desc-lightbox-user'>";
-                    sliderHtml +=           "<div class='desc-lightbox-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b>, "+image.date+"</div>";
-                    sliderHtml +=           "<div class='desc-lightbox-address'><i class='fas fa-globe pg-tab'></i><a style='color: white;' href='"+image.user_url+"'>"+domain+"</a></div>";
+                    sliderHtml +=           "<div class='desc-lightbox-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b>, <a style='color: white;' href='"+image.user_url+"'>"+domain+"</a></div>";
+                    //sliderHtml +=           "<div class='desc-lightbox-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b>, "+image.date+"</div>";
+                    sliderHtml +=           "<div class='desc-lightbox-address'>"+image.date+"</div>";
+                    //sliderHtml +=           "<div class='desc-lightbox-address'><i class='fas fa-globe pg-tab'></i><a style='color: white;' href='"+image.user_url+"'>"+domain+"</a></div>";
                     sliderHtml +=       "</div>";
                 }
                 else {

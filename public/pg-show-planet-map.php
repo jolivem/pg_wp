@@ -130,8 +130,8 @@ class Pg_Show_Planet_Map_Public {
         //[$html_slider, $html_descr] = $this->render_slider($medias);
         $html_slider = "";
         $html_descr = "";
-        error_log("pg_show_page html_slider = $html_slider");
-        error_log("pg_show_page html_descr = $html_descr");
+        // error_log("pg_show_page html_slider = $html_slider");
+        // error_log("pg_show_page html_descr = $html_descr");
         //$html_addresses = $this->render_medias_address($medias);
         $admin_ajax_url = admin_url('admin-ajax.php');
         $nonce = wp_create_nonce('show_planet');
