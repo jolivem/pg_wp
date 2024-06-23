@@ -141,7 +141,7 @@ class Glp_Check_Photos_Public {
         $html_code = "
         <input type='hidden' id='pg_admin_ajax_url' value='$admin_ajax_url'/>
         <input type='hidden' id='pg_nonce' value='$nonce'/>
-        <div class='container' id='user-item-list'>";
+        <div class='container'>";
 
         $html_code .= $this->render_images($medias);
         $html_code .= 
@@ -162,25 +162,49 @@ class Glp_Check_Photos_Public {
                 $img_src = $url_img[0];
             }
 
+            $address_json = get_post_meta($item->ID, 'address_json',true);
+            $addresses = json_decode($address_json, true);
+            //error_log("render_images addresses2:".$addresses[1]['formatted_address']);
+            for ($i = 0 ; $i < count($addresses); $i++) {
+                error_log("render_images addresses:" . $addresses[$i]['formatted_address']);
+            }
+            
+            //error_log("render_images addresses[2]:".print_r($addresses, true));
             $statext = Pg_Edit_Gallery_Public::get_photo_status($item->ID);
 
             //error_log("render_images url:".print_r($url_img, true));
             // TODO check url_img is OK, add try catch
             $html.=
-            '<div class="flex-container">
+            "<div class='flex-container'>
                 
-                <img src="'.$img_src.'" class="full-miniature-big"></img>
-                <div class="photo-text-container">
-                    <div class="footer-desc-font" style="overflow: visible;">'.$item->post_title.'</div>
-                    <div class="footer-edit-gallery">
-                        <div>Date : '.$item->post_date.'</div>
+                <img src='$img_src' class='full-miniature-big'></img>
+                <div class='photo-text-container'>";
+            
+            // Select the address among the various possibilities
+            for ($i = 0 ; $i < count($addresses); $i++) {
+                $checked="";
+                if ($item->post_title == $addresses[$i]['formatted_address']){
+                    $checked=" checked='checked'";
+                }
+                $html.=
+                    "<input type='radio' id='html' name='address' value='" . $addresses[$i]['formatted_address']."' $checked>";
+                $html.=
+                    "<label for='html'>" . $addresses[$i]['formatted_address']."</label><br>";
+                                        
+                // $html.=
+                //     "<div class='footer-desc-font' style='overflow: visible;'>$item->post_title/div>";
+                // error_log("render_images addresses:" . $addresses[$i]['formatted_address']);
+            }
+            $html.=
+                    "<div class='footer-edit-gallery'>
+                        <div>Date : $item->post_date</div>
                     </div>
                 </div>
-                <div class="options-photo-gallery" style="background-color: lightgreen">
-                    <i class="admin-photo-option fas fa-thumbs-up" aria-hidden="true" data-postid="'.$item->ID.'"></i>
-                    <i class="admin-photo-option fas fa-thumbs-down" aria-hidden="true" data-postid="'.$item->ID.'"></i>
+                <div class='options-photo-gallery' style='background-color: lightgreen'>
+                    <i class='admin-photo-option fas fa-thumbs-up' aria-hidden='true' data-postid='$item->ID'></i>
+                    <i class='admin-photo-option fas fa-thumbs-down' aria-hidden='true' data-postid='$item->ID'></i>
                 </div>
-            </div>';
+            </div>";
             
 
         }
@@ -231,8 +255,7 @@ class Glp_Check_Photos_Public {
             return;
         }
 
-        $user_id = get_current_user_id();
-        if ($user_id!== 1) {
+        if ( ! current_user_can( 'manage_options' ) ) {
             error_log("admin_valid_photo No ADMIN");
             // TODO 404 NOT FOUND
             wp_send_json_error( "NOK.", 401 );
@@ -247,10 +270,19 @@ class Glp_Check_Photos_Public {
         }
 
         $pid = sanitize_text_field($_REQUEST['pid']);
+        $address = sanitize_text_field($_REQUEST['address']);
 
         update_post_meta($pid , 'admin_status', Pg_Edit_Photo_Public::ADMIN_STATUS_PUBLIC_OK);
         $this->update_visibility($pid, Pg_Edit_Photo_Public::ADMIN_STATUS_PUBLIC_OK);
         
+        $my_post = array(
+            'ID' => $pid,
+            'post_title' => $address
+        );
+        
+        // Set the image meta (e.g. Title, Excerpt, Content)
+        wp_update_post( $my_post );
+
         error_log( "admin_valid_photo Respond success");
         wp_send_json_success( null, 200);
         wp_die();
@@ -271,8 +303,7 @@ class Glp_Check_Photos_Public {
             return;
         }
 
-        $user_id = get_current_user_id();
-        if ($user_id != 1) {
+        if ( ! current_user_can( 'manage_options' ) ) {
             error_log("admin_reject_photo No ADMIN");
             // TODO 404 NOT FOUND
             wp_send_json_error( "NOK.", 401 );

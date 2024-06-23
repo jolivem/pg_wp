@@ -16,7 +16,7 @@ ob_start();
  * Plugin Name:       Planet Gallery
  * Plugin URI:        https://glp-plugin.com/wordpress/photo-gallery
  * Description:       Plugin for Planet-Gallery.org.
- * Version:           1.1.10
+ * Version:           1.2.1
  * Author:            Planet Gallery Team
  * Author URI:        https://glp-plugin.com/
  * License:           GPL-2.0+
@@ -54,8 +54,8 @@ if( ! defined( 'GLP_BASENAME' ) )
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'GLP_GALLERY_VERSION', '1.1.10' );
-define( 'GLP_GALLERY_NAME_VERSION', 'V1.1.10' );
+define( 'GLP_GALLERY_VERSION', '1.2.1' );
+define( 'GLP_GALLERY_NAME_VERSION', 'V1.2.1' );
 define( 'GLP_GALLERY_NAME', 'geolocated-photo' );
 
 /**

@@ -140,9 +140,13 @@
             //console.log("admin-photo-option thumbs-up postid=", postid)
             let nonce = document.getElementById('pg_nonce').value;
             let admin_url = document.getElementById('pg_admin_ajax_url').value;
+
+            // get the address selected 
+            let address = document.querySelector('input[name="address"]:checked').value;
     
             const formData = new FormData();
             formData.append('nonce', nonce);
+            formData.append('address', address);
             formData.append('pid', postid);
             if (e.target.classList.contains("fa-thumbs-up")) {
     
