@@ -149,14 +149,6 @@ jQuery(document).find('#single-upload').on('click', async function(event){
         return;
     }
 
-    // Get address from position
-    let geocod = await reverseGeocoding(latitudeValue, longitudeValue);
-    if (geocod) {
-        file.pgpg.address = geocod.address;
-        file.pgpg.address_json = geocod.address_json;
-        file.pgpg.country_code = geocod.country_code;
-    }
-    
     const progressContainer = document.getElementById('progressContainer');
 
     progressContainer.innerHTML = '';
@@ -165,6 +157,15 @@ jQuery(document).find('#single-upload').on('click', async function(event){
     
     file = files[0];
     console.log("uploadPhoto file=", file);
+
+    // Get address from position
+    let geocod = await reverseGeocoding(latitudeValue, longitudeValue);
+    if (geocod) {
+        file.pgpg.address = geocod.address;
+        file.pgpg.address_json = geocod.address_json;
+        file.pgpg.country_code = geocod.country_code;
+    }
+    
     const progressBarContainer = document.createElement('div');
     progressBarContainer.className = 'progress-bar-container';
     const fileName = document.createElement('span');
@@ -218,6 +219,24 @@ jQuery(document).find('#single-upload').on('click', async function(event){
     });
 });
 
+function formatTimestamp(timestamp) {
+    try {
+        const date = new Date(timestamp);
+
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+
+        return `${year}:${month}:${day} ${hours}:${minutes}:${seconds}`;
+    }
+    catch {
+        return '';
+    }
+}
 
 function downloadASinglePhoto(files) {
 
@@ -323,9 +342,16 @@ function downloadASinglePhoto(files) {
                 const lat = EXIF.getTag(this, 'GPSLatitude');
                 const lon = EXIF.getTag(this, 'GPSLongitude');
 
-                const date = EXIF.getTag(this, 'DateTimeOriginal');
                 file.pgpg = {};
-                file.pgpg.date = date;
+                const date = EXIF.getTag(this, 'DateTimeOriginal');
+                if (date) {
+                    file.pgpg.date = date;
+                    
+                }
+                else {
+                    file.pgpg.date = formatTimestamp(file.lastModified);
+                }
+                
 
                 if (lat == undefined || lon == undefined) {
                     renderItemSingle(event.target.result, file.name);
@@ -783,7 +809,7 @@ function isNumber(st) {
 async function GOGOreverseGeocoding(lat, lon) {
     try {
         //const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`;
-        //console.log('reverseGeocoding url=', url);
+        //console.log('GOGOreverseGeocoding url=', url);
         const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=AIzaSyANlJ9pdMlkfsy3ZzheOWMKK35iqTHDu0o`
 
         // Url for the request
@@ -796,10 +822,10 @@ async function GOGOreverseGeocoding(lat, lon) {
             .then(Result => Result.json())
             .then(json => {
 
-                console.log('reverseGeocoding json=', json);
+                console.log('GOGOreverseGeocoding json=', json);
                 // Printing our response 
                 if (json.address) {
-                    //console.log('reverseGeocoding BINGO');
+                    //console.log('GOGOreverseGeocoding BINGO');
                     country_code = json.address.country_code
                     address = json.display_name;
                     address_json = JSON.stringify(json.address);
@@ -808,11 +834,11 @@ async function GOGOreverseGeocoding(lat, lon) {
                 //console.log(`Title of our response : ${string.title}`);
             })
             .catch(errorMsg => { console.log(errorMsg); });
-        //console.log('reverseGeocoding out=', {country_code, address});
+        //console.log('GOGOreverseGeocoding out=', {country_code, address});
         return {country_code, address, address_json};
     }
     catch (ex){
-        console.log('Exception in reverseGeocoding', ex);
+        console.log('Exception in GOGOreverseGeocoding', ex);
     }
 }
 
@@ -879,7 +905,7 @@ async function reverseGeocoding(lat, lon) {
 
 async function OsmReverseGeocoding(lat, lon) {
     const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`;
-    //console.log('reverseGeocoding url=', url);
+    //console.log('OsmReverseGeocoding url=', url);
 
     // Url for the request
     let address_json='';
@@ -891,10 +917,10 @@ async function OsmReverseGeocoding(lat, lon) {
         .then(Result => Result.json())
         .then(json => {
 
-            console.log('reverseGeocoding json=', json);
+            console.log('OsmReverseGeocoding json=', json);
             // Printing our response 
             if (json.address) {
-                //console.log('reverseGeocoding BINGO');
+                //console.log('OsmReverseGeocoding BINGO');
                 country_code = json.address.country_code
                 address = json.display_name;
                 address_json = JSON.stringify(json.address);
@@ -903,6 +929,6 @@ async function OsmReverseGeocoding(lat, lon) {
             //console.log(`Title of our response : ${string.title}`);
         })
         .catch(errorMsg => { console.log(errorMsg); });
-    //console.log('reverseGeocoding out=', {country_code, address});
+    //console.log('OsmReverseGeocoding out=', {country_code, address});
     return {country_code, address, address_json};
 }

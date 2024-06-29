@@ -54,6 +54,7 @@ class Pg_Edit_Gallery_Public {
     const PAGE_SLUG_USER_GALLERIES = "user-galleries";
     const PAGE_SLUG_MY_PHOTOS = "my-photos";
     const PAGE_SLUG_GEOLOC_ADVISE = "geoloc-advise";
+    const PAGE_SLUG_DOWNLOAD_SINGLE = "download-single";
 
     /**
      * Initialize the class and set its properties.
@@ -201,7 +202,8 @@ class Pg_Edit_Gallery_Public {
         $user_galleries_url = Glp_User_Galleries_Public::get_page_url_from_slug(self::PAGE_SLUG_USER_GALLERIES);
         $geoloc_advise_url = Glp_User_Galleries_Public::get_page_url_from_slug(self::PAGE_SLUG_GEOLOC_ADVISE);
         $edit_photo_url = Glp_User_Galleries_Public::get_page_url_from_slug(self::PAGE_SLUG_EDIT_PHOTO); // TODO move 186 to a global constant or get by Title
-
+        $download_single_url = Glp_User_Galleries_Public::get_page_url_from_slug(self::PAGE_SLUG_DOWNLOAD_SINGLE);
+        
         $admin_ajax_url = admin_url('admin-ajax.php');
         //$admin_post_url = admin_url('admin-post.php');
         $nonce = wp_create_nonce('edit_gallery');
@@ -218,6 +220,7 @@ class Pg_Edit_Gallery_Public {
         <input type='hidden' id='pg_edit_photo_url' value='$edit_photo_url'/>
         <input type='hidden' id='pg_user_galleries_url' value='$user_galleries_url'/>
         <input type='hidden' id='pg_geoloc_advise_url' value='$geoloc_advise_url'/>
+        <input type='hidden' id='pg_download_single_url' value='$download_single_url'/>
         <input type='hidden' id='pg_nonce' value='$nonce'/>
         <div class='toast-container position-fixed bottom-0 end-0 p-3'>
             <div id='save-gallery-success' class='toast align-items-center text-white bg-success bg-gradient border-0' role='alert' aria-live='assertive' aria-atomic='true'>
@@ -265,10 +268,20 @@ class Pg_Edit_Gallery_Public {
         }
         
         $html_code .= "
-                <div>
+                <div>";
+        $html_code .= "
                     <button type='button' class='btn btn-primary' style='margin-bottom: 10px;' data-bs-toggle='modal' data-bs-target='#multipleDowloadModal'>
                         Ajouter des photos...
-                    </button>
+                    </button>";
+        // admin can add photos where he sets GPS position
+        if ( current_user_can( 'manage_options' ) ) {
+            $html_code .= "
+                    <button type='button' id='btn-add-single-photo' class='btn btn-outline-warning' style='margin-bottom: 10px;' data-galid='$id'>
+                        Ajouter une photo
+                    </button>";
+        }
+
+        $html_code .= "
                     <button type='button' class='btn btn-primary align-right' id='edit-gallery-save'>Enregistrer</button>
                 </div>
                 <div id='gallery-item-list'>$html_images</div>
@@ -409,21 +422,27 @@ class Pg_Edit_Gallery_Public {
     public static function get_photo_date($datetime) {
         //error_log("get_photo_date IN date = $datetime");
 
-        $date = new DateTime($datetime);
-        // Define an array of French month names
-        $frenchMonthNames = [
-            'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
-            'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'
-        ];
-        
-        // Get the day, month, and year from the DateTime object
-        $day = $date->format('d');
-        $month = $date->format('n');
-        $year = $date->format('Y');
-        $time = $date->format('H:i');
-        
-        // Format the date in French format
-        return $day . ' ' . $frenchMonthNames[$month - 1] . ' ' . $year . ' à ' . $time;;
+        try {
+            $date = new DateTime($datetime);
+            // Define an array of French month names
+            $frenchMonthNames = [
+                'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
+                'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'
+            ];
+            
+            // Get the day, month, and year from the DateTime object
+            $day = $date->format('d');
+            $month = $date->format('n');
+            $year = $date->format('Y');
+            $time = $date->format('H:i');
+            
+            // Format the date in French format
+            return $day . ' ' . $frenchMonthNames[$month - 1] . ' ' . $year . ' à ' . $time;;
+        }
+        catch (Exception $e) {
+            error_log("get_photo_date Exception: " .$e->getMessage());
+            return "";
+        }
     }
 
     //////////////////////////////////////

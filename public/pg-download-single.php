@@ -94,6 +94,10 @@ class Pg_Download_Single_Public {
         
         wp_localize_script($this->plugin_name, 'ays_vars', array('base_url' => GLP_BASE_URL));
         // wp_localize_script($this->plugin_name, 'gal_ajax_public', array('ajax_url' => admin_url('admin-ajax.php')));
+        wp_enqueue_script( $this->plugin_name.'-geocoding.js', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyANlJ9pdMlkfsy3ZzheOWMKK35iqTHDu0o&v=weekly', array( 'jquery' ), $this->version, 
+            array(
+                    'strategy' => 'defer'
+                )  );
 
     }
 
@@ -105,10 +109,10 @@ class Pg_Download_Single_Public {
     
     public function pg_generate_page( $attr ){
 
-        if (! isset($_GET['gid'])) {
-            error_log("Pg_Edit_Gallery_Public::pg_generate_page Missing parameters");
-            wp_die();
-        }
+        // if (! isset($_GET['gid'])) {
+        //     error_log("Pg_Download_Single_Public::pg_generate_page Missing parameters");
+        //     wp_die();
+        // }
 
         ob_start();
         error_log("Pg_Download_Single_Public::pg_generate_page IN");
@@ -135,6 +139,9 @@ class Pg_Download_Single_Public {
         //     return "[pg_download_single id='".$id."']";
         // }
         $admin_ajax_url = admin_url('admin-ajax.php');
+        $edit_gallery_url = Glp_User_Galleries_Public::get_page_url_from_slug(Pg_Edit_Gallery_Public::PAGE_SLUG_EDIT_GALLERY);
+        $edit_gallery_url .= "?gid=$gid";
+
         $nonce = wp_create_nonce('download_multiple_photos');
         error_log("pg_show_page single admin_ajax_url=".$admin_ajax_url);
         //TODO remove input-group class
@@ -181,6 +188,8 @@ class Pg_Download_Single_Public {
                 </div>
             </form>
             <div id="progressContainer"></div>
+            <br/>
+            <a href="'.$edit_gallery_url.'">Retour à la galerie</a>
         </div>';
 
         return $html_code;

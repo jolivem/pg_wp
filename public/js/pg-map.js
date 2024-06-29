@@ -265,27 +265,6 @@ var animateMarkerByImage = function(img) {
                     visibleOne.refreshIconOptions({
                         iconSize:     [60, 60],
                     }, true);
-
-                    /*if (g_selectedImageSrc != null) {
-                        //iconCreateFunction has not been called
-                        // it is a single image without cluster
-                        console.log('animateMarkerByImage Animate the visible marker', visibleOne);
-
-                        visibleOne.refreshIconOptions({
-                            iconSize:     [100, 100],
-                        }, true); 
-                        console.log( 'animateMarkerByImage FFFFFFFFFFFFFFFF ');
-                        setTimeout(function(){
-                            // come back to normal size after timeout
-                            visibleOne.refreshIconOptions({
-                                iconSize:     [60, 60],
-                            }, true);
-                        }, 400);
-                    }*/
-                    
-
-                    //console.log('animateMarkerByImage break OUT');
-                    //return; 
                 }
             }
             // else {
@@ -313,10 +292,6 @@ var animateMarkerByImage = function(img) {
             console.log('iconCreateFunction IN ');
             //console.log('iconCreateFunction getChildCount', cluster.getChildCount());
 
-            /*var markers = cluster.getAllChildMarkers();
-            var html = '<div class="circle">' + markers.length + '</div>';
-            return L.divIcon({ html: html, className: 'mycluster', iconSize: L.point(32, 32) });
-            */
             var children = cluster.getAllChildMarkers()[0];
 
             //console.log('icon', children.options.icon);
@@ -371,7 +346,6 @@ var animateMarkerByImage = function(img) {
         console.log('clusterclick ', a);
         console.log('L ', L); */
         let visibleOne = g_markers.getVisibleParent(a.layer);
-        //console.log('clusterclick BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB: visibleOne', visibleOne);
         visibleOne.refreshIconOptions({
                     iconSize:     [100, 100],
                 }, true);

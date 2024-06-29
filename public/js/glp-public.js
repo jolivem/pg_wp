@@ -345,6 +345,16 @@
 
         });  
 
+        $(document).find('#btn-add-single-photo').on('click', function(e){
+            console.log("btn-add-single-photo click", e);
+            e.preventDefault();
+            const galid = e.target.dataset.galid;
+            let download_single_url = document.getElementById('pg_download_single_url').value;
+            download_single_url += "?gid=";
+            download_single_url += galid;
+            window.location = download_single_url;
+        });  
+
         $(document).find('.user-photo-option').on('click', function(e){
             console.log("user-photo-option click", e);
             e.preventDefault();
