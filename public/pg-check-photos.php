@@ -161,14 +161,27 @@ class Glp_Check_Photos_Public {
             if ($url_img != false) {
                 $img_src = $url_img[0];
             }
-
-            $address_json = get_post_meta($item->ID, 'address_json',true);
-            $addresses = json_decode($address_json, true);
-            //error_log("render_images addresses2:".$addresses[1]['formatted_address']);
-            for ($i = 0 ; $i < count($addresses); $i++) {
-                error_log("render_images addresses:" . $addresses[$i]['formatted_address']);
-            }
+            $addresses=[];
+            try {
+                $address_json = get_post_meta($item->ID, 'address_json',true);
+                if ($address_json) {
+                    error_log("render_images addresses:".$address_json);
+                    $addresses = json_decode($address_json, true);
+                    if ($addresses != null) {
+                        error_log("render_images addresses2:".$addresses[1]['formatted_address']);
+                        for ($i = 0 ; $i < count($addresses); $i++) {
+                            error_log("render_images addresses:" . $addresses[$i]['formatted_address']);
+                        }
+                    }
+                    else {
+                        $addresses=[];
+                    }
+                }
             
+            } catch (Exception $e) {
+                error_log("render_images Exception");
+                
+            }
             //error_log("render_images addresses[2]:".print_r($addresses, true));
             $statext = Pg_Edit_Gallery_Public::get_photo_status($item->ID);
 
