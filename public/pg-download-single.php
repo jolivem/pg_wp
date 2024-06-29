@@ -114,6 +114,13 @@ class Pg_Download_Single_Public {
         //     wp_die();
         // }
 
+        if ( ! current_user_can( 'manage_options' ) ) {
+            error_log("download_singe No ADMIN");
+            my_custom_404();
+            wp_die();
+        }
+
+
         ob_start();
         error_log("Pg_Download_Single_Public::pg_generate_page IN");
 
