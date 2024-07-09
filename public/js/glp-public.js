@@ -142,7 +142,8 @@
             let admin_url = document.getElementById('pg_admin_ajax_url').value;
 
             // get the address selected 
-            let address = document.querySelector('input[name="address"]:checked').value;
+            let name = "address" + postid;
+            let address = document.querySelector('input[name="'+name+'"]:checked').value;
     
             const formData = new FormData();
             formData.append('nonce', nonce);

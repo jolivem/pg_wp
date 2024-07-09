@@ -184,6 +184,7 @@ class Glp_Check_Photos_Public {
             }
             //error_log("render_images addresses[2]:".print_r($addresses, true));
             $statext = Pg_Edit_Gallery_Public::get_photo_status($item->ID);
+            $group_name = "address" . $item->ID;
 
             //error_log("render_images url:".print_r($url_img, true));
             // TODO check url_img is OK, add try catch
@@ -200,7 +201,7 @@ class Glp_Check_Photos_Public {
                     $checked=" checked='checked'";
                 }
                 $html.=
-                    "<input type='radio' id='html' name='address' value='" . $addresses[$i]['formatted_address']."' $checked>";
+                    "<input type='radio' name='$group_name' value='" . $addresses[$i]['formatted_address']."' $checked>";
                 $html.=
                     "<label for='html'>" . $addresses[$i]['formatted_address']."</label><br>";
                                         

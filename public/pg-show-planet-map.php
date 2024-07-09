@@ -307,6 +307,13 @@ class Pg_Show_Planet_Map_Public {
 
         if ($results){
 
+            # random sort 
+            shuffle($results);
+
+            if (count($results ) > 40) {
+                $results = array_slice($results, 0, 40);
+            }
+
             $data = array();
 
             foreach($results as $resu){
