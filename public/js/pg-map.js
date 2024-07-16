@@ -74,7 +74,7 @@ var setSliderPhotoCss = function (element, class_) {
 };
 
 var selectSliderImageBySrc =  function(mysrc, scroll) {
-    console.log('selectSliderImageBySrc IN', mysrc);
+    // console.log('selectSliderImageBySrc IN', mysrc);
     const slider = document.getElementById('imageSlider');
 
     /* Remove classname from previously selected image */
@@ -87,10 +87,10 @@ var selectSliderImageBySrc =  function(mysrc, scroll) {
     //let thumbnailSrc = makeThumbnailSrc(mysrc);
     var imageElement = document.querySelector(`#imageSlider img[src='${mysrc}']`);
     /* Add classname to the selected image */
-    console.log('selectSliderImageBySrc imageElement', imageElement);
+    // console.log('selectSliderImageBySrc imageElement', imageElement);
     if (imageElement) {
         //console.log('slider ', slider);
-        console.log('imageElement ', imageElement);
+        // console.log('imageElement ', imageElement);
         imageElement.classList.remove('imgNotSelected');
         imageElement.classList.add('imgSelected');
         g_selectedImageElem = imageElement;
@@ -105,13 +105,13 @@ var selectSliderImageBySrc =  function(mysrc, scroll) {
         displayPostDescription(postid);
 
     }
-    else {
-        console.log('selectSliderImageBySrc NOT FOUND');
-    }
+    // else {
+    //     console.log('selectSliderImageBySrc NOT FOUND');
+    // }
 };
 
 var selectSliderImageByElem =  function(imageElement, scroll) {
-    console.log('selectSliderImageByElem IN', imageElement);
+    // console.log('selectSliderImageByElem IN', imageElement);
     const slider = document.getElementById('imageSlider');
 
     /* Remove classname from previously selected image */
@@ -122,7 +122,7 @@ var selectSliderImageByElem =  function(imageElement, scroll) {
     }
 
     /* Add classname to the selected image */
-    console.log('selectSliderImageByElem imageElement', imageElement);
+    // console.log('selectSliderImageByElem imageElement', imageElement);
     if (imageElement) {
         //console.log('slider ', slider);
         imageElement.classList.remove('imgNotSelected');
@@ -140,9 +140,9 @@ var selectSliderImageByElem =  function(imageElement, scroll) {
         displayPostDescription(postid);
 
     }
-    else {
-        console.log('selectSliderImageBySrc NOT FOUND');
-    }
+    // else {
+    //     console.log('selectSliderImageBySrc NOT FOUND');
+    // }
 };
 
 var displayPostDescription = function(postid) {
@@ -156,7 +156,7 @@ var displayPostDescription = function(postid) {
     if (postid != null) {
         const descid = "desc-"+postid;
         var descr = document.getElementById(descid);
-        console.log('descid ', descid);
+        // console.log('descid ', descid);
         if (descr) {
             descr.style.display='block';
         }
@@ -190,7 +190,7 @@ var centerInSlider = function ( image, slider) {
 };
 
 var processClickOnTarget = function(elem) {
-    console.log('processClickOnTarget elem', elem);
+    // console.log('processClickOnTarget elem', elem);
     
     const img = elem.parentElement.parentElement.getElementsByTagName("img")[0];
 
@@ -211,7 +211,7 @@ var processClickOnText = function( elem) {
 
 var animateMarkerByImage = function(img) {
 
-    console.log('animateMarkerByImage IN', g_selectedImageSrc);
+    // console.log('animateMarkerByImage IN', g_selectedImageSrc);
     //console.log('animateMarkerByImage g_markers', g_markers);
     let imageSrc= img.getAttribute('src');
 
@@ -235,7 +235,7 @@ var animateMarkerByImage = function(img) {
                 layer._icon.style.width="100px";
                 layer._icon.style.height="100px";
                 layer._icon.style.zIndex += 1000;
-                console.log( 'animateMarkerByImage layer._icon FOUND for iconUrl');
+                // console.log( 'animateMarkerByImage layer._icon FOUND for iconUrl');
                 //g_selectedImageSrc = null;
                 setTimeout(function(){
                     // come back to normal size after timeout
@@ -274,7 +274,7 @@ var animateMarkerByImage = function(img) {
         }
     }
     g_selectedImageSrc = null;
-    console.log('animateMarkerByImage break OUT', g_selectedImageSrc);
+    // console.log('animateMarkerByImage break OUT', g_selectedImageSrc);
 };
 
 
@@ -289,7 +289,7 @@ var animateMarkerByImage = function(img) {
         zoomToBoundsOnClick: true,
         iconCreateFunction: function(cluster) {
             // Called on zoom end and move end
-            console.log('iconCreateFunction IN ');
+            // console.log('iconCreateFunction IN ');
             //console.log('iconCreateFunction getChildCount', cluster.getChildCount());
 
             var children = cluster.getAllChildMarkers()[0];
@@ -306,7 +306,6 @@ var animateMarkerByImage = function(img) {
             }
             //console.log( 'g_selectedImageSrc', g_selectedImageSrc);
             if (g_selectedImageSrc != null) {
-                console.log( 'iconCreateFunction AAAAAAAA g_selectedImageSrc not null');
                 iicoon.options.iconSize = [100,100];
                 iicoon.options.iconUrl = g_selectedImageSrc;
                 g_selectedImageSrc = null;
@@ -335,10 +334,10 @@ var animateMarkerByImage = function(img) {
 
     /* when clicked on marker */
     g_markers.on('click', function (a) {
-        console.log('click marker ', a.layer.options.icon.options.iconUrl);
+        // console.log('click marker ', a.layer.options.icon.options.iconUrl);
         selectSliderImageBySrc(a.layer.options.icon.options.iconUrl, true); 
         let visibleOne = g_markers.getVisibleParent(a.layer);
-        console.log('click visibleOne', visibleOne);
+        // console.log('click visibleOne', visibleOne);
     });
 
     g_markers.on('clusterclick', function (a) {
@@ -355,7 +354,7 @@ var animateMarkerByImage = function(img) {
 
     /* When user clicked on the target area */
     $(".slider-overlay-circle").on('click', function(event){
-        console.log('gal.on click target', event.target);
+        // console.log('gal.on click target', event.target);
         event.preventDefault();
         processClickOnTarget( event.target);
     });
@@ -434,7 +433,7 @@ var animateMarkerByImage = function(img) {
             displayPostDescription(null);
         }
 
-        console.log("show-gallery-option OUT g_selectedImage", {g_selectedImageElem, g_selectedImageSrc});
+        // console.log("show-gallery-option OUT g_selectedImage", {g_selectedImageElem, g_selectedImageSrc});
 
     });
 
@@ -442,7 +441,7 @@ var animateMarkerByImage = function(img) {
     if (searchElem) {
         document.getElementById("searchInput").addEventListener("keypress", function(event) {
             // Check if the pressed key is 'Enter' (key code 13)
-            console.log('searchInput IN', event);
+            // console.log('searchInput IN', event);
             if (event.key === 'Enter') {
                 event.preventDefault();
 
@@ -457,7 +456,7 @@ var animateMarkerByImage = function(img) {
         });                
 
         function searchAddress() {
-            console.log('searchAddress IN');
+            // console.log('searchAddress IN');
             var address = document.getElementById('searchInput').value;
 
             if (address == '') {
@@ -466,12 +465,12 @@ var animateMarkerByImage = function(img) {
 
             // Utilisation de l'API Nominatim pour géocoder l'adresse
             var url = 'https://nominatim.openstreetmap.org/search?format=json&q=' + address;
-            console.log('searchAddress url', url);
+            // console.log('searchAddress url', url);
 
             fetch(url)
             .then(response => response.json())
             .then(data => {
-                console.log('searchAddress response', data);
+                // console.log('searchAddress response', data);
                 if (data.length > 0) {
                     var lat = parseFloat(data[0].lat);
                     var lon = parseFloat(data[0].lon);
@@ -494,7 +493,7 @@ var animateMarkerByImage = function(img) {
 
 function getImagesFromBB(ne_lat, ne_lng, sw_lat, sw_lng, zoom) {
 
-    console.log("getImagesFromBB IN", {ne_lat, ne_lng, sw_lat, sw_lng, zoom});
+    // console.log("getImagesFromBB IN", {ne_lat, ne_lng, sw_lat, sw_lng, zoom});
     
     let admin_url = document.getElementById('pg_admin_ajax_url').value;
     let nonce = document.getElementById('page_nonce').value;
@@ -515,7 +514,7 @@ function getImagesFromBB(ne_lat, ne_lng, sw_lat, sw_lng, zoom) {
         contentType: false,
         processData: false,
         success: function(response){
-            console.log("success", response);
+            // console.log("success", response);
             updatePlanetSlider(response.data);
             
 

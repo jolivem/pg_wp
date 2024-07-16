@@ -1161,8 +1161,8 @@
           if (this.options.overlay) {
             document.body.appendChild(this.domNodes.overlay);
           }
-          console.log('simplelightbox openImage domNodes.wrapper.parentNode', this.domNodes.wrapper.parentNode);
-          console.log('simplelightbox openImage domNodes.overlay.parentNode', this.domNodes.overlay.parentNode);
+        //   console.log('simplelightbox openImage domNodes.wrapper.parentNode', this.domNodes.wrapper.parentNode);
+        //   console.log('simplelightbox openImage domNodes.overlay.parentNode', this.domNodes.overlay.parentNode);
 
           this.relatedElements = this.getRelated(element.rel);
           if (this.options.showCounter) {
@@ -1577,8 +1577,8 @@
           this.removeEventListener(window, 'hashchange.' + this.eventNamespace);
           this.close();
           if (this.isOpen) {
-            console.log('simplelightbox domNodes.wrapper.parentNode', _this2.domNodes.wrapper.parentNode);
-            console.log('simplelightbox domNodes.overlay.parentNode', _this2.domNodes.overlay.parentNode);
+            // console.log('simplelightbox domNodes.wrapper.parentNode', _this2.domNodes.wrapper.parentNode);
+            // console.log('simplelightbox domNodes.overlay.parentNode', _this2.domNodes.overlay.parentNode);
             document.body.removeChild(this.domNodes.wrapper);
             document.body.removeChild(this.domNodes.overlay);
           }
@@ -1590,7 +1590,7 @@
           if (!this.initialSelector) {
             throw 'refreshing only works when you initialize using a selector!';
           }
-          console.log("simple-lightbox refresh");
+        //   console.log("simple-lightbox refresh");
           var options = this.options,
             selector = this.initialSelector;
           this.destroy();

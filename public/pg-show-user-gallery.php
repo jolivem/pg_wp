@@ -392,7 +392,6 @@ class Pg_Show_User_Gallery_Public {
             $glp_lazy_load_animation = "
             $(document).find('.ays_gallery_container_".$id." .$gallery_lightbox_selector > img').each(function(e, img){
                 img.onload = function(e){
-                    console.log('img onload IN');
                     img.classList.add('lazyloaded');
                     aysgrid_".$id.".masonry('layout');
                 }
@@ -748,10 +747,7 @@ class Pg_Show_User_Gallery_Public {
                 $gallery_view .= "
                 ".$responsive_width_height." 
                 window.addEventListener('load', function(e){
-                    console.log('XA page loaded', e);
-                    console.log('window.aysGalleryOptions', window.aysGalleryOptions);
                     setTimeout(function(){
-                        console.log('timeout in');
                         var aysGalleryImages_".$id." = JSON.parse(window.atob(window.aysGalleryOptions.galleryImages[".$id."]));
                         $(window).resize(function() {
                             $(document).find('.mosaic_".$id."').Mosaic({
@@ -788,10 +784,8 @@ class Pg_Show_User_Gallery_Public {
                             gutter: {$images_distance},
 
                         });
-                        console.log('XA before masonry layout');
                         aysgrid_".$id.".masonry('layout');
                         aysgrid_".$id.".on( 'layoutComplete', function() {
-                            console.log('layout done, just this one time');
                             lazyload_single();
                         });
                       

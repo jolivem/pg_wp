@@ -323,7 +323,6 @@ class Pg_Show_User_Map_Public {
                 
                 /* dezoom one level */
                 const currentLevel = g_map.getZoom();
-                console.log('INIT currentlevel', currentLevel);
                 if (currentLevel > 1) {
                     if (currentLevel > 10) {
                         g_map.setZoom(currentLevel - 2);
@@ -332,7 +331,6 @@ class Pg_Show_User_Map_Public {
                         g_map.setZoom(currentLevel - 1);
                     }
                 }
-                console.log('INIT map', g_map);
                 g_markers.refreshClusters();
                 
                 /* add lightbox */ 
