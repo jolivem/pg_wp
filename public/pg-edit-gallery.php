@@ -109,7 +109,8 @@ class Pg_Edit_Gallery_Public {
             my_custom_404();
             wp_die();
         }
-
+        //error_log("Pg_Edit_Gallery_Public server = ".print_r($_SERVER, true));
+        
         //use the post ID provided in the URL
         $id=$_GET['gid']; 
 
@@ -161,7 +162,8 @@ class Pg_Edit_Gallery_Public {
         //error_log("pg_show_page IN user_id: ".$user_id);
         if ($user_id == 0) {
             return "";
-        }        
+        }
+        $nb_medias = 0;   
         
         if ($id == -1) {
             // create a new gallery
@@ -197,6 +199,7 @@ class Pg_Edit_Gallery_Public {
             $medias = $this->pg_get_medias_by_gallery($id);
             if ($medias != null) {
                 $html_images = $this->render_images($medias);
+                $nb_medias = count($medias);
             }
         }
         $user_galleries_url = Glp_User_Galleries_Public::get_page_url_from_slug(self::PAGE_SLUG_USER_GALLERIES);
@@ -296,10 +299,10 @@ class Pg_Edit_Gallery_Public {
                     Supprimer la galerie
                 </button>";
         // The photos added are automatically saved in the gallery
-        // if ($html_images != "") {
-        //     $html_code .= "
-        //         <button type='button' class='btn btn-primary align-right' id='edit-gallery-save-2'>Enregistrer</button>";
-        // }
+        if ($nb_medias > 7) {
+            $html_code .= "
+                <button type='button' class='btn btn-primary align-right' id='edit-gallery-save-2'>Enregistrer</button>";
+        }
         $html_code .= "
             </div>
         </div>";

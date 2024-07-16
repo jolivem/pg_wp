@@ -1,6 +1,6 @@
 
 var g_filesArray = []; // only the files with exif data
-const maxFile=5;
+const maxFile=20;
 
 //
 // SINGLE UPLOAD

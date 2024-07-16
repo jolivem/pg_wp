@@ -149,13 +149,16 @@ class Pg_Show_User_Map_Public {
         }
   
         $html_code = "
-        <div class='pg-container'>
-            <div class='desc-block'>
-                <div class='desc-gallery'>
-                    <div class='desc-title'>$gtitle</div>
-                    <p class='desc-description'>$gdescription</p>
-                </div>
-            </div>
+        <div class='pg-container'>";
+        if ($gtitle != "" || $gdescription != "") {
+            $html_code .= "
+            <div class='desc-gallery'>
+                <div class='desc-title'>$gtitle</div>
+                <div class='desc-description'>$gdescription</div>
+            </div>";
+        }
+
+        $html_code .= "
             </br>
             <div class='pg-map'>
                 <div id='map' style='height:300px;'></div>

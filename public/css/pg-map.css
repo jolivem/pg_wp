@@ -40,11 +40,11 @@ div.gallery-slider {
     overflow: hidden;
     white-space: nowrap;
     /*padding: 4px;*/
-    display: ruby;
+    display: flex;
 }
 
 div.gallery-slider img {
-    display: ruby;
+    /*display: ruby;*/
     padding-bottom: 2px;
     height: 122px;
     cursor: pointer;
@@ -58,11 +58,11 @@ div.planet-slider {
     overflow: hidden;
     white-space: nowrap;
     /*padding: 4px;*/
-    display: ruby;
+    display: flex;
 }
 
 div.planet-slider img {
-    display: ruby;
+    /*display: ruby;*/
     padding-bottom: 2px;
     height: 150px;
     cursor: pointer;

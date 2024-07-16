@@ -124,7 +124,6 @@ class Pg_Show_Planet_Map_Public {
         
         //global $wpdb;
   
-        //$medias = $this->pg_get_medias_by_gallery($id);
         $medias = Pg_Geoposts_Table::get_all_public_images();
         //error_log("pg_show_page ".print_r($medias, true));
         //[$html_slider, $html_descr] = $this->render_slider($medias);
@@ -189,7 +188,6 @@ class Pg_Show_Planet_Map_Public {
     } // end ays_show_galery()
 
     // render all the images 
-    // medias is an array of array with 'post_id'
     // medias is an array of array with 'post_id'
  
     // create map, markers and lightbox
