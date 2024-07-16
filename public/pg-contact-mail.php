@@ -78,7 +78,7 @@ class Pg_Contact_Mail_Public {
     
     public function pg_generate_page( $attr ){
         
-        error_log("Pg_Contact_Mail_Public::pg_generate_page IN ");
+        //error_log("Pg_Contact_Mail_Public::pg_generate_page IN ");
 
         ob_start();
 
@@ -93,7 +93,7 @@ class Pg_Contact_Mail_Public {
     // attr should have the user id
     public function pg_show_page(){
 
-        error_log("pg_show_page IN" );
+        //error_log("pg_show_page IN" );
         
         $admin_ajax_url = admin_url('admin-ajax.php');
         $nonce = wp_create_nonce('contact_mail');
@@ -148,7 +148,7 @@ class Pg_Contact_Mail_Public {
     //
     public function contact_mail() {
         //error_log("user_edit_photo IN");
-        error_log("contact_mail REQUEST ".print_r($_REQUEST, true));
+        //error_log("contact_mail REQUEST ".print_r($_REQUEST, true));
         //error_log("download_single_photo FILES ".print_r($_FILES, true));
 
         if( !isset( $_REQUEST['nonce'] ) or 

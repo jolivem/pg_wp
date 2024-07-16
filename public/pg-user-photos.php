@@ -99,7 +99,7 @@ class Glp_User_Photos_Public {
     
     public function pg_generate_page( $attr ){
         ob_start();
-        error_log("Glp_User_Photos_Public::pg_generate_page IN ");
+        // error_log("Glp_User_Photos_Public::pg_generate_page IN ");
         $this->enqueue_styles();
         $this->enqueue_scripts();
 
@@ -114,7 +114,7 @@ class Glp_User_Photos_Public {
         global $wpdb;
         
         $user_id = get_current_user_id();
-        error_log("Glp_User_Photos_Public::pg_show_page user_id =$user_id");
+        // error_log("Glp_User_Photos_Public::pg_show_page user_id =$user_id");
         $medias = $this->pg_get_medias_by_user($user_id);
         if(!$medias){
             // TODO add a link the the gallery creationAdd gal
@@ -129,7 +129,7 @@ class Glp_User_Photos_Public {
             </div>";
             return $html_code;    
         }
-        error_log("Glp_User_Photos_Public::pg_show_page count image =". count($medias));
+        // error_log("Glp_User_Photos_Public::pg_show_page count image =". count($medias));
 
         $medias_nb = $this->pg_get_nb_galleries_per_media($user_id);
 
@@ -266,7 +266,7 @@ class Glp_User_Photos_Public {
 
     // callback on request to delete a photo
     public function user_delete_photo() {
-        error_log("user_delete_photo IN REQUEST ".print_r($_REQUEST, true));
+        // error_log("user_delete_photo IN REQUEST ".print_r($_REQUEST, true));
         //error_log("download_single_photo FILES ".print_r($_FILES, true));
 
         // TODO test current user is gallery user
@@ -305,7 +305,7 @@ class Glp_User_Photos_Public {
         // delete also in Geoposts table
         Pg_Geoposts_Table::delete_post($pid);
 
-        error_log( "user_delete_photo Respond success");
+        // error_log( "user_delete_photo Respond success");
         wp_send_json_success( null, 200);
         wp_die();
         
@@ -327,8 +327,7 @@ class Glp_User_Photos_Public {
                 }
             }               
         }
-        error_log("pg_get_nb_galleries_per_media medias_nb:".print_r($medias_nb, true));
+        // error_log("pg_get_nb_galleries_per_media medias_nb:".print_r($medias_nb, true));
         return $medias_nb;
     }
-
 }

@@ -113,7 +113,7 @@ class Pg_Show_User_Gallery_Public {
     
     public function ays_generate_gallery( $attr ){
         ob_start();
-        error_log("ays_generate_gallery IN ".print_r($_GET, true));
+        // error_log("ays_generate_gallery IN ".print_r($_GET, true));
 
         // TODO check that the photo belons to the current user
         if (! isset($_GET['guuid'])) {
@@ -142,7 +142,7 @@ class Pg_Show_User_Gallery_Public {
         /*
          * Gallery global settings
          */
-        error_log("pg_show_gallery, read gallery: ".print_r($gallery, true));
+        // error_log("pg_show_gallery, read gallery: ".print_r($gallery, true));
         $id = $gallery['id'];
 
         $gallery_options = json_decode($gallery['options'],true);
@@ -932,12 +932,12 @@ class Pg_Show_User_Gallery_Public {
                 return $item;
             }
         }
-        error_log("getCountryOptions out null");
+        // error_log("getCountryOptions out null");
         return null; // Return null if the file is not found
     }
     
     private function load_countries() {
-        error_log("load_countries: IN");
+        // error_log("load_countries: IN");
         if (!count($this->countries)) {
             
             // Add None
@@ -963,7 +963,7 @@ class Pg_Show_User_Gallery_Public {
     // return null if on is wrong
     // return country options if correct
     private function checkGeolocation($latitude, $longitude, $country) {
-        error_log("checkGeolocation IN country=$country");
+        // error_log("checkGeolocation IN country=$country");
         
         if (!is_numeric($latitude)) {
             error_log("checkGeolocation lat out NULL");
@@ -987,8 +987,8 @@ class Pg_Show_User_Gallery_Public {
         $show_title_on, $html_hover_icon, $ays_show_caption, $ays_images_loader, $images,
         $image_countries, $image_latitudes, $image_longitudes, $images_categories, $images_distance,
         $column_width, $vignette_display) {
-        error_log("ays_add_images IN  vignette_display=". $vignette_display);
-        error_log("ays_add_images IN  view=". $view);
+        // error_log("ays_add_images IN  vignette_display=". $vignette_display);
+        // error_log("ays_add_images IN  view=". $view);
         $gallery_view = "";
         if ($view == "masonry") {
             $gallery_view .= "<div class='ays_masonry_grid' id='ays_masonry_grid_".$id."'><div class='ays_masonry_grid-sizer'></div>";
@@ -1043,7 +1043,7 @@ class Pg_Show_User_Gallery_Public {
             $vignette_div = "";
             // if no vignette
             if ($image_countries[$key] == null) {
-                error_log("ays_add_images NO vignette");
+                // error_log("ays_add_images NO vignette");
                 //$img_tag ="<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "' onload='console.log(\"ID=".$image_ids[$key]."\")'>";
                 $img_tag ="<img class='". $image_class ."' ". $src_attribute ."='". $image ."' alt='" . wp_unslash($image_alts[$key]) . "'>";
             }
@@ -1060,7 +1060,7 @@ class Pg_Show_User_Gallery_Public {
                           ."' onload='ays_add_vignette_to_image(\"".esc_attr("$lmapId")."\",\"".esc_attr($file)."\",".$lat.",".$lon.",".$zoom.")'>";
                               
                 $vignette_div ="<div id='".$lmapId."' class='overlay-image' style='width: ".$geo_width."; height: ".$geo_height.";'></div>";
-                error_log("ays_add_images vignette_div=".$vignette_div);
+                // error_log("ays_add_images vignette_div=".$vignette_div);
             }
             
             $image_url = "";
@@ -1235,7 +1235,7 @@ class Pg_Show_User_Gallery_Public {
     
     protected function ays_get_gallery_content($gallery, $gallery_options, $gal_lightbox_options, $id){
         global $wpdb;
-        error_log("ays_get_gallery_content IN");
+        // error_log("ays_get_gallery_content IN");
         $settings_options = Gallery_Settings_Actions::ays_get_setting('options');
         if($settings_options){
             $settings_options = json_decode(stripcslashes($settings_options), true);
@@ -1329,7 +1329,7 @@ class Pg_Show_User_Gallery_Public {
         $vignette_display = (!isset($gallery_options['vignette_display']) ||
             $gallery_options['vignette_display'] == '' ||
             $gallery_options['vignette_display'] == false) ? 'permanent' : $gallery_options['vignette_display'];
-        error_log("ays_get_gallery_content vignette_display=".$vignette_display);
+        // error_log("ays_get_gallery_content vignette_display=".$vignette_display);
       
         //Gallery image position
         $gallery_img_positions = (!isset($gallery_options['gallery_img_position']) ||
@@ -1389,7 +1389,7 @@ class Pg_Show_User_Gallery_Public {
         else {
             $image_ids = explode( "***", $gallery["images_ids"]);
         }
-        error_log("Image ids : ".print_r($image_ids, true));
+        // error_log("Image ids : ".print_r($image_ids, true));
         $images = array();
         $image_titles = array();
         $image_descs = array();
@@ -1442,7 +1442,7 @@ class Pg_Show_User_Gallery_Public {
             $latitude = 0;
             $vignette = '';
             if (count($result) > 0) {
-                error_log("result : ".print_r($result , true));
+                // error_log("result : ".print_r($result , true));
                 $longitude = $this->findValueByKey($result, 'longitude');
                 $latitude = $this->findValueByKey($result, 'latitude');
                 $vignette = $this->findValueByKey($result, 'vignette');
@@ -1460,9 +1460,9 @@ class Pg_Show_User_Gallery_Public {
                 array_push($image_countries, null);
             }
         }
-        error_log("image_latitudes: ".print_r($image_latitudes, true));
-        error_log("image_longitudes: ".print_r($image_longitudes, true));
-        error_log("image_countries: ".print_r($image_countries, true));
+        // error_log("image_latitudes: ".print_r($image_latitudes, true));
+        // error_log("image_longitudes: ".print_r($image_longitudes, true));
+        // error_log("image_countries: ".print_r($image_countries, true));
 
         //TODO tests when there is not title or no description,...
 

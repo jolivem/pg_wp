@@ -106,9 +106,9 @@ class Pg_Edit_Photo_Public {
     
     public function pg_generate_page( $attr ){
         
-        error_log("Pg_Edit_Photo_Public::pg_generate_page IN ".print_r($attr, true));
-        error_log("pg_generate_page REQUEST ".print_r($_REQUEST, true));
-        error_log("pg_generate_page GET ".print_r($_GET, true));
+        // error_log("Pg_Edit_Photo_Public::pg_generate_page IN ".print_r($attr, true));
+        // error_log("pg_generate_page REQUEST ".print_r($_REQUEST, true));
+        // error_log("pg_generate_page GET ".print_r($_GET, true));
 
         // TODO check that gallery belongs to the current user
         
@@ -147,7 +147,7 @@ class Pg_Edit_Photo_Public {
 
         // ig gid is empty, request comes from the page "My Photos"
 
-        error_log("pg_show_page IN photo id = $pid, gid = $gid");
+        // error_log("pg_show_page IN photo id = $pid, gid = $gid");
         
         global $wpdb;
         $post = get_post($pid);
@@ -159,7 +159,7 @@ class Pg_Edit_Photo_Public {
             if (get_post_meta($pid, 'user_status', true) == self::USER_STATUS_PUBLIC) {
                 $user_status_checked = " checked";
                 $user_status = self::USER_STATUS_PUBLIC;
-                $user_status_label ="Affichage autorisé sur la galerie mondiale";
+                $user_status_label ="Affichage autorisé sur la galerie publique";
             }
 
             $images_str='';
@@ -176,7 +176,7 @@ class Pg_Edit_Photo_Public {
 
             $admin_ajax_url = admin_url('admin-ajax.php');
             $nonce = wp_create_nonce('edit_photo');
-            error_log("pg_show_page single admin_ajax_url=".$admin_ajax_url);
+            // error_log("pg_show_page single admin_ajax_url=".$admin_ajax_url);
 
             $url_img = wp_get_attachment_image_src($pid, "medium");
             if ($url_img != false) {
@@ -279,7 +279,7 @@ class Pg_Edit_Photo_Public {
     //
     public function user_edit_photo() {
         //error_log("user_edit_photo IN");
-        error_log("user_edit_photo REQUEST ".print_r($_REQUEST, true));
+        // error_log("user_edit_photo REQUEST ".print_r($_REQUEST, true));
         //error_log("download_single_photo FILES ".print_r($_FILES, true));
 
         if( ! isset( $_REQUEST['nonce'] ) or 
@@ -336,7 +336,7 @@ class Pg_Edit_Photo_Public {
             error_log("user_edit_photo not a photo");
         }
 
-        error_log( "Respond success");
+        // error_log( "Respond success");
         wp_send_json_success( null, 200);
         wp_die();
         
@@ -344,10 +344,10 @@ class Pg_Edit_Photo_Public {
 
     // Update the public visibility
     private function update_visibility($post_id, $user_status) {
-        error_log("update_visibility IN id=$post_id user_status=$user_status");
+        // error_log("update_visibility IN id=$post_id user_status=$user_status");
 
         $admin_status = get_post_meta($post_id, 'admin_status', true);
-        error_log("update_visibility admin_status=$admin_status");
+        // error_log("update_visibility admin_status=$admin_status");
 
         if ($user_status == self::USER_STATUS_PUBLIC && $admin_status == self::ADMIN_STATUS_PUBLIC_OK) {
             Pg_Geoposts_Table::update_visible($post_id, Pg_Geoposts_Table::PUBLIC_VISIBLE);

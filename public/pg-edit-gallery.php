@@ -125,7 +125,7 @@ class Pg_Edit_Gallery_Public {
         }
 
         ob_start();
-        error_log("Pg_Edit_Gallery_Public::pg_generate_page IN GET ".print_r($_GET, true));
+        //error_log("Pg_Edit_Gallery_Public::pg_generate_page IN GET ".print_r($_GET, true));
 
         // TODO check that the gallery belongs to the current user
         // TODO check that the gallery belongs to the current user
@@ -156,7 +156,7 @@ class Pg_Edit_Gallery_Public {
     // attr should have the user id
     public function pg_show_page( $id ){
 
-        error_log("Pg_Edit_Gallery_Public::pg_show_page IN gallery id=$id");
+        //error_log("Pg_Edit_Gallery_Public::pg_show_page IN gallery id=$id");
 
         $user_id = get_current_user_id();
         //error_log("pg_show_page IN user_id: ".$user_id);
@@ -168,7 +168,7 @@ class Pg_Edit_Gallery_Public {
         if ($id == -1) {
             // create a new gallery
             $id = $this->create_gallery();
-            error_log("pg_show_page after id=".$id);
+            //error_log("pg_show_page after id=".$id);
             if ( $id == 0 ) {
                 // internal error
                 // TODO 404
@@ -193,8 +193,8 @@ class Pg_Edit_Gallery_Public {
                 return "";
             }
             $title = stripslashes($gallery["title"]);
-            error_log("pg_show_page gallery['title'] = " . $gallery["title"]);
-            error_log("pg_show_page title = " .  $title);
+            //error_log("pg_show_page gallery['title'] = " . $gallery["title"]);
+            //error_log("pg_show_page title = " .  $title);
             $description = stripslashes($gallery["description"]);
             $medias = $this->pg_get_medias_by_gallery($id);
             if ($medias != null) {
@@ -210,7 +210,7 @@ class Pg_Edit_Gallery_Public {
         $admin_ajax_url = admin_url('admin-ajax.php');
         //$admin_post_url = admin_url('admin-post.php');
         $nonce = wp_create_nonce('edit_gallery');
-        error_log("pg_show_page single admin_ajax_url=".$admin_ajax_url);
+        //error_log("pg_show_page single admin_ajax_url=".$admin_ajax_url);
 
         $hide_help = get_user_meta( $user_id, 'hide_gallery_help', true); 
 
@@ -259,8 +259,8 @@ class Pg_Edit_Gallery_Public {
                     <div>- Utilisez &nbsp<i class='fas fa-trash'></i>&nbsp pour supprimer la photo de la galerie, elle reste présente dans votre phototèque.</div>
                     </br>
                     <div>- Une photo notée <b>Non vérifiée</b> est publique, en attente de vérification par le modérateur.</div>
-                    <div>- Une photo notée <b>Privée</b> n'est pas affichée sur la galerie mondiale et n'est pas vérifiée par le modérateur.</div>
-                    <div>- Une photo notée <b>Publique</b> est affichée sur la galerie mondiale.</div>
+                    <div>- Une photo notée <b>Privée</b> n'est pas affichée sur la galerie publique et n'est pas vérifiée par le modérateur.</div>
+                    <div>- Une photo notée <b>Publique</b> est affichée sur la galerie publique.</div>
                     </br>
                     <div class='form-check form-switch'>
                         <input  id='gallery_help' class='form-check-input' type='checkbox' role='switch'>
@@ -322,7 +322,7 @@ class Pg_Edit_Gallery_Public {
     // $id = gallery id
     // return an array with image IDs
     public static function pg_get_medias_by_gallery( $id ) {
-        error_log("pg_get_medias_by_gallery IN gallery_id=".$id);
+       // error_log("pg_get_medias_by_gallery IN gallery_id=".$id);
         global $wpdb;
 
         $sql = "SELECT * FROM {$wpdb->prefix}glp_gallery WHERE id={$id}";
@@ -336,7 +336,7 @@ class Pg_Edit_Gallery_Public {
             return null;
         }
         $image_ids = explode( "***", $result["images_ids"]);
-        error_log("pg_get_medias_by_gallery count =".count($image_ids));
+        //error_log("pg_get_medias_by_gallery count =".count($image_ids));
         return $image_ids;
     }
 
@@ -454,7 +454,7 @@ class Pg_Edit_Gallery_Public {
 
     // callback on request to submit gallery settings
     public function user_edit_gallery() {
-        error_log("user_edit_gallery IN");
+        //error_log("user_edit_gallery IN");
         //error_log("user_edit_gallery REQUEST ".print_r($_REQUEST, true));
         //error_log("download_single_photo FILES ".print_r($_FILES, true));
 
@@ -479,7 +479,7 @@ class Pg_Edit_Gallery_Public {
 
         $this->update_gallery($_REQUEST);
 
-        error_log( "Respond success");
+        //error_log( "Respond success");
         wp_send_json_success( null, 200);
         wp_die();
     }
@@ -487,8 +487,8 @@ class Pg_Edit_Gallery_Public {
   
     // callback on request to delete a gallery
     public function user_delete_gallery() {
-        error_log("user_delete_gallery IN");
-        error_log("user_delete_gallery REQUEST ".print_r($_REQUEST, true));
+        //error_log("user_delete_gallery IN");
+        //error_log("user_delete_gallery REQUEST ".print_r($_REQUEST, true));
         //error_log("download_single_photo FILES ".print_r($_FILES, true));
 
         // TODO test current user is gallery user
@@ -527,7 +527,7 @@ class Pg_Edit_Gallery_Public {
 
         Glp_Galleries_List_Table::delete_gallery($_REQUEST['gid']);
 
-        error_log( "Respond success");
+        //error_log( "Respond success");
         wp_send_json_success( null, 200);
         wp_die();
         
@@ -535,7 +535,7 @@ class Pg_Edit_Gallery_Public {
 
     function pg_get_gallery_by_id( $id ) {
         global $wpdb;
-        error_log( "pg_get_gallery_by_id IN id=".$id);
+        //error_log( "pg_get_gallery_by_id IN id=".$id);
 
         $sql = "SELECT * FROM {$wpdb->prefix}glp_gallery WHERE id={$id}";
 
@@ -608,7 +608,7 @@ class Pg_Edit_Gallery_Public {
     }
 
     public function create_gallery(){
-        error_log( "create_gallery IN");
+        //error_log( "create_gallery IN");
         global $wpdb;
         $gallery_table = $wpdb->prefix . "glp_gallery";
     
@@ -638,7 +638,7 @@ class Pg_Edit_Gallery_Public {
             array( "%s", "%s", "%s", "%d", "%d", "%s", "%s", "%s", "%s", "%s", "%s" )
         );
 
-        error_log( "create_gallery, id = ".$wpdb->insert_id);
+        //error_log( "create_gallery, id = ".$wpdb->insert_id);
         return $wpdb->insert_id;
     }
     
@@ -661,16 +661,16 @@ class Pg_Edit_Gallery_Public {
 
         // List of images
         if (isset($data["images_id"]) && !empty($data["images_id"])) {
-            error_log("update_gallery() images selected ! ");
+            //error_log("update_gallery() images selected ! ");
             $images_ids = str_replace(",", "***", $data["images_id"]);
-            error_log("update_gallery() images=".$image_ids);
+            //error_log("update_gallery() images=".$image_ids);
         }
         else {
             error_log("update_gallery() NO images ! ");
             //$image_paths            = '';
             $images_ids = '';
         }
-        error_log("image_ids ".$images_ids);
+        //error_log("image_ids ".$images_ids);
         $id = ( $data["gallery_id"] != NULL ) ? absint( intval( $data["gallery_id"] ) ) : null;
         // $title = (isset($data["title"]) && $data["title"] != '') ? stripslashes(sanitize_text_field( $data["title"] )) : '';
         // $description = (isset($data["desc"]) && $data["desc"] != '') ? stripslashes(sanitize_text_field( $data["desc"] )) : '';
@@ -737,8 +737,8 @@ class Pg_Edit_Gallery_Public {
     
     // callback on Ajax request
     public function hide_gallery_help() {
-        error_log("hide_gallery_help IN");
-        error_log("hide_gallery_help REQUEST ".print_r($_REQUEST, true));
+        //error_log("hide_gallery_help IN");
+        //error_log("hide_gallery_help REQUEST ".print_r($_REQUEST, true));
         //error_log("download_single_photo FILES ".print_r($_FILES, true));
 
         // TODO test current user is gallery user
@@ -766,7 +766,7 @@ class Pg_Edit_Gallery_Public {
             delete_user_meta( $user_id, 'hide_gallery_help');
         }
 
-        error_log( "Respond success");
+        //error_log( "Respond success");
         wp_send_json_success( null, 200);
         wp_die();
         

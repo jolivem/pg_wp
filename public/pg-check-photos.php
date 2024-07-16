@@ -102,14 +102,14 @@ class Glp_Check_Photos_Public {
 
         $user_id = get_current_user_id();
         if ($user_id != 1) {
-            error_log("admin_reject_photo No ADMIN");
+            //error_log("admin_reject_photo No ADMIN");
             // TODO 404 NOT FOUND
             my_custom_404();
             wp_die();
         }
         
         ob_start();
-        error_log("Glp_Check_Photos_Public::pg_generate_page IN ".print_r($attr, true));
+        //error_log("Glp_Check_Photos_Public::pg_generate_page IN ".print_r($attr, true));
         $this->enqueue_styles();
         $this->enqueue_scripts();
 
@@ -165,17 +165,17 @@ class Glp_Check_Photos_Public {
             try {
                 $address_json = get_post_meta($item->ID, 'address_json',true);
                 if ($address_json) {
-                    error_log("render_images addresses:".$address_json);
+                    //error_log("render_images addresses:".$address_json);
                     $addresses = json_decode($address_json, true);
-                    if ($addresses != null) {
-                        error_log("render_images addresses2:".$addresses[1]['formatted_address']);
-                        for ($i = 0 ; $i < count($addresses); $i++) {
-                            error_log("render_images addresses:" . $addresses[$i]['formatted_address']);
-                        }
-                    }
-                    else {
+                    if ($addresses == null) {
                         $addresses=[];
                     }
+                    // else {
+                        // error_log("render_images addresses2:".$addresses[1]['formatted_address']);
+                        // for ($i = 0 ; $i < count($addresses); $i++) {
+                        //     error_log("render_images addresses:" . $addresses[$i]['formatted_address']);
+                        // }
+                    // }
                 }
             
             } catch (Exception $e) {
@@ -255,7 +255,7 @@ class Glp_Check_Photos_Public {
 
     // callback on request to delete a photo
     public function admin_valid_photo() {
-        error_log("admin_valid_photo IN REQUEST ".print_r($_REQUEST, true));
+        //error_log("admin_valid_photo IN REQUEST ".print_r($_REQUEST, true));
         //error_log("download_single_photo FILES ".print_r($_FILES, true));
 
         // TODO test current user is gallery user
@@ -296,14 +296,14 @@ class Glp_Check_Photos_Public {
         // Set the image meta (e.g. Title, Excerpt, Content)
         wp_update_post( $my_post );
 
-        error_log( "admin_valid_photo Respond success");
+        //error_log( "admin_valid_photo Respond success");
         wp_send_json_success( null, 200);
         wp_die();
         
     } 
 
     public function admin_reject_photo() {
-        error_log("admin_reject_photo IN REQUEST ".print_r($_REQUEST, true));
+        //error_log("admin_reject_photo IN REQUEST ".print_r($_REQUEST, true));
         //error_log("download_single_photo FILES ".print_r($_FILES, true));
 
         // TODO test current user is gallery user
@@ -334,16 +334,16 @@ class Glp_Check_Photos_Public {
         update_post_meta($pid , 'admin_status', Pg_Edit_Photo_Public::ADMIN_STATUS_NOT_OK);
         $this->update_visibility($pid, Pg_Edit_Photo_Public::ADMIN_STATUS_NOT_OK);
 
-        error_log( "admin_reject_photo Respond success");
+        //error_log( "admin_reject_photo Respond success");
         wp_send_json_success( null, 200);
         wp_die();
     }
 
     private function update_visibility($post_id, $admin_status) {
-        error_log("update_visibility IN id=$post_id admin_status=$admin_status");
+        //error_log("update_visibility IN id=$post_id admin_status=$admin_status");
 
         $user_status = get_post_meta($post_id, 'user_status', true);
-        error_log("update_visibility user_status=$user_status");
+        //error_log("update_visibility user_status=$user_status");
 
         if ($user_status == Pg_Edit_Photo_Public::USER_STATUS_PUBLIC && $admin_status == Pg_Edit_Photo_Public::ADMIN_STATUS_PUBLIC_OK) {
             Pg_Geoposts_Table::update_visible($post_id, Pg_Geoposts_Table::PUBLIC_VISIBLE);

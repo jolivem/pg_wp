@@ -92,7 +92,7 @@ class Glp_User_Galleries_Public {
     
     public function pg_generate_page( $attr ){
         ob_start();
-        error_log("Glp_User_Galleries_Public::pg_generate_page IN ");
+        // error_log("Glp_User_Galleries_Public::pg_generate_page IN ");
 
         $this->enqueue_styles();
         $this->enqueue_scripts();
@@ -104,7 +104,7 @@ class Glp_User_Galleries_Public {
 
     static public function get_page_url_from_slug($slug) {
         $page = get_page_by_path($slug);
-        error_log("get_page_url_from_slug slug=".$slug);
+        // error_log("get_page_url_from_slug slug=".$slug);
         $result = get_permalink($page->ID);
         if ($result == false) {
             error_log("get_page_url_from_slug: ERROR not found");
@@ -116,7 +116,7 @@ class Glp_User_Galleries_Public {
     public function pg_show_page(){
         
         $user_id = get_current_user_id();
-        error_log("pg_show_page IN user_id: ".$user_id);
+        // error_log("pg_show_page IN user_id: ".$user_id);
         if ($user_id == 0) {
             return "";
         }
@@ -284,7 +284,7 @@ class Glp_User_Galleries_Public {
     static public function pg_get_galleries_by_user_id( $user_id ){
         global $wpdb;
 
-        error_log("pg_get_galleries_by_user_id id: ".$user_id);
+        // error_log("pg_get_galleries_by_user_id id: ".$user_id);
 
         $gallery_table = esc_sql($wpdb->prefix . "glp_gallery");
 
@@ -306,13 +306,13 @@ class Glp_User_Galleries_Public {
         global $wpdb;
 
         $user_id = get_current_user_id();
-        error_log("pg_is_current_user_gallery id: ".$user_id);
+        // error_log("pg_is_current_user_gallery id: ".$user_id);
 
         $gallery_table = esc_sql($wpdb->prefix . "glp_gallery");
 
         $sql = "SELECT id FROM ".$gallery_table." WHERE id=$gal_id AND user_id=$user_id";
         $results = $wpdb->get_results($sql, 'ARRAY_A');
-        error_log("pg_is_current_user_gallery result: ".print_r($results, true));
+        // error_log("pg_is_current_user_gallery result: ".print_r($results, true));
         if(count($results) == 1){
             return true;
         }
@@ -346,8 +346,8 @@ class Glp_User_Galleries_Public {
     
     // callback on Ajax request
     public function hide_galleries_help() {
-        error_log("hide_galleries_help IN");
-        error_log("hide_galleries_help REQUEST ".print_r($_REQUEST, true));
+        // error_log("hide_galleries_help IN");
+        // error_log("hide_galleries_help REQUEST ".print_r($_REQUEST, true));
         //error_log("download_single_photo FILES ".print_r($_FILES, true));
 
         // TODO test current user is gallery user
@@ -375,7 +375,7 @@ class Glp_User_Galleries_Public {
             delete_user_meta( $user_id, 'hide_galleries_help');
         }
 
-        error_log( "Respond success");
+        // error_log( "Respond success");
         wp_send_json_success( null, 200);
         wp_die();
         

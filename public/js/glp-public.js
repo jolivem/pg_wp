@@ -607,20 +607,18 @@
 
         });
 
-
         // When user changes photo status
         $('#user_status').on('change', function(e) {
             this.value = this.checked ? "public" : "private";
             //console.log("on user_status change", e.target);
             
             if (this.checked) {
-                document.getElementById('user_status_label').textContent = 'Affichage autorisé sur la galerie mondiale';
+                document.getElementById('user_status_label').textContent = 'Affichage autorisé sur la galerie publique';
             }
             else {
                 document.getElementById('user_status_label').textContent = 'Photo privée';
             }
             e.stopPropagation();
-            
         });
 
         // When clicked on submit button

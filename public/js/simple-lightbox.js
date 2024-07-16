@@ -54,13 +54,13 @@
           enableKeyboard: true,
           loop: true,
           rel: false,
-          docClose: true,
+          docClose: false,
           swipeTolerance: 50,
           className: 'simple-lightbox',
           widthRatio: 0.8,
           heightRatio: 0.9,
           scaleImageToRatio: false,
-          disableRightClick: false,
+          disableRightClick: true,
           disableScroll: true,
           alertError: true,
           alertErrorMessage: 'Image not found, next image will be loaded',
@@ -438,12 +438,12 @@
             if (_this2.options.htmlClass && _this2.options.htmlClass !== '') {
               document.querySelector('html').classList.remove(_this2.options.htmlClass);
             }
-            console.log('simplelightbox domNodes', _this2.domNodes);
-            console.log('simplelightbox childNodes', _this2.domNodes.childNodes);
-            console.log('simplelightbox children', _this2.domNodes.children);
-            console.log('simplelightbox domNodes.wrapper', _this2.domNodes.wrapper);
-            console.log('simplelightbox domNodes.wrapper.parentNode', _this2.domNodes.wrapper.parentNode);
-            console.log('simplelightbox domNodes.overlay.parentNode', _this2.domNodes.overlay.parentNode);
+            // console.log('simplelightbox domNodes', _this2.domNodes);
+            // console.log('simplelightbox childNodes', _this2.domNodes.childNodes);
+            // console.log('simplelightbox children', _this2.domNodes.children);
+            // console.log('simplelightbox domNodes.wrapper', _this2.domNodes.wrapper);
+            // console.log('simplelightbox domNodes.wrapper.parentNode', _this2.domNodes.wrapper.parentNode);
+            // console.log('simplelightbox domNodes.overlay.parentNode', _this2.domNodes.overlay.parentNode);
             // console.log('simplelightbox domNodes.wrapper.parent.childNodes', _this2.domNodes.wrapper.parentNode.childNodes);
             // console.log('simplelightbox domNodes.wrapper.parent.children', _this2.domNodes.wrapper.parentNode.children);
             if (_this2.domNodes.wrapper.parentNode != null) { // MJO add condition on parent

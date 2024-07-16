@@ -107,7 +107,7 @@ class Pg_Show_User_Map_Public {
     
     public function pg_generate_page( $attr ){
         ob_start();
-        error_log("Pg_Show_User_Map_Public::pg_generate_page IN ".print_r($_GET, true));
+        // error_log("Pg_Show_User_Map_Public::pg_generate_page IN ".print_r($_GET, true));
         //error_log("pg_generate_page IN ".print_r($attr, true));
 
         // TODO check that the photo belons to the current user
@@ -127,7 +127,7 @@ class Pg_Show_User_Map_Public {
     // attr should have the user id
     public function pg_show_page( $guuid ){
 
-        error_log("pg_show_page IN guuid=".$guuid);
+        // error_log("pg_show_page IN guuid=".$guuid);
         
         //global $wpdb;
 
@@ -191,7 +191,7 @@ class Pg_Show_User_Map_Public {
 
        // render all the images 
     function render_slider($medias){
-        error_log("render_images IN images=".print_r($medias, true));
+        // error_log("render_images IN images=".print_r($medias, true));
         $html='';
         $num=0;
         // loop for each media

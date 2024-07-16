@@ -107,7 +107,7 @@ class Pg_Show_Planet_Map_Public {
     
     public function pg_generate_page( $attr ){
         ob_start();
-        error_log("Pg_Show_Planet_Map_Public::pg_generate_page IN ".print_r($attr, true));
+        // error_log("Pg_Show_Planet_Map_Public::pg_generate_page IN ".print_r($attr, true));
  
         $this->enqueue_styles();
         $this->enqueue_scripts();
@@ -120,7 +120,7 @@ class Pg_Show_Planet_Map_Public {
     // attr should have the user id
     public function pg_show_page(){
 
-        error_log("pg_show_page IN");
+        // error_log("pg_show_page IN");
         
         //global $wpdb;
   
