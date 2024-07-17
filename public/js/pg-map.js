@@ -196,16 +196,62 @@ var processClickOnTarget = function(elem) {
 
     const imageSrc = img.getAttribute('src');
     g_selectedImageSrc = imageSrc; //  used
-    //console.log('gal.on click imageSrc = '+imageSrc);
+    //console.log('processClickOnTarget imageSrc = '+imageSrc);
     selectSliderImageByElem(img, false);
     animateMarkerByImage(img);
 };
 
 var processClickOnText = function( elem) {
-    //console.log('gal.on click elem', elem);
+    // console.log('processClickOnText click elem', elem);
     const img = elem.parentElement?.parentElement?.getElementsByTagName("img")[0];
     if (img){
         selectSliderImageByElem(img, false);
+    }
+}
+
+// click on ban, admin feature to ban a plublic image
+var processClickOnBan = function( elem) {
+    //console.log('processClickOnBan elem', elem);
+    const img = elem.parentElement?.parentElement?.getElementsByTagName("img")[0];
+    if (img){
+        //console.log('processClickOnBan img', img);
+        //  remove prefix "slider-"
+        let postid = img.id.substring(7);
+        // console.log('processClickOnBan postid', postid);
+
+        let admin_url = document.getElementById('pg_admin_ajax_url').value;
+        let nonce = document.getElementById('page_nonce').value;
+        //console.log("uploadPhotos admin_url=", admin_url);
+    
+        const formData = new FormData();
+        formData.append('action', 'ban_image');
+        formData.append('nonce', nonce);
+        formData.append('pid', postid);
+        jQuery.ajax({
+            method: 'POST',
+            url: admin_url,
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response){
+                // console.log("success", response);
+                
+                // build toast list
+                var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+                toastElList.map(function(toastEl) {
+                    return new bootstrap.Toast(toastEl)
+                })
+                
+                var myToastEl = document.getElementById('ban-photo-success')
+                var myToast = bootstrap.Toast.getInstance(myToastEl);
+                myToast.show();                
+            
+    
+            },
+            error: function(response) {
+                
+            }
+        });        
     }
 }
 
@@ -352,21 +398,30 @@ var animateMarkerByImage = function(img) {
         /*g_markers.refreshClusters(visibleOne);*/
     });            
 
-    /* When user clicked on the target area */
-    $(".slider-overlay-circle").on('click', function(event){
-        // console.log('gal.on click target', event.target);
-        event.preventDefault();
-        processClickOnTarget( event.target);
-    });
+    // /* When user clicked on the target area */
+    // $(".slider-overlay-circle").on('click', function(event){
+    //     console.log('gal.on click target', event.target);
+    //     event.preventDefault();
+    //     processClickOnTarget( event.target);
+    // });
 
 
-    /* When user clicked on the text icon */
-    $(".slider-overlay-text").on('click', function(event){
-        //event.preventDefault();
-        //console.log('gal.on click target parent', event.target.parentElement.parentElement);
-        event.preventDefault();
-        processClickOnText( event.target);
-    });
+    // /* When user clicked on the text icon */
+    // $(".slider-overlay-text").on('click', function(event){
+    //     //event.preventDefault();
+    //     console.error('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+    //     console.log('gal.on click target parent', event.target.parentElement.parentElement);
+    //     event.preventDefault();
+    //     processClickOnText( event.target);
+    // });
+
+    // /* When user clicked on the ban icon */
+    // $(".slider-overlay-ban").on('click', function(event){
+    //     //event.preventDefault();
+    //     console.log('gal.on click target parent', event.target.parentElement.parentElement);
+    //     event.preventDefault();
+    //     processClickOnBan( event.target);
+    // });
 
      // Process when user click on step-forward or step-backward
     // and when user click on angle-double-right or angle-double-left
@@ -530,6 +585,8 @@ function updatePlanetSlider(datas) {
     //console.log("updatePlanetSlider close g_lightbox", g_lightbox);
     // close the lightbox if opened
     //g_lightbox.close();
+    let ban = document.getElementById('pg_ban').value;
+
     
     const slider = document.getElementById('imageSlider');
     const descr = document.getElementById('imageDescr');
@@ -581,6 +638,12 @@ function updatePlanetSlider(datas) {
             sliderHtml +=       "<div class='slider-overlay-text'>";
             sliderHtml +=           "<i class='fas fa-align-center slider-icon' data-num='"+num+"'></i>";
             sliderHtml +=       "</div>";
+            if (ban) {
+                sliderHtml +=   "<div class='slider-overlay-ban'>";
+                sliderHtml +=       "<i class='fas fa-ban slider-icon' data-num='"+num+"'></i>";
+                sliderHtml +=   "</div>";
+            }
+
             sliderHtml +=    "</div>";
             
             num = num + 1;            
@@ -612,6 +675,13 @@ function updatePlanetSlider(datas) {
             event.preventDefault();
         }));
 
+        if (ban) {
+            const div_ban = slider.querySelectorAll('.slider-overlay-ban');
+            div_ban.forEach(el => el.addEventListener('click', event => {
+                processClickOnBan(event.target);
+                event.preventDefault();
+            }));
+        }
 
         g_lightbox.refresh();
     

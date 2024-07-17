@@ -78,6 +78,7 @@ class Pg_Geoposts_Table {
 
         //$visible = 0;
         if ($visible != self::PUBLIC_VISIBLE && $visible != self::PUBLIC_HIDDEN) {
+            error_log("update_visible param error");
             return;
         }
         error_log("update_visible post_id=$post_id, visible=$visible");

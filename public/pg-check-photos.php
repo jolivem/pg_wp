@@ -339,7 +339,7 @@ class Glp_Check_Photos_Public {
         wp_die();
     }
 
-    private function update_visibility($post_id, $admin_status) {
+    public static function update_visibility($post_id, $admin_status) {
         //error_log("update_visibility IN id=$post_id admin_status=$admin_status");
 
         $user_status = get_post_meta($post_id, 'user_status', true);

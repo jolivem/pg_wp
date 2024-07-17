@@ -329,7 +329,7 @@ class Pg_Edit_Photo_Public {
             update_post_meta($post_id , 'user_status', $user_status);
 
             // 
-            $this->update_visibility($post_id, $user_status);
+            Glp_Check_Photos_Public::update_visibility($post_id, $user_status);
 
         }
         else {
@@ -343,17 +343,17 @@ class Pg_Edit_Photo_Public {
     }
 
     // Update the public visibility
-    private function update_visibility($post_id, $user_status) {
-        // error_log("update_visibility IN id=$post_id user_status=$user_status");
+    // private function update_visibility($post_id, $user_status) {
+    //     // error_log("update_visibility IN id=$post_id user_status=$user_status");
 
-        $admin_status = get_post_meta($post_id, 'admin_status', true);
-        // error_log("update_visibility admin_status=$admin_status");
+    //     $admin_status = get_post_meta($post_id, 'admin_status', true);
+    //     // error_log("update_visibility admin_status=$admin_status");
 
-        if ($user_status == self::USER_STATUS_PUBLIC && $admin_status == self::ADMIN_STATUS_PUBLIC_OK) {
-            Pg_Geoposts_Table::update_visible($post_id, Pg_Geoposts_Table::PUBLIC_VISIBLE);
-        }
-        else {
-            Pg_Geoposts_Table::update_visible($post_id, Pg_Geoposts_Table::PUBLIC_HIDDEN);
-        }
-    }
+    //     if ($user_status == self::USER_STATUS_PUBLIC && $admin_status == self::ADMIN_STATUS_PUBLIC_OK) {
+    //         Pg_Geoposts_Table::update_visible($post_id, Pg_Geoposts_Table::PUBLIC_VISIBLE);
+    //     }
+    //     else {
+    //         Pg_Geoposts_Table::update_visible($post_id, Pg_Geoposts_Table::PUBLIC_HIDDEN);
+    //     }
+    // }
 }

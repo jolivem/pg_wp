@@ -138,11 +138,11 @@
             e.preventDefault();
             const postid = e.target.dataset.postid;
             //console.log("admin-photo-option thumbs-up postid=", postid)
-            let nonce = document.getElementById('pg_nonce').value;
-            let admin_url = document.getElementById('pg_admin_ajax_url').value;
+            let nonce = document.getElementById('pg_nonce')?.value;
+            let admin_url = document.getElementById('pg_admin_ajax_url')?.value;
 
             // get the address selected 
-            let address = document.querySelector('input[name="address"]:checked').value;
+            let address = document.querySelector('input[name="address"]:checked')?.value;
     
             const formData = new FormData();
             formData.append('nonce', nonce);
