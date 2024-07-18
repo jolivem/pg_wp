@@ -16,10 +16,10 @@
 
                 // set the photo counter
                 let images = elem.value.split(',');
-                console.log("edit-photo-option images", images);
+                //console.log("edit-photo-option images", images);
                 if (images.length > 1) {
                     const postid = document.getElementById("post_id").value;
-                    console.log("edit-photo-option postid", postid);
+                    //console.log("edit-photo-option postid", postid);
                     const isNumber = (element) => element == postid;
                     const index = images.findIndex(isNumber);
                     if (index != -1) {
@@ -73,7 +73,7 @@
         $(document).find('#gallery_help').on('change', function(event) {
             let hide=false;
             if (event.target.checked) {
-                console.log('Checkbox is checked');
+                //console.log('Checkbox is checked');
                 hide = true;
             }
 
@@ -101,7 +101,7 @@
         $(document).find('#galleries_help').on('change', function(event) {
             let hide=false;
             if (event.target.checked) {
-                console.log('Checkbox is checked');
+                //console.log('Checkbox is checked');
                 hide = true;
             }
 
@@ -134,12 +134,12 @@
 
 
         $(document).find('.admin-photo-option').on('click', function(e){
-            console.log("admin-photo-option click", e);
+            //console.log("admin-photo-option click", e);
             e.preventDefault();
             const postid = e.target.dataset.postid;
             //console.log("admin-photo-option thumbs-up postid=", postid)
-            let nonce = document.getElementById('pg_nonce').value;
-            let admin_url = document.getElementById('pg_admin_ajax_url').value;
+            let nonce = document.getElementById('pg_nonce')?.value;
+            let admin_url = document.getElementById('pg_admin_ajax_url')?.value;
 
             // get the address selected 
             let name = "address" + postid;
@@ -214,7 +214,7 @@
 
         // click ti valid or not the user web site
         $(document).find('.admin-url-option').on('click', function(e){
-            console.log("admin-url-option click", e);
+            //console.log("admin-url-option click", e);
             e.preventDefault();
             const userid = e.target.dataset.userid;
             let nonce = document.getElementById('pg_nonce').value;
@@ -295,31 +295,31 @@
         // Process when user click on step-forward or step-backward
         // and when user click on angle-double-right or angle-double-left
         $(document).find('.edit-photo-option').on('click', function(e){
-            console.log("edit-photo-option click", e);
+            //console.log("edit-photo-option click", e);
             e.preventDefault();
             let images_id = document.getElementById("images_id").value;
             let images = images_id.split(',');
-            console.log("edit-photo-option images", images);
+            //console.log("edit-photo-option images", images);
             if (images.length > 1) {
                 const postid = e.target.dataset.postid;
-                console.log("edit-photo-option postid", postid);
+                // console.log("edit-photo-option postid", postid);
                 const isNumber = (element) => element == postid;
                 const index = images.findIndex(isNumber);
                 if (index != -1) {
-                    console.log("edit-photo-option index", index);
+                    // console.log("edit-photo-option index", index);
 
                     if (e.target.classList.contains("fa-angle-double-right")) {
                         // find the following image
                         if (index < images.length -1) {
                             let next_id = images[index + 1];
-                            console.log("edit-photo-option next_id", next_id);
+                            // console.log("edit-photo-option next_id", next_id);
                             let edit_photo_url = document.getElementById('pg_edit_photo_url').value;
                             edit_photo_url += "?pid=";
                             edit_photo_url += next_id;
                             const gallery_id = document.getElementById('gallery-id').value;
                             edit_photo_url += "&gid=";
                             edit_photo_url += gallery_id;
-                            console.log("edit-photo-option edit_photo_url", edit_photo_url);
+                            // console.log("edit-photo-option edit_photo_url", edit_photo_url);
                             window.location = edit_photo_url;
                         }
                     }
@@ -327,14 +327,14 @@
                         // find the previous image
                         if (index > 0) {
                             let previous_id = images[index - 1];
-                            console.log("edit-photo-option previous_id", previous_id);
+                            // console.log("edit-photo-option previous_id", previous_id);
                             let edit_photo_url = document.getElementById('pg_edit_photo_url').value;
                             edit_photo_url += "?pid=";
                             edit_photo_url += previous_id;
                             const gallery_id = document.getElementById('gallery-id').value;
                             edit_photo_url += "&gid=";
                             edit_photo_url += gallery_id;
-                            console.log("edit-photo-option edit_photo_url", edit_photo_url);
+                            // console.log("edit-photo-option edit_photo_url", edit_photo_url);
                             window.location = edit_photo_url;
                         }
                     }
@@ -342,12 +342,12 @@
                     document.getElementById('cpt-photo').innerHTML = cpt + "/" + images.length;
                 }
             }
-            console.log("edit-photo-option OUT");
+            // console.log("edit-photo-option OUT");
 
         });  
 
         $(document).find('#btn-add-single-photo').on('click', function(e){
-            console.log("btn-add-single-photo click", e);
+            // console.log("btn-add-single-photo click", e);
             e.preventDefault();
             const galid = e.target.dataset.galid;
             let download_single_url = document.getElementById('pg_download_single_url').value;
@@ -357,7 +357,7 @@
         });  
 
         $(document).find('.user-photo-option').on('click', function(e){
-            console.log("user-photo-option click", e);
+            // console.log("user-photo-option click", e);
             e.preventDefault();
             if (e.target.classList.contains("fa-edit")) {
                 const postid = e.target.dataset.postid;
@@ -420,7 +420,7 @@
 
         //var deleteConfirModal;
         $(document).find('.user-gallery-option').on('click', function(e){
-            console.log("user-gallery-option click", e);
+            // console.log("user-gallery-option click", e);
             if (e.target.classList.contains("fa-edit")) {
                 const galid = e.target.dataset.galid;
                 //console.log("user-gallery-option edit galid=", galid);
@@ -439,7 +439,7 @@
             }
             else if (e.target.classList.contains("fa-share-alt")) {
                 const galuuid = e.target.dataset.galuuid;
-                console.log("user-gallery-option view galuuid=", galuuid);
+                // console.log("user-gallery-option view galuuid=", galuuid);
                 let edit_gallery_url = document.getElementById('pg_show_gallery_url').value;
                 edit_gallery_url += "?guuid=";
                 edit_gallery_url += galuuid;
@@ -447,9 +447,9 @@
                 navigator.clipboard.writeText(edit_gallery_url).then(() => {
                     // display a toast
                     var toastElList = [].slice.call(document.querySelectorAll('.toast'));
-                    console.log("user-gallery-option toastElList=", toastElList);
+                    // console.log("user-gallery-option toastElList=", toastElList);
                     toastElList.map(function(toastEl) {
-                        console.log("user-gallery-option toastEl=", toastEl);
+                        // console.log("user-gallery-option toastEl=", toastEl);
                         return new bootstrap.Toast(toastEl);
                     });
 
@@ -555,7 +555,7 @@
         
         // When clicked on submit button of contact page
         $(document).find('#contact-mail').on('click', function(event){
-            console.log("contact-mail IN");
+            // console.log("contact-mail IN");
             event.preventDefault();
             let valid=true;
             $('.invalid-input').css('display', 'none');
@@ -592,7 +592,7 @@
                     contentType: false,
                     processData: false,
                     success: function(){
-                        console.log("contact-mail success");
+                        // console.log("contact-mail success");
                         var toastElList = [].slice.call(document.querySelectorAll('.toast'))
                         toastElList.map(function(toastEl) {
                             return new bootstrap.Toast(toastEl)
@@ -608,25 +608,23 @@
 
         });
 
-
         // When user changes photo status
         $('#user_status').on('change', function(e) {
             this.value = this.checked ? "public" : "private";
             //console.log("on user_status change", e.target);
             
             if (this.checked) {
-                document.getElementById('user_status_label').textContent = 'Affichage autorisé sur la galerie mondiale';
+                document.getElementById('user_status_label').textContent = 'Affichage autorisé sur la galerie publique';
             }
             else {
                 document.getElementById('user_status_label').textContent = 'Photo privée';
             }
             e.stopPropagation();
-            
         });
 
         // When clicked on submit button
         $(document).find('#save-photo').on('click', function(event){
-            console.log("edit-photo IN");
+            // console.log("edit-photo IN");
             event.preventDefault();
             let error = false;
             let post_id = document.getElementById('post_id').value;
@@ -652,9 +650,8 @@
                 contentType: false,
                 processData: false,
                 success: function(response){
-                    console.log("upload done");
                     // come back to the previous page
-                    console.log("upload done");
+                    // console.log("upload done");
                     var toastElList = [].slice.call(document.querySelectorAll('.toast'))
                     toastElList.map(function(toastEl) {
                         return new bootstrap.Toast(toastEl)
@@ -705,7 +702,7 @@
                 contentType: false,
                 processData: false,
                 success: function(response){
-                    console.log("upload done");
+                    // console.log("upload done");
                     var toastElList = [].slice.call(document.querySelectorAll('.toast'))
                     toastElList.map(function(toastEl) {
                         return new bootstrap.Toast(toastEl)
@@ -721,7 +718,13 @@
         }
         // When clicked on submit button of edit gallery page
         $(document).find('#edit-gallery-save').on('click', function(event){
-            console.log("edit-gallery-save IN");
+            // console.log("edit-gallery-save IN");
+            event.preventDefault();
+            save_current_gallery();
+        });
+
+        $(document).find('#edit-gallery-save-2').on('click', function(event){
+            // console.log("edit-gallery-save IN");
             event.preventDefault();
             save_current_gallery();
         });
@@ -901,7 +904,7 @@ function ays_getDirectionKey(ev, obj) {
 const sortableList = document.querySelector(".sortable-list");
 if (sortableList) {
     const items = sortableList.querySelectorAll(".item");
-    console.log("sortableList found");
+    // console.log("sortableList found");
 
     items.forEach(item => {
         item.addEventListener("dragstart", () => {

@@ -107,7 +107,7 @@ class Pg_Show_User_Map_Public {
     
     public function pg_generate_page( $attr ){
         ob_start();
-        error_log("Pg_Show_User_Map_Public::pg_generate_page IN ".print_r($_GET, true));
+        // error_log("Pg_Show_User_Map_Public::pg_generate_page IN ".print_r($_GET, true));
         //error_log("pg_generate_page IN ".print_r($attr, true));
 
         // TODO check that the photo belons to the current user
@@ -127,7 +127,7 @@ class Pg_Show_User_Map_Public {
     // attr should have the user id
     public function pg_show_page( $guuid ){
 
-        error_log("pg_show_page IN guuid=".$guuid);
+        // error_log("pg_show_page IN guuid=".$guuid);
         
         //global $wpdb;
 
@@ -149,13 +149,16 @@ class Pg_Show_User_Map_Public {
         }
   
         $html_code = "
-        <div class='pg-container'>
-            <div class='desc-block'>
-                <div class='desc-gallery'>
-                    <div class='desc-title'>$gtitle</div>
-                    <p class='desc-description'>$gdescription</p>
-                </div>
-            </div>
+        <div class='pg-container'>";
+        if ($gtitle != "" || $gdescription != "") {
+            $html_code .= "
+            <div class='desc-gallery'>
+                <div class='desc-title'>$gtitle</div>
+                <div class='desc-description'>$gdescription</div>
+            </div>";
+        }
+
+        $html_code .= "
             </br>
             <div class='pg-map'>
                 <div id='map' style='height:300px;'></div>
@@ -188,7 +191,7 @@ class Pg_Show_User_Map_Public {
 
        // render all the images 
     function render_slider($medias){
-        error_log("render_images IN images=".print_r($medias, true));
+        // error_log("render_images IN images=".print_r($medias, true));
         $html='';
         $num=0;
         // loop for each media
@@ -320,7 +323,6 @@ class Pg_Show_User_Map_Public {
                 
                 /* dezoom one level */
                 const currentLevel = g_map.getZoom();
-                console.log('INIT currentlevel', currentLevel);
                 if (currentLevel > 1) {
                     if (currentLevel > 10) {
                         g_map.setZoom(currentLevel - 2);
@@ -329,7 +331,6 @@ class Pg_Show_User_Map_Public {
                         g_map.setZoom(currentLevel - 1);
                     }
                 }
-                console.log('INIT map', g_map);
                 g_markers.refreshClusters();
                 
                 /* add lightbox */ 

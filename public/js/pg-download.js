@@ -1,6 +1,6 @@
 
 var g_filesArray = []; // only the files with exif data
-const maxFile=5;
+const maxFile=20;
 
 //
 // SINGLE UPLOAD
@@ -8,10 +8,9 @@ const maxFile=5;
 
 // check latitude input
 jQuery(document).find('#latitude').on("input", (event) => {
-    console.log("latitude input");
     const latitudeInput = document.getElementById('latitude');
     const latitudeValue = parseFloat(latitudeInput.value);
-    console.log("latitude input", latitudeInput.value);
+    // console.log("latitude input", latitudeInput.value);
     error = false;
     
     // not a float -> DMS style
@@ -20,7 +19,7 @@ jQuery(document).find('#latitude').on("input", (event) => {
     //console.log("isNumber(latitudeValue)", isNumber(latitudeInput.value));
     if (latitudeInput.value != '' && !isNumber(latitudeInput.value)) {
         const regLat = new RegExp("(\\d+)\\s?°\\s?(\\d+)\\s?'\\s?(\\d+\\.?\\,?\\d*?)\\\"\\s?(N|S)");
-        console.log("regLat", regLat.test(latitudeInput.value) );
+        // console.log("regLat", regLat.test(latitudeInput.value) );
         if (regLat.test(latitudeInput.value) === false) {
             // Display error message
             latitudeInput.classList.add('is-invalid');
@@ -29,7 +28,7 @@ jQuery(document).find('#latitude').on("input", (event) => {
             error = true;
         } else {
             var lat = convertDMSToDD(latitudeInput.value);
-            console.log('lat', lat);
+            // console.log('lat', lat);
             if (lat < -90 || lat > 90) {
                 // Display error message
                 latitudeInput.classList.add('is-invalid');
@@ -55,7 +54,7 @@ jQuery(document).find('#latitude').on("input", (event) => {
 
 // Validation of longitude field during input
 jQuery(document).find('#longitude').on("input", (event) => {
-    console.log("longitude input");
+    // console.log("longitude input");
     let error = false;
     const longitudeInput = document.getElementById('longitude');
     const longitudeValue = parseFloat(longitudeInput.value);
@@ -71,7 +70,7 @@ jQuery(document).find('#longitude').on("input", (event) => {
             error = true;
         } else {
             var lon = convertDMSToDD(longitudeInput.value);
-            console.log('lon', lon);
+            // console.log('lon', lon);
             if (lon < -180 || lon > 180) {
                 // Display error message
                 longitudeInput.classList.add('is-invalid');
@@ -97,7 +96,7 @@ jQuery(document).find('#longitude').on("input", (event) => {
 
 // When clicked on Single Download select button
 jQuery(document).find('#single-upload').on('click', async function(event){
-    console.log("single-upload IN");
+    // console.log("single-upload IN");
     event.preventDefault();
     let error = false;
     const longitudeInput = document.getElementById('longitude');
@@ -156,7 +155,7 @@ jQuery(document).find('#single-upload').on('click', async function(event){
 
     
     file = files[0];
-    console.log("uploadPhoto file=", file);
+    // console.log("uploadPhoto file=", file);
 
     // Get address from position
     let geocod = await reverseGeocoding(latitudeValue, longitudeValue);
@@ -204,13 +203,12 @@ jQuery(document).find('#single-upload').on('click', async function(event){
         contentType: false,
         processData: false,
         success: function(response){
-            console.log("upload done");
+            // console.log("upload done");
             const button = document.getElementById('single-upload');
             button.disabled = true;
             progressBar.style.backgroundColor= "limegreen";
         },
         error: function(response){
-            console.log("upload done");
             const button = document.getElementById('single-upload');
             button.disabled = true;
             progressBar.style.backgroundColor= "red";
@@ -240,7 +238,7 @@ function formatTimestamp(timestamp) {
 
 function downloadASinglePhoto(files) {
 
-    console.log('downloadASinglePhoto IN');
+    // console.log('downloadASinglePhoto IN');
 
     // clean everything from previous photo
     const button = document.getElementById('single-upload');
@@ -264,7 +262,7 @@ function downloadASinglePhoto(files) {
         const file = g_filesArray[0];
         const reader = new FileReader();
 
-        console.log('g_filesArray.length', g_filesArray.length);
+        // console.log('g_filesArray.length', g_filesArray.length);
 
         function renderItemSingle(src, name, latitude, longitude) {
             const photo = document.getElementById('photo-to-download');
@@ -303,26 +301,26 @@ function downloadASinglePhoto(files) {
             //thumbnailContainer.appendChild(img);
 
             const inputGooglePosition = document.getElementById('input-google-position');
-            console.log( "onload ", inputGooglePosition);
+            // console.log( "onload ", inputGooglePosition);
 
             // process Gmap input
             inputGooglePosition.addEventListener("input", (event) => {
                 let position = inputGooglePosition.value;
-                console.log( "handleInputGooglePosition", position);
+                // console.log( "handleInputGooglePosition", position);
                 // Example 51°20'20.1"N 18°42'08.8"E
                 // "([-|\\+]?\\d{1,3}[d|D|\u00B0|\\s](\\s*\\d{1,2}['|\u2019|\\s])?(\\s*\\d{1,2}[\"|\u201d|\\s])?\\s*([N|n|S|s|E|e|W|w])?\\s?)"
                 const sp = position.split(" ");
                 if (sp.length == 2) {
                     const regLat = new RegExp("(\\d+)\\s?°\\s?(\\d+)\\s?'\\s?(\\d+\\.?\\,?\\d*?)\\\"\\s?(N|S)");
                     const regLon = new RegExp("(\\d+)\\s?°\\s?(\\d+)\\s?'\\s?(\\d+\\.?\\,?\\d*?)\\\"\\s?(E|W)");
-                    console.log('sp[0]', sp[0]);
-                    console.log('sp[1]', sp[1]);
-                    console.log(regLat.test(sp[0]))
-                    console.log(regLon.test(sp[1]))
+                    // console.log('sp[0]', sp[0]);
+                    // console.log('sp[1]', sp[1]);
+                    // console.log(regLat.test(sp[0]))
+                    // console.log(regLon.test(sp[1]))
                     if (regLat.test(sp[0]) === true && regLon.test(sp[1]) === true) {
                         var lat = convertDMSToDD(sp[0]);
                         var lon = convertDMSToDD(sp[1]);
-                        console.log('lat, lon', {lat,lon});
+                        // console.log('lat, lon', {lat,lon});
                         if (lat != NaN && lon != NaN) {
                             const latitudeInput = document.getElementById('latitude');
                             const longitudeInput = document.getElementById('longitude');
@@ -337,7 +335,7 @@ function downloadASinglePhoto(files) {
     
             // Extract EXIF data
             EXIF.getData(file, function() {
-                console.log( "file: ", file);
+                // console.log( "file: ", file);
                 const exifData = EXIF.getAllTags(this);
                 const lat = EXIF.getTag(this, 'GPSLatitude');
                 const lon = EXIF.getTag(this, 'GPSLongitude');
@@ -358,7 +356,7 @@ function downloadASinglePhoto(files) {
                     file.pgpg.is_exif = false;
                 }
                 else {
-                    console.log('EXIF Data:', exifData);
+                    // console.log('EXIF Data:', exifData);
 
                     const altitude = EXIF.getTag(this, 'GPSAltitude');
             
@@ -399,18 +397,18 @@ function downloadASinglePhoto(files) {
 //
 
 jQuery(document).find('#close-multiple-modal').on('click', function(e){
-    console.log("show-modal IN");
+    // console.log("show-modal IN");
     e.preventDefault();
     location.reload();
 });
 
 // When clicking on "Download"
 jQuery(document).find('#multiple-upload').on('click', function(e){
-    console.log("uploadPhotos IN", e);
+    // console.log("uploadPhotos IN", e);
     e.preventDefault();
 
     const fileInput = document.getElementById('fileInput');
-    console.log("uploadPhotos fileInput", fileInput);
+    // console.log("uploadPhotos fileInput", fileInput);
     //const files = fileInput.files;
     //console.log("uploadPhotos files", files);
     // const progressContainer = document.getElementById('progressContainer');
@@ -422,7 +420,7 @@ jQuery(document).find('#multiple-upload').on('click', function(e){
     for (let i = 0 ; i < g_filesArray.length ; i ++) {
     //Array.from(files).forEach(file => {
         const file = g_filesArray[i];
-        console.log("uploadPhotos file=", file);
+        // console.log("uploadPhotos file=", file);
         //const progressBarContainer = document.createElement('div');
 
         // find the div element associated to the file name
@@ -431,7 +429,7 @@ jQuery(document).find('#multiple-upload').on('click', function(e){
 
             // check if file is valid (geoloc ok, data-valid="ok")
             if (!file_div.dataset.valid) {
-                console.log("uploadPhotos ignore file=", file);
+                // console.log("uploadPhotos ignore file=", file);
                 continue;
             }
             //console.log("uploadPhotos file_div=", file_div);
@@ -461,7 +459,7 @@ jQuery(document).find('#multiple-upload').on('click', function(e){
         formData.append('date', file.pgpg.date);
         formData.append('file', file);
         formData.append('galleryId', galleryId);
-        console.log("uploadPhotos gps=", file.pgpg);
+        // console.log("uploadPhotos gps=", file.pgpg);
         jQuery.ajax({
             method: 'POST',
             url: admin_url,
@@ -469,8 +467,8 @@ jQuery(document).find('#multiple-upload').on('click', function(e){
             contentType: false,
             processData: false,
             success: function(response){
-                console.log("success", response);
-                console.log("file_div", file_div);
+                // console.log("success", response);
+                // console.log("file_div", file_div);
                 const button = document.getElementById('multiple-upload');
                 let spinner = file_div.parentNode.getElementsByClassName('download-spinner');
                 spinner[0].style.display='none';
@@ -479,7 +477,7 @@ jQuery(document).find('#multiple-upload').on('click', function(e){
                 button.disabled = true;
             },
             error: function(response) {
-                console.log("error", response);
+                // console.log("error", response);
                 const button = document.getElementById('multiple-upload');
                 let spinner = file_div.parentNode.getElementsByClassName('download-spinner');
                 spinner[0].style.display='none';
@@ -500,7 +498,7 @@ function find_div_from_file_name(filename) {
             if (texts.length > 0) {
                 //console.log("find_div_from_file_name", texts[0].innerHTML);
                 if (texts[0].innerHTML.indexOf(filename) != -1) {
-                    console.log("find_div_from_file_name out", texts[0].parentNode);
+                    // console.log("find_div_from_file_name out", texts[0].parentNode);
                     // get the flex container
                     //let cont = children[i].
                     return texts[0].parentNode;
@@ -508,7 +506,7 @@ function find_div_from_file_name(filename) {
             }
         }
     }
-    console.log("find_div_from_file_name NOT found", filename);
+    // console.log("find_div_from_file_name NOT found", filename);
     return null;
 }
 
@@ -530,11 +528,11 @@ function removeDownloadPhoto(item) {
             break;
         }
     }
-    console.log('removeDownloadPhoto IN');
+    // console.log('removeDownloadPhoto IN');
 
     const list = document.getElementById('modal-item-list');
-    console.log('removeDownloadPhoto list', list)
-    console.log('removeDownloadPhoto count', list.childElementCount)
+    // console.log('removeDownloadPhoto list', list)
+    // console.log('removeDownloadPhoto count', list.childElementCount)
     if (list.childElementCount-1 < maxFile) {
         document.getElementById("fileInput").disabled = false;
     }
@@ -552,7 +550,7 @@ function removeDownloadPhoto(item) {
 
 
 function updateDownloadMultipleModal(files) {
-    console.log('updateDownloadMultipleModal IN');
+    // console.log('updateDownloadMultipleModal IN');
     
     const newFiles= Array.from(files);
 
@@ -578,11 +576,11 @@ function updateDownloadMultipleModal(files) {
         button.style.display = "none";
         
     }
-    console.log('html-list.length', list.childElementCount);
-    console.log('newFiles.length', newFiles.length);
+    // console.log('html-list.length', list.childElementCount);
+    // console.log('newFiles.length', newFiles.length);
 
     function renderItemMultiple_gps(src, name, date) {
-        console.log('renderItemMultiple_gps IN', name);
+        // console.log('renderItemMultiple_gps IN', name);
         const list = document.getElementById('modal-item-list');
         const listItem = document.createElement('div');
         listItem.className = 'full-item';
@@ -609,11 +607,11 @@ function updateDownloadMultipleModal(files) {
 
         //list.appendChild(spinner);
         list.appendChild(listItem);
-        console.log('renderItemMultiple_gps OUT');
+        // console.log('renderItemMultiple_gps OUT');
     }
 
     function renderItemMultiple_error(src, name, error) {
-        console.log('renderItemMultiple_error IN', name);
+        // console.log('renderItemMultiple_error IN', name);
         const list = document.getElementById('modal-item-list');
         const listItem = document.createElement('div');
         listItem.className = 'full-item';
@@ -640,7 +638,7 @@ function updateDownloadMultipleModal(files) {
 
         //list.appendChild(spinner);
         list.appendChild(listItem);
-        console.log('renderItemMultiple_error OUT');
+        // console.log('renderItemMultiple_error OUT');
     }
 
     for (let i = 0; i < newFiles.length ; i ++) {
@@ -653,7 +651,7 @@ function updateDownloadMultipleModal(files) {
         }
   
         reader.onload = function(event) {
-            console.log( "onload IN");
+            // console.log( "onload IN");
         
             const img = document.createElement('img');
             img.src = event.target.result;
@@ -665,7 +663,7 @@ function updateDownloadMultipleModal(files) {
 
                 //console.log( "EXIF.getData IN file", file);
                 const exifData = EXIF.getAllTags(this);
-                console.log('EXIF Data:', exifData);
+                // console.log('EXIF Data:', exifData);
                 let geoloc_advise_url = document.getElementById('pg_geoloc_advise_url').value;
 
                 const gpsInfo = await EXIF.getTag(this, 'GPSInfoIFDPointer');
@@ -673,7 +671,7 @@ function updateDownloadMultipleModal(files) {
                     const lat = await EXIF.getTag(this, 'GPSLatitude');
                     const lon = await EXIF.getTag(this, 'GPSLongitude');
                     const altitude = await EXIF.getTag(this, 'GPSAltitude');
-                    console.log('EXIF lat', lat);
+                    // console.log('EXIF lat', lat);
             
                     if (lat && lon) {
                         const latRef = await EXIF.getTag(this, 'GPSLatitudeRef') || 'N';
@@ -717,7 +715,7 @@ function updateDownloadMultipleModal(files) {
                                     file.pgpg.country_code = geocod.country_code;
                                 }
                             
-                                console.log('updateDownloadMultipleModal onload push file', file);
+                                // console.log('updateDownloadMultipleModal onload push file', file);
                                 g_filesArray.push(file);
                             }
                         }
@@ -741,7 +739,7 @@ function updateDownloadMultipleModal(files) {
     
         reader.readAsDataURL(file);
     };
-    console.log('updateDownloadMultipleModal OUT');
+    // console.log('updateDownloadMultipleModal OUT');
 }
 
 // Display thumbnails after selecting files
@@ -795,7 +793,7 @@ function convertDMSToDDExif(degrees, minutes, seconds, direction) {
 function isNumber(st) {
     // console.log('isNumber IN -------------', st);
     if (typeof(st) != "string") {
-        console.log('isNumber error shall be a string');
+        // console.log('isNumber error shall be a string');
         return false;
     }
     // console.log('isNumber !isNaN(str)', !isNaN(st));
@@ -822,7 +820,7 @@ async function GOGOreverseGeocoding(lat, lon) {
             .then(Result => Result.json())
             .then(json => {
 
-                console.log('GOGOreverseGeocoding json=', json);
+                // console.log('GOGOreverseGeocoding json=', json);
                 // Printing our response 
                 if (json.address) {
                     //console.log('GOGOreverseGeocoding BINGO');
@@ -859,17 +857,17 @@ async function reverseGeocoding(lat, lon) {
             lng: lon,
         };
         //console.log('reverseGeocoding IN', latlng);
-        console.log('before geocoder');
+        // console.log('before geocoder');
         await geocoder
             .geocode({ location: latlng })
             .then((response) => {
-                console.log('reverseGeocoding', response);
+                // console.log('reverseGeocoding', response);
                 if (response?.results[0]) {
 
                     for (var i = 0; i < response.results.length; i++){
                         if (response.results[i].types[0] != 'plus_code') {
                             address = response.results[i].formatted_address;
-                            console.log('reverseGeocoding', address);
+                            // console.log('reverseGeocoding', address);
                             for (var j = 0; j < response.results[i].address_components.length; j++){
                                 const components = response.results[i].address_components[j];
                                 // find country
@@ -877,14 +875,14 @@ async function reverseGeocoding(lat, lon) {
                                 const found = components.types.find((element) => element == 'country');
                                 if (found) {
                                     country_code = components.short_name;
-                                    console.log('reverseGeocoding', country_code);
+                                    // console.log('reverseGeocoding', country_code);
                                     break;
                                 }
                             }
                             break;
                         }
                     }
-                    console.log('reverseGeocoding BINGO', response.results);
+                    // console.log('reverseGeocoding BINGO', response.results);
                     address_json = JSON.stringify(response.results);
 
                     //infowindow.setContent(response.results[0].formatted_address);
@@ -917,7 +915,7 @@ async function OsmReverseGeocoding(lat, lon) {
         .then(Result => Result.json())
         .then(json => {
 
-            console.log('OsmReverseGeocoding json=', json);
+            // console.log('OsmReverseGeocoding json=', json);
             // Printing our response 
             if (json.address) {
                 //console.log('OsmReverseGeocoding BINGO');

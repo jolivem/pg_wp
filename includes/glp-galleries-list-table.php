@@ -87,13 +87,13 @@ class Glp_Galleries_List_Table extends WP_List_Table{
             
             // List of images
             if ($data["ays-image-path"] != NULL) {
-                error_log("add_or_edit_gallery() images selected ! ");
+                //error_log("add_or_edit_gallery() images selected ! ");
                 //$image_paths            = (isset($data["ays-image-path"]) && $data["ays-image-path"] != '') ? sanitize_text_field( implode( "***", array_filter($data["ays-image-path"] )) ) : '';
                 $image_ids              = (isset($data["ays-image-id"]) && $data["ays-image-id"] != '') ? sanitize_text_field( implode( "***", array_filter($data["ays-image-id"] )) ) : '';
                 $image_categories       = (isset($data['ays_gallery_category']) && $data['ays_gallery_category'] != '') ? sanitize_text_field( implode('***', $data['ays_gallery_category']) ) : '';
             }
             else {
-                error_log("add_or_edit_gallery() NO images ! ");
+                //error_log("add_or_edit_gallery() NO images ! ");
                 //$image_paths            = '';
                 $image_ids              = '';
                 $image_categories       = '';
@@ -115,7 +115,7 @@ class Glp_Galleries_List_Table extends WP_List_Table{
             $hover_opacity          = (isset($data['glp-image-hover-opacity']) && $data['glp-image-hover-opacity'] != '') ? sanitize_text_field( $data['glp-image-hover-opacity'] ) : '';
             $hover_color            = (isset($data['glp-hover-color']) && $data['glp-hover-color'] != '') ? sanitize_text_field( $data['glp-hover-color'] ) : '';
             $hover_icon             = (isset($data['glp-image-hover-icon']) && $data['glp-image-hover-icon'] != '') ? sanitize_text_field( $data['glp-image-hover-icon'] ) : '';
-            error_log("add_or_edit_gallery() hover_icon=".$hover_icon);
+            //error_log("add_or_edit_gallery() hover_icon=".$hover_icon);
             $custom_css             = isset($data['gallery_custom_css']) && $data['gallery_custom_css'] != '' ? stripslashes( esc_attr($data['gallery_custom_css'])) : '';
             $lightbox_color         = (isset($data['glp-lightbox-color']) && $data['glp-lightbox-color'] != '') ? wp_unslash(sanitize_text_field( $data['glp-lightbox-color'] )) : '';
             $images_orderby         = (isset($data['ays_images_ordering']) && $data['ays_images_ordering'] != '') ? wp_unslash(sanitize_text_field( $data['ays_images_ordering'] )) : '';

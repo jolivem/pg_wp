@@ -644,7 +644,7 @@
                     
                     var attachment = selection.first();
                     let display = state.display(attachment).toJSON();
-                    console.log("display=",display);
+                    //console.log("display=",display);
                     attachment = attachment.toJSON();
                     
                     var d = new Date()
@@ -792,7 +792,7 @@
                         accordion = $(document).find('ul.ays-accordion.ays_accordion_active');
                     }
                     
-                    console.log("attachment[i] = ", attachment[i]);
+                    //console.log("attachment[i] = ", attachment[i]);
                     let newListImage = '<li class="ays-accordion_li">' +
                         //'           TOTO IMAGE NOT SAVED' +
                         '           <input type="hidden" name="ays-image-path[]" value="'+attachment[i].url+'">' +
@@ -1403,13 +1403,13 @@
     }
 
     function ays_add_vignette( mapId, country) {
-        console.log("country", country);
+        //console.log("country", country);
         let zoom = country.zoom;
         let file = ays_vars.base_url + "assets/geojson/" + country.file;
  
         let select = document.getElementsByClassName("compat-field-vignette")[0];
-        console.log("select", select);
-        console.log("BABAauRHUM", parent);
+        // console.log("select", select);
+        // console.log("BABAauRHUM", parent);
         // select.appendChild(p);
         var elemDiv = document.createElement('td');
         elemDiv.id = mapId;
@@ -1462,7 +1462,7 @@
                 let lon = data.features[0].properties.geo_point_2d.lon;
                 let lat = data.features[0].properties.geo_point_2d.lat;
                 let coord = [lat, lon];
-                console.log("coord:", coord);
+                // console.log("coord:", coord);
                 g_lmap.setView(coord, zoom);
 
                 //var marker = L.marker(coord, {icon: mark}).addTo(g_lmap);

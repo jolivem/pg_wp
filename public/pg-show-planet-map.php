@@ -107,7 +107,7 @@ class Pg_Show_Planet_Map_Public {
     
     public function pg_generate_page( $attr ){
         ob_start();
-        error_log("Pg_Show_Planet_Map_Public::pg_generate_page IN ".print_r($attr, true));
+        // error_log("Pg_Show_Planet_Map_Public::pg_generate_page IN ".print_r($attr, true));
  
         $this->enqueue_styles();
         $this->enqueue_scripts();
@@ -120,11 +120,10 @@ class Pg_Show_Planet_Map_Public {
     // attr should have the user id
     public function pg_show_page(){
 
-        error_log("pg_show_page IN");
+        // error_log("pg_show_page IN");
         
         //global $wpdb;
   
-        //$medias = $this->pg_get_medias_by_gallery($id);
         $medias = Pg_Geoposts_Table::get_all_public_images();
         //error_log("pg_show_page ".print_r($medias, true));
         //[$html_slider, $html_descr] = $this->render_slider($medias);
@@ -136,12 +135,29 @@ class Pg_Show_Planet_Map_Public {
         $admin_ajax_url = admin_url('admin-ajax.php');
         $nonce = wp_create_nonce('show_planet');
 
-  
+        
         //$markers_js = $this->define_markers();
+        $ban = 0;
+        if ( current_user_can( 'manage_options' ) ) {
+            $ban = 1;
+        }
 
         $html_code = "
         <input type='hidden' id='page_nonce' value='$nonce'/>
         <input type='hidden' id='pg_admin_ajax_url' value='$admin_ajax_url'/>
+        <input type='hidden' id='pg_ban' value='$ban'/>
+
+        <div class='toast-container position-fixed bottom-0 end-0 p-3'>
+            <div id='ban-photo-success' class='toast align-items-center text-white bg-success bg-gradient border-0' role='alert' aria-live='assertive' aria-atomic='true'>
+                <div class='d-flex'>
+                    <div class='toast-body'>
+                        Enregistré !
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <div class='pg-container'>
             <form id='searchForm' class='search-place'>
                 <input type='text' class='form-control' id='searchInput' placeholder='Entrez un lieu'>
@@ -189,7 +205,6 @@ class Pg_Show_Planet_Map_Public {
     } // end ays_show_galery()
 
     // render all the images 
-    // medias is an array of array with 'post_id'
     // medias is an array of array with 'post_id'
  
     // create map, markers and lightbox
@@ -296,7 +311,7 @@ class Pg_Show_Planet_Map_Public {
             error_log("get_bb_images nonce not found");
             wp_send_json_error( "NOK.", 403 );
         }
-
+        
         $results = Pg_Geoposts_Table::get_boundingbox_images(
             $_REQUEST['ne_lat'],
             $_REQUEST['ne_lng'],
@@ -358,6 +373,39 @@ class Pg_Show_Planet_Map_Public {
         }
 
         wp_send_json_success( $data, 200 );
+        wp_die();
+    }
+
+    
+    // $id = gallery id
+    // return an array with image IDs
+    // TODO, used elsewhere, to be defined in a static method
+    public function ban_image() {
+
+        //error_log("ban_image IN");
+        //error_log("ban_image REQUEST ".print_r($_REQUEST, true));
+        //error_log("download_single_photo FILES ".print_r($_FILES, true));
+
+        if( ! isset( $_REQUEST['nonce'] ) or 
+            ! wp_verify_nonce( $_REQUEST['nonce'], 'show_planet' ) ) {
+            error_log("ban_image nonce not found");
+            wp_send_json_error( "NOK.", 403 );
+            return;
+        }
+
+        if ( ! current_user_can( 'manage_options' ) ) {
+            error_log("ban_image No ADMIN");
+            // TODO 404 NOT FOUND
+            wp_send_json_error( "NOK.", 401 );
+            return;
+        }
+        
+        $pid = sanitize_text_field($_REQUEST['pid']);
+
+        update_post_meta($pid , 'admin_status', Pg_Edit_Photo_Public::ADMIN_STATUS_NOT_OK);
+        Glp_Check_Photos_Public::update_visibility($pid, Pg_Edit_Photo_Public::ADMIN_STATUS_NOT_OK);
+
+        wp_send_json_success( null, 200 );
         wp_die();
     }
 }

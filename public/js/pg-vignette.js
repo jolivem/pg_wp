@@ -12,7 +12,7 @@
         //console.log("selection", $('#select-country'));
         // get the selected file name
         let selectedValue = $('#select-country').val();
-        console.log("selection", selectedValue);
+        // console.log("selection", selectedValue);
 
         if (selectedValue == "None") {
             let mapId = "leaflet-map";
@@ -73,10 +73,10 @@
     }    
 
     function ays_remove_vignette( mapId) {
-        console.log("ays_remove_vignette IN", mapId);
+        // console.log("ays_remove_vignette IN", mapId);
         let previous_map = document.getElementById(mapId);
         if (previous_map) {
-            console.log("ays_remove_vignette", previous_map);
+            // console.log("ays_remove_vignette", previous_map);
             previous_map.style.display="none";
             //previous_map?.remove();
             if (g_lmap && g_lmap.remove) {
@@ -88,17 +88,17 @@
     }
 
     function ays_add_vignette( mapId, country) {
-        console.log("ays_add_vignette country", {mapId, country});
+        // console.log("ays_add_vignette country", {mapId, country});
         let zoom = country.zoom;
         let file = ays_vars.base_url + "assets/geojson/" + country.file;
  
         let select = document.getElementById("select-country");
-        console.log("select", select);
+        // console.log("select", select);
         //console.log("BABAauRHUM", parent);
         // select.appendChild(p);
         var elemDiv = document.getElementById(mapId);
         elemDiv.style.display="block";
-        console.log("ays_add_vignette mapId", elemDiv);
+        // console.log("ays_add_vignette mapId", elemDiv);
         //elemDiv.id = mapId;
         
         var props = {
@@ -137,7 +137,7 @@
         fetch(file)  // Remplacez 'votre_fichier.geojson' par le chemin de votre fichier GeoJSON
             .then(response => response.json())
             .then(data => {
-                console.log("fetch", parent);
+                // console.log("fetch", parent);
                 L.geoJSON(data, {
                     clickable: false,
                     style: geostyle
@@ -147,7 +147,7 @@
                 let lon = data.features[0].properties.geo_point_2d.lon;
                 let lat = data.features[0].properties.geo_point_2d.lat;
                 let coord = [lat, lon];
-                console.log("coord:", coord);
+                // console.log("coord:", coord);
                 g_lmap.setView(coord, zoom);
 
             });
@@ -156,7 +156,7 @@
 
     // handle map vignette    
     function ays_handle_country( filename) {
-        console.log("ays_handle_country base_url", ays_vars.base_url);
+        // console.log("ays_handle_country base_url", ays_vars.base_url);
         let mapId = "leaflet-map";
         ays_remove_vignette( mapId)
 

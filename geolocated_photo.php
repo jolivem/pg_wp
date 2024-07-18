@@ -167,7 +167,7 @@ function pg_user_register($user_id) {
     // For example, sending a welcome email
     $user_info = get_userdata($user_id);
 
-    error_log("pg_user_register data ".print_r($user_info->data, true));
+    //error_log("pg_user_register data ".print_r($user_info->data, true));
     if ($user_info->data->user_url != ''){
         update_user_meta( $user_id, 'user_url', 'to_be_checked');
     }

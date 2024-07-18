@@ -109,7 +109,7 @@ class Glp_Check_User_Url_Public {
         }
 
         ob_start();
-        error_log("Glp_Check_User_Url_Public::pg_generate_page IN ".print_r($attr, true));
+        //error_log("Glp_Check_User_Url_Public::pg_generate_page IN ".print_r($attr, true));
         $this->enqueue_styles();
         $this->enqueue_scripts();
 
@@ -192,7 +192,7 @@ class Glp_Check_User_Url_Public {
 
     // callback on request to delete a photo
     public function admin_valid_url() {
-        error_log("admin_valid_url IN REQUEST ".print_r($_REQUEST, true));
+        //error_log("admin_valid_url IN REQUEST ".print_r($_REQUEST, true));
         //error_log("download_single_photo FILES ".print_r($_FILES, true));
 
         // TODO test current user is gallery user
@@ -224,14 +224,14 @@ class Glp_Check_User_Url_Public {
 
         update_user_meta($uid , 'user_url', 'OK');
         
-        error_log( "admin_valid_url Respond success");
+        //error_log( "admin_valid_url Respond success");
         wp_send_json_success( null, 200);
         wp_die();
         
     } 
 
     public function admin_reject_url() {
-        error_log("admin_reject_url IN REQUEST ".print_r($_REQUEST, true));
+        //error_log("admin_reject_url IN REQUEST ".print_r($_REQUEST, true));
         //error_log("download_single_photo FILES ".print_r($_FILES, true));
 
         // TODO test current user is gallery user
@@ -263,7 +263,7 @@ class Glp_Check_User_Url_Public {
         update_user_meta($uid , 'user_url', 'NOK');
         //$this->update_visibility($pid, Pg_Edit_Photo_Public::ADMIN_STATUS_NOT_OK);
 
-        error_log( "admin_reject_url Respond success");
+        //error_log( "admin_reject_url Respond success");
         wp_send_json_success( null, 200);
         wp_die();
     }
