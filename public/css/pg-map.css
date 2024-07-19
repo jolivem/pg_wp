@@ -44,10 +44,10 @@ div.gallery-slider {
 }
 
 div.gallery-slider img {
-    /*display: ruby;*/
     padding-bottom: 2px;
     height: 122px;
     cursor: pointer;
+    max-width: none;
     /* Add cursor pointer for better usability */
     /*border: 2px solid transparent; /*Initial border style */
 }
@@ -62,10 +62,10 @@ div.planet-slider {
 }
 
 div.planet-slider img {
-    /*display: ruby;*/
     padding-bottom: 2px;
     height: 150px;
     cursor: pointer;
+    max-width: none;
     /* Add cursor pointer for better usability */
     /*border: 2px solid transparent; /*Initial border style */
 }
