@@ -76,7 +76,6 @@ class Pg_Show_User_Map_Public {
 
         wp_enqueue_style( $this->plugin_name."-simple-lightbox.css", plugin_dir_url( __FILE__ ) . 'css/simple-lightbox.css', array(), $this->version, 'all' );
         wp_enqueue_style( $this->plugin_name."-public.css", plugin_dir_url( __FILE__ ) . 'css/glp-public.css', array(), $this->version, 'all' );
-        wp_enqueue_style( $this->plugin_name."-map.css", plugin_dir_url( __FILE__ ) . 'css/pg-map.css', array(), $this->version, 'all' );
         //wp_enqueue_style('leaflet.css', 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css');
     }
 
@@ -161,7 +160,7 @@ class Pg_Show_User_Map_Public {
         $html_code .= "
             </br>
             <div class='pg-map'>
-                <div id='map' style='height:300px;'></div>
+                <div id='map'></div>
             </div>
             <div class='flex-container-slider'>
                 <div class='slider-options-left' style='background-color: lightgreen'>

@@ -398,32 +398,7 @@ var animateMarkerByImage = function(img) {
         /*g_markers.refreshClusters(visibleOne);*/
     });            
 
-    // /* When user clicked on the target area */
-    // $(".slider-overlay-circle").on('click', function(event){
-    //     console.log('gal.on click target', event.target);
-    //     event.preventDefault();
-    //     processClickOnTarget( event.target);
-    // });
-
-
-    // /* When user clicked on the text icon */
-    // $(".slider-overlay-text").on('click', function(event){
-    //     //event.preventDefault();
-    //     console.error('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
-    //     console.log('gal.on click target parent', event.target.parentElement.parentElement);
-    //     event.preventDefault();
-    //     processClickOnText( event.target);
-    // });
-
-    // /* When user clicked on the ban icon */
-    // $(".slider-overlay-ban").on('click', function(event){
-    //     //event.preventDefault();
-    //     console.log('gal.on click target parent', event.target.parentElement.parentElement);
-    //     event.preventDefault();
-    //     processClickOnBan( event.target);
-    // });
-
-     // Process when user click on step-forward or step-backward
+    // Process when user click on step-forward or step-backward
     // and when user click on angle-double-right or angle-double-left
     $(document).find('.show-gallery-option').on('click', function(e){
         //console.log("show-gallery-option click", e);

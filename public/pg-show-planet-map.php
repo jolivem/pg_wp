@@ -76,7 +76,6 @@ class Pg_Show_Planet_Map_Public {
 
         wp_enqueue_style( $this->plugin_name."-simple-lightbox.css", plugin_dir_url( __FILE__ ) . 'css/simple-lightbox.css', array(), $this->version, 'all' );
         wp_enqueue_style( $this->plugin_name."-public.css", plugin_dir_url( __FILE__ ) . 'css/glp-public.css', array(), $this->version, 'all' );
-        wp_enqueue_style( $this->plugin_name."-map.css", plugin_dir_url( __FILE__ ) . 'css/pg-map.css', array(), $this->version, 'all' );
         //wp_enqueue_style('leaflet.css', 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css');
     }
 
@@ -164,9 +163,9 @@ class Pg_Show_Planet_Map_Public {
                 <button type='button' id='searchButton' class='btn btn-primary'>Rechercher</button>
             </form>
             <div class='pg-map'>
-                <div id='map' style='height:350px;'></div>
+                <div id='map'></div>
             </div>
-            <div class='flex-container-slider' style='height: 150px;'>
+            <div class='flex-container-slider'>
                 <div class='slider-options-left' style='background-color: lightgreen'>
                     <div>
                         <div class='show-gallery-option fas fa-step-backward' style='padding-bottom:38px;' aria-hidden='true'></div>
@@ -221,7 +220,12 @@ class Pg_Show_Planet_Map_Public {
             'use strict';
             $(window).ready(function(){
 
-                g_map.setView([0,0], 1);
+                if (window.innerWidth > 1200) {
+                    g_map.setView([0,0], 2);
+                }
+                else {
+                    g_map.setView([0,0], 1);
+                }
  
                 g_map.on('moveend', function(e) {
                     const data = g_lightbox.getLighboxData();

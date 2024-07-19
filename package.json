@@ -1,0 +1,9 @@
+{
+    "name": "my-app",
+    "version": "1.0.0",
+    "scripts": {
+        "clean": "rimraf dist",
+        "build:dev": "NODE_ENV=development node build.js",
+        "build:prod": "NODE_ENV=production node build.js"
+    }
+}

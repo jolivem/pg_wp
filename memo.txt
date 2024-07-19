@@ -1,0 +1,4 @@
+npm install --save-dev esbuild-sass-plugin
+
+npm run build:dev
+npm run build:prod
