@@ -574,18 +574,15 @@ button.lg-icon {
     margin-top: 10px;
     display: flex;
     align-items: stretch;
-    background-color: #f1f1f1;
+    background-color: #fefefe;
     border-radius: 10px;
 }
 
 .flex-container-slider {
     margin-top: 10px;
-    display: flex;
-    align-items: stretch;
-    background-color: #f1f1f1;
+    /*background-color: #f1f1f1;*/
     border-radius: 10px;
-    justify-content: space-between;
-    height: 150px;
+    height: 160px;
 }
 
 .flex-container-photo {
@@ -636,6 +633,7 @@ button.lg-icon {
     flex-basis: 15px;
 }
 
+.gallery-text-container,
 .photo-text-container {
     flex: 10 0 180px;
     padding: 5px;
@@ -692,12 +690,6 @@ button.lg-icon {
     text-overflow: ellipsis;
     overflow: hidden;
     height: 50px;
-}
-
-.photo-text-user {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    height: 48px;
 }
 
 .photo-text-date {
@@ -760,19 +752,6 @@ button.lg-icon {
     color: #666;
     line-height: 16px;
     ;
-}
-
-.flex-options {
-    display: flex;
-    align-items: stretch;
-    flex-direction: column;
-}
-
-.flex-options-2 {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
 }
 
 .options {
@@ -839,11 +818,6 @@ button.lg-icon {
     padding-top: 20px;
 }
 
-.show-gallery-option {
-    cursor: pointer;
-    padding: 4px;
-}
-
 /* EDIT photos */
 
 .edit-photo-option {
@@ -858,21 +832,6 @@ button.lg-icon {
     padding-top: 17px;
 }
 
-.edit-photo-flex-container {
-    display: flex;
-    align-items: stretch;
-}
-
-.edit-photo-select {
-    flex: 10 0 200px;
-}
-
-.edit-photo-map {
-    flex-basis: 130px;
-    border-radius: 7px;
-    margin-left: 10px;
-}
-
 .align-right {
     position: relative;
     float: right;
@@ -885,7 +844,7 @@ button.lg-icon {
 
 .search-place {
     display: flex;
-    padding-bottom: 10px;
+    padding: 10px 22px;
 }
 
 .search-place button {
@@ -937,25 +896,13 @@ body {
 .desc-block {
     display: flex;
     justify-content: center;
+    min-height: 100px;
 }
 
 .desc-slider {
-    border: 2px solid #e5e5e5;
-    border-radius: 7px;
-    margin-top: 10px;
+    margin-bottom: 20px;
     max-width: 600px;
     min-width: 50%;
-    padding: 5px;
-    background-color: #f1f1f1;
-}
-
-.desc-gallery {
-    border: 2px solid #e5e5e5;
-    border-radius: 7px;
-    margin-top: 10px;
-    /* see pg-container */
-    max-width: 800px;
-    min-width: 100%;
     padding: 5px;
     background-color: #f1f1f1;
 }
@@ -968,6 +915,13 @@ body {
 .desc-slider-address {
     font-size: small;
     font-weight: 500;
+}
+
+.desc-slider-user {
+    font-size: small;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
 }
 
 .desc-lightbox-title {
@@ -989,15 +943,15 @@ body {
 
 .pg-container {
     max-width: 800px !important;
-    padding-left: 12px;
-    padding-right: 12px;
+    padding: 12px;
+    background-color: #f1f1f1;
     /* see desc-gallery */
 }
 
 .pg-map {
     border: solid #f1f1f1;
     border-radius: 8px;
-    border-width: 0px 32px;
+    border-width: 0px 22px;
     /*height: 350px;*/
     /* see desc-gallery */
 }
@@ -1008,7 +962,7 @@ body {
 }
 
 .toast {
-    --bs-toast-max-width: 250px;
+    --bs-toast-max-width: 120px;
 }
 
 .invalid-input {
@@ -1055,56 +1009,27 @@ body {
     border: 6px solid #fff;
 }
 
-.mydivmarker12 {
-    border-radius: 25%;
-    border: 8px solid #fff;
-}
-
-div.gallery-slider {
-    overflow: hidden;
-    white-space: nowrap;
-    /*padding: 4px;*/
-    display: flex;
-}
-
-div.gallery-slider img {
-    padding-bottom: 2px;
+div.slider img {
     height: 150px;
     cursor: pointer;
     max-width: none;
-    /* Add cursor pointer for better usability */
-    /*border: 2px solid transparent; /*Initial border style */
 }
 
-
-div.planet-slider {
-    overflow: hidden;
-    white-space: nowrap;
-    /*padding: 4px;*/
-    display: flex;
-    height: 150px;
+/* slick classes */
+.slick-slide {
+    transition: all ease-in-out .3s;
+    opacity: .8;
+    padding: 14px 2px;
 }
 
-div.planet-slider img {
-    padding-bottom: 2px;
-    height: 150px;
-    cursor: pointer;
-    max-width: none;
-    /* Add cursor pointer for better usability */
-    /*border: 2px solid transparent; /*Initial border style */
-}
-
-
-.imgSelected {
-    border-bottom: 4px solid #a2a6a8;
-    /* Adjust the border style for selected images */
+.slick-current {
     opacity: 1;
-}
+    padding: 4px 8px;
 
-.imgNotSelected {
-    border: 2px solid transparent;
-    /* Adjust the border style for selected images */
-    opacity: 0.85;
+}
+/* slide is a slick class */
+div.slider {
+    margin: 0px 20px !important;
 }
 
 .slider-item {
@@ -1113,42 +1038,42 @@ div.planet-slider img {
 
 .slider-overlay-circle {
     position: absolute;
-    top: 3px;
-    right: 3px;
+    top: 0px;
+    right: 0px;
     height: 32px;
     width: 32px;
-    opacity: 0;
+    opacity: 1;
     background-color: rgba(0, 0, 0, 0.3);
     transition: .3s ease;
-    display: flex;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.slider-overlay-expand {
+    position: absolute;
+    top: 0px;
+    /*left: 3px;*/
+    height: 32px;
+    width: 32px;
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.3);
+    transition: .3s ease;
+    display: none;
     justify-content: center;
     align-items: center;
 }
 
 .slider-overlay-ban {
     position: absolute;
-    top: 3px;
-    left: 3px;
+    bottom: 0px;
+    right: 0px;
     height: 32px;
     width: 32px;
-    opacity: 0;
+    opacity: 1;
     background-color: rgba(0, 0, 0, 0.3);
-    transition: .3s ease;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.slider-overlay-text {
-    position: absolute;
-    bottom: 3px;
-    right: 3px;
-    height: 32px;
-    width: 32px;
-    opacity: 0;
-    background-color: rgba(0, 0, 0, 0.3);
-    transition: .3s ease;
-    display: flex;
+    transition: .9s ease;
+    display: none;
     justify-content: center;
     align-items: center;
 }
@@ -1159,16 +1084,16 @@ div.planet-slider img {
     cursor: pointer;
 }
 
-.slider-item:hover .slider-overlay-circle {
-    opacity: 1;
+.slick-current:hover .slider-overlay-circle {
+    display: flex;
 }
 
-.slider-item:hover .slider-overlay-text {
-    opacity: 1;
+.slick-current:hover .slider-overlay-expand {
+    display: flex;
 }
 
-.slider-item:hover .slider-overlay-ban {
-    opacity: 1;
+.slick-current:hover .slider-overlay-ban {
+    display: flex;
 }
 
 .slider-descr {
@@ -1193,17 +1118,7 @@ div.planet-slider img {
     #map {
         height: 600px;
     }
-
-    div.planet-slider {
-        height: 180px;
-    }
-
-    div.planet-slider img {
-        height: 180px;
-    }
-
-    div.gallery-slider img {
-        height: 180px;
-    }
-
+    .desc-block {
+        min-height: 70px;
+    }    
 }

@@ -915,7 +915,6 @@ class Pg_Show_User_Gallery_Public {
     }
 
     // Function to find the value for a given country (ex "Albania.geojson")
-    // ex return: {"file": "Albania.geojson", "height": "60px", "width": "50px", "zoom": 4}
     private function getCountryOptions($fileName) {
         error_log("getCountryOptions in filename=".$fileName);
         $this->load_countries();

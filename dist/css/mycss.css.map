@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../test/mycss.scss"],
-  "sourcesContent": ["$primary-color: #47dff0;\r\n$secondary-color: darken($primary-color, 50%);\r\n$margin: 16px;\r\n\r\n.highlight {\r\n    border-color: $primary-color;\r\n    color: $secondary-color;\r\n}\r\n\r\nh1 {\r\n    span {\r\n        margin: calc($margin / 2);\r\n    }\r\n\r\n    color: $secondary-color;\r\n}"],
-  "mappings": ";AAIA,CAAA;AACI,gBALY;AAMZ,SALc;;AAQlB;AAKI,SAbc;;AASd,GAAA;AACI,UAAA;;",
-  "names": []
-}

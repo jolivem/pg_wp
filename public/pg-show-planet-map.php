@@ -75,6 +75,8 @@ class Pg_Show_Planet_Map_Public {
         wp_enqueue_style( 'gpg-fontawesome', 'https://use.fontawesome.com/releases/v5.4.1/css/all.css', array(), $this->version, 'all');
 
         wp_enqueue_style( $this->plugin_name."-simple-lightbox.css", plugin_dir_url( __FILE__ ) . 'css/simple-lightbox.css', array(), $this->version, 'all' );
+        wp_enqueue_style( $this->plugin_name."-slick.css", plugin_dir_url( __FILE__ ) . 'slick/slick.css', array(), $this->version, 'all' );
+        wp_enqueue_style( $this->plugin_name."-slick-theme.css", plugin_dir_url( __FILE__ ) . 'slick/slick-theme.css', array(), $this->version, 'all' );
         wp_enqueue_style( $this->plugin_name."-public.css", plugin_dir_url( __FILE__ ) . 'css/glp-public.css', array(), $this->version, 'all' );
         //wp_enqueue_style('leaflet.css', 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css');
     }
@@ -94,6 +96,7 @@ class Pg_Show_Planet_Map_Public {
         wp_enqueue_script( $this->plugin_name.'-markercluster.js', 'https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js', array( 'jquery' ), $this->version, true );
 
         wp_enqueue_script( $this->plugin_name.'-simple-lightbox.js', plugin_dir_url( __FILE__ ) . 'js/simple-lightbox.js', array( 'jquery' ), $this->version, true );
+        wp_enqueue_script( $this->plugin_name.'-slick.js', plugin_dir_url( __FILE__ ) . 'slick/slick.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-pg-map.js', plugin_dir_url( __FILE__ ) . 'js/pg-map.js', array( 'jquery' ), $this->version, true );
         wp_localize_script($this->plugin_name.'-pg-map.js', 'ays_vars', array('base_url' => GLP_BASE_URL));
 
@@ -126,8 +129,8 @@ class Pg_Show_Planet_Map_Public {
         $medias = Pg_Geoposts_Table::get_all_public_images();
         //error_log("pg_show_page ".print_r($medias, true));
         //[$html_slider, $html_descr] = $this->render_slider($medias);
-        $html_slider = "";
-        $html_descr = "";
+        //$html_slider = "";
+        //$html_descr = "";
         // error_log("pg_show_page html_slider = $html_slider");
         // error_log("pg_show_page html_descr = $html_descr");
         //$html_addresses = $this->render_medias_address($medias);
@@ -156,36 +159,24 @@ class Pg_Show_Planet_Map_Public {
             </div>
         </div>
 
-
         <div class='pg-container'>
-            <form id='searchForm' class='search-place'>
-                <input type='text' class='form-control' id='searchInput' placeholder='Entrez un lieu'>
-                <button type='button' id='searchButton' class='btn btn-primary'>Rechercher</button>
+            <form id='searchForm'>
+                <div class='input-group mb-3'>
+                    <input type='text' class='form-control' id='searchInput' placeholder='Entrez un lieu' aria-label='Entrez un lieu' aria-describedby='searchButton'>
+                    <button type='button' id='searchButton' class='btn btn-primary' data-mdb-ripple-init>
+                        <i class='fas fa-search'></i>
+                    </button>
+                </div>            
             </form>
             <div class='pg-map'>
                 <div id='map'></div>
             </div>
-            <div class='flex-container-slider'>
-                <div class='slider-options-left' style='background-color: lightgreen'>
-                    <div>
-                        <div class='show-gallery-option fas fa-step-backward' style='padding-bottom:38px;' aria-hidden='true'></div>
-                        <div class='show-gallery-option fas fa-angle-double-left' aria-hidden='true'></div>
-                    </div>
-                </div>
-                <div class='planet-slider' id='imageSlider'>
-                                        $html_slider 
-                </div>
-                <div class='slider-options-right' style='background-color: lightgreen'>
-                    <div>
-                        <div class='show-gallery-option fas fa-step-forward' style='padding-bottom:38px;' aria-hidden='true'></div>
-                        <div class='show-gallery-option fas fa-angle-double-right' aria-hidden='true'></div>
-                    </div>
-                </div>
-            </div>   
-            <div id='imageDescr' class='desc-block'>$html_descr</div>
-            </br>
-            </br>
-            </br>
+            <div id='imageSlider' class='slider'></div>
+            <div id='imageDescr' class='desc-block'></div>
+        </div>
+        </br>
+        </br>
+        <div class='pg-container'>
             <div class='participate-info'>
                 Participez au projet Planet-Gallery !
                 <ul>
@@ -274,7 +265,7 @@ class Pg_Show_Planet_Map_Public {
                             //error_log("minlat=".$minlat.", maxlat=".$maxlat.",minlng=".$minlng.", maxlng=".$maxlng);
         
                             
-                            $map_js .= "icon = new g_LeafIcon({iconUrl: '". $img_src ."'});";
+                            $map_js .= "icon = new g_LeafIcon({iconUrl: '". $img_src ."', data: 'slider-". $id ."'});";
                             $map_js .= "g_markers.addLayer(L.marker([".strval($latitude).", ".strval($longitude)."], {icon: icon}));";
                         }
                     }
@@ -288,7 +279,8 @@ class Pg_Show_Planet_Map_Public {
                     sourceAttr: 'data-full',
                     captionSelector: '.slider-descr',
                     widthRatio: 0.9,
-                    captionType: 'text'
+                    captionType: 'text',
+                    disableClick: true,
                 });
 
             })
@@ -300,6 +292,22 @@ class Pg_Show_Planet_Map_Public {
     
     }// end ays_add_makers()    
 
+    public function rework_address($address) {
+
+       // Remove "Route sans nom" if it exists
+        $address = str_replace("Route sans nom,", "", $address);
+        
+        // Remove words with numerals
+        $address = preg_replace('/\b\w*\d\w*\b/', '', $address);
+        
+        // Remove any extra spaces or commas caused by the replacements
+        $address = preg_replace('/\s+/', ' ', $address); // Replace multiple spaces with a single space
+        $address = preg_replace('/\s*,\s*/', ', ', $address); // Remove extra spaces around commas
+        $address = trim($address, ', '); // Remove leading/trailing commas and spaces
+        
+        return $address;
+        
+    }
  
     // $id = gallery id
     // return an array with image IDs
@@ -347,6 +355,7 @@ class Pg_Show_Planet_Map_Public {
                         $metadate = $meta['date'][0];
                         $date = $date = Pg_Edit_Gallery_Public::get_photo_date($metadate);
                         $user = get_user_by( 'ID', $post->post_author );
+                        $address = $this->rework_address($post->post_title);
 
                         $user_url='';
                         $url_checked = get_user_meta( $post->post_author, 'user_url', true);
@@ -359,7 +368,7 @@ class Pg_Show_Planet_Map_Public {
                             'id'            => $pid,
                             'url_medium'    => $url_img_medium[0],
                             'url_full'      => $url_img_full[0],
-                            'address'       => $post->post_title,
+                            'address'       => $address,
                             'content'       => $post->content,
                             'date'          => $date,
                             'user'          => $user->display_name,

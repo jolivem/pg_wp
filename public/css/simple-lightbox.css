@@ -122,12 +122,12 @@ body.hidden-scroll {
     }
 
     .sl-wrapper .sl-navigation button.sl-next {
-        right: 10px;
+        /*right: 10px;*/
         font-size: 3rem;
     }
 
     .sl-wrapper .sl-navigation button.sl-prev {
-        left: 10px;
+        /*left: 10px;*/
         font-size: 3rem;
     }
 }
@@ -138,12 +138,12 @@ body.hidden-scroll {
     }
 
     .sl-wrapper .sl-navigation button.sl-next {
-        right: 20px;
+        /*right: 20px;*/
         font-size: 3rem;
     }
 
     .sl-wrapper .sl-navigation button.sl-prev {
-        left: 20px;
+        /*left: 20px;*/
         font-size: 3rem;
     }
 }

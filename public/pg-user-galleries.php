@@ -229,7 +229,7 @@ class Glp_User_Galleries_Public {
             //error_log("render_galleries url:".print_r($url_img, true));
             // TODO check url_img is OK, add try catch
             $html.=
-            '<div class="flex-container">
+            '<div class="flex-container" data-galid="'.$item["id"].'">
                 <div class="miniature1" style="background-image: url('.$img_src1.')"></div>
                 <div class="miniature2" style="background-image: url('.$img_src2.')"></div>
                 <div class="miniature3" style="background-image: url('.$img_src3.')"></div>

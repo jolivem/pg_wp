@@ -75,6 +75,8 @@ class Pg_Show_User_Map_Public {
         wp_enqueue_style( 'gpg-fontawesome', 'https://use.fontawesome.com/releases/v5.4.1/css/all.css', array(), $this->version, 'all');
 
         wp_enqueue_style( $this->plugin_name."-simple-lightbox.css", plugin_dir_url( __FILE__ ) . 'css/simple-lightbox.css', array(), $this->version, 'all' );
+        wp_enqueue_style( $this->plugin_name."-slick.css", plugin_dir_url( __FILE__ ) . 'slick/slick.css', array(), $this->version, 'all' );
+        wp_enqueue_style( $this->plugin_name."-slick-theme.css", plugin_dir_url( __FILE__ ) . 'slick/slick-theme.css', array(), $this->version, 'all' );
         wp_enqueue_style( $this->plugin_name."-public.css", plugin_dir_url( __FILE__ ) . 'css/glp-public.css', array(), $this->version, 'all' );
         //wp_enqueue_style('leaflet.css', 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css');
     }
@@ -94,6 +96,7 @@ class Pg_Show_User_Map_Public {
         wp_enqueue_script( $this->plugin_name.'-markercluster.js', 'https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js', array( 'jquery' ), $this->version, true );
 
         wp_enqueue_script( $this->plugin_name.'-simple-lightbox.js', plugin_dir_url( __FILE__ ) . 'js/simple-lightbox.js', array( 'jquery' ), $this->version, true );
+        wp_enqueue_script( $this->plugin_name.'-slick.js', plugin_dir_url( __FILE__ ) . 'slick/slick.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-pg-map.js', plugin_dir_url( __FILE__ ) . 'js/pg-map.js', array( 'jquery' ), $this->version, true );
         wp_localize_script($this->plugin_name.'-pg-map.js', 'ays_vars', array('base_url' => GLP_BASE_URL));
 
@@ -151,7 +154,7 @@ class Pg_Show_User_Map_Public {
         <div class='pg-container'>";
         if ($gtitle != "" || $gdescription != "") {
             $html_code .= "
-            <div class='desc-gallery'>
+            <div>
                 <div class='desc-title'>$gtitle</div>
                 <div class='desc-description'>$gdescription</div>
             </div>";
@@ -163,20 +166,8 @@ class Pg_Show_User_Map_Public {
                 <div id='map'></div>
             </div>
             <div class='flex-container-slider'>
-                <div class='slider-options-left' style='background-color: lightgreen'>
-                    <div>
-                        <div class='show-gallery-option fas fa-step-backward' style='padding-bottom:38px;' aria-hidden='true'></div>
-                        <div class='show-gallery-option fas fa-angle-double-left' aria-hidden='true'></div>
-                    </div>
-                </div>
-                <div class='gallery-slider' id='imageSlider'>
+                <div class='gallery-slider slider' id='imageSlider'>
                     $html_slider 
-                </div>
-                <div class='slider-options-right' style='background-color: lightgreen'>
-                    <div>
-                        <div class='show-gallery-option fas fa-step-forward' style='padding-bottom:38px;' aria-hidden='true'></div>
-                        <div class='show-gallery-option fas fa-angle-double-right' aria-hidden='true'></div>
-                    </div>
                 </div>
             </div>
             <div id='imageDescr' class='desc-block'>$html_descr</div> 
@@ -210,7 +201,7 @@ class Pg_Show_User_Map_Public {
                 }
 
                 $html.="
-                <div class='slider-item'>
+                <div class='slide slider-item'>
                     <div class='slider-lb' data-full='$img_src_full'>
                         <img src='$img_src_medium' id='slider-$id' class='imgNotSelected' data-full='$img_src_full'>";
                 // description of the photo INSIDE the lightbox
@@ -225,8 +216,8 @@ class Pg_Show_User_Map_Public {
                     <div class='slider-overlay-circle'>
                         <i class='far fa-dot-circle slider-icon' data-num='$num'></i>
                     </div>
-                    <div class='slider-overlay-text'>
-                        <i class='fas fa-align-center slider-icon' data-num='$num'></i>
+                    <div class='slider-overlay-expand'>
+                        <i class='fas fa-expand slider-icon' data-num='$num'></i>
                     </div>
                 </div>";
                $num = $num + 1;
@@ -338,8 +329,45 @@ class Pg_Show_User_Map_Public {
                     captionSelector: '.slider-descr',
                     captionType: 'text',
                     widthRatio: 0.9,
-                    captionPosition: 'bottom'
+                    captionPosition: 'bottom',
+                    disableClick: true,
                 });
+                /* add slick slider */
+                $('.slider').slick({
+                    infinite: true,
+                    centerMode: true,
+                    slidesToScroll: 1,
+                    variableWidth: true,
+                    swipeToSlide: true,
+                });
+                g_slick = $('.slider').slick('getSlick');
+                window.displaySlideDescription();
+                $('.slider').on('afterChange', function(event, slick, currentSlide){
+                    window.displaySlideDescription();
+                });
+
+                const slider = document.getElementById('imageSlider');
+
+                const div_targets = slider.querySelectorAll('.slider-overlay-circle');
+                div_targets.forEach(el => el.addEventListener('click', event => {
+                    processClickOnTarget(event.target);
+                    event.preventDefault();
+                }));
+        
+                const div_expand = slider.querySelectorAll('.slider-overlay-expand');
+                console.log('expand g_lightbox', g_lightbox);
+                div_expand.forEach(el => el.addEventListener('click', event => {
+
+                    const slide = event.target.parentElement.parentElement;
+
+                    console.log('expand slide', slide);
+                    const src = window.findSlideSrc(slide);
+                    if (src) {
+                        g_lightbox.openSrc(src);
+                    }
+                }));
+
+
             })
         })(jQuery);
         </script>";

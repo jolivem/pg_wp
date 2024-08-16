@@ -135,13 +135,18 @@ class Pg_Download_Multiple_Public {
                 <div class="modal-content">
                     <div class="container">
                         <div class="modal-header modal-download" style="display: block;">
-                            <div class="modal-title" id="multipleDowloadModalLabel">Sélection de photos géolocalisées par groupe de 20 maximum.</div>';
+                            <div class="modal-title" id="multipleDowloadModalLabel">Sélection de photos géolocalisées par groupes de 20 maximum.</div>';
         $os = $this->getOS();
-        if ($os == "Android" || $os == "iPhone") {
-            $html_code .= '<div>
-            Utiliser les menus "Fichiers" ou "Parcourir".</br>Ne pas utiliser les menus "Images" ou "Caméra".
-          </div>';
+        // for test$os = "Android";
+        error_log("Pg_Download_Multiple_Public::pg_show_page os=".$os);
+        if ($os == "Android") {
+            $html_code .= '<div><b>Utiliser exclusivement le bouton <img src="'.GLP_PUBLIC_URL.'img/Android_file.png" alt=""> à droite.</b></div>';
 
+        }
+        if ($os == "iOS") {
+            $html_code .= '<div>
+            <b>Utiliser exclusivement le menu du bouton <img src="'.GLP_PUBLIC_URL.'img/IOS_file.png" alt="">.</b>
+          </div>';
         }
         $html_code .= '
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
@@ -202,9 +207,9 @@ class Pg_Download_Multiple_Public {
             '/mac_powerpc/i'        => 'Mac OS 9',
             '/linux/i'              => 'Linux',
             '/ubuntu/i'             => 'Ubuntu',
-            '/iphone/i'             => 'iPhone',
-            '/ipod/i'               => 'iPod',
-            '/ipad/i'               => 'iPad',
+            '/iphone/i'             => 'iOS',
+            '/ipod/i'               => 'iOS',
+            '/ipad/i'               => 'iOS',
             '/android/i'            => 'Android',
             '/blackberry/i'         => 'BlackBerry',
             '/webos/i'              => 'Mobile'

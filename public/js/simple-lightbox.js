@@ -45,6 +45,7 @@
           captionHTML: true,
           close: true,
           closeText: '&times;',
+          disableClick: false,
           swipeClose: true,
           showCounter: true,
           fileExt: 'png|jpg|jpeg|gif|webp|avif',
@@ -182,16 +183,19 @@
         if (this.options.spinner) {
           this.domNodes.wrapper.appendChild(this.domNodes.spinner);
         }
-        this.addEventListener(this.elements, 'click.' + this.eventNamespace, function (event) {
-          if (_this.isValidLink(event.currentTarget)) {
-            event.preventDefault();
-            if (_this.isAnimating) {
-              return false;
+        //console.log("simple-lightbox disableClick", this.options.disableClick)
+        if (this.options.disableClick === false) {
+          this.addEventListener(this.elements, 'click.' + this.eventNamespace, function (event) {
+            if (_this.isValidLink(event.currentTarget)) {
+              event.preventDefault();
+              if (_this.isAnimating) {
+                return false;
+              }
+              _this.initialImageIndex = _this.elements.indexOf(event.currentTarget);
+              _this.openImage(event.currentTarget);
             }
-            _this.initialImageIndex = _this.elements.indexOf(event.currentTarget);
-            _this.openImage(event.currentTarget);
-          }
-        });
+          });
+        }
     
         // close addEventListener click addEventListener doc
         if (this.options.docClose) {
@@ -1520,15 +1524,18 @@
       }, {
         key: "open",
         value: function open(elem) {
+          //console.log('lightbox elem', elem);
           var position = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
           elem = elem || this.elements[0];
           if (typeof jQuery !== "undefined" && elem instanceof jQuery) {
             elem = elem.get(0);
           }
+          //console.log('lightbox position', position);
           if (position > 0) {
             elem = this.elements[position];
           }
           this.initialImageIndex = this.elements.indexOf(elem);
+          //console.log('lightbox elements', this.elements);
           if (this.initialImageIndex > -1) {
             this.openImage(elem);
           }
@@ -1539,6 +1546,37 @@
           var elem = this.elements[position];
           this.open(elem, position);
         }
+      }, {
+        key: "openSrc",
+        value: function openSrc(imgSrc) {
+
+          let elemFound = null;
+          //console.log('lightbox src', imgSrc);
+
+          function hasImgWithSrc(element, imgSrc) {
+            // Find all <img> elements within the given element
+            var imgs = element.querySelectorAll('img');
+            
+            // Check if any of the <img> elements have the specified src
+            return Array.prototype.some.call(imgs, function(img) {
+                return img.src === imgSrc;
+            });
+          }
+    
+          // Iterate through the array of jQuery nodes
+          this.elements.forEach(function(elem) {
+       
+              if (hasImgWithSrc(elem, imgSrc)) {
+                elemFound = elem; // Set the resultNode to the current node
+                //console.log('lightbox FOUND', elem);
+                return false; // Break out of the $.each loop
+              }
+          });
+
+          if (elemFound != null) {
+            this.openImage(elemFound);
+          }
+       }
       }, {
         key: "next",
         value: function next() {

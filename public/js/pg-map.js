@@ -1,148 +1,36 @@
-var g_selectedImageElem = null;
 var g_selectedImageSrc = null; /*image src when clicked in the slider target*/
 var g_map;
 var g_lightbox;
 var g_markers;
 var g_LeafIcon = L.Icon.extend({
     options: {
-        iconSize:     [60, 60],
+        iconSize:     [50, 50],
         shadowSize:   [50, 64],
         shadowAnchor: [4, 62],
         popupAnchor:  [-3, -76],
         className: 'mydivicon'
     }
 });
+var g_slick;
 
 
-/* START grab and scroll image slider 
-
-const slider = document.getElementById('imageSlider');
-
-let isDragging = false;
-let startPos = 0;
-let scrollLeft = 0;
-
-// Add mousedown event listener to start dragging
-slider.addEventListener('mousedown', (event) => {
-    console.log('slider mousedown');
-    isDragging = true;
-    startPos = event.clientX;
-    scrollLeft = slider.scrollLeft;
-    slider.classList.add('dragging');
-    return false;
-});
-
-// Add mousemove event listener to track movement
-slider.addEventListener('mousemove', (event) => {
-    if (!isDragging) return;
-    const distance = event.clientX - startPos;
-    slider.scrollLeft = scrollLeft - distance;
-});
-
-// Add mouseup event listener to stop dragging
-slider.addEventListener('mouseup', (event) => {
-    console.log('slider mouseup');
-    isDragging = false;
-    slider.classList.remove('dragging');
-    event.preventDefault()
-});
-
-// Add mouseleave event listener to stop dragging when mouse leaves the slider
-slider.addEventListener('mouseleave', () => {
-    console.log('slider mouseleave');
-    isDragging = false;
-    slider.classList.remove('dragging');
-});
-
-// Prevent default behavior of mouse events
-slider.addEventListener('dragstart', (event) => event.preventDefault());        
-
-/* END grab and scroll image slider */
-
-var setSliderPhotoCss = function (element, class_) {
-
-    switch( class_) {
-        case "imgNotSelected":
-            element.classList.remove('imgSelected');
-            element.classList.add(class_);
-            break;
-        case "imgSelected":
-            element.classList.remove('imgNotSelected');
-            element.classList.add(class_);
-            break;
-        }
-};
-
-var selectSliderImageBySrc =  function(mysrc, scroll) {
-    // console.log('selectSliderImageBySrc IN', mysrc);
-    const slider = document.getElementById('imageSlider');
-
-    /* Remove classname from previously selected image */
-    //console.log('selectSliderImageBySrc current g_selectedImageElem', g_selectedImageElem);
-    if (g_selectedImageElem) {
-        g_selectedImageElem.classList.remove('imgSelected');
-        g_selectedImageElem.classList.add('imgNotSelected');
-    }
+/* brief move to slide image when map image is clicked */
+var selectSlideById =  function(id) {
+    //console.log('selectSlideById IN', {id});
 
     //let thumbnailSrc = makeThumbnailSrc(mysrc);
-    var imageElement = document.querySelector(`#imageSlider img[src='${mysrc}']`);
+    //var imageElement = document.querySelector(`#imageSlider img[src='${mysrc}']`);
+    var imageElement = document.getElementById(id);
     /* Add classname to the selected image */
-    // console.log('selectSliderImageBySrc imageElement', imageElement);
+    //console.log('selectSlideById imageElement', imageElement);
     if (imageElement) {
-        //console.log('slider ', slider);
-        // console.log('imageElement ', imageElement);
-        imageElement.classList.remove('imgNotSelected');
-        imageElement.classList.add('imgSelected');
-        g_selectedImageElem = imageElement;
+        //console.log('selectSlideById imageElement ', imageElement);
 
-        /* Scroll and center to the selected image */
-        if (scroll == true) {
-            centerInSlider(imageElement, slider);
+        const index = g_slick.findIndexBySrc(imageElement.src);
+        if (index != -1) {
+            g_slick.slickGoTo(index, false);
         }
-
-        //  remove prefix "slider-"
-        let postid = imageElement.id.substring(7);
-        displayPostDescription(postid);
-
     }
-    // else {
-    //     console.log('selectSliderImageBySrc NOT FOUND');
-    // }
-};
-
-var selectSliderImageByElem =  function(imageElement, scroll) {
-    // console.log('selectSliderImageByElem IN', imageElement);
-    const slider = document.getElementById('imageSlider');
-
-    /* Remove classname from previously selected image */
-    //console.log('selectSliderImageByElem current g_selectedImageElem', g_selectedImageElem);
-    if (g_selectedImageElem) {
-        g_selectedImageElem.classList.remove('imgSelected');
-        g_selectedImageElem.classList.add('imgNotSelected');
-    }
-
-    /* Add classname to the selected image */
-    // console.log('selectSliderImageByElem imageElement', imageElement);
-    if (imageElement) {
-        //console.log('slider ', slider);
-        imageElement.classList.remove('imgNotSelected');
-        imageElement.classList.add('imgSelected');
-        g_selectedImageElem = imageElement;
-        //g_selectedImageSrc = g_selectedImageElem.getAttribute('src');
-
-        /* Scroll and center to the selected image */
-        if (scroll == true) {
-            centerInSlider(imageElement, slider);
-        }
-
-        //  remove prefix "slider-"
-        let postid = imageElement.id.substring(7);
-        displayPostDescription(postid);
-
-    }
-    // else {
-    //     console.log('selectSliderImageBySrc NOT FOUND');
-    // }
 };
 
 var displayPostDescription = function(postid) {
@@ -163,51 +51,19 @@ var displayPostDescription = function(postid) {
     }
 };
 
-var centerInSlider = function ( image, slider) {
-    // console.log('centerInSlider IN', image);
-    // console.log('centerInSlider IN', slider.scrollLeft);
-
-    const parent = image.parentElement.parentElement;
-    const currentLeft = slider.scrollLeft;
-    //slider.scrollLeft = parent.offsetLeft - slider.offsetLeft + (parent.clientWidth - slider.offsetWidth) / 2;
-    const newLeft = parent.offsetLeft - slider.offsetLeft + (parent.clientWidth - slider.offsetWidth) / 2;
-    slider.scrollBy({
-        left: newLeft - currentLeft,
-        top: 0,
-        behavior: 'smooth'
-    })
-    // console.log('centerInSlider newLeft', newLeft);
-    // console.log('centerInSlider OUT', slider.scrollLeft);
-
-    // for centering:
-    // iOL + iOW/2 = sOL + sSL + sOW/2
-
-    // console.log('slider.offsetWidth ', slider.offsetWidth);
-    // console.log('slider.offsetLeft ', slider.offsetLeft);
-    // console.log('slider.scrollLeft ', slider.scrollLeft);
-    // console.log('element.offsetWidth ', element.offsetWidth);
-    // console.log('element.offsetLeft ', element.offsetLeft);
-};
-
+// brief: show map image when wlick on slide target
 var processClickOnTarget = function(elem) {
-    // console.log('processClickOnTarget elem', elem);
+    //console.log('processClickOnTarget elem', elem);
     
     const img = elem.parentElement.parentElement.getElementsByTagName("img")[0];
+    //console.log('processClickOnTarget img', img);
 
-    const imageSrc = img.getAttribute('src');
-    g_selectedImageSrc = imageSrc; //  used
+    //const imageSrc = img.getAttribute('id');
+    g_selectedImageSrc = img.getAttribute('src'); //  used to focus on clustered image in the map
     //console.log('processClickOnTarget imageSrc = '+imageSrc);
-    selectSliderImageByElem(img, false);
-    animateMarkerByImage(img);
+    //selectSliderImageByElem(img, false);
+    animateMarkerById(img.getAttribute('id'));
 };
-
-var processClickOnText = function( elem) {
-    // console.log('processClickOnText click elem', elem);
-    const img = elem.parentElement?.parentElement?.getElementsByTagName("img")[0];
-    if (img){
-        selectSliderImageByElem(img, false);
-    }
-}
 
 // click on ban, admin feature to ban a plublic image
 var processClickOnBan = function( elem) {
@@ -255,38 +111,40 @@ var processClickOnBan = function( elem) {
     }
 }
 
-var animateMarkerByImage = function(img) {
+// animate the maker in the map
+var animateMarkerById = function(id) {
 
-    // console.log('animateMarkerByImage IN', g_selectedImageSrc);
-    //console.log('animateMarkerByImage g_markers', g_markers);
-    let imageSrc= img.getAttribute('src');
+    //console.log('animateMarkerById IN', g_selectedImageSrc);
+    //console.log('animateMarkerById g_markers', g_markers);
+    //console.log('animateMarkerById id', id);
+    //let imageSrc= img.getAttribute('src');
 
     // animate the marker on the map
     let layers = g_markers.getLayers();
-    //console.log( 'animateMarkerByImage layers', layers);
+    //console.log( 'animateMarkerById layers', layers);
     for (let i in layers) {
         let layer = layers[i];
-        //console.log( 'animateMarkerByImage loop on layers', {i, layer});
-        let has = g_markers.hasLayer(layer);
-        //console.log( 'animateMarkerByImage hasLayer', has);
-        let iconUrl = layer?.options?.icon?.options?.iconUrl;
-        //console.log( 'iconUrl', layer.options.icon.options.iconUrl);
-        if (iconUrl != null && iconUrl == imageSrc) {
-            // console.log( `animateMarkerByImage FFOOUUNNDD layer`, layer);
-            // console.log( `animateMarkerByImage iconUrl`, layer.options.icon.options.iconUrl);
-            // console.log( `animateMarkerByImage options`, layer.options);
-            //console.log( `animateMarkerByImage iconUrl FOUND`);
+        //console.log( 'animateMarkerById loop on layers', {i, layer});
+        //let has = g_markers.hasLayer(layer);
+        //console.log( 'animateMarkerById hasLayer', has);
+        //let iconUrl = layer?.options?.icon?.options?.iconUrl;
+        let data = layer?.options?.icon?.options?.data;
+        //console.log( 'animateMarkerById data', data);
+        if (data != null && data == id) {
+            // console.log( `animateMarkerById FFOOUUNNDD layer`, layer);
+            // console.log( `animateMarkerById iconUrl`, layer.options.icon.options.iconUrl);
+            // console.log( `animateMarkerById options`, layer.options);
+            //console.log( `animateMarkerById iconUrl FOUND`);
             if (layer._icon != null) {
 
-                layer._icon.style.width="100px";
-                layer._icon.style.height="100px";
+                layer._icon.style.width="70px";
+                layer._icon.style.height="70px";
                 layer._icon.style.zIndex += 1000;
-                // console.log( 'animateMarkerByImage layer._icon FOUND for iconUrl');
-                //g_selectedImageSrc = null;
+                // console.log( 'animateMarkerById layer._icon FOUND for iconUrl');
                 setTimeout(function(){
                     // come back to normal size after timeout
-                    layer._icon.style.width="60px";
-                    layer._icon.style.height="60px";
+                    layer._icon.style.width="50px";
+                    layer._icon.style.height="50px";
                     layer._icon.style.zIndex -= 1000;
                     }, 400);
             }
@@ -301,41 +159,31 @@ var animateMarkerByImage = function(img) {
                         //console.log('position', position);
                         g_map.setView(new L.latLng(position));
                     }
-                    //console.log('animateMarkerByImage YYYYYYYYYYYYYYYYYYYYYYY  _childCount',visibleOne._childCount);
-                    //console.log('animateMarkerByImage THIS IS A MARKER visibleone', visibleOne);
-                    //g_selectedImageSrc = null;
-                    //console.log( 'animateMarkerByImage visibleOne FOUND BBBBBBBBBBBBBBBBBB');
                     
                     // leads to call iconCreateFunction for cluster
                     // iconCreateFunction set g_selectedImageSrc=null
                     visibleOne.refreshIconOptions({
-                        iconSize:     [60, 60],
+                        iconSize:     [50, 50],
                     }, true);
                 }
             }
-            // else {
-            //     // TODO display "dezoom to show the image on the map"
-            //     //console.log( `parent not visible`);
-            // }
         }
     }
     g_selectedImageSrc = null;
-    // console.log('animateMarkerByImage break OUT', g_selectedImageSrc);
+    // console.log('animateMarkerById break OUT', g_selectedImageSrc);
 };
-
-
 
 (function( $ ) {
 	'use strict';	
 	//$(document).ready(function(){     
-    g_selectedImageElem = null;
     g_selectedImageSrc = null; /*image clicked in the slider */
 
     g_markers = L.markerClusterGroup({
         zoomToBoundsOnClick: true,
         iconCreateFunction: function(cluster) {
             // Called on zoom end and move end
-            // console.log('iconCreateFunction IN ');
+            // Called when clicking on cluster image
+            //console.log('iconCreateFunction IN ');
             //console.log('iconCreateFunction getChildCount', cluster.getChildCount());
 
             var children = cluster.getAllChildMarkers()[0];
@@ -350,22 +198,24 @@ var animateMarkerByImage = function(img) {
             else {
                 iicoon.options.className = 'mydivmarker9';    
             }
-            //console.log( 'g_selectedImageSrc', g_selectedImageSrc);
+            
             if (g_selectedImageSrc != null) {
-                iicoon.options.iconSize = [100,100];
+                //console.log( 'g_selectedImageSrc', g_selectedImageSrc);
+                iicoon.options.iconSize = [70,70];
                 iicoon.options.iconUrl = g_selectedImageSrc;
                 g_selectedImageSrc = null;
                 
                 setTimeout(function(){
                     cluster.refreshIconOptions({
                         //shadowUrl: 'leaf-shadow.png',
-                        iconSize:     [60, 60],
+                        iconSize:     [50, 50],
                     }, true); 
                 }, 400);                        
             }
 
             return iicoon;
         },
+        polygonOptions: {color: 'transparent'},
         //spiderfyOnMaxZoom: false, 
         //showCoverageOnHover: true
         //zoomToBoundsOnClick: false 
@@ -380,92 +230,24 @@ var animateMarkerByImage = function(img) {
 
     /* when clicked on marker */
     g_markers.on('click', function (a) {
-        // console.log('click marker ', a.layer.options.icon.options.iconUrl);
-        selectSliderImageBySrc(a.layer.options.icon.options.iconUrl, true); 
-        let visibleOne = g_markers.getVisibleParent(a.layer);
+        //console.log('click icon ', a.layer.options.icon);
+        //selectSlideById(a.layer.options.icon.options.iconUrl, true);
+        selectSlideById(a.layer.options.icon.options.data, true);
+        //let visibleOne = g_markers.getVisibleParent(a.layer);
         // console.log('click visibleOne', visibleOne);
     });
 
     g_markers.on('clusterclick', function (a) {
+        //console.log('clusterclick ', a);
         /* a.layer is actually a cluster
-        console.log('clusterclick ', a);
         console.log('L ', L); */
         let visibleOne = g_markers.getVisibleParent(a.layer);
         visibleOne.refreshIconOptions({
-                    iconSize:     [100, 100],
+                    iconSize:     [70, 70],
                 }, true);
         g_markers.refreshClusters();
         /*g_markers.refreshClusters(visibleOne);*/
     });            
-
-    // Process when user click on step-forward or step-backward
-    // and when user click on angle-double-right or angle-double-left
-    $(document).find('.show-gallery-option').on('click', function(e){
-        //console.log("show-gallery-option click", e);
-        e.preventDefault();
-        const slider = document.getElementById('imageSlider');
-        
-        // if no image in the slider
-        if (slider.childElementCount == 0) {
-            g_selectedImageElem = null;
-            g_selectedImageSrc = null;
-            displayPostDescription(null);
-            return;
-        }
-
-        //console.log("show-gallery-option imageSlider", slider);
-        let selected = false;
-        //console.log("show-gallery-option IN g_selectedImageElem", g_selectedImageElem);
-        // if selection exists
-        if (g_selectedImageElem) {
-            setSliderPhotoCss(g_selectedImageElem, 'imgNotSelected');
-
-            if (e.target.classList.contains("fa-step-forward") || e.target.classList.contains("fa-angle-double-right")) {
-                // find the following image
-                const nextSibling = g_selectedImageElem?.parentElement?.parentElement?.nextElementSibling;
-                if (nextSibling){
-                    g_selectedImageElem = nextSibling.getElementsByTagName("img")[0];
-                }
-                else {
-                    // go to the first image
-                    g_selectedImageElem = slider.querySelectorAll('img')[0];
-                }
-                selected = true;
-            }
-            else if (e.target.classList.contains("fa-step-backward") || e.target.classList.contains("fa-angle-double-left")) {
-                const previousSibling = g_selectedImageElem?.parentElement?.parentElement?.previousElementSibling;
-                // find the following image
-                if (previousSibling){
-                    g_selectedImageElem = previousSibling.getElementsByTagName("img")[0];
-                }
-                else {
-                    const all = slider.querySelectorAll('img');
-                    g_selectedImageElem = slider.querySelectorAll('img')[all.length-1];
-                }
-                selected = true;
-            }
-        }
-        else {
-            //console.log("show-gallery-option nothing selected");
-            //console.log("show-gallery-option slider", slider);
-            g_selectedImageElem = slider.querySelectorAll('img')[0];
-            selected = true;
-        }
-
-        if (selected) {
-            selectSliderImageByElem(g_selectedImageElem, true);
-            if (e.target.classList.contains("fa-step-forward") || e.target.classList.contains("fa-step-backward")) {
-                g_selectedImageSrc = g_selectedImageElem.getAttribute('src');
-                animateMarkerByImage(g_selectedImageElem);
-            }
-        }
-        else {
-            displayPostDescription(null);
-        }
-
-        // console.log("show-gallery-option OUT g_selectedImage", {g_selectedImageElem, g_selectedImageSrc});
-
-    });
 
     let searchElem = document.getElementById("searchInput");
     if (searchElem) {
@@ -519,6 +301,223 @@ var animateMarkerByImage = function(img) {
         }
     }
 
+    window.findSlideSrc = function(slide) {
+        // use JQuery
+        var elem = $(slide);
+    
+        // Trouver l'élément img unique parmi tous les descendants
+        var imgElements = elem.find('img');
+    
+        // Vérifier s'il y a un seul élément img
+        if (imgElements.length === 1) {
+            // console.log("findSlideSrc return", imgElements.first().attr('src'));
+            return imgElements.first().attr('src'); // Retourner le seul élément img
+        } else {
+            return null; // Retourner null s'il n'y a pas exactement un seul élément img
+        }
+    }
+
+    window.displaySlideDescription = function() {
+        //console.log("displaySlideDescription g_slick", g_slick);
+        const elem = g_slick.getCurrentElem().get(0);
+        //console.log("displaySlideDescription elem", elem);
+        const img = elem.getElementsByTagName("img")[0];
+        //console.log("afterChange img", img);
+        if (img){
+            let postid = img.id.substring(7);    
+            // hide all descriptions
+            let alldescs = document.querySelectorAll('.desc-display');
+            for (let i = 0; i < alldescs.length; i++) {
+                alldescs[i].style.display = "none";
+                //$(alldescs[i]).fadeOut();
+            }
+    
+            // find description
+            if (postid != null) {
+                const descid = "desc-"+postid;
+                var descr = document.getElementById(descid);
+                // console.log('descid ', descid);
+                if (descr) {
+                    $(descr).fadeIn();
+                    //descr.style.display='block';
+                }
+            }
+        }
+    };
+
+    // update planet slider from given data structure response
+    window.updatePlanetSlider = function(datas) {
+        //console.log("updatePlanetSlider IN", datas);
+        //console.log("updatePlanetSlider close g_lightbox", g_lightbox);
+        // close the lightbox if opened
+        //g_lightbox.close();
+        let ban = document.getElementById('pg_ban').value;
+        
+        const slider = document.getElementById('imageSlider');
+        const descr = document.getElementById('imageDescr');
+        slider.innerHTML="";
+        descr.innerHTML="";
+
+        if (g_slick !== undefined) {
+            //console.log("updatePlanetSlider destroy", g_slick);
+            g_slick.destroy();
+            g_slick = undefined;
+            $('.slider').empty();
+            //slider.innerHTML='';
+        }
+        //console.log("updatePlanetSlider descr avant", descr);
+        //g_lightbox.destroy();
+        //let newHtml="";
+        if (datas) {
+            let num=0;
+            datas.forEach(function(image) {
+                //console.log("updatePlanetSlider image", image);                
+                let sliderHtml = "<div class='slide slider-item'>";
+                sliderHtml +=       "<div class='slider-lb' data-full='"+image.url_full+"'>";
+                sliderHtml +=           "<img src='"+image.url_medium+"' id='slider-"+image.id+"' class='imgNotSelected'>";
+                sliderHtml +=           "<div class='slider-descr'>";
+                
+                // description of the photo INSIDE the lightbox
+                if (image.content != "") {
+                    sliderHtml +=           "<div class='desc-lightbox-title'>"+image.content+"</div>";
+                }
+                if (image.address != "") {
+                    sliderHtml +=           "<div class='desc-lightbox-address'><i class='fas fa-map-marker-alt pg-tab'></i>"+image.address+"</div>";
+                }
+                if (image.user != "") {
+                    if (image.user_url != "") {
+                        let domain= new URL(image.user_url).origin
+                        sliderHtml +=       "<div class='desc-lightbox-user'>";
+                        sliderHtml +=           "<div class='desc-lightbox-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b>, <a style='color: white;' href='"+image.user_url+"'>"+domain+"</a></div>";
+                        //sliderHtml +=           "<div class='desc-lightbox-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b>, "+image.date+"</div>";
+                        sliderHtml +=           "<div class='desc-lightbox-address'>"+image.date+"</div>";
+                        //sliderHtml +=           "<div class='desc-lightbox-address'><i class='fas fa-globe pg-tab'></i><a style='color: white;' href='"+image.user_url+"'>"+domain+"</a></div>";
+                        sliderHtml +=       "</div>";
+                    }
+                    else {
+                        sliderHtml +=       "<div class='desc-lightbox-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b>, "+image.date+"</div>";
+                    }
+                }
+                else {
+                    sliderHtml +=           "<div class='desc-lightbox-address'>"+image.date+"</div>";
+                }
+                sliderHtml +=           "</div>";
+
+                // Add overlay buttons
+                sliderHtml +=       "</div>";
+                sliderHtml +=       "<div class='slider-overlay-circle'>";
+                sliderHtml +=           "<i class='far fa-dot-circle slider-icon' data-num='"+num+"'></i>";
+                sliderHtml +=       "</div>";
+                sliderHtml +=       "<div class='slider-overlay-expand'>";
+                sliderHtml +=           "<i class='fas fa-expand slider-icon' data-num='"+num+"'></i>";
+                sliderHtml +=       "</div>";
+                if (ban) {
+                    sliderHtml +=   "<div class='slider-overlay-ban'>";
+                    sliderHtml +=       "<i class='fas fa-ban slider-icon' data-num='"+num+"'></i>";
+                    sliderHtml +=   "</div>";
+                }
+    
+                sliderHtml +=    "</div>";
+                
+                num = num + 1;            
+    
+                slider.innerHTML += sliderHtml;
+    
+                // description of the photo below the slider
+                let descrHtml = "<div id='desc-"+image.id+"' class='desc-slider desc-display'>";
+                if (image.content != "") {
+                    descrHtml +="<div class='desc-slider-title'>"+image.content+"</div>";
+                }
+                if (image.address != "") {
+                    descrHtml +="<div class='desc-slider-address'><i class='fas fa-map-marker-alt pg-tab'></i>"+image.address+"</div>";
+                }
+                if (image.user != "") {
+                    if (image.user_url != "") {
+                        let domain= new URL(image.user_url).origin
+                        descrHtml +=       "<div class='desc-slider-user'>";
+                        descrHtml +=           "<div class='desc-slider-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b>, <a href='"+image.user_url+"'>"+domain+"</a></div>";
+                        //sliderHtml +=           "<div class='desc-slider-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b>, "+image.date+"</div>";
+                        descrHtml +=           "<div class='desc-slider-address'>"+image.date+"</div>";
+                        //sliderHtml +=           "<div class='desc-slider-address'><i class='fas fa-globe pg-tab'></i><a style='color: white;' href='"+image.user_url+"'>"+domain+"</a></div>";
+                        descrHtml +=       "</div>";
+                    }
+                    else {
+                        descrHtml +=       "<div class='desc-slider-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b>, "+image.date+"</div>";
+                    }
+                }
+                else {
+                    descrHtml +=           "<div class='desc-slider-address'>"+image.date+"</div>";
+                }
+
+                descrHtml +="</div>";            
+    
+                descr.innerHTML += descrHtml;
+            
+            }); // end foreach
+ 
+            if (num > 0) {
+
+                // create slider
+                $('.slider').slick({
+                    infinite: true,
+                    centerMode: true,
+                    // for slide-active class
+                    // value muste be less than nb of slides
+                    //slidesToShow: num-1, 
+                    slidesToScroll: 1,
+                    variableWidth: true,
+                    //centerPadding: '40px',
+                    swipeToSlide: true,
+                });
+                g_slick = $('.slider').slick('getSlick');
+
+                // display description of first slide
+                window.displaySlideDescription();
+                
+                $('.slider').on('afterChange', function(event, slick, currentSlide){
+                    //console.log("afterChange target", event.target);
+                    //console.log("afterChange currentSlide", currentSlide);
+
+                    window.displaySlideDescription();
+                                    
+                });
+            }
+    
+            //console.log("updatePlanetSlider descr après", descr);
+            const div_targets = slider.querySelectorAll('.slider-overlay-circle');
+            div_targets.forEach(el => el.addEventListener('click', event => {
+                processClickOnTarget(event.target);
+                event.preventDefault();
+            }));
+    
+            const div_expand = slider.querySelectorAll('.slider-overlay-expand');
+            div_expand.forEach(el => el.addEventListener('click', event => {
+
+                const slide = event.target.parentElement.parentElement;
+
+                //console.log("expand slide", slide);
+                const src = window.findSlideSrc(slide);
+                if (src) {
+                    g_lightbox.openSrc(src);
+                }
+            }));
+    
+            if (ban) {
+                const div_ban = slider.querySelectorAll('.slider-overlay-ban');
+                div_ban.forEach(el => el.addEventListener('click', event => {
+                    processClickOnBan(event.target);
+                    event.preventDefault();
+                }));
+            }
+    
+            g_lightbox.refresh();
+        }
+        else {
+            // no data --> empty area
+            slider.innerHTML = "<div style='height:250px;'>";
+        }
+    }
+
 })( jQuery );
 
 function getImagesFromBB(ne_lat, ne_lng, sw_lat, sw_lng, zoom) {
@@ -545,8 +544,7 @@ function getImagesFromBB(ne_lat, ne_lng, sw_lat, sw_lng, zoom) {
         processData: false,
         success: function(response){
             // console.log("success", response);
-            updatePlanetSlider(response.data);
-            
+            window.updatePlanetSlider(response.data);
 
         },
         error: function(response) {
@@ -554,123 +552,4 @@ function getImagesFromBB(ne_lat, ne_lng, sw_lat, sw_lng, zoom) {
         }
     });
 }
-
-function updatePlanetSlider(datas) {
-    //console.log("updatePlanetSlider IN", datas);
-    //console.log("updatePlanetSlider close g_lightbox", g_lightbox);
-    // close the lightbox if opened
-    //g_lightbox.close();
-    let ban = document.getElementById('pg_ban').value;
-
-    
-    const slider = document.getElementById('imageSlider');
-    const descr = document.getElementById('imageDescr');
-    slider.innerHTML="";
-    descr.innerHTML="";
-        //console.log("updatePlanetSlider descr avant", descr);
-    //g_lightbox.destroy();
-    //let newHtml="";
-    if (datas) {
-        let num=0;
-        datas.forEach(function(image) {
-            //console.log("updatePlanetSlider image", image);
-
-            
-            let sliderHtml = "<div class='slider-item'>";
-            sliderHtml +=       "<div class='slider-lb' data-full='"+image.url_full+"'>";
-            sliderHtml +=           "<img src='"+image.url_medium+"' id='slider-"+image.id+"' class='imgNotSelected'>";
-            sliderHtml +=           "<div class='slider-descr'>";
-            
-            // description of the photo INSIDE the lightbox
-            if (image.content != "") {
-                sliderHtml +=           "<div class='desc-lightbox-title'>"+image.content+"</div>";
-            }
-            if (image.address != "") {
-                sliderHtml +=           "<div class='desc-lightbox-address'><i class='fas fa-map-marker-alt pg-tab'></i>"+image.address+"</div>";
-            }
-            if (image.user != "") {
-                if (image.user_url != "") {
-                    let domain= new URL(image.user_url).origin
-                    sliderHtml +=       "<div class='desc-lightbox-user'>";
-                    sliderHtml +=           "<div class='desc-lightbox-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b>, <a style='color: white;' href='"+image.user_url+"'>"+domain+"</a></div>";
-                    //sliderHtml +=           "<div class='desc-lightbox-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b>, "+image.date+"</div>";
-                    sliderHtml +=           "<div class='desc-lightbox-address'>"+image.date+"</div>";
-                    //sliderHtml +=           "<div class='desc-lightbox-address'><i class='fas fa-globe pg-tab'></i><a style='color: white;' href='"+image.user_url+"'>"+domain+"</a></div>";
-                    sliderHtml +=       "</div>";
-                }
-                else {
-                    sliderHtml +=       "<div class='desc-lightbox-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b>, "+image.date+"</div>";
-                }
-            }
-            else {
-                sliderHtml +=           "<div class='desc-lightbox-address'>"+image.date+"</div>";
-            }
-            sliderHtml +=           "</div>";
-            sliderHtml +=       "</div>";
-            sliderHtml +=       "<div class='slider-overlay-circle'>";
-            sliderHtml +=           "<i class='far fa-dot-circle slider-icon' data-num='"+num+"'></i>";
-            sliderHtml +=       "</div>";
-            sliderHtml +=       "<div class='slider-overlay-text'>";
-            sliderHtml +=           "<i class='fas fa-align-center slider-icon' data-num='"+num+"'></i>";
-            sliderHtml +=       "</div>";
-            if (ban) {
-                sliderHtml +=   "<div class='slider-overlay-ban'>";
-                sliderHtml +=       "<i class='fas fa-ban slider-icon' data-num='"+num+"'></i>";
-                sliderHtml +=   "</div>";
-            }
-
-            sliderHtml +=    "</div>";
-            
-            num = num + 1;            
-
-            slider.innerHTML += sliderHtml;
-
-            let descrHtml = "<div id='desc-"+image.id+"' class='desc-slider desc-display'>";
-            if (image.content != "") {
-                descrHtml +="<div class='desc-slider-title'>"+image.content+"</div>";
-            }
-            if (image.address != "") {
-                descrHtml +="<div class='desc-slider-address'><i class='fas fa-map-marker-alt'></i> "+image.address+"</div>";
-            }
-            descrHtml +="</div>";            
-
-            descr.innerHTML += descrHtml;
-        });
-
-        //console.log("updatePlanetSlider descr après", descr);
-        const div_targets = slider.querySelectorAll('.slider-overlay-circle');
-        div_targets.forEach(el => el.addEventListener('click', event => {
-            processClickOnTarget(event.target);
-            event.preventDefault();
-        }));
-
-        const div_texts = slider.querySelectorAll('.slider-overlay-text');
-        div_texts.forEach(el => el.addEventListener('click', event => {
-            processClickOnText(event.target);
-            event.preventDefault();
-        }));
-
-        if (ban) {
-            const div_ban = slider.querySelectorAll('.slider-overlay-ban');
-            div_ban.forEach(el => el.addEventListener('click', event => {
-                processClickOnBan(event.target);
-                event.preventDefault();
-            }));
-        }
-
-        g_lightbox.refresh();
-    
-    }
-
-}
-
-// Function to create image elements
-function createImageElement(url) {
-    //console.log("createImageElement IN", url);
-    const img = document.createElement('img');
-    img.src = url;
-    img.classList.add('ImgNotSelected');
-    return img;
-}
-
 
