@@ -739,7 +739,7 @@
             default:
                 return;
         }
-
+        
     };
 
     Slick.prototype.checkNavigable = function(index) {
@@ -1279,6 +1279,12 @@
 
         return this;
 
+    };
+
+    Slick.prototype.getSlideSize = function() {
+
+        var _ = this;
+        return _.slideCount;
     };
 
     Slick.prototype.getSlideCount = function() {
@@ -2485,7 +2491,7 @@
             _.options.centerMode = false;
         }
 
-        if (_.options.infinite === true && _.options.fade === false) {
+                if (_.options.infinite === true && _.options.fade === false) {
 
             slideIndex = null;
 
@@ -2496,17 +2502,17 @@
                 } else {
                     infiniteCount = _.options.slidesToShow;
                 }
-
+                
                 for (i = _.slideCount; i > (_.slideCount -
                         infiniteCount); i -= 1) {
                     slideIndex = i - 1;
-                    $(_.$slides[slideIndex]).clone(true).attr('id', '')
+                                        $(_.$slides[slideIndex]).clone(true).attr('id', '')
                         .attr('data-slick-index', slideIndex - _.slideCount)
                         .prependTo(_.$slideTrack).addClass('slick-cloned');
                 }
                 for (i = 0; i < infiniteCount  + _.slideCount; i += 1) {
                     slideIndex = i;
-                    $(_.$slides[slideIndex]).clone(true).attr('id', '')
+                                        $(_.$slides[slideIndex]).clone(true).attr('id', '')
                         .attr('data-slick-index', slideIndex + _.slideCount)
                         .appendTo(_.$slideTrack).addClass('slick-cloned');
                 }
@@ -2573,7 +2579,7 @@
         if (sync === false) {
             _.asNavFor(index);
         }
-
+        
         targetSlide = index;
         targetLeft = _.getLeft(targetSlide);
         slideLeft = _.getLeft(_.currentSlide);
@@ -2609,7 +2615,7 @@
         if ( _.options.autoplay ) {
             clearInterval(_.autoPlayTimer);
         }
-
+        
         if (targetSlide < 0) {
             if (_.slideCount % _.options.slidesToScroll !== 0) {
                 animSlide = _.slideCount - (_.slideCount % _.options.slidesToScroll);
@@ -2625,7 +2631,7 @@
         } else {
             animSlide = targetSlide;
         }
-
+        
         _.animating = true;
 
         _.$slider.trigger('beforeChange', [_, _.currentSlide, animSlide]);
@@ -2645,7 +2651,7 @@
             }
 
         }
-
+        
         _.updateDots();
         _.updateArrows();
 
@@ -2664,7 +2670,7 @@
             _.animateHeight();
             return;
         }
-
+        
         if (dontAnimate !== true && _.slideCount > _.options.slidesToShow) {
             _.animateSlide(targetLeft, function() {
                 _.postSlide(animSlide);
@@ -2672,7 +2678,7 @@
         } else {
             _.postSlide(animSlide);
         }
-
+        
     };
 
     Slick.prototype.startLoad = function() {

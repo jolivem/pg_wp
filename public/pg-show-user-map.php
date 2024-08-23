@@ -299,7 +299,7 @@ class Pg_Show_User_Map_Public {
                             $maxlng = max($maxlng, $longitude);
                             //error_log("minlat=".$minlat.", maxlat=".$maxlat.",minlng=".$minlng.", maxlng=".$maxlng);
         
-                            $map_js .= "icon = new g_LeafIcon({iconUrl: '". $img_src ."'});";
+                            $map_js .= "icon = new g_LeafIcon({iconUrl: '". $img_src ."', data: 'slider-". $id ."'});";
                             $map_js .= "g_markers.addLayer(L.marker([".strval($latitude).", ".strval($longitude)."], {icon: icon}));";
                         }
                     }
@@ -342,8 +342,13 @@ class Pg_Show_User_Map_Public {
                 });
                 g_slick = $('.slider').slick('getSlick');
                 window.displaySlideDescription();
-                $('.slider').on('afterChange', function(event, slick, currentSlide){
+                $('.slider').on('afterChange', function(event, slick, direction){
                     window.displaySlideDescription();
+                });
+                $('.slider').on('beforeChange', function(event, slick, currentSlide, nextSlide){
+                    if (currentSlide != nextSlide) {
+                        window.hideSlideDescription();
+                    }
                 });
 
                 const slider = document.getElementById('imageSlider');
@@ -366,8 +371,6 @@ class Pg_Show_User_Map_Public {
                         g_lightbox.openSrc(src);
                     }
                 }));
-
-
             })
         })(jQuery);
         </script>";

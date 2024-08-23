@@ -4,9 +4,8 @@ var g_lightbox;
 var g_markers;
 var g_LeafIcon = L.Icon.extend({
     options: {
-        iconSize:     [50, 50],
-        shadowSize:   [50, 64],
-        shadowAnchor: [4, 62],
+        iconSize:     [45, 45],
+        shadowAnchor: [4, 47],
         popupAnchor:  [-3, -76],
         className: 'mydivicon'
     }
@@ -60,7 +59,7 @@ var processClickOnTarget = function(elem) {
 
     //const imageSrc = img.getAttribute('id');
     g_selectedImageSrc = img.getAttribute('src'); //  used to focus on clustered image in the map
-    //console.log('processClickOnTarget imageSrc = '+imageSrc);
+    //console.log('processClickOnTarget imageSrc = '+g_selectedImageSrc);
     //selectSliderImageByElem(img, false);
     animateMarkerById(img.getAttribute('id'));
 };
@@ -126,7 +125,7 @@ var animateMarkerById = function(id) {
         let layer = layers[i];
         //console.log( 'animateMarkerById loop on layers', {i, layer});
         //let has = g_markers.hasLayer(layer);
-        //console.log( 'animateMarkerById hasLayer', has);
+        //console.log( 'animateMarkerById options', layer?.options?.icon?.options);
         //let iconUrl = layer?.options?.icon?.options?.iconUrl;
         let data = layer?.options?.icon?.options?.data;
         //console.log( 'animateMarkerById data', data);
@@ -137,16 +136,16 @@ var animateMarkerById = function(id) {
             //console.log( `animateMarkerById iconUrl FOUND`);
             if (layer._icon != null) {
 
-                layer._icon.style.width="70px";
-                layer._icon.style.height="70px";
+                layer._icon.style.width="60px";
+                layer._icon.style.height="60px";
                 layer._icon.style.zIndex += 1000;
-                // console.log( 'animateMarkerById layer._icon FOUND for iconUrl');
+                console.log( 'animateMarkerById layer._icon FOUND for iconUrl');
                 setTimeout(function(){
                     // come back to normal size after timeout
-                    layer._icon.style.width="50px";
-                    layer._icon.style.height="50px";
+                    layer._icon.style.width="45px";
+                    layer._icon.style.height="45px";
                     layer._icon.style.zIndex -= 1000;
-                    }, 400);
+                }, 400);
             }
             else {
                 let visibleOne = g_markers.getVisibleParent(layer);
@@ -163,7 +162,7 @@ var animateMarkerById = function(id) {
                     // leads to call iconCreateFunction for cluster
                     // iconCreateFunction set g_selectedImageSrc=null
                     visibleOne.refreshIconOptions({
-                        iconSize:     [50, 50],
+                        iconSize:     [45, 45],
                     }, true);
                 }
             }
@@ -192,12 +191,12 @@ var animateMarkerById = function(id) {
             var iicoon = new L.Icon(children.options.icon.options);
             //console.log('iicoon', iicoon);
             var count = cluster.getChildCount();
-            if (count < 6) {
-                iicoon.options.className = 'mydivmarker6';    
-            }
-            else {
-                iicoon.options.className = 'mydivmarker9';    
-            }
+            // if (count < 6) {
+            iicoon.options.className = 'mydivmarker';
+            // }
+            // else {
+            //    iicoon.options.className = 'mydivmarker9';    
+            //}
             
             if (g_selectedImageSrc != null) {
                 //console.log( 'g_selectedImageSrc', g_selectedImageSrc);
@@ -208,7 +207,7 @@ var animateMarkerById = function(id) {
                 setTimeout(function(){
                     cluster.refreshIconOptions({
                         //shadowUrl: 'leaf-shadow.png',
-                        iconSize:     [50, 50],
+                        iconSize:     [45, 45],
                     }, true); 
                 }, 400);                        
             }
@@ -317,6 +316,18 @@ var animateMarkerById = function(id) {
         }
     }
 
+    window.hideSlideDescription = function() {
+        // hide all descriptions
+        let alldescs = document.querySelectorAll('.desc-display');
+        for (let i = 0; i < alldescs.length; i++) {
+            if (alldescs[i].style.display != "none") {
+                $(alldescs[i]).fadeOut(100);
+            }
+            //$(alldescs[i]).fadeOut();
+        }
+    
+    };
+
     window.displaySlideDescription = function() {
         //console.log("displaySlideDescription g_slick", g_slick);
         const elem = g_slick.getCurrentElem().get(0);
@@ -325,12 +336,6 @@ var animateMarkerById = function(id) {
         //console.log("afterChange img", img);
         if (img){
             let postid = img.id.substring(7);    
-            // hide all descriptions
-            let alldescs = document.querySelectorAll('.desc-display');
-            for (let i = 0; i < alldescs.length; i++) {
-                alldescs[i].style.display = "none";
-                //$(alldescs[i]).fadeOut();
-            }
     
             // find description
             if (postid != null) {
@@ -459,7 +464,7 @@ var animateMarkerById = function(id) {
 
                 // create slider
                 $('.slider').slick({
-                    infinite: true,
+                    infinite: false,
                     centerMode: true,
                     // for slide-active class
                     // value muste be less than nb of slides
@@ -470,16 +475,33 @@ var animateMarkerById = function(id) {
                     swipeToSlide: true,
                 });
                 g_slick = $('.slider').slick('getSlick');
+                let size = g_slick.getSlideSize();
+                //console.log("SLIDE COUNT", size);
+                g_slick.slickGoTo( size/2);
+                if (size > 10) {
+                    g_slick.setOption( "infinite", true, true);
+                }
 
                 // display description of first slide
                 window.displaySlideDescription();
+                // $('.slider').on('swipe', function(event, slick, direction){
+                //     console.log("swipe");
+                // });
                 
-                $('.slider').on('afterChange', function(event, slick, currentSlide){
+                $('.slider').on('afterChange', function(event, slick, direction){
                     //console.log("afterChange target", event.target);
                     //console.log("afterChange currentSlide", currentSlide);
 
                     window.displaySlideDescription();
                                     
+                });
+                $('.slider').on('beforeChange', function(event, slick, currentSlide, nextSlide){
+                    //console.log("beforeChange", {currentSlide, nextSlide});
+                    //console.log("afterChange currentSlide", currentSlide);
+
+                    if (currentSlide != nextSlide) {
+                        window.hideSlideDescription();
+                    }
                 });
             }
     

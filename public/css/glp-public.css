@@ -901,7 +901,7 @@ body {
 
 .desc-slider {
     margin-bottom: 20px;
-    max-width: 600px;
+    /* max-width: 600px; */
     min-width: 50%;
     padding: 5px;
     background-color: #f1f1f1;
@@ -914,6 +914,7 @@ body {
 
 .desc-slider-address {
     font-size: small;
+    text-align: center;
     font-weight: 500;
 }
 
@@ -999,14 +1000,9 @@ body {
     border: 2px solid #fff;
 }
 
-.mydivmarker6 {
+.mydivmarker {
     border-radius: 25%;
     border: 4px solid #fff;
-}
-
-.mydivmarker9 {
-    border-radius: 25%;
-    border: 6px solid #fff;
 }
 
 div.slider img {
@@ -1027,6 +1023,7 @@ div.slider img {
     padding: 4px 8px;
 
 }
+
 /* slide is a slick class */
 div.slider {
     margin: 0px 20px !important;
@@ -1118,7 +1115,8 @@ div.slider {
     #map {
         height: 600px;
     }
+
     .desc-block {
         min-height: 70px;
-    }    
+    }
 }
