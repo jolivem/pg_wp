@@ -578,13 +578,6 @@ button.lg-icon {
     border-radius: 10px;
 }
 
-.flex-container-slider {
-    margin-top: 10px;
-    /*background-color: #f1f1f1;*/
-    border-radius: 10px;
-    height: 160px;
-}
-
 .flex-container-photo {
     margin-top: 10px;
     display: flex;
@@ -844,7 +837,7 @@ button.lg-icon {
 
 .search-place {
     display: flex;
-    padding: 10px 22px;
+    padding: 10px 25px;
 }
 
 .search-place button {
@@ -944,7 +937,7 @@ body {
 
 .pg-container {
     max-width: 800px !important;
-    padding: 12px;
+    padding: 10px 29px;
     background-color: #f1f1f1;
     /* see desc-gallery */
 }
@@ -952,7 +945,6 @@ body {
 .pg-map {
     border: solid #f1f1f1;
     border-radius: 8px;
-    border-width: 0px 22px;
     /*height: 350px;*/
     /* see desc-gallery */
 }
@@ -1025,9 +1017,6 @@ div.slider img {
 }
 
 /* slide is a slick class */
-div.slider {
-    margin: 0px 20px !important;
-}
 
 .slider-item {
     position: relative;
@@ -1106,10 +1095,6 @@ div.slider {
 @media only screen and (min-width: 1200px) {
     .pg-container {
         max-width: 1200px !important;
-    }
-
-    .flex-container-slider {
-        height: 180px;
     }
 
     #map {

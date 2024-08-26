@@ -71,7 +71,7 @@ class Pg_Show_User_Map_Public {
 
         wp_enqueue_style( 'ays_pb_bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css', array(), $this->version, 'all' );
         wp_enqueue_style( 'leaflet', 'https://unpkg.com/leaflet@1.0.3/dist/leaflet.css', array(), $this->version, 'all' );
-        wp_enqueue_style( 'MarkerCluster', '"https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css', array(), $this->version, 'all' );
+        wp_enqueue_style( 'MarkerCluster', 'https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css', array(), $this->version, 'all' );
         wp_enqueue_style( 'gpg-fontawesome', 'https://use.fontawesome.com/releases/v5.4.1/css/all.css', array(), $this->version, 'all');
 
         wp_enqueue_style( $this->plugin_name."-simple-lightbox.css", plugin_dir_url( __FILE__ ) . 'css/simple-lightbox.css', array(), $this->version, 'all' );
@@ -165,10 +165,8 @@ class Pg_Show_User_Map_Public {
             <div class='pg-map'>
                 <div id='map'></div>
             </div>
-            <div class='flex-container-slider'>
-                <div class='gallery-slider slider' id='imageSlider'>
-                    $html_slider 
-                </div>
+            <div id='imageSlider' class='slider' >
+                $html_slider 
             </div>
             <div id='imageDescr' class='desc-block'>$html_descr</div> 
          </div>";

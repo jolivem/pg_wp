@@ -416,7 +416,7 @@ var animateMarkerById = function(id) {
                 sliderHtml +=       "<div class='slider-overlay-expand'>";
                 sliderHtml +=           "<i class='fas fa-expand slider-icon' data-num='"+num+"'></i>";
                 sliderHtml +=       "</div>";
-                if (ban) {
+                if (ban == 1) {
                     sliderHtml +=   "<div class='slider-overlay-ban'>";
                     sliderHtml +=       "<i class='fas fa-ban slider-icon' data-num='"+num+"'></i>";
                     sliderHtml +=   "</div>";
@@ -477,7 +477,7 @@ var animateMarkerById = function(id) {
                 g_slick = $('.slider').slick('getSlick');
                 let size = g_slick.getSlideSize();
                 //console.log("SLIDE COUNT", size);
-                g_slick.slickGoTo( size/2);
+                g_slick.slickGoTo( size/2, true);
                 if (size > 10) {
                     g_slick.setOption( "infinite", true, true);
                 }
@@ -524,7 +524,7 @@ var animateMarkerById = function(id) {
                 }
             }));
     
-            if (ban) {
+            if (ban == 1) {
                 const div_ban = slider.querySelectorAll('.slider-overlay-ban');
                 div_ban.forEach(el => el.addEventListener('click', event => {
                     processClickOnBan(event.target);
