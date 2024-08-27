@@ -570,7 +570,11 @@ button.lg-icon {
 
 /* display user photos */
 
-.flex-container {
+/* see @media below 
+  pdb = photo + description + buttons
+  height for mobiles (<450px)*/
+.pdb-container {
+    height: 90px;
     margin-top: 10px;
     display: flex;
     align-items: stretch;
@@ -597,41 +601,48 @@ button.lg-icon {
     padding: 10px 0;
 }
 
+/* see @media below 
+  pdb = photo + description + buttons
+  flex-basis for mobiles (<450px)*/
 .miniature {
     background-position: center;
     background-size: cover;
     float: left;
     border-radius: 8px 0 0 8px;
-    flex-basis: 110px;
+    flex-basis: 90px;
 }
 
 .miniature1 {
     background-position: center;
     background-size: cover;
     border-radius: 8px 0 0 8px;
-    flex-basis: 100px;
+    flex-basis: 90px;
 }
 
 .miniature2 {
     background-position: right;
     background-size: cover;
     border-left: 1px solid white;
-    flex-basis: 30px;
+    flex-basis: 20px;
 }
 
 .miniature3 {
     background-position: right;
     background-size: cover;
     border-left: 1px solid white;
-    flex-basis: 15px;
+    flex-basis: 10px;
 }
 
 .gallery-text-container,
-.photo-text-container {
-    flex: 10 0 180px;
+.pdb-descr-container {
+    flex: 10 0 60px;
     padding: 5px;
-    height: 104px;
     font-size: small;
+
+    /* description is vertical*/
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .url-text-container {
@@ -648,9 +659,12 @@ button.lg-icon {
     background-color: whitesmoke;
 }
 
+/* see @media below 
+  max-width for mobiles (<450px)*/
 .full-miniature {
-    float: left;
-    max-height: 100px;
+    /*float: left;
+    max-height: 100px;*/
+    max-width: 135px;
     width: auto;
     padding: 4px;
     border-right: solid 1px #888
@@ -664,69 +678,73 @@ button.lg-icon {
     border-right: solid 1px #888
 }
 
-.full-photo-text-container {
+/*.full-photo-text-container {
     padding: 5px;
     flex: 1 10 100px;
     overflow: auto;
     display: flex;
     flex-direction: column;
-}
+}*/
 
 .download-photo-title {
     overflow: visible;
-    height: 40px;
-    line-height: 20px;
+    /*height: 40px;
+    line-height: 20px;*/
 }
 
 .download-photo-text {
-    line-height: 26px;
+    /*line-height: 26px;*/
     text-overflow: ellipsis;
     overflow: hidden;
-    height: 50px;
+    /*height: 50px;*/
 }
 
-.photo-text-date {
-    text-overflow: ellipsis;
+.pdb-descr-footer-flex-1 {
+    /*text-overflow: ellipsis;
     overflow: hidden;
-    height: 16px;
-}
-
-.photo-text-file {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    height: 16px;
+    height: 16px;*/
     flex: 1;
 }
 
-/* page Edit gallery */
-.photo-text-gallery {
-    line-height: 20px;
+.pdb-descr-footer-flex-2 {
     text-overflow: ellipsis;
     overflow: hidden;
-    height: 64px;
+    /*height: 16px;*/
 }
 
-.footer-edit-gallery {
+/* page Edit gallery */
+.pdb-descr-header {
+    /*line-height: 20px;*/
+    text-overflow: ellipsis;
+    overflow: hidden;
+    /*height: 64px;*/
+}
+
+.pdb-descr-word-break {
+    /*line-height: 20px;*/
+    word-wrap: break-word;
+    word-break: break-word;
+    /*height: 64px;*/
+}
+
+.pdb-descr-footer {
     position: relative;
+}
+
+.pdb-descr-footer-flex {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
 }
 
+.user-gallery-btns {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+}
 
 /* page My galleries */
-.user-gallery-title {
-    line-height: 20px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    height: 24px;
-}
-
-.user-gallery-text {
-    line-height: 22px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    height: 48px;
-}
 
 .user-gallery-option {
     cursor: pointer;
@@ -736,15 +754,15 @@ button.lg-icon {
 }
 
 .footer-desc-font {
-    font-size: medium;
+    font-weight: 500;
     color: #666
 }
 
 .desc-font-small {
     font-size: small;
     color: #666;
-    line-height: 16px;
-    ;
+    /*line-height: 16px;*/
+
 }
 
 .options {
@@ -865,7 +883,7 @@ body {
     opacity: 0.6;
 }
 
-.item.dragging :where(.flex-container, i) {
+.item.dragging :where(.pdb-container, i) {
     opacity: 0;
 }
 
@@ -886,7 +904,9 @@ body {
     text-align: center;
 }
 
-.desc-block {
+/* see @media below 
+  this value for mobiles (<450px)*/
+.map-desc-block {
     display: flex;
     justify-content: center;
     min-height: 100px;
@@ -935,17 +955,27 @@ body {
     justify-content: space-between;
 }
 
+/* see @media below 
+  this value for mobiles (<450px)*/
 .pg-container {
-    max-width: 800px !important;
+    /*max-width: 800px !important;*/
+    padding: 10px;
+    background-color: #f1f1f1;
+    /* see desc-gallery */
+}
+
+/* see @media below 
+  this value for mobiles (<450px)*/
+.pg-map-container {
+    /*max-width: 800px !important;*/
     padding: 10px 29px;
     background-color: #f1f1f1;
     /* see desc-gallery */
 }
 
 .pg-map {
-    border: solid #f1f1f1;
-    border-radius: 8px;
-    /*height: 350px;*/
+    border: solid 2px lightgrey;
+    border-radius: 3px;
     /* see desc-gallery */
 }
 
@@ -1086,14 +1116,34 @@ div.slider img {
     display: none;
 }
 
+/* see @media below 
+  this value for mobiles (<450px)*/
 #map {
     height: 350px;
 }
 
+.flex-space-between {
+    display: flex;
+    justify-content: space-between;
+}
 
-/* Extra large devices (large laptops and desktops, 1200px and up) */
-@media only screen and (min-width: 1200px) {
+/* default is for small devices < 400px
+
+/* Medium devices */
+@media only screen and (min-width: 450px) {
+
+    /* container for photo + descr + buttons */
+    .pdb-container {
+        /* see miniature */
+        height: 110px;
+
+    }
+
     .pg-container {
+        max-width: 1200px !important;
+    }
+
+    .pg-map-container {
         max-width: 1200px !important;
     }
 
@@ -1101,7 +1151,46 @@ div.slider img {
         height: 600px;
     }
 
-    .desc-block {
+    .map-desc-block {
         min-height: 70px;
     }
+
+    .miniature {
+        /* see pdb-container height */
+        flex-basis: 110px;
+    }
+
+    .miniature1 {
+        flex-basis: 100px;
+    }
+
+    .miniature2 {
+        flex-basis: 30px;
+    }
+
+    .miniature3 {
+        flex-basis: 15px;
+    }
+
+    .full-miniature {
+        max-width: 200px;
+    }
+
+    /* Large devices (large laptops and desktops, 1200px and up) 
+@media only screen and (min-width: 850px) {
+    .pg-container {
+        max-width: 1200px !important;
+    }
+
+    .pg-map-container {
+        max-width: 1200px !important;
+    }
+
+    #map {
+        height: 600px;
+    }
+
+    .map-desc-block {
+        min-height: 70px;
+    }*/
 }

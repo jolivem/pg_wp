@@ -271,9 +271,9 @@ class Pg_Edit_Gallery_Public {
         }
         
         $html_code .= "
-                <div>";
+                <div class='user-gallery-btns'>";
         $html_code .= "
-                    <button type='button' class='btn btn-primary' style='margin-bottom: 10px;' data-bs-toggle='modal' data-bs-target='#multipleDowloadModal'>
+                    <button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#multipleDowloadModal'>
                         Ajouter des photos...
                     </button>";
         // admin can add photos where he sets GPS position
@@ -285,7 +285,7 @@ class Pg_Edit_Gallery_Public {
         }
 
         $html_code .= "
-                    <button type='button' class='btn btn-primary align-right' id='edit-gallery-save'>Enregistrer</button>
+                    <button type='button' class='btn btn-primary' id='edit-gallery-save'>Enregistrer</button>
                 </div>
                 <div id='gallery-item-list'>$html_images</div>
             </div>
@@ -366,23 +366,20 @@ class Pg_Edit_Gallery_Public {
                 $metadate = get_post_meta($id, 'date', true);
                 $date = Pg_Edit_Gallery_Public::get_photo_date($metadate);
 
-
-                //TODO get title and text  <div class="photo-text-date">'.$date.'</div>
                 //error_log("render_images url:".print_r($url_img, true));
                 // TODO check url_img is OK, add try catch
                 $html.=
                 '<li class="item" draggable="true" data-id="'.$id.'">
-                    <div class="flex-container">
+                    <div class="pdb-container">
                         <div class="miniature" style="background-image: url('.$img_src.')"></div>
-                        <div class="photo-text-container">
-                            <div class="photo-text-gallery footer-desc-font">'.$content.'</div>
-                            <div class="footer-edit-gallery desc-font-small">
-                                <div class="photo-text-date">'.$date.'</div>
-                                <div></div>
-                            </div>
-                            <div class="footer-edit-gallery desc-font-small">
-                                <div class="photo-text-file">'.$post->post_name.'</div>
-                                <div class="photo-text-date">'.$statext.'</div>
+                        <div class="pdb-descr-container">
+                            <div class="pdb-descr-header footer-desc-font">'.$content.'</div>
+                            <div class="pdb-descr-footer desc-font-small">
+                                <div>'.$date.'</div>
+                                <div class="pdb-descr-footer-flex">
+                                    <div class="pdb-descr-footer-flex-1">'.$post->post_name.'</div>
+                                    <div class="pdb-descr-footer-flex-2">'.$statext.'</div>
+                                </div>
                             </div>
                         </div>
                         <div class="options-photo-gallery" data-id="'.$id.'" style="background-color: lightblue">

@@ -157,7 +157,7 @@ class Glp_Check_User_Url_Public {
             //error_log("render_images url:".print_r($url_img, true));
             // TODO check url_img is OK, add try catch
             $html.=
-            '<div class="flex-container">
+            '<div class="pdb-container">
                 <div>'.$user->user_login.'</br>'.$user->user_email.'</br>ID='.$user->ID.'</div>
                 <div class="url-text-container">
                     <a href="'.$user->user_url.'">'.$user->user_url.'</a>

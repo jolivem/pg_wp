@@ -245,7 +245,7 @@ class Pg_Edit_Photo_Public {
                     <label class='form-check-label' for='user_status' id='user_status_label'>$user_status_label</label>
                 </div>
                 <br>
-                <div>";
+                <div class='flex-space-between'>";
             if (!empty($gid)) {
                 $html_code .= "
                     <a href='$edit_gallery_url'>Retour à la galerie</a>";
@@ -256,7 +256,7 @@ class Pg_Edit_Photo_Public {
 
             }
             $html_code .= "
-                    <button type='button' class='btn btn-primary' id='save-photo' style='float: inline-end;'>Enregistrer</button>
+                    <button type='button' class='btn btn-primary' id='btn-save-photo' style='float: inline-end;'>Enregistrer</button>
                 </div>
             </div>";
             return $html_code;

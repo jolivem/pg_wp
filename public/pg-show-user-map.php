@@ -151,7 +151,7 @@ class Pg_Show_User_Map_Public {
         }
   
         $html_code = "
-        <div class='pg-container'>";
+        <div class='pg-map-container'>";
         if ($gtitle != "" || $gdescription != "") {
             $html_code .= "
             <div>
@@ -168,7 +168,7 @@ class Pg_Show_User_Map_Public {
             <div id='imageSlider' class='slider' >
                 $html_slider 
             </div>
-            <div id='imageDescr' class='desc-block'>$html_descr</div> 
+            <div id='imageDescr' class='map-desc-block'>$html_descr</div> 
          </div>";
 
         $js = $this->script_map($medias);

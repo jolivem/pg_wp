@@ -196,17 +196,19 @@ class Glp_User_Photos_Public {
             //error_log("render_images url:".print_r($url_img, true));
             // TODO check url_img is OK, add try catch
             $html.=
-            '<div class="flex-container">
+            '<div class="pdb-container">
                 <div class="miniature" style="background-image: url('.$img_src.')"></div>
-                <div class="photo-text-container";>
-                    <div class="photo-text-gallery footer-desc-font">'.$item->post_content.'</div>
-                    <div class="footer-edit-gallery desc-font-small">
-                        <div class="photo-text-file">'.$date.'</div>
-                        <div class="photo-text-date">'.$textnbgalleries.'</div>
-                    </div>
-                    <div class="footer-edit-gallery desc-font-small">
-                        <div class="photo-text-file">'.$item->post_name.'</div>
-                        <div class="photo-text-date">'.$statext.'</div>
+                <div class="pdb-descr-container";>
+                    <div class="pdb-descr-header footer-desc-font">'.$item->post_content.'</div>
+                    <div class="pdb-descr-footer desc-font-small">
+                        <div class="pdb-descr-footer-flex">
+                            <div class="pdb-descr-footer-flex-1">'.$date.'</div>
+                            <div class="pdb-descr-footer-flex-2">'.$textnbgalleries.'</div>
+                        </div>
+                        <div class="pdb-descr-footer-flex">
+                            <div class="pdb-descr-footer-flex-1">'.$item->post_name.'</div>
+                            <div class="pdb-descr-footer-flex-2">'.$statext.'</div>
+                        </div>
                     </div>
                 </div>
                 <div class="options-photo-gallery" style="background-color: lightblue">

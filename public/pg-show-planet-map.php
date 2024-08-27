@@ -159,7 +159,7 @@ class Pg_Show_Planet_Map_Public {
             </div>
         </div>
 
-        <div class='pg-container'>
+        <div class='pg-map-container'>
             <form id='searchForm'>
                 <div class='input-group mb-3'>
                     <input type='text' class='form-control' id='searchInput' placeholder='Entrez un lieu' aria-label='Entrez un lieu' aria-describedby='searchButton'>
@@ -172,11 +172,11 @@ class Pg_Show_Planet_Map_Public {
                 <div id='map'></div>
             </div>
             <div id='imageSlider' class='slider'></div>
-            <div id='imageDescr' class='desc-block'></div>
+            <div id='imageDescr' class='map-desc-block'></div>
         </div>
         </br>
         </br>
-        <div class='pg-container'>
+        <div class='pg-map-container'>
             <div class='participate-info'>
                 Participez au projet Planet-Gallery !
                 <ul>

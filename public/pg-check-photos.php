@@ -189,10 +189,10 @@ class Glp_Check_Photos_Public {
             //error_log("render_images url:".print_r($url_img, true));
             // TODO check url_img is OK, add try catch
             $html.=
-            "<div class='flex-container'>
+            "<div class='pdb-container'>
                 
                 <img src='$img_src' class='full-miniature-big'></img>
-                <div class='photo-text-container'>";
+                <div class='pdb-descr-container'>";
             
             // Select the address among the various possibilities
             for ($i = 0 ; $i < count($addresses); $i++) {
@@ -210,7 +210,7 @@ class Glp_Check_Photos_Public {
                 // error_log("render_images addresses:" . $addresses[$i]['formatted_address']);
             }
             $html.=
-                    "<div class='footer-edit-gallery'>
+                    "<div class='pdb-descr-footer'>
                         <div>Date : $item->post_date</div>
                     </div>
                 </div>

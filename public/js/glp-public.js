@@ -463,7 +463,7 @@
         });
 
         // edit gallery when click on gallery text container and miniatures
-        $(document).on('click', '.miniature1, .miniature2, .miniature3, .photo-text-container', function(e){
+        $(document).on('click', '.miniature1, .miniature2, .miniature3, .pdb-descr-container', function(e){
             //console.log("miniature1 click", e.target);
             const closest = e.target.closest(`[data-galid]`);
             //console.log("miniature1 closest", closest);
@@ -515,7 +515,7 @@
         
 
         // edit gallery when click on gallery text container and miniatures
-        $(document).on('click', '.miniature, .photo-text-container', function(e){
+        $(document).on('click', '.miniature, .pdb-descr-container', function(e){
             //console.log("miniature1 click", e.target);
             const closest = e.target.closest(`[data-id]`);
             //console.log("miniature1 closest", closest);
@@ -668,7 +668,7 @@
         });
 
         // When clicked on submit button
-        $(document).find('#save-photo').on('click', function(event){
+        $(document).find('#btn-save-photo').on('click', function(event){
             // console.log("edit-photo IN");
             event.preventDefault();
             let error = false;

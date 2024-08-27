@@ -494,7 +494,7 @@ function find_div_from_file_name(filename) {
     if (parent) {
         children = parent.children;
         for (let i = 0; i < children.length; i++) {
-            let texts = children[i].getElementsByClassName( "full-photo-text-container");
+            let texts = children[i].getElementsByClassName( "pdb-descr-container");
             if (texts.length > 0) {
                 //console.log("find_div_from_file_name", texts[0].innerHTML);
                 if (texts[0].innerHTML.indexOf(filename) != -1) {
@@ -590,11 +590,11 @@ function updateDownloadMultipleModal(files) {
             <div class="spinner-border text-primary download-spinner" style="display:none;"></div>
             <div class="download-success"><i class="fas fa-check" style="color: green;"></i></div>
             <div class="download-error"><i class="fas fa-times" style="color: red;"></i></div>
-            <div class="flex-container" style="margin-top:0px" data-valid="ok">
-                <img src="${src}" class="full-miniature" style="max-width: 135px;"></img>
-                <div class="full-photo-text-container" style="flex: 10 10 150px;">
-                    <div class="download-photo-title footer-desc-font">${name}</div>
-                    <div class="download-photo-text footer-desc-font">Localisation OK<br/>${date}</div>
+            <div class="pdb-container" style="margin-top:0px" data-valid="ok">
+                <img src="${src}" class="full-miniature"></img>
+                <div class="pdb-descr-container">
+                    <div class="pdb-descr-word-break footer-desc-font">${name}</div>
+                    <div class="pdb-descr-footer footer-desc-font">${date}</div>
                 </div>
                 <div class="flex-options-3" style="background-color: lightblue">
                     <div data-id="'.$id.'">
@@ -619,9 +619,9 @@ function updateDownloadMultipleModal(files) {
         listItem.innerHTML = `
         <div style="position: relative;">
             <div class="download-error"><i class="fas fa-times" style="color: red;"></i></div>
-            <div class="flex-container" style="margin-top:0px">
+            <div class="pdb-container" style="margin-top:0px">
                 <img src="${src}" class="full-miniature"></img>
-                    <div class="full-photo-text-container" style="flex: 10 0 200px;">
+                    <div class="pdb-descr-container">
                         <div class="download-photo-title footer-desc-font">Fichier : ${name}</div>
                         <div class="download-photo-text footer-desc-font" style="color:red;">
                             ${error}
