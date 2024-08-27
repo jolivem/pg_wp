@@ -234,8 +234,8 @@ class Glp_User_Galleries_Public {
                 <div class="miniature2" style="background-image: url('.$img_src2.')"></div>
                 <div class="miniature3" style="background-image: url('.$img_src3.')"></div>
                 <div class="pdb-descr-container">
-                    <div class="pdb-descr-header footer-desc-font">'.$title.'</div>
-                    <div class="pdb-descr-footer desc-font-small">'.$date.'</div>
+                    <div class="pdb-descr-header pdb-descr-font">'.$title.'</div>
+                    <div class="pdb-descr-footer pdb-descr-font-small">'.$date.'</div>
                 </div>
                 <div class="options-photo-gallery" style="background-color: lightgreen">
                     <div class="user-gallery-option pointer-icon fas fa-edit" aria-hidden="true" data-galid="'.$item["id"].'"></div>

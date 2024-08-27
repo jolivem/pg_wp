@@ -206,7 +206,7 @@ class Glp_Check_Photos_Public {
                     "<label for='html'>" . $addresses[$i]['formatted_address']."</label><br>";
                                         
                 // $html.=
-                //     "<div class='footer-desc-font' style='overflow: visible;'>$item->post_title/div>";
+                //     "<div class='pdb-descr-font' style='overflow: visible;'>$item->post_title/div>";
                 // error_log("render_images addresses:" . $addresses[$i]['formatted_address']);
             }
             $html.=

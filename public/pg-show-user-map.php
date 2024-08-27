@@ -144,7 +144,7 @@ class Pg_Show_User_Map_Public {
         $gtitle = stripslashes($gallery["title"]);
         $gdescription = stripslashes($gallery["description"]);
   
-        $medias = $this->pg_get_medias_by_gallery($id);
+        $medias = Pg_Edit_Gallery_Public::pg_get_medias_by_gallery($id);
         if ($medias != null) {
             $html_slider = $this->render_slider($medias);
             $html_descr = $this->render_medias_descriptions($medias);
@@ -358,7 +358,6 @@ class Pg_Show_User_Map_Public {
                 }));
         
                 const div_expand = slider.querySelectorAll('.slider-overlay-expand');
-                console.log('expand g_lightbox', g_lightbox);
                 div_expand.forEach(el => el.addEventListener('click', event => {
 
                     const slide = event.target.parentElement.parentElement;
@@ -377,27 +376,5 @@ class Pg_Show_User_Map_Public {
         return $map_js;
     
     }// end ays_add_makers()    
-
-    // $id = gallery id
-    // return an array with image IDs
-    // TODO, used elsewhere, to be defined in a static method
-    public function pg_get_medias_by_gallery( $id ) {
-        error_log("pg_get_medias_by_gallery IN gallery_id=".$id);
-        global $wpdb;
-
-        $sql = "SELECT * FROM {$wpdb->prefix}glp_gallery WHERE id={$id}";
-        $result = $wpdb->get_row( $sql, "ARRAY_A" );
-        if ( is_null( $result ) || empty( $result ) ) {
-            error_log("pg_get_medias_by_gallery OUT null");
-            return null;
-        }
-        if ( is_null( $result["images_ids"] ) || empty( $result["images_ids"] ) ) {
-            error_log("pg_get_medias_by_gallery images_id empty");
-            return null;
-        }
-        $image_ids = explode( "***", $result["images_ids"]);
-        return $image_ids;
-    }
-
 
 }

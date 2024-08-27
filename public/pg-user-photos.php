@@ -199,8 +199,8 @@ class Glp_User_Photos_Public {
             '<div class="pdb-container">
                 <div class="miniature" style="background-image: url('.$img_src.')"></div>
                 <div class="pdb-descr-container";>
-                    <div class="pdb-descr-header footer-desc-font">'.$item->post_content.'</div>
-                    <div class="pdb-descr-footer desc-font-small">
+                    <div class="pdb-descr-header pdb-descr-font">'.$item->post_content.'</div>
+                    <div class="pdb-descr-footer pdb-descr-font-small">
                         <div class="pdb-descr-footer-flex">
                             <div class="pdb-descr-footer-flex-1">'.$date.'</div>
                             <div class="pdb-descr-footer-flex-2">'.$textnbgalleries.'</div>

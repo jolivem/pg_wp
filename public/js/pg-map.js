@@ -139,7 +139,7 @@ var animateMarkerById = function(id) {
                 layer._icon.style.width="60px";
                 layer._icon.style.height="60px";
                 layer._icon.style.zIndex += 1000;
-                console.log( 'animateMarkerById layer._icon FOUND for iconUrl');
+                //console.log( 'animateMarkerById layer._icon FOUND for iconUrl');
                 setTimeout(function(){
                     // come back to normal size after timeout
                     layer._icon.style.width="45px";

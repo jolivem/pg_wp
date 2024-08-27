@@ -729,6 +729,7 @@ button.lg-icon {
 
 .pdb-descr-footer {
     position: relative;
+    overflow: hidden;
 }
 
 .pdb-descr-footer-flex {
@@ -753,12 +754,12 @@ button.lg-icon {
     padding: 7px;
 }
 
-.footer-desc-font {
+.pdb-descr-font {
     font-weight: 500;
     color: #666
 }
 
-.desc-font-small {
+.pdb-descr-font-small {
     font-size: small;
     color: #666;
     /*line-height: 16px;*/

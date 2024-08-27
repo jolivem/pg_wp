@@ -203,7 +203,7 @@ jQuery(document).find('#single-upload').on('click', async function(event){
         contentType: false,
         processData: false,
         success: function(response){
-            // console.log("upload done");
+            // console.log("upload success", response);
             const button = document.getElementById('single-upload');
             button.disabled = true;
             progressBar.style.backgroundColor= "limegreen";
@@ -593,8 +593,8 @@ function updateDownloadMultipleModal(files) {
             <div class="pdb-container" style="margin-top:0px" data-valid="ok">
                 <img src="${src}" class="full-miniature"></img>
                 <div class="pdb-descr-container">
-                    <div class="pdb-descr-word-break footer-desc-font">${name}</div>
-                    <div class="pdb-descr-footer footer-desc-font">${date}</div>
+                    <div class="pdb-descr-word-break pdb-descr-font">${name}</div>
+                    <div class="pdb-descr-footer pdb-descr-font">${date}</div>
                 </div>
                 <div class="flex-options-3" style="background-color: lightblue">
                     <div data-id="'.$id.'">
@@ -622,8 +622,8 @@ function updateDownloadMultipleModal(files) {
             <div class="pdb-container" style="margin-top:0px">
                 <img src="${src}" class="full-miniature"></img>
                     <div class="pdb-descr-container">
-                        <div class="download-photo-title footer-desc-font">Fichier : ${name}</div>
-                        <div class="download-photo-text footer-desc-font" style="color:red;">
+                        <div class="download-photo-title pdb-descr-font">Fichier : ${name}</div>
+                        <div class="download-photo-text pdb-descr-font" style="color:red;">
                             ${error}
                         </div>
                     </div>

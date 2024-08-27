@@ -336,6 +336,9 @@ class Pg_Edit_Gallery_Public {
             return null;
         }
         $image_ids = explode( "***", $result["images_ids"]);
+        
+        // remove duplicates values if any
+        $image_ids = array_unique($image_ids);
         //error_log("pg_get_medias_by_gallery count =".count($image_ids));
         return $image_ids;
     }
@@ -373,12 +376,12 @@ class Pg_Edit_Gallery_Public {
                     <div class="pdb-container">
                         <div class="miniature" style="background-image: url('.$img_src.')"></div>
                         <div class="pdb-descr-container">
-                            <div class="pdb-descr-header footer-desc-font">'.$content.'</div>
-                            <div class="pdb-descr-footer desc-font-small">
+                            <div class="pdb-descr-header pdb-descr-font">'.$content.'</div>
+                            <div class="pdb-descr-footer pdb-descr-font-small">
                                 <div>'.$date.'</div>
                                 <div class="pdb-descr-footer-flex">
-                                    <div class="pdb-descr-footer-flex-1">'.$post->post_name.'</div>
-                                    <div class="pdb-descr-footer-flex-2">'.$statext.'</div>
+                                <div class="pdb-descr-footer-flex-1">'.$statext.'</div>
+                                <div class="pdb-descr-footer-flex-2">'.$post->post_name.'</div>
                                 </div>
                             </div>
                         </div>
@@ -667,7 +670,7 @@ class Pg_Edit_Gallery_Public {
             //$image_paths            = '';
             $images_ids = '';
         }
-        //error_log("image_ids ".$images_ids);
+        // error_log("update_gallery image_ids ".$images_ids);
         $id = ( $data["gallery_id"] != NULL ) ? absint( intval( $data["gallery_id"] ) ) : null;
         // $title = (isset($data["title"]) && $data["title"] != '') ? stripslashes(sanitize_text_field( $data["title"] )) : '';
         // $description = (isset($data["desc"]) && $data["desc"] != '') ? stripslashes(sanitize_text_field( $data["desc"] )) : '';
