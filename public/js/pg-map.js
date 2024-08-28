@@ -2,6 +2,7 @@ var g_selectedImageSrc = null; /*image src when clicked in the slider target*/
 var g_map;
 var g_lightbox;
 var g_markers;
+var g_listImageIds = []; /* list image ids currently displayed */
 var g_LeafIcon = L.Icon.extend({
     options: {
         iconSize:     [45, 45],
@@ -356,6 +357,12 @@ var animateMarkerById = function(id) {
         //console.log("updatePlanetSlider close g_lightbox", g_lightbox);
         // close the lightbox if opened
         //g_lightbox.close();
+
+        if (datas.action == "nothing") {
+            // do nothing !!
+            return;
+        }
+
         let ban = document.getElementById('pg_ban').value;
         
         const slider = document.getElementById('imageSlider');
@@ -373,9 +380,12 @@ var animateMarkerById = function(id) {
         //console.log("updatePlanetSlider descr avant", descr);
         //g_lightbox.destroy();
         //let newHtml="";
-        if (datas) {
+        if (datas?.images) {
+
+            g_listImageIds = datas.ids; // save ids for optimisations
+
             let num=0;
-            datas.forEach(function(image) {
+            datas.images.forEach(function(image) {
                 //console.log("updatePlanetSlider image", image);                
                 let sliderHtml = "<div class='slide slider-item'>";
                 sliderHtml +=       "<div class='slider-lb' data-full='"+image.url_full+"'>";
@@ -390,19 +400,17 @@ var animateMarkerById = function(id) {
                     sliderHtml +=           "<div class='desc-lightbox-address'><i class='fas fa-map-marker-alt pg-tab'></i>"+image.address+"</div>";
                 }
                 if (image.user != "") {
+                    sliderHtml +=           "<div class='desc-lightbox-user'>";
                     if (image.user_url != "") {
                         let domain= new URL(image.user_url).origin
-                        sliderHtml +=       "<div class='desc-lightbox-user'>";
                         sliderHtml +=           "<div class='desc-lightbox-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b>, <a style='color: white;' href='"+image.user_url+"'>"+domain+"</a></div>";
-                        //sliderHtml +=           "<div class='desc-lightbox-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b>, "+image.date+"</div>";
-                        sliderHtml +=           "<div class='desc-lightbox-address'>"+image.date+"</div>";
-                        //sliderHtml +=           "<div class='desc-lightbox-address'><i class='fas fa-globe pg-tab'></i><a style='color: white;' href='"+image.user_url+"'>"+domain+"</a></div>";
-                        sliderHtml +=       "</div>";
                     }
                     else {
-                        sliderHtml +=       "<div class='desc-lightbox-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b>, "+image.date+"</div>";
+                        sliderHtml +=           "<div class='desc-lightbox-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b></div>";
                     }
-                }
+                    sliderHtml +=               "<div class='desc-lightbox-address'>"+image.date+"</div>";
+                    sliderHtml +=           "</div>";
+            }
                 else {
                     sliderHtml +=           "<div class='desc-lightbox-address'>"+image.date+"</div>";
                 }
@@ -437,21 +445,20 @@ var animateMarkerById = function(id) {
                     descrHtml +="<div class='desc-slider-address'><i class='fas fa-map-marker-alt pg-tab'></i>"+image.address+"</div>";
                 }
                 if (image.user != "") {
+                    descrHtml +=       "<div class='desc-slider-user'>";
                     if (image.user_url != "") {
                         let domain= new URL(image.user_url).origin
-                        descrHtml +=       "<div class='desc-slider-user'>";
-                        descrHtml +=           "<div class='desc-slider-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b>, <a href='"+image.user_url+"'>"+domain+"</a></div>";
-                        //sliderHtml +=           "<div class='desc-slider-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b>, "+image.date+"</div>";
-                        descrHtml +=           "<div class='desc-slider-address'>"+image.date+"</div>";
-                        //sliderHtml +=           "<div class='desc-slider-address'><i class='fas fa-globe pg-tab'></i><a style='color: white;' href='"+image.user_url+"'>"+domain+"</a></div>";
-                        descrHtml +=       "</div>";
+                        descrHtml +=         "<div class='desc-slider-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b>, <a href='"+image.user_url+"'>"+domain+"</a></div>";
                     }
                     else {
-                        descrHtml +=       "<div class='desc-slider-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b>, "+image.date+"</div>";
+                        descrHtml +=         "<div class='desc-slider-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b></div>";
                     }
+                    descrHtml +=             "<div class='desc-slider-address'>"+image.date+"</div>";
+                    //sliderHtml +=           "<div class='desc-slider-address'><i class='fas fa-globe pg-tab'></i><a style='color: white;' href='"+image.user_url+"'>"+domain+"</a></div>";
+                    descrHtml +=       "</div>";
                 }
                 else {
-                    descrHtml +=           "<div class='desc-slider-address'>"+image.date+"</div>";
+                    descrHtml +=       "<div class='desc-slider-address'>"+image.date+"</div>";
                 }
 
                 descrHtml +="</div>";            
@@ -558,6 +565,7 @@ function getImagesFromBB(ne_lat, ne_lng, sw_lat, sw_lng, zoom) {
     formData.append('sw_lat', sw_lat);
     formData.append('sw_lng', sw_lng);
     formData.append('zoom', zoom);
+    formData.append('current_ids', g_listImageIds);
     jQuery.ajax({
         method: 'POST',
         url: admin_url,

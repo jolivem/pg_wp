@@ -81,7 +81,7 @@ class Pg_Geoposts_Table {
             error_log("update_visible param error");
             return;
         }
-        error_log("update_visible post_id=$post_id, visible=$visible");
+        //error_log("update_visible post_id=$post_id, visible=$visible");
 
 
         $table = $wpdb->prefix . "glp_geo_posts";

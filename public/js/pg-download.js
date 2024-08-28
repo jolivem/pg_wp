@@ -1,5 +1,5 @@
 
-var g_filesArray = []; // only the files with exif data
+var g_exifFiles = []; // only the files with exif data
 const maxFile=20;
 
 //
@@ -257,12 +257,12 @@ function downloadASinglePhoto(files) {
     document.getElementById("latitudeHelp").style.display = "block";
     document.getElementById("longitudeHelp").style.display = "block";
 
-    g_filesArray = Array.from(files);
-    if (g_filesArray.length == 1) {
-        const file = g_filesArray[0];
+    g_exifFiles = Array.from(files);
+    if (g_exifFiles.length == 1) {
+        const file = g_exifFiles[0];
         const reader = new FileReader();
 
-        // console.log('g_filesArray.length', g_filesArray.length);
+        // console.log('g_exifFiles.length', g_exifFiles.length);
 
         function renderItemSingle(src, name, latitude, longitude) {
             const photo = document.getElementById('photo-to-download');
@@ -415,12 +415,12 @@ jQuery(document).find('#multiple-upload').on('click', function(e){
     const galleryId = document.getElementById('gallery-id')?.value;
     // progressContainer.innerHTML = '';
     // progressContainer.style.display = 'block';
-    //console.log("uploadPhotos g_filesArray.length=", g_filesArray.length);
+    //console.log("uploadPhotos g_exifFiles.length=", g_exifFiles.length);
     //const files = Array.from(fileInput.files)
-    for (let i = 0 ; i < g_filesArray.length ; i ++) {
+    for (let i = 0 ; i < g_exifFiles.length ; i ++) {
     //Array.from(files).forEach(file => {
-        const file = g_filesArray[i];
-        // console.log("uploadPhotos file=", file);
+        const file = g_exifFiles[i];
+        //console.log("uploadPhotos file=", file);
         //const progressBarContainer = document.createElement('div');
 
         // find the div element associated to the file name
@@ -512,29 +512,20 @@ function find_div_from_file_name(filename) {
 
 // Function to remove the list item
 function removeDownloadPhoto(item) {
-    //item.remove(); // Remove the corresponding list item
     //console.log("removeDownloadPhoto item", item);
     let ancestor = item.parentNode.parentNode.parentNode;
-    let title = ancestor.getElementsByClassName('download-photo-title')[0].innerHTML;
+    //console.log("removeDownloadPhoto ancestor=", ancestor);
+    let filename = ancestor.getElementsByClassName('descr-file-name')[0].innerHTML;
     //console.log("removeDownloadPhoto title=", title);
-    // remove the assocaited file in g_filesArray
-    for (let i = 0 ; i < g_filesArray.length ; i ++) {
+    // remove the assocaited file in g_exifFiles
+    for (let i = 0 ; i < g_exifFiles.length ; i ++) {
         //Array.from(files).forEach(file => {
-        //const file = g_filesArray[i];
-        //console.log("removeDownloadPhoto file.name=", g_filesArray[i].name);
-        if (g_filesArray[i].name == title) {
+        //const file = g_exifFiles[i];
+        if (g_exifFiles[i].name == filename) {
             //console.log("removeDownloadPhoto FOUND");
-            g_filesArray.splice(i, 1);
+            g_exifFiles.splice(i, 1);
             break;
         }
-    }
-    // console.log('removeDownloadPhoto IN');
-
-    const list = document.getElementById('modal-item-list');
-    // console.log('removeDownloadPhoto list', list)
-    // console.log('removeDownloadPhoto count', list.childElementCount)
-    if (list.childElementCount-1 < maxFile) {
-        document.getElementById("fileInput").disabled = false;
     }
 
     ancestor.style.animationDuration = '.35s';
@@ -542,15 +533,48 @@ function removeDownloadPhoto(item) {
 
     setTimeout(() => {
         ancestor.remove(); // Remove the corresponding list item after animation
-    }, 300); // Duration of the animation    
 
-    // remove from g_filesArray
+        const list = document.getElementById('modal-item-list');
+        if (list.childElementCount < maxFile) {
+            enable_select_btn();
+        }
+
+    }, 300); // Duration of the animation    
 
 }     
 
+function disable_select_btn() {
+    //console.log('disable_select_btn IN');
+    let msg = document.getElementsByClassName('btn-warning')[0];
+    if (msg) {
+        msg.style.display= 'block';
+    }
+    let btn = document.getElementById('btnSelect');
+    if (btn) {
+        btn.classList.add('disabled');
+    }
 
+    //console.log('fileInput.disabled');
+}
+
+function enable_select_btn() {
+    //console.log('enable_select_btn IN');
+    let msg = document.getElementsByClassName('btn-warning')[0];
+    if (msg) {
+        msg.style.display= 'none';
+    }
+    let btn = document.getElementById('btnSelect');
+    if (btn) {
+        btn.classList.remove('disabled');
+    }
+
+    //console.log('fileInput.disabled');
+}
+
+
+// @brief : handle new selected files, add them to the list of files to download
 function updateDownloadMultipleModal(files) {
-    // console.log('updateDownloadMultipleModal IN');
+    //console.log('updateDownloadMultipleModal IN', files);
     
     const newFiles= Array.from(files);
 
@@ -558,16 +582,17 @@ function updateDownloadMultipleModal(files) {
     const button = document.getElementById('multiple-upload');
     //const spinner = document.getElementById('selection-spinner');
     const fileInput = document.getElementById("fileInput");
-    //console.log('updateDownloadMultipleModal current files', fileInput.files);
+    //console.log('updateDownloadMultipleModal fileInput list', fileInput.files);
     
     // delete previous list
     if (button.disabled == true) {
         // the previous list has been uploaded, remove it
         list.innerHTML = "";
-        g_filesArray = [];
+        g_exifFiles = [];
     }
     //spinner.style.display = "block";
     button.disabled = false;
+    //console.log('updateDownloadMultipleModal newFiles.length', newFiles.length);
 
     if (newFiles.length > 0) {
         button.style.display = "block";
@@ -593,7 +618,7 @@ function updateDownloadMultipleModal(files) {
             <div class="pdb-container" style="margin-top:0px" data-valid="ok">
                 <img src="${src}" class="full-miniature"></img>
                 <div class="pdb-descr-container">
-                    <div class="pdb-descr-word-break pdb-descr-font">${name}</div>
+                    <div class="pdb-descr-word-break pdb-descr-font descr-file-name">${name}</div>
                     <div class="pdb-descr-footer pdb-descr-font">${date}</div>
                 </div>
                 <div class="flex-options-3" style="background-color: lightblue">
@@ -611,7 +636,7 @@ function updateDownloadMultipleModal(files) {
     }
 
     function renderItemMultiple_error(src, name, error) {
-        // console.log('renderItemMultiple_error IN', name);
+        //console.log('renderItemMultiple_error IN', name);
         const list = document.getElementById('modal-item-list');
         const listItem = document.createElement('div');
         listItem.className = 'full-item';
@@ -622,10 +647,8 @@ function updateDownloadMultipleModal(files) {
             <div class="pdb-container" style="margin-top:0px">
                 <img src="${src}" class="full-miniature"></img>
                     <div class="pdb-descr-container">
-                        <div class="download-photo-title pdb-descr-font">Fichier : ${name}</div>
-                        <div class="download-photo-text pdb-descr-font" style="color:red;">
-                            ${error}
-                        </div>
+                        <div class="pdb-descr-word-break pdb-descr-font" style="color:red;">${error}</div>
+                        <div class="pdb-descr-footer pdb-descr-font descr-file-name">${name}</div>
                     </div>
                     <div class="flex-options-3" style="background-color: lightblue">
                         <div data-id="'.$id.'">
@@ -642,17 +665,24 @@ function updateDownloadMultipleModal(files) {
     }
 
     for (let i = 0; i < newFiles.length ; i ++) {
-        const file = newFiles[i];
-        const reader = new FileReader();
-        
+
         if (list.childElementCount >= maxFile) {
-            fileInput.disabled = true;
+            //console.log('updateDownloadMultipleModal inside loop');
+            disable_select_btn();
             break;
         }
   
-        reader.onload = function(event) {
-            // console.log( "onload IN");
+        const file = newFiles[i];
+        const reader = new FileReader();
         
+        reader.onload = function(event) {
+            //console.log( "onload IN");
+        
+            const list = document.getElementById('modal-item-list');
+            //console.log( "onload IN", list.childElementCount);
+            if (list.childElementCount >= maxFile) {
+                return;
+            }
             const img = document.createElement('img');
             img.src = event.target.result;
             img.className = 'thumbnail';
@@ -696,9 +726,8 @@ function updateDownloadMultipleModal(files) {
 
                             let geocod = await reverseGeocoding(latitude, longitude);
 
-                            if (g_filesArray.length < maxFile) {
-                                
-                                //console.log( "onload geocod", geocod);
+                            //console.log( "onload geocod", geocod);
+                            if (list.childElementCount < maxFile) {
                                 renderItemMultiple_gps(event.target.result, file.name, date);
 
                                 file.pgpg = {};
@@ -716,21 +745,30 @@ function updateDownloadMultipleModal(files) {
                                 }
                             
                                 // console.log('updateDownloadMultipleModal onload push file', file);
-                                g_filesArray.push(file);
+                                g_exifFiles.push(file);
                             }
                         }
                     }
                     else {
                         // render without lat,lon -> error because no EXIF data
-                        renderItemMultiple_error(event.target.result, file.name, 
-                            "Géolocalisation bloquée.<br/>Consultez <a href='"+geoloc_advise_url+"' target='_blank'>cette page</a>.");
+                        if (list.childElementCount < maxFile) {
+                            renderItemMultiple_error(event.target.result, file.name, 
+                                "Géolocalisation bloquée.Consultez <a href='"+geoloc_advise_url+"' target='_blank'>cette page</a>.");
+                        }
                     }
     
                 }
                 else {
-                    // render without lat,lon -> error because no EXIF data
-                    renderItemMultiple_error(event.target.result, file.name, 
-                        "Géolocalisation absente.<br/>Consultez <a href='"+geoloc_advise_url+"' target='_blank'>cette page</a>.");
+                    if (list.childElementCount < maxFile) {
+                        // render without lat,lon -> error because no EXIF data
+                        renderItemMultiple_error(event.target.result, file.name, 
+                            "Géolocalisation absente. Consultez <a href='"+geoloc_advise_url+"' target='_blank'>cette page</a>.");
+                    }
+                }
+                //console.log('updateDownloadMultipleModal list.childElementCount', list.childElementCount);
+                // check again childElementCount after load process
+                if (list.childElementCount >= maxFile) {
+                    disable_select_btn();
                 }
             });
             //const spinner = document.getElementById('selection-spinner');

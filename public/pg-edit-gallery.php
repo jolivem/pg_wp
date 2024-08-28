@@ -183,7 +183,7 @@ class Pg_Edit_Gallery_Public {
 
             // $title = "";
             // $description = "";
-            // $html_images = "";
+            $html_images = "";
         }
         else {
             // get an existing gallery

@@ -145,8 +145,8 @@ class Pg_Download_Multiple_Public {
         }
         if ($os == "iOS") {
             $html_code .= '<div>
-            <b>Utiliser exclusivement le menu du bouton <img src="'.GLP_PUBLIC_URL.'img/IOS_file.png" alt="">.</b>
-          </div>';
+                              <b>Utiliser exclusivement le menu du bouton <img src="'.GLP_PUBLIC_URL.'img/IOS_file.png" alt="">.</b>
+                            </div>';
         }
         $html_code .= '
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
@@ -155,9 +155,12 @@ class Pg_Download_Multiple_Public {
                             <form id="custom-upload-form" style="text-align=center;">
                                 <input type="hidden" id="pg_admin_ajax_url" value="'.$admin_ajax_url.'"/>
                                 <input type="hidden" id="download_nonce" value="'.$nonce.'"/>
-                                <label for="fileInput" class="btn btn-primary">
-                                    Sélectionner...
-                                </label>
+                                <div style="display:flex">
+                                    <label for="fileInput" id="btnSelect" class="btn btn-primary">
+                                        Sélectionner...
+                                    </label>
+                                    <div class="btn-warning">Nombre maximum atteint pour cette sélection </div>
+                                </div>
                                 <br/>
                                 <input type="file" id="fileInput" name="custom-file[]" multiple>
                                 <div id="modal-item-list"></div>

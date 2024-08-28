@@ -333,61 +333,112 @@ class Pg_Show_Planet_Map_Public {
 
         if ($results){
 
-            # random sort 
-            shuffle($results);
-
-            if (count($results ) > 40) {
-                $results = array_slice($results, 0, 40);
+            $action = $this->find_action($results, $_REQUEST['current_ids']);
+            if ($action == "nothing") {
+                $data = [
+                    "action" => "nothing",
+                ];
             }
+            else {
 
-            $data = array();
 
-            foreach($results as $resu){
-                $pid = $resu['post_id'];
-                $post = get_post($pid);
-                if ($post != null) {
-                    //error_log("get_bb_images post=".print_r($post, true));
-                    $url_img_medium = wp_get_attachment_image_src($pid, "medium");
-                    $url_img_full = wp_get_attachment_image_src($pid, "full");
-                    if ($url_img_medium != false) {
-                        $meta = get_post_meta($pid);
-                        $metadate = $meta['date'][0];
-                        $date = $date = Pg_Edit_Gallery_Public::get_photo_date($metadate);
-                        $user = get_user_by( 'ID', $post->post_author );
-                        $address = $this->rework_address($post->post_title);
+                # random sort 
+                shuffle($results);
 
-                        $user_url='';
-                        $url_checked = get_user_meta( $post->post_author, 'user_url', true);
-                        if ($url_checked == 'OK') {
-                            $user_url = $user->user_url;
-                        }
-                        //error_log("get_bb_images user_url=".$user_url);
-
-                        $image = (object) [
-                            'id'            => $pid,
-                            'url_medium'    => $url_img_medium[0],
-                            'url_full'      => $url_img_full[0],
-                            'address'       => $address,
-                            'content'       => $post->content,
-                            'date'          => $date,
-                            'user'          => $user->display_name,
-                            'user_url'      => $user_url
-                        ];
-                        
-                        //error_log("get_bb_images image=".print_r($image, true));
-                        $data[] = $image;
-                    }
+                if (count($results ) > 40) {
+                    $results = array_slice($results, 0, 40);
                 }
+
+                $images = array();
+
+                foreach($results as $resu){
+                    $pid = $resu['post_id'];
+                    $post = get_post($pid);
+                    if ($post != null) {
+                        //error_log("get_bb_images post=".print_r($post, true));
+                        $url_img_medium = wp_get_attachment_image_src($pid, "medium");
+                        $url_img_full = wp_get_attachment_image_src($pid, "full");
+                        if ($url_img_medium != false) {
+                            $meta = get_post_meta($pid);
+                            $metadate = $meta['date'][0];
+                            $date = $date = Pg_Edit_Gallery_Public::get_photo_date($metadate);
+                            $user = get_user_by( 'ID', $post->post_author );
+                            $address = $this->rework_address($post->post_title);
+
+                            $user_url='';
+                            $url_checked = get_user_meta( $post->post_author, 'user_url', true);
+                            if ($url_checked == 'OK') {
+                                $user_url = $user->user_url;
+                            }
+                            //error_log("get_bb_images user_url=".$user_url);
+
+                            $image = (object) [
+                                'id'            => $pid,
+                                'url_medium'    => $url_img_medium[0],
+                                'url_full'      => $url_img_full[0],
+                                'address'       => $address,
+                                'content'       => $post->content,
+                                'date'          => $date,
+                                'user'          => $user->display_name,
+                                'user_url'      => $user_url
+                            ];
+                            
+                            //error_log("get_bb_images image=".print_r($image, true));
+                            $images[] = $image;
+                            $ids[] = $pid;
+                        }
+                    }
+                }// end foreach
+
+                $data = [
+                    "images" => $images,
+                    "ids" => $ids,
+                    "action" => "update",
+                ];
             }
         } 
         else {
-            $data = null;
+            $data = [
+                "action" => "update",
+            ];
         }
 
         wp_send_json_success( $data, 200 );
         wp_die();
     }
 
+    // $brief : if the current displayed list is included into new list
+    // do nothing, keep the list
+    private function find_action($results, $current_ids) {
+
+        if (!empty($current_ids)) {
+            $list_current = explode(",", $current_ids);
+
+            $list_new = array_map(function($item) {
+                return $item['post_id'];
+            }, $results);
+            //error_log("find_action ids=".print_r($list_new, true));
+            $string_for_log = implode(",", $list_new);
+            error_log("find_action list_new=".$string_for_log);
+
+            if (empty(array_diff($list_current, $list_new))) {
+                // new list fully includes the current list 
+
+                if (count($list_current) == 40) {
+                    error_log("find_action count=40, return 'nothing'");
+                    return "nothing";
+                }
+
+                if (count($list_current) == count($list_new)) {
+                    error_log("find_action same sizes, return 'nothing'");
+                    return "nothing";
+                }
+                //error_log("find_action OUT 'nothing'");
+            }
+        }
+        error_log("find_action OUT ''");
+        return "";
+    }
     
     // $id = gallery id
     // return an array with image IDs
