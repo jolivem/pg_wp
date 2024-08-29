@@ -420,11 +420,14 @@
 
     function findEXIFinJPEG(file) {
         var dataView = new DataView(file);
-
-        if (debug) console.log("Got file of length " + file.byteLength);
-        if ((dataView.getUint8(0) != 0xFF) || (dataView.getUint8(1) != 0xD8)) {
-            if (debug) console.log("Not a valid JPEG");
-            return false; // not a valid jpeg
+        try {
+            if ((dataView.getUint8(0) != 0xFF) || (dataView.getUint8(1) != 0xD8)) {
+                // console.log("findEXIFinJPEG Not a valid JPEG");
+                return false; // not a valid jpeg
+            }
+        }  catch (e) {
+            //console.log(e.message);
+            return false;
         }
 
         var offset = 2,
@@ -433,18 +436,18 @@
 
         while (offset < length) {
             if (dataView.getUint8(offset) != 0xFF) {
-                if (debug) console.log("Not a valid marker at offset " + offset + ", found: " + dataView.getUint8(offset));
+                //console.log("Not a valid marker at offset " + offset + ", found: " + dataView.getUint8(offset));
                 return false; // not a valid marker, something is wrong
             }
 
             marker = dataView.getUint8(offset + 1);
-            if (debug) console.log(marker);
+            // console.log(marker);
 
             // we could implement handling for other markers here,
             // but we're only looking for 0xFFE1 for EXIF data
 
             if (marker == 225) {
-                if (debug) console.log("Found 0xFFE1 marker");
+                // console.log("Found 0xFFE1 marker");
 
                 return readEXIFData(dataView, offset + 4, dataView.getUint16(offset + 2) - 2);
 
@@ -461,10 +464,15 @@
     function findIPTCinJPEG(file) {
         var dataView = new DataView(file);
 
-        if (debug) console.log("Got file of length " + file.byteLength);
-        if ((dataView.getUint8(0) != 0xFF) || (dataView.getUint8(1) != 0xD8)) {
-            if (debug) console.log("Not a valid JPEG");
-            return false; // not a valid jpeg
+        try {   
+            // console.log("Got file of length " + file.byteLength);
+            if ((dataView.getUint8(0) != 0xFF) || (dataView.getUint8(1) != 0xD8)) {
+                // console.log("Not a valid JPEG");
+                return false; // not a valid jpeg
+            }
+        }  catch (e) {
+            //console.log(e.message);
+            return false;
         }
 
         var offset = 2,
@@ -847,9 +855,9 @@
         }
         var dataView = new DataView(file);
 
-        if (debug) console.log("Got file of length " + file.byteLength);
+        // console.log("Got file of length " + file.byteLength);
         if ((dataView.getUint8(0) != 0xFF) || (dataView.getUint8(1) != 0xD8)) {
-           if (debug) console.log("Not a valid JPEG");
+           // console.log("Not a valid JPEG");
            return false; // not a valid jpeg
         }
 

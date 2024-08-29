@@ -515,27 +515,29 @@
         
 
         // edit gallery when click on gallery text container and miniatures
-        $(document).on('click', '.miniature, .pdb-descr-container', function(e){
-            //console.log("miniature1 click", e.target);
+        $(document).on('click', '.miniature', function(e){
+            //console.log("miniature click", e.target);
             const closest = e.target.closest(`[data-id]`);
-            //console.log("miniature1 closest", closest);
-            
+            //console.log("miniature closest", closest);
+
             if (closest) {
                 const postid = closest.dataset.id;
                 //console.log("gallery-photo-option postid=", postid);
                 let edit_photo_url = document.getElementById('pg_edit_photo_url').value;
                 edit_photo_url += "?pid=";
                 edit_photo_url += postid;
-                const gallery_id = document.getElementById('gallery-id').value;
-                edit_photo_url += "&gid=";
-                edit_photo_url += gallery_id;
+                const gallery_id = document.getElementById('gallery-id')?.value;
+                if (gallery_id) {
+                    edit_photo_url += "&gid=";
+                    edit_photo_url += gallery_id;
+                }
                 window.location = edit_photo_url;                
-                const galid = closest.dataset.galid;
-                //console.log("user-gallery-option edit galid=", galid);
-                let edit_gallery_url = document.getElementById('pg_edit_gallery_url').value;
-                edit_gallery_url += "?gid=";
-                edit_gallery_url += galid;
-                window.location = edit_gallery_url;
+                // const galid = closest.dataset.galid;
+                // //console.log("user-gallery-option edit galid=", galid);
+                // let edit_gallery_url = document.getElementById('pg_edit_gallery_url').value;
+                // edit_gallery_url += "?gid=";
+                // edit_gallery_url += galid;
+                // window.location = edit_gallery_url;
             }
             e.preventDefault();
         });

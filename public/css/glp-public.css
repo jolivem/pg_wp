@@ -608,6 +608,7 @@ button.lg-icon {
     background-size: cover;
     float: left;
     border-radius: 8px 0 0 8px;
+    cursor: pointer;
 }
 
 .miniature1 {
@@ -615,6 +616,8 @@ button.lg-icon {
     background-size: cover;
     border-radius: 8px 0 0 8px;
     flex-basis: 90px;
+    cursor: pointer;
+    background-color: #dddddd;
 }
 
 .miniature2 {
@@ -622,6 +625,8 @@ button.lg-icon {
     background-size: cover;
     border-left: 1px solid white;
     flex-basis: 20px;
+    cursor: pointer;
+    background-color: #dddddd;
 }
 
 .miniature3 {
@@ -629,6 +634,8 @@ button.lg-icon {
     background-size: cover;
     border-left: 1px solid white;
     flex-basis: 10px;
+    cursor: pointer;
+    background-color: #dddddd;
 }
 
 .gallery-text-container,

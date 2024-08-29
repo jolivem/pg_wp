@@ -196,7 +196,7 @@ class Glp_User_Photos_Public {
             //error_log("render_images url:".print_r($url_img, true));
             // TODO check url_img is OK, add try catch
             $html.=
-            '<div class="pdb-container">
+            '<div class="pdb-container" data-id="'.$item->ID.'">
                 <div class="miniature" style="background-image: url('.$img_src.')"></div>
                 <div class="pdb-descr-container";>
                     <div class="pdb-descr-header pdb-descr-font">'.$item->post_content.'</div>
