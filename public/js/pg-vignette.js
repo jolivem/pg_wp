@@ -16,23 +16,23 @@
 
         if (selectedValue == "None") {
             let mapId = "leaflet-map";
-            ays_remove_vignette( mapId);
+            pg_remove_vignette( mapId);
         }
         else {
-            ays_handle_country( selectedValue);
+            pg_handle_country( selectedValue);
         }
 
     });
 
-    function ays_refresh_marker() {
+    function pg_refresh_marker() {
         //let postId = document.getElementById("post_ID").value;
         let lat = document.getElementById("latitude")?.value;
         let lon = document.getElementById("longitude")?.value;
 
-        ays_update_marker_point(lat, lon);
+        pg_update_marker_point(lat, lon);
     }
 
-    function ays_delete_markers() {
+    function pg_delete_markers() {
         //console.log("g_lmap", g_lmap);
         g_lmap?.eachLayer(function (layer) { 
             //console.log("layer", layer);
@@ -45,7 +45,7 @@
         });
     }
 
-    function ays_add_marker_point( latitude, longitude) {
+    function pg_add_marker_point( latitude, longitude) {
         let flat = parseFloat(latitude);
         let flon = parseFloat(longitude)
         if (g_lmap != null && !isNaN(parseFloat(latitude)) && !isNaN(parseFloat(longitude))) {
@@ -57,26 +57,26 @@
             });
             
             let coord = [flat.toString(), flon.toString()];
-            //console.log("ays_add_marker_point coord:", coord);
+            //console.log("pg_add_marker_point coord:", coord);
             var mark = new myIconClass ({iconUrl: ays_vars.base_url + 'assets/markpoint.png'});
             L.marker(coord, {icon: mark}).addTo(g_lmap);
         }
 
     }
 
-    function ays_update_marker_point( latitude, longitude) {
-        ays_delete_markers();
+    function pg_update_marker_point( latitude, longitude) {
+        pg_delete_markers();
         if (latitude && longitude) {
 
-            ays_add_marker_point(latitude, longitude);
+            pg_add_marker_point(latitude, longitude);
         }
     }    
 
-    function ays_remove_vignette( mapId) {
-        // console.log("ays_remove_vignette IN", mapId);
+    function pg_remove_vignette( mapId) {
+        // console.log("pg_remove_vignette IN", mapId);
         let previous_map = document.getElementById(mapId);
         if (previous_map) {
-            // console.log("ays_remove_vignette", previous_map);
+            // console.log("pg_remove_vignette", previous_map);
             previous_map.style.display="none";
             //previous_map?.remove();
             if (g_lmap && g_lmap.remove) {
@@ -87,8 +87,8 @@
         }        
     }
 
-    function ays_add_vignette( mapId, country) {
-        // console.log("ays_add_vignette country", {mapId, country});
+    function pg_add_vignette( mapId, country) {
+        // console.log("pg_add_vignette country", {mapId, country});
         let zoom = country.zoom;
         let file = ays_vars.base_url + "assets/geojson/" + country.file;
  
@@ -98,7 +98,7 @@
         // select.appendChild(p);
         var elemDiv = document.getElementById(mapId);
         elemDiv.style.display="block";
-        // console.log("ays_add_vignette mapId", elemDiv);
+        // console.log("pg_add_vignette mapId", elemDiv);
         //elemDiv.id = mapId;
         
         var props = {
@@ -155,10 +155,10 @@
     }
 
     // handle map vignette    
-    function ays_handle_country( filename) {
-        // console.log("ays_handle_country base_url", ays_vars.base_url);
+    function pg_handle_country( filename) {
+        // console.log("pg_handle_country base_url", ays_vars.base_url);
         let mapId = "leaflet-map";
-        ays_remove_vignette( mapId)
+        pg_remove_vignette( mapId)
 
         //let ays_admin_url = $(document).find('#glp_admin_url').val();
         let file = ays_vars.base_url +'/assets/world.json';
@@ -169,14 +169,14 @@
                 data.forEach(function (boundary) {
 
                     if (boundary.file == filename) {
-                        ays_add_vignette(mapId, boundary);
-                        ays_refresh_marker();
+                        pg_add_vignette(mapId, boundary);
+                        pg_refresh_marker();
                     }
                 });
             });
     }
 
     let selectedValue = $('#select-country').val();
-    ays_handle_country(selectedValue);
+    pg_handle_country(selectedValue);
     
 })( jQuery );

@@ -1499,7 +1499,6 @@
     let selectedValue = $('#select-country').val();
     ays_handle_country(selectedValue);
 
-
 })( jQuery );
 
 

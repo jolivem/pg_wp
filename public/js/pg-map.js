@@ -386,7 +386,7 @@ var animateMarkerById = function(id) {
 
             let num=0;
             datas.images.forEach(function(image) {
-                //console.log("updatePlanetSlider image", image);                
+                console.log("updatePlanetSlider image", image);                
                 let sliderHtml = "<div class='slide slider-item'>";
                 sliderHtml +=       "<div class='slider-lb' data-full='"+image.url_full+"'>";
                 sliderHtml +=           "<img src='"+image.url_medium+"' id='slider-"+image.id+"' class='imgNotSelected'>";

@@ -91,16 +91,16 @@ class Pg_Edit_Photo_Public {
         //wp_enqueue_media();
         wp_enqueue_script( $this->plugin_name.'-bootstrap.js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', array( 'jquery' ), $this->version, true );
         //wp_enqueue_script('leaflet', 'https://unpkg.com/leaflet/dist/leaflet.js', array('jquery'), '1.7.1', true);
-        wp_enqueue_script( $this->plugin_name.'-glp-public.js', plugin_dir_url( __FILE__ ) . 'js/glp-public.js', array( 'jquery' ), $this->version, true );
+        wp_enqueue_script( $this->plugin_name.'-pg-public.js', plugin_dir_url( __FILE__ ) . 'js/pg-public.js', array( 'jquery' ), $this->version, true );
 
         //wp_enqueue_script( $this->plugin_name.'-pg-vignette.js', plugin_dir_url( __FILE__ ) . 'js/pg-vignette.js', array( 'jquery' ), $this->version, true );
-        wp_localize_script($this->plugin_name.'-glp-public.js', 'ays_vars', array('base_url' => GLP_BASE_URL));
+        wp_localize_script($this->plugin_name.'-pg-public.js', 'ays_vars', array('base_url' => GLP_BASE_URL));
 
     }
 
     public function enqueue_styles_early(){
 
-        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/glp-public.css', array(), $this->version, 'all' );
+        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/pg-public.css', array(), $this->version, 'all' );
         wp_enqueue_script('jquery');
     }
     
