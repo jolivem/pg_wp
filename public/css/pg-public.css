@@ -568,6 +568,8 @@ div.slider img {
 .pg-descr-vignette {
     left: 50%;
     transform: translate(-50%, 0);
+    background-color: #f1f1f1 !important;
+    border-width: 0px !important;
 }
 
 /* default is for small devices < 400px */

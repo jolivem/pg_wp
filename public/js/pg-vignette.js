@@ -118,7 +118,7 @@
         };
 
         var geostyle = {
-            fillColor: 'yellow',
+            fillColor: 'white',
             //color: 'yellow',
             fillOpacity: 2,
             weight: 1
@@ -157,7 +157,6 @@
             });
 
         return lmap;
-
     }
 
     window.pg_add_vignette_to_slider = function(father) {
@@ -177,18 +176,18 @@
         }
     }
 
-    window.pg_add_vignette_to_lightbox = function(elem) {
-        console.log( "pg_add_vignette_to_lightbox IN", elem);
+    // window.pg_add_vignette_to_lightbox = function(elem) {
+    //     console.log( "pg_add_vignette_to_lightbox IN", elem);
 
-        //console.log( "pg_add_vignette_to_slider IN", elem);
-        const lat = elem.getAttribute('data-lat');
-        const lon = elem.getAttribute('data-lon');
-        const filename = elem.getAttribute('data-country');
-        //const id = elem.id;
-        const mapId = "vignette-lb-" + elem.id;
-        //console.log( "pg_add_vignette_to_lightbox id", id);
-        pg_add_vignette(elem, mapId, filename, lon, lat);
-    }
+    //     //console.log( "pg_add_vignette_to_slider IN", elem);
+    //     const lat = elem.getAttribute('data-lat');
+    //     const lon = elem.getAttribute('data-lon');
+    //     const filename = elem.getAttribute('data-country');
+    //     //const id = elem.id;
+    //     const mapId = "vignette-lb-" + elem.id;
+    //     //console.log( "pg_add_vignette_to_lightbox id", id);
+    //     pg_add_vignette(elem, mapId, filename, lon, lat);
+    // }
 
     // handle map vignette    
     function pg_add_vignette (elemDiv, mapId, filename, lon, lat) {

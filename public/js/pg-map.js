@@ -438,7 +438,7 @@ var animateMarkerById = function(id) {
                 sliderHtml +=       "<div class='slider-lb' data-full='"+image.url_full+"'>";
                 sliderHtml +=           "<img src='"+image.url_medium+"' id='slider-"+image.id+"' class='imgNotSelected'>";
                 sliderHtml +=           "<div class='lightbox-descr'>";
-                sliderHtml +=              "<div class='lightbox-descr-all'>";
+                //sliderHtml +=              "<div class='lightbox-descr-all'>";
                 sliderHtml +=                 "<div class='lightbox-descr-text'>";
                 
                 // description of the photo INSIDE the lightbox
@@ -464,11 +464,11 @@ var animateMarkerById = function(id) {
                     sliderHtml +=                 "<div class='desc-lightbox-address'>"+image.date+"</div>";
                 }
                 sliderHtml +=                 "</div>"; // for lightbox-descr-text
-                if (image.vignette != "") {
-                    sliderHtml +=             "<div id='vignette-lb-"+image.id+"' class='desc-slider-address pg-lightbox-vignette' data-lon='"+image.longitude+"' data-lat='"+image.latitude+"' data-country='"+image.vignette+"'></div>";
-                }
+                // if (image.vignette != "") {
+                //     sliderHtml +=             "<div id='vignette-lb-"+image.id+"' class='desc-slider-address pg-lightbox-vignette' data-lon='"+image.longitude+"' data-lat='"+image.latitude+"' data-country='"+image.vignette+"'></div>";
+                // }
                 sliderHtml +=              "</div>";
-                sliderHtml +=           "</div>";
+                //sliderHtml +=           "</div>";
 
                 // Add overlay buttons
                 sliderHtml +=       "</div>";
