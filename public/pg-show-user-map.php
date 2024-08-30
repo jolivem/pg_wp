@@ -205,7 +205,7 @@ class Pg_Show_User_Map_Public {
                 // description of the photo INSIDE the lightbox
                 if ($post->post_content != '') {
                     $html.="
-                        <div class='slider-descr'>
+                        <div class='lightbox-descr'>
                             <div class='desc-lightbox-title'>$post->post_content</div>
                         </div>";
                 }
@@ -324,7 +324,7 @@ class Pg_Show_User_Map_Public {
                 /* add lightbox */ 
                 g_lightbox = new SimpleLightbox('#imageSlider .slider-lb', {
                     sourceAttr: 'data-full',
-                    captionSelector: '.slider-descr',
+                    captionSelector: '.lightbox-descr',
                     captionType: 'text',
                     widthRatio: 0.9,
                     captionPosition: 'bottom',

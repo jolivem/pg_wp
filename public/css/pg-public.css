@@ -329,8 +329,8 @@ body {
 
 .desc-slider {
     margin-bottom: 20px;
-    /* max-width: 600px; */
-    min-width: 50%;
+    /* max-width: 600px; 
+    min-width: 50%;*/
     padding: 5px;
     background-color: #f1f1f1;
 }
@@ -350,7 +350,7 @@ body {
     font-size: small;
     font-weight: 500;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
 }
 
 .desc-lightbox-title {
@@ -367,7 +367,7 @@ body {
     font-size: small;
     font-weight: lighter;
     display: flex;
-    justify-content: space-between;
+    /*justify-content: space-between;*/
 }
 
 /* see @media below 
@@ -535,8 +535,18 @@ div.slider img {
     display: flex;
 }
 
-.slider-descr {
+.lightbox-descr {
     display: none;
+}
+
+.lightbox-descr-all {
+    /*display: flex;
+    justify-content: space-between;*/
+}
+
+.lightbox-descr-text {
+    display: flex;
+    flex-direction: column;
 }
 
 /* see @media below 
@@ -550,6 +560,15 @@ div.slider img {
     justify-content: space-between;
 }
 
+.pg-lightbox-vignette {
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+.pg-descr-vignette {
+    left: 50%;
+    transform: translate(-50%, 0);
+}
 
 /* default is for small devices < 400px */
 @media only screen and (max-width: 449px) {

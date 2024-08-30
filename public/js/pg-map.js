@@ -328,9 +328,43 @@ var animateMarkerById = function(id) {
         }
     
     };
+    function get_lightbox_caption() {
 
-    window.displaySlideDescription = function() {
-        //console.log("displaySlideDescription g_slick", g_slick);
+        
+        let slb = $(document).find('.sl-wrapper'); //.sl-wrapper 
+        if (slb.length > 0) {
+            console.log("get_lightbox_caption slb", slb[0].innerHTML);
+            let elem = $(slb).find('.pg-lightbox-vignette');
+            console.log("get_lightbox_caption elem", elem);
+            if (elem.length > 0) {
+                console.log("get_lightbox_caption return ", elem[0]);
+                return elem[0];
+            }
+        }
+        console.log("get_lightbox_caption return null");
+        return null;
+        // const elem = g_slick.getCurrentElem().get(0);
+        // //console.log("displaySlideDescription elem", elem);
+        // const img = elem.getElementsByTagName("img")[0];
+        // //console.log("afterChange img", img);
+        // if (img){
+        //     let postid = img.id.substring(7);    
+    
+        //     // find description
+        //     if (postid != null) {
+        //         const descid = "desc-"+postid;
+        //         var descr = document.getElementById(descid);
+        //         // console.log('descid ', descid);
+        //         if (descr) {
+        //             return descr;
+        //         }
+        //     }
+        // }
+        return null;
+    }
+
+    function get_current_slick_description() {
+        
         const elem = g_slick.getCurrentElem().get(0);
         //console.log("displaySlideDescription elem", elem);
         const img = elem.getElementsByTagName("img")[0];
@@ -344,10 +378,23 @@ var animateMarkerById = function(id) {
                 var descr = document.getElementById(descid);
                 // console.log('descid ', descid);
                 if (descr) {
-                    $(descr).fadeIn();
-                    //descr.style.display='block';
+                    return descr;
                 }
             }
+        }
+        return null;
+    }
+
+    window.displaySlideDescription = function() {
+        let descr = get_current_slick_description();
+        //console.log("displaySlideDescription descr", descr);
+        if (descr) {
+            
+            // add vignette
+            window.pg_add_vignette_to_slider(descr);
+
+            $(descr).fadeIn();
+            //descr.style.display='block';
         }
     };
 
@@ -386,34 +433,41 @@ var animateMarkerById = function(id) {
 
             let num=0;
             datas.images.forEach(function(image) {
-                console.log("updatePlanetSlider image", image);                
+                //console.log("updatePlanetSlider image", image.vignette);
                 let sliderHtml = "<div class='slide slider-item'>";
                 sliderHtml +=       "<div class='slider-lb' data-full='"+image.url_full+"'>";
                 sliderHtml +=           "<img src='"+image.url_medium+"' id='slider-"+image.id+"' class='imgNotSelected'>";
-                sliderHtml +=           "<div class='slider-descr'>";
+                sliderHtml +=           "<div class='lightbox-descr'>";
+                sliderHtml +=              "<div class='lightbox-descr-all'>";
+                sliderHtml +=                 "<div class='lightbox-descr-text'>";
                 
                 // description of the photo INSIDE the lightbox
                 if (image.content != "") {
-                    sliderHtml +=           "<div class='desc-lightbox-title'>"+image.content+"</div>";
+                    sliderHtml +=                 "<div class='desc-lightbox-title'>"+image.content+"</div>";
                 }
                 if (image.address != "") {
-                    sliderHtml +=           "<div class='desc-lightbox-address'><i class='fas fa-map-marker-alt pg-tab'></i>"+image.address+"</div>";
+                    sliderHtml +=                 "<div class='desc-lightbox-address'><i class='fas fa-map-marker-alt pg-tab'></i>"+image.address+"</div>";
                 }
                 if (image.user != "") {
-                    sliderHtml +=           "<div class='desc-lightbox-user'>";
+                    sliderHtml +=                 "<div class='desc-lightbox-user'>";
                     if (image.user_url != "") {
                         let domain= new URL(image.user_url).origin
-                        sliderHtml +=           "<div class='desc-lightbox-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b>, <a style='color: white;' href='"+image.user_url+"'>"+domain+"</a></div>";
+                        sliderHtml +=                 "<div class='desc-lightbox-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b>, <a style='color: white;' href='"+image.user_url+"'>"+domain+"</a>,&nbsp</div>";
                     }
                     else {
-                        sliderHtml +=           "<div class='desc-lightbox-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b></div>";
+                        sliderHtml +=                 "<div class='desc-lightbox-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b>,&nbsp</div>";
                     }
-                    sliderHtml +=               "<div class='desc-lightbox-address'>"+image.date+"</div>";
-                    sliderHtml +=           "</div>";
-            }
-                else {
-                    sliderHtml +=           "<div class='desc-lightbox-address'>"+image.date+"</div>";
+                    sliderHtml +=                     "<div class='desc-lightbox-address'>"+image.date+"</div>";
+                    sliderHtml +=                 "</div>";
                 }
+                else {
+                    sliderHtml +=                 "<div class='desc-lightbox-address'>"+image.date+"</div>";
+                }
+                sliderHtml +=                 "</div>"; // for lightbox-descr-text
+                if (image.vignette != "") {
+                    sliderHtml +=             "<div id='vignette-lb-"+image.id+"' class='desc-slider-address pg-lightbox-vignette' data-lon='"+image.longitude+"' data-lat='"+image.latitude+"' data-country='"+image.vignette+"'></div>";
+                }
+                sliderHtml +=              "</div>";
                 sliderHtml +=           "</div>";
 
                 // Add overlay buttons
@@ -448,10 +502,10 @@ var animateMarkerById = function(id) {
                     descrHtml +=       "<div class='desc-slider-user'>";
                     if (image.user_url != "") {
                         let domain= new URL(image.user_url).origin
-                        descrHtml +=         "<div class='desc-slider-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b>, <a href='"+image.user_url+"'>"+domain+"</a></div>";
+                        descrHtml +=         "<div class='desc-slider-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b>, <a href='"+image.user_url+"'>"+domain+"</a>,&nbsp</div>";
                     }
                     else {
-                        descrHtml +=         "<div class='desc-slider-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b></div>";
+                        descrHtml +=         "<div class='desc-slider-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b>,&nbsp</div>";
                     }
                     descrHtml +=             "<div class='desc-slider-address'>"+image.date+"</div>";
                     //sliderHtml +=           "<div class='desc-slider-address'><i class='fas fa-globe pg-tab'></i><a style='color: white;' href='"+image.user_url+"'>"+domain+"</a></div>";
@@ -459,6 +513,9 @@ var animateMarkerById = function(id) {
                 }
                 else {
                     descrHtml +=       "<div class='desc-slider-address'>"+image.date+"</div>";
+                }
+                if (image.vignette != "") {
+                    descrHtml +=       "<div id='vignette-"+image.id+"' class='desc-slider-address pg-descr-vignette' data-lon='"+image.longitude+"' data-lat='"+image.latitude+"' data-country='"+image.vignette+"'></div>";
                 }
 
                 descrHtml +="</div>";            
@@ -494,22 +551,28 @@ var animateMarkerById = function(id) {
                 // $('.slider').on('swipe', function(event, slick, direction){
                 //     console.log("swipe");
                 // });
+                //console.log("window.g_slick_has_callbacks", window.g_slick_has_callbacks);
+                // bind callbacks once
+                if (window.g_slick_has_callbacks === undefined) {
                 
-                $('.slider').on('afterChange', function(event, slick, direction){
-                    //console.log("afterChange target", event.target);
-                    //console.log("afterChange currentSlide", currentSlide);
+                    $('.slider').on('afterChange', function(event, slick, direction){
+                        //console.log("afterChange IN", {event, slick, direction});
+                        //console.log("afterChange target", event.target);
+                        //console.log("afterChange currentSlide", currentSlide);
 
-                    window.displaySlideDescription();
-                                    
-                });
-                $('.slider').on('beforeChange', function(event, slick, currentSlide, nextSlide){
-                    //console.log("beforeChange", {currentSlide, nextSlide});
-                    //console.log("afterChange currentSlide", currentSlide);
+                        window.displaySlideDescription();
+                                        
+                    });
+                    $('.slider').on('beforeChange', function(event, slick, currentSlide, nextSlide){
+                        //console.log("beforeChange", {currentSlide, nextSlide});
+                        //console.log("afterChange currentSlide", currentSlide);
 
-                    if (currentSlide != nextSlide) {
-                        window.hideSlideDescription();
-                    }
-                });
+                        if (currentSlide != nextSlide) {
+                            window.hideSlideDescription();
+                        }
+                    });
+                    window.g_slick_has_callbacks = true;
+                }
             }
     
             //console.log("updatePlanetSlider descr après", descr);
@@ -540,6 +603,27 @@ var animateMarkerById = function(id) {
             }
     
             g_lightbox.refresh();
+            // bind callbacks once
+            // if (window.g_lightbox_has_callbacks === undefined) {
+            //     g_lightbox.on('shown.simplelightbox', function (e) {
+            //         console.log("shown.simplelightbox", e.target);
+            //         let caption = get_lightbox_caption();
+            //         if (caption != null) {
+            //             window.pg_add_vignette_to_lightbox(caption);
+            //         }
+
+            //     });
+            //     g_lightbox.on('changed.simplelightbox', function (e) {
+            //         console.log("changed.simplelightbox", e.target);
+            //         let caption = get_lightbox_caption();
+            //         if (caption != null) {
+            //             window.pg_add_vignette_to_lightbox(caption);
+            //         }
+            //     });
+            //     window.g_lightbox_has_callbacks = true;
+            // }
+
+            //window.pg_load_vignettes();
         }
         else {
             // no data --> empty area

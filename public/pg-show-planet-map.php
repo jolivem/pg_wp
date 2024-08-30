@@ -94,13 +94,13 @@ class Pg_Show_Planet_Map_Public {
         //wp_enqueue_script('leaflet', 'https://unpkg.com/leaflet/dist/leaflet.js', array('jquery'), '1.7.1', true);
         wp_enqueue_script( $this->plugin_name.'-leaflet.js', 'https://unpkg.com/leaflet@1.0.3/dist/leaflet-src.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-markercluster.js', 'https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js', array( 'jquery' ), $this->version, true );
-        wp_enqueue_script( $this->plugin_name.'-pg-vignette.js', plugin_dir_url( __FILE__ ) . 'js/pg-vignette.js', array( 'jquery' ), $this->version, true );
 
         wp_enqueue_script( $this->plugin_name.'-simple-lightbox.js', plugin_dir_url( __FILE__ ) . 'js/simple-lightbox.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-slick.js', plugin_dir_url( __FILE__ ) . 'slick/slick.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-pg-map.js', plugin_dir_url( __FILE__ ) . 'js/pg-map.js', array( 'jquery' ), $this->version, true );
         wp_localize_script($this->plugin_name.'-pg-map.js', 'ays_vars', array('base_url' => GLP_BASE_URL));
 
+        wp_enqueue_script( $this->plugin_name.'-pg-vignette.js', plugin_dir_url( __FILE__ ) . 'js/pg-vignette.js', array( 'jquery' ), $this->version, true );
     }
 
     public function enqueue_styles_early(){
@@ -277,7 +277,7 @@ class Pg_Show_Planet_Map_Public {
                 /* add lightbox */ 
                 g_lightbox = new SimpleLightbox('#imageSlider .slider-lb', {
                     sourceAttr: 'data-full',
-                    captionSelector: '.slider-descr',
+                    captionSelector: '.lightbox-descr',
                     widthRatio: 0.9,
                     captionType: 'text',
                     disableClick: true,
@@ -361,8 +361,12 @@ class Pg_Show_Planet_Map_Public {
                         $url_img_full = wp_get_attachment_image_src($pid, "full");
                         if ($url_img_medium != false) {
                             $meta = get_post_meta($pid);
+                            //error_log("get_bb_images meta=".print_r($meta, true));
                             $metadate = $meta['date'][0];
-                            $date = $date = Pg_Edit_Gallery_Public::get_photo_date($metadate);
+                            $latitude = $meta['latitude'][0];
+                            $longitude = $meta['longitude'][0];
+                            $vignette = $meta['vignette'][0];
+                            $date = Pg_Edit_Gallery_Public::get_photo_date($metadate);
                             $user = get_user_by( 'ID', $post->post_author );
                             $address = $this->rework_address($post->post_title);
 
@@ -381,7 +385,10 @@ class Pg_Show_Planet_Map_Public {
                                 'content'       => $post->content,
                                 'date'          => $date,
                                 'user'          => $user->display_name,
-                                'user_url'      => $user_url
+                                'user_url'      => $user_url,
+                                'latitude'      => $latitude,
+                                'longitude'     => $longitude,
+                                'vignette'      => $vignette,
                             ];
                             
                             //error_log("get_bb_images image=".print_r($image, true));
@@ -420,24 +427,24 @@ class Pg_Show_Planet_Map_Public {
             }, $results);
             //error_log("find_action ids=".print_r($list_new, true));
             $string_for_log = implode(",", $list_new);
-            error_log("find_action list_new=".$string_for_log);
+            //error_log("find_action list_new=".$string_for_log);
 
             if (empty(array_diff($list_current, $list_new))) {
                 // new list fully includes the current list 
 
                 if (count($list_current) == 40) {
-                    error_log("find_action count=40, return 'nothing'");
+                    //error_log("find_action count=40, return 'nothing'");
                     return "nothing";
                 }
 
                 if (count($list_current) == count($list_new)) {
-                    error_log("find_action same sizes, return 'nothing'");
+                    //error_log("find_action same sizes, return 'nothing'");
                     return "nothing";
                 }
                 //error_log("find_action OUT 'nothing'");
             }
         }
-        error_log("find_action OUT ''");
+        //error_log("find_action OUT ''");
         return "";
     }
     

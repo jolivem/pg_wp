@@ -578,6 +578,7 @@
             _this5.loadImage(dirIsDefined ? direction : 1);
           });
           tmpImage.addEventListener('load', function (event) {
+            //console.log("simplelightbox.load event");
             if (typeof direction !== 'undefined') {
               _this5.relatedElements[_this5.currentImageIndex].dispatchEvent(new Event('changed.' + _this5.eventNamespace));
               _this5.relatedElements[_this5.currentImageIndex].dispatchEvent(new Event((direction === 1 ? 'nextDone' : 'prevDone') + '.' + _this5.eventNamespace));
@@ -618,6 +619,7 @@
             } else if (typeof _this5.options.captionSelector === 'function') {
               captionContainer = _this5.options.captionSelector(_this5.relatedElements[_this5.currentImageIndex]);
             }
+            //console.log("simplelightbox captionContainer", captionContainer);
             if (_this5.options.captions && captionContainer) {
               if (_this5.options.captionType === 'data') {
                 captionText = captionContainer.dataset[_this5.options.captionsData];
@@ -627,6 +629,7 @@
                 captionText = captionContainer.getAttribute(_this5.options.captionsData);
               }
             }
+            //console.log("simplelightbox captionText", captionText);
             if (!_this5.options.loop) {
               if (_this5.currentImageIndex === 0) {
                 _this5.hide(_this5.domNodes.navigation.querySelector('.sl-prev'));
@@ -1152,6 +1155,7 @@
         value: function openImage(element) {
           var _this8 = this;
           element.dispatchEvent(new Event('show.' + this.eventNamespace));
+          //console.log("simplelightbox.openImage COUCOU");
           this.globalScrollbarWidth = this.getScrollbarWidth();
           if (this.options.disableScroll) {
             this.toggleScrollbar('hide');
