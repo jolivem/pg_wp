@@ -349,6 +349,13 @@ class Pg_Show_Planet_Map_Public {
                 if (count($results ) > 40) {
                     $results = array_slice($results, 0, 40);
                 }
+                //error_log("get_bb_images before sort".print_r($results, true));
+                // sort on longitude
+                usort($results, function($a, $b) {
+                    return $a['ST_Y(location)'] <=> $b['ST_Y(location)'];
+                });
+
+                //error_log("get_bb_images after sort".print_r($results, true));
 
                 $images = array();
 

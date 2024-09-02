@@ -157,15 +157,23 @@ class Glp_Check_Photos_Public {
             if ($url_img != false) {
                 $img_src = $url_img[0];
             }
-            $addresses=[];
+            $addresses=[]; // final addresses to be displayed in the radio list
             try {
                 $address_json = get_post_meta($item->ID, 'address_json',true);
-                if ($address_json) {
-                    //error_log("render_images addresses:".$address_json);
-                    $addresses = json_decode($address_json, true);
-                    if ($addresses == null) {
-                        $addresses=[];
+                if ($addresses_json) {
+                    error_log("render_images addresses:".$addresses_json);
+                    $jadresses = json_decode($addresses_json, true);
+                    error_log("render_images jaddresses".print_r($jaddresses, true));
+                    if ($jadresses != null) {
+                        
+                        for ($i = 0 ; $i < count($jadresses); $i++) {
+                            $addresses[] = $this->remove_numeric_words($jadresses[$i]['formatted_address']);
+                        }
+
+                        // remove duplicates
+                        $addresses = array_values(array_unique($addresses));
                     }
+
                     // else {
                         // error_log("render_images addresses2:".$addresses[1]['formatted_address']);
                         // for ($i = 0 ; $i < count($addresses); $i++) {
@@ -176,30 +184,29 @@ class Glp_Check_Photos_Public {
             
             } catch (Exception $e) {
                 error_log("render_images Exception");
-                
             }
-            //error_log("render_images addresses[2]:".print_r($addresses, true));
+            
+            //error_log("render_images addresses".print_r($addresses, true));
             $statext = Pg_Edit_Gallery_Public::get_photo_status($item->ID);
             $group_name = "address" . $item->ID;
 
             //error_log("render_images url:".print_r($url_img, true));
             // TODO check url_img is OK, add try catch
             $html.=
-            "<div class='pdb-container'>
-                
+            "<div class='pdb-big-container'>
                 <img src='$img_src' class='full-miniature-big'></img>
-                <div class='pdb-descr-container'>";
+                <div class='pdb-radio-container'>";
             
             // Select the address among the various possibilities
             for ($i = 0 ; $i < count($addresses); $i++) {
                 $checked="";
-                if ($item->post_title == $addresses[$i]['formatted_address']){
+                if ($item->post_title == $addresses[$i]){
                     $checked=" checked='checked'";
                 }
                 $html.=
-                    "<input type='radio' name='$group_name' value='" . $addresses[$i]['formatted_address']."' $checked>";
+                    "<input type='radio' name='$group_name' value='" . $addresses[$i]."' $checked>";
                 $html.=
-                    "<label for='html'>" . $addresses[$i]['formatted_address']."</label><br>";
+                    "<label for='html'>" . $addresses[$i]."</label><br>";
                                         
                 // $html.=
                 //     "<div class='pdb-descr-font' style='overflow: visible;'>$item->post_title/div>";
@@ -219,6 +226,16 @@ class Glp_Check_Photos_Public {
 
         }
         return $html;
+    }
+
+    private function remove_numeric_words( $input) {
+        // remove numerica words and words with a '+'
+        //error_log("remove_numeric_words IN " . $input);
+        $output = preg_replace('/\b\d+\b/', '', $input);
+        $output = preg_replace('/\S*\+\S*/', '', $output);
+        //$output = preg_replace('/\b\d+\b/', '', $input);
+        
+        return trim($output);
     }
 
     public function pg_get_medias_to_be_checked(  ) {

@@ -3,8 +3,8 @@
 /* see @media below 
   pdb = photo + description + buttons
   height for mobiles (<450px)*/
+.pdb-big-container,
 .pdb-container {
-    height: 90px;
     margin-top: 10px;
     display: flex;
     align-items: stretch;
@@ -80,6 +80,16 @@
     justify-content: space-between;
 }
 
+.pdb-radio-container {
+    flex: 10 0 60px;
+    padding: 5px;
+    font-size: small;
+
+    /* description is vertical*/
+    flex-direction: column;
+    justify-content: space-between;
+}
+
 .url-text-container {
     flex: 10 0 180px;
     padding: 5px;
@@ -110,7 +120,7 @@
     max-height: 280px;
     width: auto;
     padding: 4px;
-    border-right: solid 1px #888
+    border: solid 1px #888
 }
 
 
@@ -196,7 +206,7 @@
 }
 
 .flex-options-3 {
-    flex: 0 0 26px;
+    flex: 0 0 32px;
     display: flex;
     align-items: center;
     border-radius: 0 8px 8px 0;
@@ -588,11 +598,11 @@ div.slider img {
 
     .miniature {
         /* see pdb-container height */
-        flex-basis: 90px;
+        flex-basis: 80px;
     }
 
     .miniature1 {
-        flex-basis: 90px;
+        flex-basis: 80px;
     }
 
     .miniature2 {

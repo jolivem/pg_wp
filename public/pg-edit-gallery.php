@@ -405,7 +405,7 @@ class Pg_Edit_Gallery_Public {
         //error_log("get_photo_status meta=".print_r($meta, true));
         //error_log("get_photo_status type=".gettype($meta['status'][0]));
 
-        if ($meta['user_status'][0] != Pg_Edit_Photo_Public::USER_STATUS_PUBLIC){
+        if (isset($meta['user_status']) && $meta['user_status'][0] != Pg_Edit_Photo_Public::USER_STATUS_PUBLIC){
             $statext = "Privée";
         }
         else {

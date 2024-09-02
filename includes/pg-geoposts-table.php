@@ -54,10 +54,10 @@ class Pg_Geoposts_Table {
     {
         global $wpdb;
 
-        error_log("insert_post post_id=$post_id, latitude=$latitude, longitude=$longitude, is_exif=$is_exif, date=$date");
+        //error_log("insert_post post_id=$post_id, latitude=$latitude, longitude=$longitude, is_exif=$is_exif, date=$date");
 
         $table = $wpdb->prefix . "glp_geo_posts";
-        error_log("insert_post table=".$table);
+        //error_log("insert_post table=".$table);
         $bexif = 0;
         if ($is_exif == 'true') {
             $bexif = 1;
@@ -127,7 +127,7 @@ class Pg_Geoposts_Table {
 
         global $wpdb;
         $table = $wpdb->prefix . "glp_geo_posts";
-        $query = $wpdb->prepare("SELECT post_id FROM ".$table." WHERE (visible = 1 and ST_within(location, 
+        $query = $wpdb->prepare("SELECT post_id, ST_Y(location) FROM ".$table." WHERE (visible = 1 and ST_within(location, 
             ST_GeomFromText('POLYGON((%f %f, %f %f, %f %f, %f %f, %f %f))')))",
             $sw_lat, $sw_lng,
             $ne_lat, $sw_lng,
