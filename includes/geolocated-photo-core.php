@@ -149,7 +149,7 @@ class Geolocated_Photo {
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-show-planet-map.php';
 
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-show-user-gallery.php';
+		/*require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-show-user-gallery.php';*/
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/pg-edit-gallery.php';
 

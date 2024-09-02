@@ -79,6 +79,7 @@ class Pg_Edit_Photo_Public {
         wp_enqueue_style( 'ays_pb_bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css', array(), $this->version, 'all' );
         //wp_enqueue_style('leaflet.css', 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css');
         wp_enqueue_style( 'gpg-fontawesome', 'https://use.fontawesome.com/releases/v5.4.1/css/all.css', array(), $this->version, 'all');
+        wp_enqueue_style( $this->plugin_name.'-pg-public.css', plugin_dir_url( __FILE__ ) . 'css/pg-public.css', array(), $this->version, 'all' );
     }        
 
     /**
@@ -100,7 +101,6 @@ class Pg_Edit_Photo_Public {
 
     public function enqueue_styles_early(){
 
-        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/pg-public.css', array(), $this->version, 'all' );
         wp_enqueue_script('jquery');
     }
     

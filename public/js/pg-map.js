@@ -498,24 +498,23 @@ var animateMarkerById = function(id) {
                 if (image.address != "") {
                     descrHtml +="<div class='desc-slider-address'><i class='fas fa-map-marker-alt pg-tab'></i>"+image.address+"</div>";
                 }
+                if (image.vignette != "") {
+                    descrHtml +=       "<div id='vignette-"+image.id+"' class='desc-slider-address pg-descr-vignette' data-lon='"+image.longitude+"' data-lat='"+image.latitude+"' data-country='"+image.vignette+"'></div>";
+                }
                 if (image.user != "") {
-                    descrHtml +=       "<div class='desc-slider-user'>";
+                    descrHtml +=       "<div class='desc-slider-address'>";
                     if (image.user_url != "") {
                         let domain= new URL(image.user_url).origin
-                        descrHtml +=         "<div class='desc-slider-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b>, <a href='"+image.user_url+"'>"+domain+"</a>,&nbsp</div>";
+                        descrHtml +=         "<i class='fas fa-user pg-tab'></i><b>"+image.user+"</b>, <a href='"+image.user_url+"'>"+domain+"</a>,&nbsp"+image.date;
                     }
                     else {
-                        descrHtml +=         "<div class='desc-slider-address'><i class='fas fa-user pg-tab'></i><b>"+image.user+"</b>,&nbsp</div>";
+                        descrHtml +=         "<i class='fas fa-user pg-tab'></i><b>"+image.user+"</b>,&nbsp"+image.date;
                     }
-                    descrHtml +=             "<div class='desc-slider-address'>"+image.date+"</div>";
                     //sliderHtml +=           "<div class='desc-slider-address'><i class='fas fa-globe pg-tab'></i><a style='color: white;' href='"+image.user_url+"'>"+domain+"</a></div>";
                     descrHtml +=       "</div>";
                 }
                 else {
                     descrHtml +=       "<div class='desc-slider-address'>"+image.date+"</div>";
-                }
-                if (image.vignette != "") {
-                    descrHtml +=       "<div id='vignette-"+image.id+"' class='desc-slider-address pg-descr-vignette' data-lon='"+image.longitude+"' data-lat='"+image.latitude+"' data-country='"+image.vignette+"'></div>";
                 }
 
                 descrHtml +="</div>";            

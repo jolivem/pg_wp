@@ -324,7 +324,6 @@ body {
 .map-desc-block {
     display: flex;
     justify-content: center;
-    min-height: 100px;
 }
 
 .desc-slider {
@@ -344,13 +343,6 @@ body {
     font-size: small;
     text-align: center;
     font-weight: 500;
-}
-
-.desc-slider-user {
-    font-size: small;
-    font-weight: 500;
-    display: flex;
-    justify-content: center;
 }
 
 .desc-lightbox-title {
@@ -587,11 +579,11 @@ div.slider img {
     }*/
 
     #map {
-        height: 350px;
+        height: 300px;
     }
 
     .map-desc-block {
-        min-height: 100px;
+        min-height: 170px;
     }
 
     .miniature {
@@ -617,7 +609,7 @@ div.slider img {
 
 }
 
-/* Medium devices */
+/* Medium and large devices */
 @media only screen and (min-width: 450px) {
 
     /* container for photo + descr + buttons */
@@ -640,7 +632,7 @@ div.slider img {
     }
 
     .map-desc-block {
-        min-height: 70px;
+        min-height: 150px;
     }
 
     .miniature {
