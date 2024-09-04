@@ -391,7 +391,10 @@ var animateMarkerById = function(id) {
         if (descr) {
             
             // add vignette
-            window.pg_add_vignette_to_slider(descr);
+            if (window.pg_add_vignette_to_slider) {
+                // vignette only for planet map, not for user map
+                window.pg_add_vignette_to_slider(descr);
+            }
 
             $(descr).fadeIn();
             //descr.style.display='block';
