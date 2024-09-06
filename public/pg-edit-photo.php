@@ -137,13 +137,13 @@ class Pg_Edit_Photo_Public {
         $this->enqueue_styles();
         $this->enqueue_scripts();
 
-        echo $this->pg_show_page( $pid, $gid );
+        echo $this->pg_show_page( $pid, $gid, $user_id );
 
         return str_replace(array("\r\n", "\n", "\r"), '', ob_get_clean());
     }
 
     // attr should have the user id
-    public function pg_show_page( $pid, $gid ){
+    public function pg_show_page( $pid, $gid, $user_id){
 
         // ig gid is empty, request comes from the page "My Photos"
 
@@ -170,7 +170,15 @@ class Pg_Edit_Photo_Public {
                     wp_die();
                 }
                 $images_str = implode(",", $images_id);
-            }       
+            }
+            else {
+                $images_id = $this->pg_get_medias_by_user( $user_id );
+                if ($images_id == null) {
+                    my_custom_404();
+                    wp_die();
+                }
+                $images_str = implode(",", $images_id);
+            }
 
             $content = stripslashes($post->post_content);
 
@@ -206,9 +214,8 @@ class Pg_Edit_Photo_Public {
                 </div>
             </div>
             <div class='pg-container'>";
-            if (!empty($gid)) {
-                // add right and left buttons
-                $html_code .= "
+            // add right and left buttons
+            $html_code .= "
                 <div class='flex-container-photo''>
                     <div class='slider-options-left' style='background-color: lightblue'>
                         <div>
@@ -216,7 +223,7 @@ class Pg_Edit_Photo_Public {
                         </div>
                     </div>
                     <div style='display:flex; justify-content: center;'>
-                        <img style='height:200px; width:auto; border: 1px solid #BBB; padding:3px; border-radius: 4px' src='$img_src' alt=''>
+                        <img class='pg-edit-img' src='$img_src' alt=''>
                     </div>
                     <div class='slider-options-right' style='background-color: lightblue'>
                         <div>
@@ -225,16 +232,8 @@ class Pg_Edit_Photo_Public {
                     </div>
                 </div>
                 <div id='cpt-photo' class='cpt-photo'></div>";
-                }
-            else {
 
-                $html_code .= "
-                <div style='display:flex; justify-content: center;'>
-                    <img style='height:200px; width:auto; border: 1px solid #BBB; padding:3px; border-radius: 4px' src='$img_src' alt=''>
-                </div>
-                <br>";
-            }
-
+            // Add description
             $html_code .= "
                 <div class='form-floating mb-3'>
                     <textarea rows='3' style='height:100%;' class='form-control' placeholder='' id='photo-description'>$content</textarea>
@@ -266,13 +265,6 @@ class Pg_Edit_Photo_Public {
         }
         
     } // end ays_show_galery()
-
-    // public function ays_gallery_replace_message_variables($content, $data){
-    //     foreach($data as $variable => $value){
-    //         $content = str_replace("%%".$variable."%%", $value, $content);
-    //     }
-    //     return $content;
-    // }
 
     //
     // callback on request to download photos
@@ -342,18 +334,27 @@ class Pg_Edit_Photo_Public {
         
     }
 
-    // Update the public visibility
-    // private function update_visibility($post_id, $user_status) {
-    //     // error_log("update_visibility IN id=$post_id user_status=$user_status");
+    public function pg_get_medias_by_user( $user_id ) {
+        // error_log("pg_get_medias_by_gallery IN gallery_id=".$id);
+         global $wpdb;
 
-    //     $admin_status = get_post_meta($post_id, 'admin_status', true);
-    //     // error_log("update_visibility admin_status=$admin_status");
+         $args = array(
+            'author'         => $user_id,
+            'post_type'      => 'attachment',
+            'post_status'    => 'inherit,private', // Adjust post status as needed
+            'posts_per_page' => -1, // Retrieve all attachments
+        );
+        
+        $query = new WP_Query( $args );
+        $medias = $query->get_posts();
+        $ids = [];
+        foreach($medias as $item){
+            //error_log("render_images item:".print_r($item, true));
+            $ids[] = $item->ID;
+        }
 
-    //     if ($user_status == self::USER_STATUS_PUBLIC && $admin_status == self::ADMIN_STATUS_PUBLIC_OK) {
-    //         Pg_Geoposts_Table::update_visible($post_id, Pg_Geoposts_Table::PUBLIC_VISIBLE);
-    //     }
-    //     else {
-    //         Pg_Geoposts_Table::update_visible($post_id, Pg_Geoposts_Table::PUBLIC_HIDDEN);
-    //     }
-    // }
+        return $ids;
+
+     }
+ 
 }

@@ -574,6 +574,19 @@ div.slider img {
     border-width: 0px !important;
 }
 
+.android-buttons {
+    height: 50px;
+    border-radius: 8px;
+}
+
+.pg-edit-img {
+    height: 200px;
+    width: auto;
+    border: 1px solid #BBB;
+    padding: 3px;
+    border-radius: 4px
+}
+
 /* default is for small devices < 400px */
 @media only screen and (max-width: 449px) {
 
@@ -615,6 +628,10 @@ div.slider img {
 
     .full-miniature {
         max-width: 135px;
+    }
+
+    .pg-edit-img {
+        height: 200px;
     }
 
 }
@@ -664,6 +681,10 @@ div.slider img {
 
     .full-miniature {
         max-width: 200px;
+    }
+
+    .pg-edit-img {
+        height: 350px;
     }
 
 }

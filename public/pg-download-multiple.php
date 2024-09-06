@@ -140,11 +140,11 @@ class Pg_Download_Multiple_Public {
         // for test$os = "Android";
         //error_log("Pg_Download_Multiple_Public::pg_show_page os=".$os);
         if ($os == "Android") {
-            $html_code .= '<div><b>Utiliser exclusivement le bouton <img src="'.GLP_PUBLIC_URL.'img/Android_file.png" alt=""> à droite.</b></div>';
+            $html_code .= '<div class="android-buttons"><b>Utiliser exclusivement le bouton à droite <img src="'.GLP_PUBLIC_URL.'img/Android_file.png" alt=""> .</b></div>';
 
         }
         if ($os == "iOS") {
-            $html_code .= '<div>
+            $html_code .= '<div class="android-buttons">
                               <b>Utiliser exclusivement le menu du bouton <img src="'.GLP_PUBLIC_URL.'img/IOS_file.png" alt="">.</b>
                             </div>';
         }
