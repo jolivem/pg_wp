@@ -192,20 +192,20 @@ class Glp_User_Galleries_Public {
 
         // loop for each media
         foreach($galleries as $item){
-            error_log("render_galleries item:".print_r($item, true));
+            //error_log("render_galleries item:".print_r($item, true));
             $title = stripslashes($item["title"]);
             $desc = stripslashes($item["description"]);
             
             // get the first image og the gallery
             $image_ids = $this->pg_get_images_by_id($item["id"]);
-            error_log("render_galleries item:".print_r($image_ids, true));
+            //error_log("render_galleries item:".print_r($image_ids, true));
             $img_src1 = "";
             $img_src2 = "";
             $img_src3 = "";
             $count_image = 0;
             foreach( $image_ids as $id) {
                 $url_img = wp_get_attachment_image_src($id, "thumbnail");
-                error_log("render_galleries id=".$id." url=".print_r($url_img, true));
+                //error_log("render_galleries id=".$id." url=".print_r($url_img, true));
                 if ($url_img != false) { // return false if no image
                     if ($count_image == 0) {
                         $img_src1 = $url_img[0];

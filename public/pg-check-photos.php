@@ -160,31 +160,61 @@ class Glp_Check_Photos_Public {
             $addresses=[]; // final addresses to be displayed in the radio list
             try {
                 $address_json = get_post_meta($item->ID, 'address_json',true);
-                if ($addresses_json) {
-                    error_log("render_images addresses:".$addresses_json);
-                    $jadresses = json_decode($addresses_json, true);
-                    error_log("render_images jaddresses".print_r($jaddresses, true));
-                    if ($jadresses != null) {
+                /* for tests only 
+                $address_json = '[
+                    {
+                        "formatted_address": "HQCV+3Q Bourg-Saint-Maurice, France",
+                        "place_id": "GhIJr7coDvvIRkARvVKWIY4tG0A",
+                        "types": [
+                            "plus_code"
+                        ]
+                    },
+                    {
+                        "formatted_address": "Route coucou, 73700 Bourg-Saint-Maurice, France",
+                        "place_id": "ChIJB9sU57VviUcRMpnD_cDeVOI",
+                        "types": [
+                            "route"
+                        ]
+                    },
+                    {
+                        "formatted_address": "Route sans nom, 73700 Bourg-Saint-Maurice, France",
+                        "place_id": "ChIJB9sU57VviUcRMpnD_cDeVOI",
+                        "types": [
+                            "route"
+                        ]
+                    },                    {
+                        "formatted_address": "73700 Bourg-Saint-Maurice, France",
+                        "place_id": "ChIJOXYlgjRmiUcRsLa65CqrCAQ",
+                        "types": [
+                            "locality",
+                            "political"
+                        ]
+                    }
+                ]'; */
+
+                //$address_json = '[{"long_name":"HQCV+3Q","short_name":"HQCV+3Q","types":["plus_code"]}]';
+                if ($address_json) {
+                    //error_log("render_images addresses:".$address_json);
+                    $jaddresses = json_decode($address_json, true);
+                    //error_log("render_images jaddresses: ".print_r($jaddresses, true));
+                    if ($jaddresses != null) {
                         
-                        for ($i = 0 ; $i < count($jadresses); $i++) {
-                            $addresses[] = $this->remove_numeric_words($jadresses[$i]['formatted_address']);
+                        for ($i = 0 ; $i < count($jaddresses); $i++) {
+                            $addresses[] = $this->remove_numeric_words($jaddresses[$i]['formatted_address']);
                         }
 
                         // remove duplicates
+                        //error_log("render_images jaddresses: A. addresses :".print_r($addresses, true));
                         $addresses = array_values(array_unique($addresses));
+                        //error_log("render_images jaddresses: B. addresses :".print_r($addresses, true));
                     }
 
-                    // else {
-                        // error_log("render_images addresses2:".$addresses[1]['formatted_address']);
-                        // for ($i = 0 ; $i < count($addresses); $i++) {
-                        //     error_log("render_images addresses:" . $addresses[$i]['formatted_address']);
-                        // }
-                    // }
                 }
             
             } catch (Exception $e) {
                 error_log("render_images Exception");
             }
+            //error_log("render_images jaddresses: addresses :".print_r($addresses, true));
             
             //error_log("render_images addresses".print_r($addresses, true));
             $statext = Pg_Edit_Gallery_Public::get_photo_status($item->ID);
