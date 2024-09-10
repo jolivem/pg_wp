@@ -53,16 +53,16 @@
             let nonce = document.getElementById('pg_nonce')?.value;
             let admin_url = document.getElementById('pg_admin_ajax_url')?.value;
 
-            // get the address selected 
-            let name = "address" + postid;
-            let address = document.querySelector('input[name="'+name+'"]:checked').value;
-    
             const formData = new FormData();
             formData.append('nonce', nonce);
-            formData.append('address', address);
             formData.append('pid', postid);
             if (e.target.classList.contains("fa-thumbs-up")) {
     
+                // get the address selected 
+                let name = "address" + postid;
+                let address = document.querySelector('input[name="'+name+'"]:checked').value;
+                formData.append('address', address);
+
                 formData.append('action', 'admin_valid_photo');
 
                 jQuery.ajax({
