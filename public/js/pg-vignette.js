@@ -28,7 +28,7 @@
         let file = ays_vars.base_url + "assets/geojson/" + country.file;
  
         //var elemDiv = document.getElementById(mapId);
-        console.log("pg_add_leaflet_map", elemDiv);
+        //console.log("pg_add_leaflet_map", elemDiv);
         //console.log("pg_add_leaflet_map elemDiv", elemDiv);
         if (elemDiv == null || elemDiv.childElementCount > 0) {
             console.log("pg_add_leaflet_map map already added");
@@ -92,7 +92,7 @@
     }
 
     window.pg_add_vignette_to_slider = function(father) {
-        console.log( "pg_add_vignette_to_slider IN", father);
+        //console.log( "pg_add_vignette_to_slider IN", father);
         let elems = father.getElementsByClassName('pg-descr-vignette');
         if (elems.length > 0) {
             let elem = elems[0];
