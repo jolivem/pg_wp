@@ -60,6 +60,7 @@ class Glp_User_Photos_Public {
         $this->version = $version;
         // $this->settings = new Gallery_Settings_Actions($this->plugin_name);
         add_shortcode( 'glp_user_photos', array($this, 'pg_generate_page') );
+        error_log("Glp_User_Photos_Public::ctor locale =".get_locale());
     }
 
     /**
@@ -152,7 +153,7 @@ class Glp_User_Photos_Public {
             </div>
         </div>
         <div class='pg-container' id='user-item-list'>
-            <h3>Mes photos</h3>";
+            <h3>".esc_html__("Mes photos", $this->plugin_name)."</h3>";
 
         $html_code .= $this->render_images($medias, $medias_nb);
         $html_code .= 
@@ -175,21 +176,21 @@ class Glp_User_Photos_Public {
                 $img_src = $url_img[0];
             }
 
-            $statext = Pg_Edit_Gallery_Public::get_photo_status($item->ID);
+            $statext = Pg_Edit_Gallery_Public::get_photo_status($item->ID, $this->plugin_name);
             $metadate = get_post_meta($item->ID, 'date', true);
             $date = Pg_Edit_Gallery_Public::get_photo_date($metadate);
             
             $textnbgalleries='';
             if (array_key_exists($item->ID, $medias_nb)) {
                 if ($medias_nb[$item->ID] == 1) {
-                    $textnbgalleries='1 galerie';
+                    $textnbgalleries = esc_html__("1 galerie", $this->plugin_name);
                 }
                 else {
-                    $textnbgalleries=$medias_nb[$item->ID]." galleries";
+                    $textnbgalleries=$medias_nb[$item->ID]." ".esc_html__("galeries", $this->plugin_name);
                 }
             }
             else {
-                $textnbgalleries='Sans galerie';
+                $textnbgalleries = esc_html__("Sans galerie", $this->plugin_name);
             }
 
             //error_log("render_images url:".print_r($url_img, true));

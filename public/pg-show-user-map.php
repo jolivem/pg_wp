@@ -60,6 +60,7 @@ class Pg_Show_User_Map_Public {
         $this->version = $version;
         // $this->settings = new Gallery_Settings_Actions($this->plugin_name);
         add_shortcode( 'pg_show_user_map', array($this, 'pg_generate_page') );
+        error_log("Pg_Show_User_Map_Public::ctor locale =".get_locale());
     }
 
     /**

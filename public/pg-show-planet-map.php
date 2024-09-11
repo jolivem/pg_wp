@@ -60,6 +60,7 @@ class Pg_Show_Planet_Map_Public {
         $this->version = $version;
         // $this->settings = new Gallery_Settings_Actions($this->plugin_name);
         add_shortcode( 'pg_show_planet_map', array($this, 'pg_generate_page') );
+        error_log("Pg_Show_Planet_Map_Public::ctor locale =".get_locale());
     }
 
     /**
@@ -125,16 +126,8 @@ class Pg_Show_Planet_Map_Public {
 
         // error_log("pg_show_page IN");
         
-        //global $wpdb;
-  
         $medias = Pg_Geoposts_Table::get_all_public_images();
         //error_log("pg_show_page ".print_r($medias, true));
-        //[$html_slider, $html_descr] = $this->render_slider($medias);
-        //$html_slider = "";
-        //$html_descr = "";
-        // error_log("pg_show_page html_slider = $html_slider");
-        // error_log("pg_show_page html_descr = $html_descr");
-        //$html_addresses = $this->render_medias_address($medias);
         $admin_ajax_url = admin_url('admin-ajax.php');
         $nonce = wp_create_nonce('show_planet');
 
@@ -154,7 +147,7 @@ class Pg_Show_Planet_Map_Public {
             <div id='ban-photo-success' class='toast align-items-center text-white bg-success bg-gradient border-0' role='alert' aria-live='assertive' aria-atomic='true'>
                 <div class='d-flex'>
                     <div class='toast-body'>
-                        Enregistré !
+                    ".esc_html__("Enregistré !", $this->plugin_name)."
                     </div>
                 </div>
             </div>
@@ -163,7 +156,7 @@ class Pg_Show_Planet_Map_Public {
         <div class='pg-map-container'>
             <form id='searchForm'>
                 <div class='input-group mb-3'>
-                    <input type='text' class='form-control' id='searchInput' placeholder='Entrez un lieu' aria-label='Entrez un lieu' aria-describedby='searchButton'>
+                    <input type='text' class='form-control' id='searchInput' placeholder='".esc_html__("Entrez un lieu", $this->plugin_name)."' aria-label='Entrez un lieu' aria-describedby='searchButton'>
                     <button type='button' id='searchButton' class='btn btn-primary' data-mdb-ripple-init>
                         <i class='fas fa-search'></i>
                     </button>
@@ -179,13 +172,14 @@ class Pg_Show_Planet_Map_Public {
         </br>
         <div class='pg-map-container'>
             <div class='participate-info'>
-                Participez au projet Planet-Gallery !
+            ".esc_html__("Participez au projet Planet-Gallery !", $this->plugin_name)."
                 <ul>
-                    <li>Créez des galeries avec vos photos géolocalisées.</li>
-                    <li>Partagez des galeries et cartes inédites avec vos proches.</li>
-                    <li>Les photos publiques sont affichées sur la carte ci-dessus.</li>
+                    <li>".esc_html__("Créez des galeries avec vos photos géolocalisées.", $this->plugin_name)."</li>
+                    <li>".esc_html__("Partagez des galeries et cartes inédites avec vos proches.", $this->plugin_name)."</li>
+                    <li>".esc_html__("Faites connaître votre activité.", $this->plugin_name)."</li>
+                    <li>".esc_html__("Les photos publiques sont affichées sur la carte ci-dessus.", $this->plugin_name)."</li>
                 </ul>
-                C'est un projet participatif, tout est gratuit. Inscrivez-vous dès maintenant !
+                ".esc_html__("C'est un projet participatif, tout est gratuit. Inscrivez-vous dès maintenant !", $this->plugin_name)."
             </div>
          </div>";
 

@@ -108,33 +108,27 @@ class Pg_Contact_Mail_Public {
         <div class='toast-container position-fixed bottom-0 end-0 p-3'>
             <div id='contact-success' class='toast align-items-center text-white bg-success bg-gradient border-0' role='alert' aria-live='assertive' aria-atomic='true'>
                 <div class='d-flex'>
-                    <div class='toast-body'>
-                        Envoyé !
-                    </div>
+                    <div class='toast-body'>".esc_html__("Envoyé !", $this->plugin_name)."</div>
                 </div>
             </div>
         </div>
         <div class='pg-container'>
             </br>
-            <h3>Formulaire de contact</h3>
+            <h3>".esc_html__("Formulaire de contact", $this->plugin_name)."</h3>
             <div>
                 <div class='form-floating mb-3'>
                     <input type='text' name='email' class='form-control' id='email' aria-describedby='emailHelp' placeholder=''>
-                    <label for='email'>Votre email de contact</label>
-                    <div class='invalid-input'>
-                        Veuillez saisir un email valide.
-                    </div>
+                    <label for='email'>".esc_html__("Votre email de contact", $this->plugin_name)."</label>
+                    <div class='invalid-input'>".esc_html__("Veuillez saisir un email valide.", $this->plugin_name)."</div>
                 </div>
                 <div class='form-floating mb-3'>
                     <textarea rows='6' name='desc' style='height:100%;' class='form-control' placeholder='' id='contact-message'></textarea>
-                    <label for='contact-message'>Votre message</label>                        
-                    <div class='invalid-input'>
-                        Veuillez saisir un message.
-                    </div>
+                    <label for='contact-message'>".esc_html__("Votre message", $this->plugin_name)."</label>                        
+                    <div class='invalid-input'>".esc_html__("Veuillez saisir un message.", $this->plugin_name)."</div>
                 </div>
             </div>
             <div>
-                <button type='button' class='btn btn-primary align-right' id='contact-mail'>Envoyer</button>
+                <button type='button' class='btn btn-primary align-right' id='contact-mail'>".esc_html__("Envoyer", $this->plugin_name)."</button>
             </div>
             <br/>
         </div>";

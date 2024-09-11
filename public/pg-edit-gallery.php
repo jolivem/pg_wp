@@ -230,7 +230,7 @@ class Pg_Edit_Gallery_Public {
             <div id='save-gallery-success' class='toast align-items-center text-white bg-success bg-gradient border-0' role='alert' aria-live='assertive' aria-atomic='true'>
                 <div class='d-flex'>
                     <div class='toast-body'>
-                        Enregistré !
+                        ".esc_html__("", $this->plugin_name)."Enregistré !
                     </div>
                 </div>
             </div>
@@ -245,7 +245,7 @@ class Pg_Edit_Gallery_Public {
         // th only way is to use value with double quotes
         $html_code .= 'value="'.$title.'">';
         $html_code .= "
-                        <label for='gallery-title'>Titre</label>
+                        <label for='gallery-title'>".esc_html__("Titre", $this->plugin_name)."</label>
                     </div>
                     <div class='form-floating mb-3'>
                         <textarea rows='4' name='desc' style='height:100%;' class='form-control' placeholder='' id='gallery-description'>$description</textarea>
@@ -255,17 +255,17 @@ class Pg_Edit_Gallery_Public {
         if ($hide_help != 'true') {
             $html_code .= "
                 <div class='alert alert-info' role='alert'>
-                    <div>Pour chaque photo :</div>
-                    <div>- Utilisez &nbsp<i class='fas fa-edit'></i>&nbsp pour modifier la description et le caractère <b>Publique</b> / <b>Privé</b> de la photo.</div>
-                    <div>- Utilisez &nbsp<i class='fas fa-trash'></i>&nbsp pour supprimer la photo de la galerie, elle reste présente dans votre phototèque.</div>
+                    <div>".esc_html__("Pour chaque photo :", $this->plugin_name)."</div>
+                    <div>- ".esc_html__("Utilisez", $this->plugin_name)." &nbsp<i class='fas fa-edit'></i>&nbsp ".esc_html__("pour modifier la description et le caractère <b>Publique</b> / <b>Privé</b> de la photo.", $this->plugin_name)."</div>
+                    <div>- ".esc_html__("Utilisez", $this->plugin_name)." &nbsp<i class='fas fa-trash'></i>&nbsp ".esc_html__("pour supprimer la photo de la galerie, elle reste présente dans votre phototèque.", $this->plugin_name)."</div>
                     </br>
-                    <div>- Une photo notée <b>Non vérifiée</b> est publique, en attente de vérification par le modérateur.</div>
-                    <div>- Une photo notée <b>Privée</b> n'est pas affichée sur la galerie publique et n'est pas vérifiée par le modérateur.</div>
-                    <div>- Une photo notée <b>Publique</b> est affichée sur la galerie publique.</div>
+                    <div>- ".esc_html__("Une photo notée", $this->plugin_name)." <b>".esc_html__("Non vérifiée", $this->plugin_name)."</b> ".esc_html__("est publique, en attente de vérification par le modérateur.", $this->plugin_name)."</div>
+                    <div>- ".esc_html__("Une photo notée", $this->plugin_name)." <b>".esc_html__("Privée", $this->plugin_name)."</b> ".esc_html__("n'est pas affichée sur la galerie publique et n'est pas vérifiée par le modérateur.", $this->plugin_name)."</div>
+                    <div>- ".esc_html__("Une photo notée", $this->plugin_name)." <b>".esc_html__("Publique", $this->plugin_name)."</b> ".esc_html__("est affichée sur la galerie publique.", $this->plugin_name)."</div>
                     </br>
                     <div class='form-check form-switch'>
                         <input  id='gallery_help' class='form-check-input' type='checkbox' role='switch'>
-                        <label class='form-check-label' for='galleries_help'>Ne plus afficher</label>
+                        <label class='form-check-label' for='galleries_help'>".esc_html__("Ne plus afficher", $this->plugin_name)."</label>
                     </div>
                 </div>
                 <br/>";
@@ -275,34 +275,34 @@ class Pg_Edit_Gallery_Public {
                 <div class='user-gallery-btns'>";
         $html_code .= "
                     <button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#multipleDowloadModal'>
-                        Ajouter des photos...
+                    ".esc_html__("Ajouter des photos...", $this->plugin_name)."
                     </button>";
         // admin can add photos where he sets GPS position
         if ( current_user_can( 'manage_options' ) ) {
             $html_code .= "
                     <button type='button' id='btn-add-single-photo' class='btn btn-outline-warning' style='margin-bottom: 10px;' data-galid='$id'>
-                        Ajouter une photo
+                    ".esc_html__("Ajouter une photo", $this->plugin_name)."
                     </button>";
         }
 
         $html_code .= "
-                    <button type='button' class='btn btn-primary' id='edit-gallery-save'>Enregistrer</button>
+                    <button type='button' class='btn btn-primary' id='edit-gallery-save'>".esc_html__("Enregistrer", $this->plugin_name)."</button>
                 </div>
                 <div id='gallery-item-list'>$html_images</div>
             </div>
             <br/>
             <div>
-                <a href='$user_galleries_url'>Retour à Mes galeries</a>
+                <a href='$user_galleries_url'>".esc_html__("Retour à Mes galeries", $this->plugin_name)."</a>
             </div>
             </br>
             <div>
                 <button type='button' class='btn btn-secondary align-left' data-bs-toggle='modal' data-bs-target='#delete-confirmation'>
-                    Supprimer la galerie
+                ".esc_html__("Supprimer la galerie", $this->plugin_name)."
                 </button>";
         // The photos added are automatically saved in the gallery
         if ($nb_medias > 7) {
             $html_code .= "
-                <button type='button' class='btn btn-primary align-right' id='edit-gallery-save-2'>Enregistrer</button>";
+                <button type='button' class='btn btn-primary align-right' id='edit-gallery-save-2'>".esc_html__("Enregistrer", $this->plugin_name)."</button>";
         }
         $html_code .= "
             </div>
@@ -366,7 +366,7 @@ class Pg_Edit_Gallery_Public {
                 $content = stripslashes($post->post_content);
                 $title = stripslashes($post->post_title);
 
-                $statext = $this->get_photo_status($id);
+                $statext = $this->get_photo_status($id, $this->plugin_name);
                 $metadate = get_post_meta($id, 'date', true);
                 $date = Pg_Edit_Gallery_Public::get_photo_date($metadate);
 
@@ -400,24 +400,24 @@ class Pg_Edit_Gallery_Public {
     }
 
    
-    public static function get_photo_status($id) {
+    public static function get_photo_status($id, $plugin_name) {
         $meta = get_post_meta($id);
         //error_log("get_photo_status meta=".print_r($meta, true));
         //error_log("get_photo_status type=".gettype($meta['status'][0]));
 
         if (isset($meta['user_status']) && $meta['user_status'][0] != Pg_Edit_Photo_Public::USER_STATUS_PUBLIC){
-            $statext = "Privée";
+            $statext = esc_html__("Privée", $plugin_name);
         }
         else {
             //TODO get if its shared or not
             if ($meta['admin_status'][0] == Pg_Edit_Photo_Public::ADMIN_STATUS_PUBLIC_OK) {
-                $statext = "Publique";
+                $statext = esc_html__("Publique", $plugin_name);
             }
             else if ($meta['admin_status'][0] == Pg_Edit_Photo_Public::ADMIN_STATUS_NOT_SEEN) {
-                $statext = "Non vérifiée";
+                $statext = esc_html__("Non vérifiée", $plugin_name);
             }
             else if ($meta['admin_status'][0] == Pg_Edit_Photo_Public::ADMIN_STATUS_NOT_OK) {
-                $statext = "Non publique";
+                $statext = esc_html__("Non publique", $plugin_name);
             }
         }
         return $statext;
@@ -429,19 +429,18 @@ class Pg_Edit_Gallery_Public {
         try {
             $date = new DateTime($datetime);
             // Define an array of French month names
-            $frenchMonthNames = [
-                'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
-                'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'
-            ];
-            
+            $locale = get_locale();
+            $formatter = new IntlDateFormatter( $locale,
+                IntlDateFormatter::MEDIUM,
+                IntlDateFormatter::NONE);
+    
+            $day = $formatter->format($date );
+
             // Get the day, month, and year from the DateTime object
-            $day = $date->format('d');
-            $month = $date->format('n');
-            $year = $date->format('Y');
             $time = $date->format('H:i');
             
             // Format the date in French format
-            return $day . ' ' . $frenchMonthNames[$month - 1] . ' ' . $year . ' à ' . $time;;
+            return $day  . ', ' . $time;;
         }
         catch (Exception $e) {
             error_log("get_photo_date Exception: " .$e->getMessage());
@@ -716,16 +715,16 @@ class Pg_Edit_Gallery_Public {
                 <div class="modal-content">
                     <div class="pg-container">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="delete-confirmation-label">Suppression de la galerie</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                            <h5 class="modal-title" id="delete-confirmation-label">'.esc_html__("Suppression de la galerie", $this->plugin_name).'</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="'.esc_html__("Fermer", $this->plugin_name).'""></button>
                         </div>                            
                         <div class="modal-body">
-                            <p>La galerie va être supprimée définitivement.</p>
-                            <p>Note : Les photos de la galerie sont conservées et accessibles dans le menu <b>Mes photos<b>.<p>
+                            <p>'.esc_html__("La galerie va être supprimée définitivement.", $this->plugin_name).'</p>
+                            <p>'.esc_html__("Note : Les photos de la galerie sont conservées et accessibles dans le menu Mes photos.", $this->plugin_name).'<p>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" id="close-modal" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                            <button type="button" id="modal-delete-gallery" class="btn btn-primary">Confirmer</button>
+                            <button type="button" id="close-modal" class="btn btn-secondary" data-bs-dismiss="modal">'.esc_html__("Fermer", $this->plugin_name).'</button>
+                            <button type="button" id="modal-delete-gallery" class="btn btn-primary">'.esc_html__("Confirmer", $this->plugin_name).'</button>
                         </div>
                     </div>
                 </div>

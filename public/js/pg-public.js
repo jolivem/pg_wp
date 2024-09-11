@@ -1,8 +1,11 @@
+
 (function ($) {
 
-
     $(function () {
-        
+
+        const message = wp.i18n.__('TEST', 'geolocated-photo');
+        console.log("XXXXXXXXXXXXX  message", message);
+
         // Update the photo counter on the edit-photo page
         function updatePhotoCounter() {
 
@@ -34,7 +37,6 @@
 
         // call the function when ready
         updatePhotoCounter();
-
 
         
         $(document).find('#user-galleries-create').on('click', function(e){

@@ -123,7 +123,7 @@ class Pg_Download_Multiple_Public {
         // TODO check if user id is a valid user
         // $medias = 
         // if(!$medias){
-        //     // TODO display no photos yet, upload your first photo
+        //     // TODO display no photos yet, upload your first photo .esc_html__("", $this->plugin_name).
         //     return "[pg_download_multiple id='".$id."']";
         // }
         $admin_ajax_url = admin_url('admin-ajax.php');
@@ -135,19 +135,19 @@ class Pg_Download_Multiple_Public {
                 <div class="modal-content">
                     <div class="container">
                         <div class="modal-header modal-download" style="display: block;">
-                            <div class="modal-title" id="multipleDowloadModalLabel">Sélection de photos géolocalisées par groupes de 20 maximum.</div>';
+                            <div class="modal-title" id="multipleDowloadModalLabel">'.esc_html__("Sélection de photos géolocalisées par groupes de 20 maximum.", $this->plugin_name).'</div>';
         $os = $this->getOS();
         // for test$os = "Android";
         //error_log("Pg_Download_Multiple_Public::pg_show_page os=".$os);
         if ($os == "Android") {
             $html_code .=  '<div>
-                                <b>Utiliser exclusivement le bouton à droite : </b><img class="android-buttons" src="'.GLP_PUBLIC_URL.'img/Android_file.png" alt="">
+                                <b>'.esc_html__("Utiliser exclusivement le bouton à droite : ", $this->plugin_name).'</b><img class="android-buttons" src="'.GLP_PUBLIC_URL.'img/Android_file.png" alt="">
                             </div>';
 
         }
         if ($os == "iOS") {
             $html_code .=  '<div>
-                              <b>Utiliser exclusivement le menu du bouton : </b><img class="android-buttons" src="'.GLP_PUBLIC_URL.'img/IOS_file.png" alt="">
+                              <b>'.esc_html__("Utiliser exclusivement le menu du bouton : ", $this->plugin_name).'</b><img class="android-buttons" src="'.GLP_PUBLIC_URL.'img/IOS_file.png" alt="">
                             </div>';
         }
         $html_code .= '
@@ -159,20 +159,20 @@ class Pg_Download_Multiple_Public {
                                 <input type="hidden" id="download_nonce" value="'.$nonce.'"/>
                                 <div style="display:flex">
                                     <label for="fileInput" id="btnSelect" class="btn btn-primary">
-                                        Sélectionner...
+                                        '.esc_html__("Sélectionner...", $this->plugin_name).'
                                     </label>
-                                    <div class="btn-warning">Nombre maximum atteint pour cette sélection </div>
+                                    <div class="btn-warning">'.esc_html__("Nombre maximum atteint pour cette sélection ", $this->plugin_name).'</div>
                                 </div>
                                 <br/>
                                 <input type="file" id="fileInput" name="custom-file[]" multiple>
                                 <div id="modal-item-list"></div>
                                 <br/>
                                 <div id="selection-spinner" class="spinner-border text-primary download-spinner" style="display:none;"></div>
-                                <button type="submit" id="multiple-upload" class="btn btn-primary" style="display: none">Télécharger</button>
+                                <button type="submit" id="multiple-upload" class="btn btn-primary" style="display: none">'.esc_html__("Télécharger", $this->plugin_name).'</button>
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" id="close-multiple-modal" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                            <button type="button" id="close-multiple-modal" class="btn btn-secondary" data-bs-dismiss="modal">'.esc_html__("Fermer", $this->plugin_name).'</button>
                         </div>
                         <div id="progressContainer"></div>
                     </div>

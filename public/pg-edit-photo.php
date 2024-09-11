@@ -65,6 +65,7 @@ class Pg_Edit_Photo_Public {
 
         $this->plugin_name = $plugin_name;
         $this->version = $version;
+        error_log("Pg_Edit_Photo_Public::ctor plugin_name = ".$plugin_name);
         // $this->settings = new Gallery_Settings_Actions($this->plugin_name);
         add_shortcode( 'pg_edit_photo', array($this, 'pg_generate_page') );
     }
@@ -92,7 +93,10 @@ class Pg_Edit_Photo_Public {
         //wp_enqueue_media();
         wp_enqueue_script( $this->plugin_name.'-bootstrap.js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', array( 'jquery' ), $this->version, true );
         //wp_enqueue_script('leaflet', 'https://unpkg.com/leaflet/dist/leaflet.js', array('jquery'), '1.7.1', true);
-        wp_enqueue_script( $this->plugin_name.'-pg-public.js', plugin_dir_url( __FILE__ ) . 'js/pg-public.js', array( 'jquery' ), $this->version, true );
+        
+        wp_enqueue_script( $this->plugin_name.'-pg-public.js', plugin_dir_url( __FILE__ ) . 'js/pg-public.js', array( 'jquery', 'wp-i18n' ), $this->version, true );
+        $resu = wp_set_script_translations($this->plugin_name.'-pg-public.js', $this->plugin_name, plugin_dir_path(__FILE__) . 'languages' );
+        error_log("Pg_Edit_Photo_Public::enqueue_scripts resu=$resu, plugin_name=$this->plugin_name");
 
         //wp_enqueue_script( $this->plugin_name.'-pg-vignette.js', plugin_dir_url( __FILE__ ) . 'js/pg-vignette.js', array( 'jquery' ), $this->version, true );
         wp_localize_script($this->plugin_name.'-pg-public.js', 'ays_vars', array('base_url' => GLP_BASE_URL));
@@ -154,12 +158,12 @@ class Pg_Edit_Photo_Public {
         if ($post != null) {
 
             $user_status_checked = "";
-            $user_status_label ="Photo privée";
+            $user_status_label = esc_html__("Photo privée", $this->plugin_name);
             $user_status = self::USER_STATUS_PRIVATE;
             if (get_post_meta($pid, 'user_status', true) == self::USER_STATUS_PUBLIC) {
                 $user_status_checked = " checked";
                 $user_status = self::USER_STATUS_PUBLIC;
-                $user_status_label ="Affichage autorisé sur la galerie publique";
+                $user_status_label = esc_html__("Affichage autorisé sur la galerie publique", $this->plugin_name);
             }
 
             $images_str='';
@@ -208,7 +212,7 @@ class Pg_Edit_Photo_Public {
                 <div id='save-photo-success' class='toast align-items-center text-white bg-success bg-gradient border-0' role='alert' aria-live='assertive' aria-atomic='true'>
                     <div class='d-flex'>
                         <div class='toast-body'>
-                            Enregistré !
+                            ".esc_html__("Enregistré !", $this->plugin_name)."
                         </div>
                     </div>
                 </div>
@@ -247,15 +251,15 @@ class Pg_Edit_Photo_Public {
                 <div class='flex-space-between'>";
             if (!empty($gid)) {
                 $html_code .= "
-                    <a href='$edit_gallery_url'>Retour à la galerie</a>";
+                    <a href='$edit_gallery_url'>".esc_html__("Retour à la galerie", $this->plugin_name)."</a>";
             }
             else {
                 $html_code .= "
-                    <a href='$my_photo_url'>Retour à Mes photos</a>";
+                    <a href='$my_photo_url'>".esc_html__("Retour à Mes photos", $this->plugin_name)."</a>";
 
             }
             $html_code .= "
-                    <button type='button' class='btn btn-primary' id='btn-save-photo' style='float: inline-end;'>Enregistrer</button>
+                    <button type='button' class='btn btn-primary' id='btn-save-photo' style='float: inline-end;'>".esc_html__("Enregistrer", $this->plugin_name)."</button>
                 </div>
             </div>";
             return $html_code;

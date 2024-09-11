@@ -17,1378 +17,241 @@ msgstr ""
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-msgid "Select user"
+msgid "Oops ! La page est introuvable."
 msgstr ""
 
-msgid "Please enter 1 or more characters"
+msgid "Formulaire de contact"
 msgstr ""
 
-msgid "Searching..."
+# toast message
+msgid "Envoyé !"
 msgstr ""
 
-msgid "Copied!"
+msgid "Votre email de contact"
 msgstr ""
 
-msgid "Click for copy."
+msgid "Veuillez saisir un email valide."
 msgstr ""
 
-msgid "Add Gif"
+msgid "Votre message"
 msgstr ""
 
-msgid "Maybe something went wrong."
+msgid "Veuillez saisir un message."
 msgstr ""
 
-msgid "Error"
+# btn text
+msgid "Envoyer"
 msgstr ""
 
-msgid "Are you sure you want to go to the next gallery page?"
+msgid "Sélection de photos géolocalisées par groupes de 20 maximum."
 msgstr ""
 
-msgid "Are you sure you want to go to the previous gallery page?"
+msgid "Utiliser exclusivement le bouton à droite : "
 msgstr ""
 
-msgid "Clear"
+msgid "Utiliser exclusivement le menu du bouton : "
 msgstr ""
 
-msgid "Clear color"
+msgid "Sélectionner..."
 msgstr ""
 
-msgid "Default"
+msgid "Nombre maximum atteint pour cette sélection"
 msgstr ""
 
-msgid "Select default color"
+msgid "Télécharger"
 msgstr ""
 
-msgid "Select Color"
+msgid "Fermer"
 msgstr ""
 
-msgid "Color value"
+msgid "Titre"
 msgstr ""
 
-msgid "Photo Gallery"
+msgid "Pour chaque photo :"
 msgstr ""
 
-msgid "All Galleries"
+msgid "Utilisez"
 msgstr ""
 
-msgid "Add new"
+msgid "Une photo notée"
 msgstr ""
 
-msgid "Categories"
+msgid "Non vérifiée"
 msgstr ""
 
-msgid "General Settings"
+msgid "Non publique"
 msgstr ""
 
-msgid "How to use"
+msgid "Privée"
 msgstr ""
 
-msgid "Our products"
+msgid "Publique"
 msgstr ""
 
-msgid "PRO Features"
+msgid "pour modifier la description et le caractère <b>Publique</b> / <b>Privé</b> de la photo."
 msgstr ""
 
-msgid "Settings"
+msgid "pour supprimer la photo de la galerie, elle reste présente dans votre phototèque."
 msgstr ""
 
-msgid "Demo"
+msgid "est publique, en attente de vérification par le modérateur."
 msgstr ""
 
-msgid "Upgrade 20% Sale"
+msgid "n'est pas affichée sur la galerie publique et n'est pas vérifiée par le modérateur."
 msgstr ""
 
-msgid "Galleries"
+msgid "est affichée sur la galerie publique."
 msgstr ""
 
-msgid "Gallery Photo Gallery"
+msgid "Ne plus afficher"
 msgstr ""
 
-msgid "If you love our plugin, please do big favor and rate us on"
-msgstr ""
-
-msgid "Message Variables"
-msgstr ""
-
-msgid "Insert your preferred message variable into the editor by clicking."
-msgstr ""
-
-msgid "Add new gallery"
-msgstr ""
-
-msgid "Edit gallery"
-msgstr ""
-
-msgid "User's First Name"
-msgstr ""
-
-msgid "User's Last Name"
-msgstr ""
-
-msgid "User's Display Name"
-msgstr ""
-
-msgid "User's Nick Name"
-msgstr ""
-
-msgid "User's WordPress profile email"
-msgstr ""
-
-msgid "User's Wordpress Roles"
-msgstr ""
-
-msgid "User's IP address"
-msgstr ""
-
-msgid "User's ID"
-msgstr ""
-
-msgid "View Documentation"
-msgstr ""
-
-msgid "Save and close"
-msgstr ""
-
-msgid "Save"
-msgstr ""
-
-msgid "Shortcode text for editor"
-msgstr ""
-
-msgid "To insert the Gallery into a page, post or text widget, copy shortcode"
-msgstr ""
-
-msgid "and paste it at the desired place in the editor."
-msgstr ""
-
-msgid "Images"
-msgstr ""
-
-msgid "Styles"
-msgstr ""
-
-msgid "Lightbox settings"
-msgstr ""
-
-msgid "Lightbox effects"
-msgstr ""
-
-msgid "Gallery Title"
-msgstr ""
-
-msgid "In this field is noted the name of the gallery"
-msgstr ""
-
-msgid "Gallery Description"
-msgstr ""
-
-msgid "This section is noted for the description of the gallery. You can use Variables (General Settings) to insert user data here."
-msgstr ""
-
-msgid "To see all Message Variables "
-msgstr ""
-
-msgid "click here"
-msgstr ""
-
-msgid "Add Images"
-msgstr ""
-
-msgid "Upload images for your gallery"
-msgstr ""
-
-msgid "Add multiple images +"
-msgstr ""
-
-msgid "Delete"
-msgstr ""
-
-msgid "Select all"
-msgstr ""
-
-msgid "It shows the name of the inserted picture"
-msgstr ""
-
-msgid "This field shows the alternate text when the picture is not loaded or not found"
-msgstr ""
-
-msgid "This field shows the description of the chosen image"
-msgstr ""
-
-msgid "This section is for the URL address"
-msgstr ""
-
-msgid "Select image categories"
-msgstr ""
-
-msgid "All"
-msgstr ""
-
-msgid "5"
-msgstr ""
-
-msgid "10"
-msgstr ""
-
-msgid "15"
-msgstr ""
-
-msgid "20"
-msgstr ""
-
-msgid "25"
-msgstr ""
-
-msgid "30"
-msgstr ""
-
-msgid "This field is for the creation of pagination"
-msgstr ""
-
-msgid "Image pagination"
-msgstr ""
-
-msgid "Change the ordering"
-msgstr ""
-
-msgid "Title"
-msgstr ""
-
-msgid "Image title"
-msgstr ""
-
-msgid "Alt"
-msgstr ""
-
-msgid "Image alt"
-msgstr ""
-
-msgid "Description"
-msgstr ""
-
-msgid "Image description"
-msgstr ""
-
-msgid "URL"
-msgstr ""
-
-msgid "Image Category"
-msgstr ""
-
-msgid "General options"
-msgstr ""
-
-msgid "Enable filter by categories"
-msgstr ""
-
-msgid "You can decide whether to show the filter by category of the gallery or not. This option is compatible only with the Grid layout."
-msgstr ""
-
-msgid "Categories filter animation"
-msgstr ""
-
-msgid "Choose the animation of the images displaying while filtering them by categories."
-msgstr ""
-
-msgid "Slide Up"
-msgstr ""
-
-msgid "Slide Down"
-msgstr ""
-
-msgid "Slide Left"
-msgstr ""
-
-msgid "Slide Right"
-msgstr ""
-
-msgid "Show gallery head"
-msgstr ""
-
-msgid "You can decide whether to show the title and description of the gallery or not"
-msgstr ""
-
-msgid "Show gallery title "
-msgstr ""
-
-msgid "If it is marked it will show the title"
-msgstr ""
-
-msgid "Show gallery description "
-msgstr ""
-
-msgid "If it is marked it will show the description"
-msgstr ""
-
-msgid "Thumbnail Size"
-msgstr ""
-
-msgid "The size of the image in the thumbnail"
-msgstr ""
-
-msgid "Full size"
-msgstr ""
-
-msgid "Images order by"
-msgstr ""
-
-msgid "This field arranges the images by parameters of title, date, random"
-msgstr ""
-
-msgid "No ordering"
-msgstr ""
-
-msgid "Date"
-msgstr ""
-
-msgid "Random"
-msgstr ""
-
-msgid "Ascending"
-msgstr ""
-
-msgid "Descending"
-msgstr ""
-
-msgid "Images loading"
-msgstr ""
-
-msgid "The images are loaded according to two principles: already loaded gallery with images and at first opens gallery after then the images"
-msgstr ""
-
-msgid "Global loading "
-msgstr ""
-
-msgid "Lazy loading "
-msgstr ""
-
-msgid "Images loading effect"
-msgstr ""
-
-msgid "Choose Images loading animation"
-msgstr ""
-
-msgid "Redirect URL"
-msgstr ""
-
-msgid "Specify the opening method of the Image URLs:"
-msgstr ""
-
-msgid "Current tab։ Enable this option in order to open the URL in the same tab"
-msgstr ""
-
-msgid "New tab։ Enable this option in order to redirect the URL to a new tab"
-msgstr ""
-
-msgid "New Tab"
-msgstr ""
-
-msgid "Current Tab"
-msgstr ""
-
-msgid "Show title on thumbnail"
-msgstr ""
-
-msgid "The name of the image is written in the below of it"
-msgstr ""
-
-msgid "Show title "
-msgstr ""
-
-msgid "Show on"
-msgstr ""
-
-msgid "If you choose the case of Thumbnail hover the title will appear when the mouse cursor stops on the image, otherwise the title by default will appear at the bottom of the image."
-msgstr ""
-
-msgid "Thumbnail hover "
-msgstr ""
-
-msgid "Gallery thumbnail "
-msgstr ""
-
-msgid "Image title position"
-msgstr ""
-
-msgid "Show title: in the bottom or on top"
-msgstr ""
-
-msgid "Bottom"
-msgstr ""
-
-msgid "Top"
-msgstr ""
-
-msgid "Show with date "
-msgstr ""
-
-msgid "If you choose the Show with a date of adding the image to the gallery will appear on the date with the title."
-msgstr ""
-
-msgid "Yes"
-msgstr ""
-
-msgid "No"
-msgstr ""
-
-msgid "Disable lightbox"
-msgstr ""
-
-msgid "By checking this option it will disable lightbox on image click"
-msgstr ""
-
-msgid "Make a link on the whole image"
-msgstr ""
-
-msgid "Make a URL redirection while clicking on any spot on the image container. Please note that the option works when the Disable lightbox option is activated."
-msgstr ""
-
-msgid "Enable search for image"
-msgstr ""
-
-msgid "This option is not compatible with the Mosaic layout."
-msgstr ""
-
-msgid "Gallery Width"
-msgstr ""
-
-msgid "This field shows the width of the Gallery"
-msgstr ""
-
-msgid "For 100% leave blank"
-msgstr ""
-
-msgid "Responsive Width/Height"
-msgstr ""
-
-msgid "Enable the option if you want to assign the values to height and weight by ratio."
-msgstr ""
-
-msgid "Height / Width ratio"
-msgstr ""
-
-msgid "This ratio indicates the quantitative relation between height and width. For example, if you give 1.2 value to ratio while the width is 300, then the height will be 300x1.2=360."
-msgstr ""
-
-msgid "Thumbnails height"
-msgstr ""
-
-msgid "The height of the thumbnails of the Gallery"
-msgstr ""
-
-msgid "For mobile:"
-msgstr ""
-
-msgid "For desktop:"
-msgstr ""
-
-msgid "Columns count. Default: 3"
-msgstr ""
-
-msgid "The counts of the columns of the Gallery"
-msgstr ""
-
-msgid "Use RTL Direction"
-msgstr ""
-
-msgid "Enable Right to Left direction for the text. This option is intended for the Arabic language."
-msgstr ""
-
-msgid "Change the author of the current gallery"
-msgstr ""
-
-msgid "You can change the author who created the current gallery to your preferred one. You need to write the User ID here. Please note, that in case you write an ID, by which there are no users found, the changes will not be applied and the previous author will remain the same."
-msgstr ""
-
-msgid "Select User"
-msgstr ""
-
-msgid "Upgrade"
-msgstr ""
-
-msgid "Pagination"
-msgstr ""
-
-msgid "You will be able to choose the way of the pagination. By default it is none, so all the images will loaded in the Front-end."
-msgstr ""
-
-msgid "None"
-msgstr ""
-
-msgid "Simple"
-msgstr ""
-
-msgid "Load More "
-msgstr ""
-
-msgid "Images per page"
-msgstr ""
-
-msgid "Set the exact number of images you want to be displayed on each page"
-msgstr ""
-
-msgid "Choose the number of images you want to be displayed at the beginning"
-msgstr ""
-
-msgid "Images per load"
-msgstr ""
-
-msgid "Choose how many images will be loaded after clicking on the ''Load More'' button"
-msgstr ""
-
-msgid "Main options"
-msgstr ""
-
-msgid "Gallery view type"
-msgstr ""
-
-msgid "This section notes the type of the Gallery that is in what sequence should the pictures be"
-msgstr ""
-
-msgid " "
-msgstr ""
-
-msgid "This feature available only in PRO version!!!"
-msgstr ""
-
-msgid "Images hover effect"
-msgstr ""
-
-msgid "Effect intended for hover according to animation"
-msgstr ""
-
-msgid "Simple animation "
-msgstr ""
-
-msgid "Direction-aware "
-msgstr ""
-
-msgid "Images hover animation"
-msgstr ""
-
-msgid "Hover appearing animation of the images of Gallery"
-msgstr ""
-
-msgid "Hover animation preview"
-msgstr ""
-
-msgid "Slide"
-msgstr ""
-
-msgid "Rotate 3D"
-msgstr ""
-
-msgid "Hover this preview block"
-msgstr ""
-
-msgid "Images hover animation speed"
-msgstr ""
-
-msgid "Specify the animation speed of the image."
-msgstr ""
-
-msgid "Image position"
-msgstr ""
-
-msgid "The position image of the gallery"
-msgstr ""
-
-msgid "Images hover opacity"
-msgstr ""
-
-msgid "The transparency degree of the image hover"
-msgstr ""
-
-msgid "Hover opacity preview"
-msgstr ""
-
-msgid "Images hover color"
-msgstr ""
-
-msgid "The color of the image hover"
-msgstr ""
-
-msgid "Images hover zoom effect"
-msgstr ""
-
-msgid "During image hover, the zoom effect of the image"
-msgstr ""
-
-msgid "Yes "
-msgstr ""
-
-msgid "No "
-msgstr ""
-
-msgid "Animation speed"
-msgstr ""
-
-msgid "Specify the animation speed of the zoom effect of the image."
-msgstr ""
-
-msgid "Images hover scale box shadow effect"
-msgstr ""
-
-msgid "During image hover, the scale box shadow effect of the image"
-msgstr ""
-
-msgid "Specify the animation speed of the scale effect of the image."
-msgstr ""
-
-msgid "Choose filter for thumbnail"
-msgstr ""
-
-msgid "The filter property defines visual effects to images of Gallery"
-msgstr ""
-
-msgid "Default none"
-msgstr ""
-
-msgid "Blur"
-msgstr ""
-
-msgid "Brightness"
-msgstr ""
-
-msgid "Contrast"
-msgstr ""
-
-msgid "Grayscale"
-msgstr ""
-
-msgid "Hue Rotate"
-msgstr ""
-
-msgid "Invert"
-msgstr ""
-
-msgid "Saturate"
-msgstr ""
-
-msgid "Sepia"
-msgstr ""
-
-msgid "Loader style"
-msgstr ""
-
-msgid "Text"
-msgstr ""
-
-msgid "Gif"
-msgstr ""
-
-msgid "Width (px)"
-msgstr ""
-
-msgid "Custom Gif width in pixels. It accepts only numeric values."
-msgstr ""
-
-msgid "Images hover icon"
-msgstr ""
-
-msgid "During hover, the icon seen on the image"
-msgstr ""
-
-msgid "Select icon for the gallery images"
-msgstr ""
-
-msgid "Images hover icon size"
-msgstr ""
-
-msgid "Images distance"
-msgstr ""
-
-msgid "The distance among images with pixels"
-msgstr ""
-
-msgid "Images border"
-msgstr ""
-
-msgid "Images border radius"
-msgstr ""
-
-msgid "The degree of borders curvature of images"
-msgstr ""
-
-msgid "Thumbnail title icon size"
-msgstr ""
-
-msgid "Gallery title text color"
-msgstr ""
-
-msgid "The color of the Gallery title"
-msgstr ""
-
-msgid "Gallery description text color"
-msgstr ""
-
-msgid "The color of the Gallery description"
-msgstr ""
-
-msgid "Background color of the Gallery thumbnail title"
-msgstr ""
-
-msgid "The color of the background of the Gallery Thumbnail title"
-msgstr ""
-
-msgid "Thumbnail title text color"
-msgstr ""
-
-msgid "Choose the color of the title text on the thumbnail. Make it transparent if you want."
-msgstr ""
-
-msgid "Custom class"
-msgstr ""
-
-msgid "Custom HTML class for gallery container. You can use your class for adding your custom styles for gallery container."
-msgstr ""
-
-msgid "myClass myAnotherClass..."
-msgstr ""
-
-msgid "Custom CSS"
-msgstr ""
-
-msgid "You can add your CSS"
-msgstr ""
-
-msgid "Lightbox options"
-msgstr ""
-
-msgid "Images counter"
-msgstr ""
-
-msgid "Enable "
-msgstr ""
-
-msgid "Disable "
-msgstr ""
-
-msgid "Show caption in lightbox"
-msgstr ""
-
-msgid "Images slide show"
-msgstr ""
-
-msgid "Slide duration"
-msgstr ""
-
-msgid "1 sec = 1000 ms"
-msgstr ""
-
-msgid "Choose filter for lightbox"
-msgstr ""
-
-msgid "Allow key control"
-msgstr ""
-
-msgid "Allow Esc key"
-msgstr ""
-
-msgid "Previous Gallery"
-msgstr ""
-
-msgid "Next Gallery"
-msgstr ""
-
-msgid "View your gallery in live preview. In the preview you can’t see Thumbnail size and Image order changes."
-msgstr ""
-
-msgid "Gallery preview"
-msgstr ""
-
-msgid "Add new category"
-msgstr ""
-
-msgid "Edit category"
-msgstr ""
-
-msgid "Title of the category"
-msgstr ""
-
-msgid "Provide more information about the gallery category"
-msgstr ""
-
-msgid "Next Category"
-msgstr ""
-
-msgid "Add New"
-msgstr ""
-
-msgid "Search"
-msgstr ""
-
-msgid "Please feel free to use our other awesome plugins!"
-msgstr ""
-
-msgid "Quiz Maker"
-msgstr ""
-
-msgid "Create powerful and engaging quizzes. Build as many quizzes as you wish. No limit on the count of participants taking the test at the same time. Use the easy-to-use features in the plugin and attract your visitors."
-msgstr ""
-
-msgid "Build up various types of polls in a minute and get instant feedback on any topic or product."
-msgstr ""
-
-msgid "Buy Now"
-msgstr ""
-
-msgid "Survey Maker"
-msgstr ""
-
-msgid "Make amazing online surveys and get real-time feedback quickly and easily."
-msgstr ""
-
-msgid "Learn what your website visitors want, need, and expect with the help of Survey Maker. Build surveys without limiting your needs."
-msgstr ""
-
-msgid "Popup Box"
-msgstr ""
-
-msgid "Popup everything you want! Create informative and promotional popups all in one plugin."
-msgstr ""
-
-msgid "Attract your visitors and convert them into email subscribers and paying customers."
-msgstr ""
-
-msgid "Secure Copy Content Protection"
-msgstr ""
-
-msgid "Disable the right click, copy paste, content selection and copy shortcut keys on your website."
-msgstr ""
-
-msgid "Protect web content from being plagiarized. Prevent plagiarism from your website with this easy to use plugin."
-msgstr ""
-
-msgid "Poll Maker"
-msgstr ""
-
-msgid "Create amazing online polls for your WordPress website super easily."
-msgstr ""
-
-msgid "Chart Builder"
-msgstr ""
-
-msgid "Chart Builder plugin allows you to create beautiful charts"
-msgstr ""
-
-msgid " and graphs easily and quickly."
-msgstr ""
 
-msgid "Easy Form"
+msgid "Ajouter des photos..."
 msgstr ""
 
-msgid "Choose the best WordPress form builder plugin. Create contact forms, payment forms, surveys, and many more custom forms."
+msgctx "btn"
+msgid "Ajouter une photo"
 msgstr ""
 
-msgid "Build forms easily with us."
+msgid "Enregistrer"
 msgstr ""
 
-msgid "Personal Dictionary"
+msgid "Retour à Mes galeries"
 msgstr ""
 
-msgid "Allow your students to create personal dictionary, study and memorize the words."
+msgid "Supprimer la galerie"
 msgstr ""
 
-msgid "Allow your users to create their own digital dictionaries and learn new words and terms as fastest as possible."
+msgid "Suppression de la galerie"
 msgstr ""
 
-msgid "See All Plugins"
+msgid "Fermer"
 msgstr ""
 
-msgid "Personal"
+msgid "La galerie va être supprimée définitivement."
 msgstr ""
 
-msgid "Business"
+msgid "Note : Les photos de la galerie sont conservées et accessibles dans le menu Mes photos."
 msgstr ""
 
-msgid "Developer"
+msgid "Confirmer"
 msgstr ""
 
-msgid "Free"
+msgid "Photo privée"
 msgstr ""
 
-msgid "Buy now"
+msgid "Affichage autorisé sur la galerie publique"
 msgstr ""
 
-msgid "(One-time payment)"
+msgid "Enregistré !"
 msgstr ""
 
-msgid "Install on unlimited sites"
+msgid "Retour à la galerie"
 msgstr ""
 
-msgid "Upgrade for"
+msgid "Retour à Mes photos"
 msgstr ""
 
-msgid "1 months"
+msgid "Entrez un lieu"
 msgstr ""
 
-msgid "12 months"
+msgid "Participez au projet Planet-Gallery !"
 msgstr ""
 
-msgid "Lifetime"
+msgid "Créez des galeries avec vos photos géolocalisées."
 msgstr ""
 
-msgid "Support for"
+msgid "Partagez des galeries et cartes inédites avec vos proches."
 msgstr ""
 
-msgid "1 site"
+msgid "Les photos publiques sont affichées sur la carte ci-dessus."
 msgstr ""
 
-msgid "5 site"
+msgid "C'est un projet participatif, tout est gratuit. Inscrivez-vous dès maintenant !"
 msgstr ""
 
-msgid "Unlimited sites"
+msgid "Mes galeries"
 msgstr ""
 
-msgid "Unlimited galleries"
+msgid "Créez votre première galerie"
 msgstr ""
 
-msgid "Unlimited items"
+msgid "et ajoutez des photos."
 msgstr ""
 
-msgid "30+ awesome views"
+msgid "Vos galeries sont privées."
 msgstr ""
 
-msgid "20+ Transition effects"
+msgid "Utilisez"
 msgstr ""
 
-msgid "20+ Animation easing effects"
+msgid "pour modifier une galerie."
 msgstr ""
 
-msgid "Transition speed (in ms)"
+msgid "pour visualiser une galerie quand elle est partagée."
 msgstr ""
 
-msgid "Lightbox overlay settings"
+msgid "pour copier le lien d'une galerie en vue de la partager."
 msgstr ""
 
-msgid "Lightbox live preview"
+msgid "Ne plus afficher"
 msgstr ""
 
-msgid "Share buttons"
+msgid "Ajouter une galerie..."
 msgstr ""
 
-msgid "Full screen button"
+msgid "Adresse copiée dans le presse-papier !"
 msgstr ""
 
-msgid "Images actual size button"
+msgid "galeries"
 msgstr ""
 
-msgid "Download button"
+msgid "1 galerie"
 msgstr ""
 
-msgid "Mouse wheel"
+msgid "Sans galerie"
 msgstr ""
 
-msgid "Thumbnails settings"
+msgid "Mes photos"
 msgstr ""
 
-msgid "Key control"
+msgid "Faites connaître votre activité."
 msgstr ""
 
-msgid "30 day money back guarantee !!!"
+#: public/js/pg-public.js:7
+msgid "TEST"
 msgstr ""
 
 msgid ""
-"We're sure that you'll love our Photo Gallery plugin, but, if for some reason, you're not\n"
-"                        satisfied in the first 30 days of using our product, there is a money-back guarantee and\n"
-"                        we'll issue a refund."
-msgstr ""
-
-msgid "Create Your First Gallery in Under One Minute"
-msgstr ""
-
-msgid "How to create a simple gallery in 3 steps with the help of the"
-msgstr ""
-
-msgid "plugin."
-msgstr ""
-
-msgid "Go to the"
-msgstr ""
-
-msgid "page and build your first gallery by clicking on the"
-msgstr ""
-
-msgid "button"
-msgstr ""
-
-msgid "Fill out the information by adding a title, images and so on."
-msgstr ""
-
-msgid "Copy the"
-msgstr ""
-
-msgid "shortcode"
-msgstr ""
-
-msgid "of the gallery and paste it into any post․"
-msgstr ""
-
-msgid "Congrats! You have already created your first gallery."
-msgstr ""
-
-msgid "Community"
-msgstr ""
-
-msgid "YouTube community"
-msgstr ""
-
-msgid "Our YouTube community  guides you to step by step tutorials about our products and not only..."
-msgstr ""
-
-msgid "Subscribe"
-msgstr ""
-
-msgid "Best Free Support"
-msgstr ""
-
-msgid "With the Free version, you get a lifetime usage for the plugin, however, you will get new updates and support for only 1 month."
-msgstr ""
-
-msgid "Join"
-msgstr ""
-
-msgid "Premium support"
-msgstr ""
-
-msgid "Get 12 months updates and support for the Business package and lifetime updates and support for the Developer package."
-msgstr ""
-
-msgid "Contact"
-msgstr ""
-
-msgid "Changes saved."
-msgstr ""
-
-msgid "Gallery attribute ."
-msgstr ""
-
-msgid "Gallery attribute deleted."
-msgstr ""
-
-msgid "General"
-msgstr ""
-
-msgid "Shortcodes"
-msgstr ""
-
-msgid "Message variables"
-msgstr ""
-
-msgid "Default parameters for gallery"
-msgstr ""
-
-msgid "WP Editor height"
-msgstr ""
-
-msgid "Give the default value to the height of the WP Editor. It will apply to all WP Editors within the plugin on the dashboard."
-msgstr ""
-
-msgid "Show All images text"
-msgstr ""
-
-msgid "Write the text you prefer for the \"All\" category to see all the images on the Front-end."
-msgstr ""
-
-msgid "Excerpt words count in list tables"
-msgstr ""
-
-msgid "Galleries list table"
-msgstr ""
-
-msgid "Determine the length of the galleries name to be shown in the Galleries List Table by putting your preferred count of words in the following field. (For example: if you put 10,  you will see the first 10 words of each galleries name in the Galleries page of your dashboard)."
-msgstr ""
-
-msgid "Gallery categories list table"
-msgstr ""
-
-msgid "Determine the length of the results to be shown in the Gallery categories List Table by putting your preferred count of words in the following field. (For example: if you put 10,  you will see the first 10 words of each result in the Question categories page of your dashboard."
-msgstr ""
-
-msgid "General CSS File"
-msgstr ""
-
-msgid "Exclude general CSS file from home page"
-msgstr ""
-
-msgid "If the option is enabled, then the gallery general CSS file will not be applied to the home page. Please note, that if you have inserted the gallery on the home page, then the option must be disabled so that the CSS File can normally work for that gallery."
-msgstr ""
-
-msgid "Extra shortcodes"
-msgstr ""
-
-msgid "Show gallery creation date"
-msgstr ""
-
-msgid "You need to insert Your Gallery ID in the shortcode. It will show the creation date of the particular gallery. If there is no gallery available/found with that particular Gallery ID, the shortcode will be empty."
-msgstr ""
-
-msgid "Show current gallery author"
-msgstr ""
-
-msgid "You need to insert Your Gallery ID in the shortcode. It will show the current author of the particular gallery. If there is no gallery available/found with that particular Gallery ID, the shortcode will be empty."
-msgstr ""
-
-msgid "Show gallery images count"
-msgstr ""
-
-msgid "You need to insert Your Gallery ID in the shortcode. It will show the images count of the particular gallery. If there is no gallery available/found with that particular Gallery ID, the shortcode will be empty."
-msgstr ""
-
-msgid "Show gallery images count by category"
-msgstr ""
-
-msgid "You need to insert Your Category ID in the shortcode. It will show the images count of the particular category. If there is no category available/found with that particular Category ID, the shortcode will be empty."
-msgstr ""
-
-msgid "Show User First Name"
-msgstr ""
-
-msgid "Shows the logged-in user's First Name. If the user is not logged-in, the shortcode will be empty."
-msgstr ""
-
-msgid "Show User Last Name"
-msgstr ""
-
-msgid "Shows the logged-in user's Last Name. If the user is not logged-in, the shortcode will be empty."
-msgstr ""
-
-msgid "Show User Display name"
-msgstr ""
-
-msgid "Shows the logged-in user's Display name. If the user is not logged-in, the shortcode will be empty."
-msgstr ""
-
-msgid "Show User Email"
-msgstr ""
-
-msgid "Shows the logged-in user's Email. If the user is not logged-in, the shortcode will be empty."
-msgstr ""
-
-msgid "Show User Nickname"
-msgstr ""
-
-msgid "Shows the logged-in user's Nickname. If the user is not logged-in, the shortcode will be empty."
-msgstr ""
-
-msgid "Gallery categories"
-msgstr ""
-
-msgid "Shortcode"
-msgstr ""
-
-msgid "You need to insert Your Gallery Category ID in the shortcode. It will show the category title. If there is no gallery category available/unavailable with that particular Gallery Category ID, the shortcode will stay empty."
-msgstr ""
-
-msgid "You need to insert Your Gallery Category ID in the shortcode. It will show the category description. If there is no gallery category available/unavailable with that particular Gallery Category ID, the shortcode will stay empty."
-msgstr ""
-
-msgid "You can copy these variables and paste them in the following options from the gallery settings"
-msgstr ""
-
-msgid "The user's first name that was filled in their WordPress site during registration."
-msgstr ""
-
-msgid "The user's last name that was filled in their WordPress site during registration."
-msgstr ""
-
-msgid "The user's display name that was filled in their WordPress profile."
-msgstr ""
-
-msgid "The user's nickname that was filled in their WordPress profile."
-msgstr ""
-
-msgid "The user's email that was filled in their WordPress profile."
-msgstr ""
-
-msgid "The user's role(s) when logged-in. In case the user is not logged-in, the field will be empty."
-msgstr ""
-
-msgid "The user's IP address."
-msgstr ""
-
-msgid "The ID of the current user."
-msgstr ""
-
-msgid "Save changes"
-msgstr ""
-
-msgid "Geolocated Photo"
-msgstr ""
-
-msgid "One-time payment"
-msgstr ""
-
-msgid "Something goes wrong please reload page"
-msgstr ""
-
-msgid "Loading..."
-msgstr ""
-
-msgid "There are no gallery yet"
-msgstr ""
-
-msgid "-Select Gallery-"
-msgstr ""
-
-msgstr ""
-
-msgid "30 Days Money Back Guarantee"
-msgstr ""
-
-msgid "Offer ends in:"
-msgstr ""
-
-msgid "Limited Time <span class='glp-dicount-wrap-color'>20%</span> SALE on <span><a href='https://glp-plugin.com/wordpress/photo-gallery' target='_blank' class='glp-dicount-wrap-color glp-dicount-wrap-text-decoration' style='display:block;'>Photo Gallery</a></span>"
-msgstr ""
-
-msgid "Hurry up! <a href='https://glp-plugin.com/wordpress/photo-gallery' target='_blank'>Check it out!</a>"
-msgstr ""
-
-msgid "Buy Now !"
 msgstr ""
 
 msgid ""
-"Limited Time \n"
-"                            <span>\n"
-"                                SALE on\n"
-"                            </span> \n"
-"                            <br>\n"
-"                            <span style='' class='glp-helloween-bundle'>\n"
-"                                    Photo Gallery\n"
-"                                </a>\n"
-"                            </span>"
 msgstr ""
 
 msgid ""
-"Hurry up! \n"
-"                                                    Check it out!\n"
-"                                                </a>"
 msgstr ""
 
-msgid "Limited Time"
+msgid ""
 msgstr ""
 
-msgid "Sale"
+msgid ""
 msgstr ""
 
-msgid "Photo Gallery plugin"
+msgid ""
 msgstr ""
 
-msgid "20% off"
+msgid ""
 msgstr ""
 
-msgid "Days"
+msgid ""
 msgstr ""
 
-msgid "Hours"
+msgid ""
 msgstr ""
 
-msgid "Minutes"
+msgid ""
 msgstr ""
 
-msgid "Seconds"
-msgstr ""
-
-msgid "Get Your Deal"
-msgstr ""
-
-msgid "Dismiss ad"
-msgstr ""
-
-msgid "20%"
-msgstr ""
-
-msgid "Photo Gallery Plugin"
-msgstr ""
-
-msgid "BUY NOW!"
-msgstr ""
-
-msgid "Gallery Category"
-msgstr ""
-
-msgid "Gallery Categories"
-msgstr ""
-
-msgid "There are no gallery categories yet."
-msgstr ""
-
-msgid "Edit"
-msgstr ""
-
-msgid "ID"
-msgstr ""
-
-msgid "Gallery category created."
-msgstr ""
-
-msgid "Gallery category saved."
-msgstr ""
-
-msgid "Gallery category deleted."
-msgstr ""
-
-msgid "Gallery"
-msgstr ""
-
-msgid "There are no galleries yet."
-msgstr ""
-
-msgid "Duplicate"
-msgstr ""
-
-msgid "Click to copy"
-msgstr ""
-
-msgid "Image"
-msgstr ""
-
-msgid "Created"
-msgstr ""
-
-msgid "Items"
-msgstr ""
-
-msgid "Gallery created."
-msgstr ""
-
-msgid "Gallery saved."
-msgstr ""
-
-msgid "Gallery duplicated."
-msgstr ""
-
-msgid "Gallery deleted."
-msgstr ""
-
-msgid "You're not allowed to add gallery for more galleries please checkout to "
-msgstr ""
-
-msgid "version"
-msgstr ""
-
-msgid "Enter the gallery title"
-msgstr ""
-
-msgid "Title Alignment"
-msgstr ""
-
-msgid "Select Gallery"
-msgstr ""
-
-msgid "The Best Geolocated Photo Ever"
-msgstr ""
-
-msgid "Geolocated Photo by AYS"
-msgstr ""
-
-msgid "Please select your gallery from dropdown"
-msgstr ""
-
-msgid "Some of the images haven\\'t been loaded"
-msgstr ""
-
-msgid "Unknown"
+msgid ""
 msgstr ""

@@ -135,9 +135,9 @@ class Glp_User_Galleries_Public {
             //<input type='hidden' id='pg_edit_gallery_url' value='$edit_gallery_url'/>
             $html_code = "
             <div class='pg-container'>
-                <h3>Mes galeries</h3>
+                <h3>".esc_html__("Mes galeries", $this->plugin_name)."</h3>
                 <br/>
-                <div>Aucune galerie. <a href='$edit_gallery_url'>Créez votre première galerie</a> et ajoutez des photos.<div>
+                <div>Aucune galerie. <a href='$edit_gallery_url'>".esc_html__("Créez votre première galerie", $this->plugin_name)."</a> ".esc_html__("et ajoutez des photos.", $this->plugin_name)."<div>
             </div>";
             return $html_code;    
         }
@@ -155,18 +155,18 @@ class Glp_User_Galleries_Public {
         <input type='hidden' id='pg_admin_ajax_url' value='$admin_ajax_url'/>
         <input type='hidden' id='pg_nonce' value='$nonce'/>
         <div class='pg-container' id='user-item-list'>
-            <h3>Mes galeries</h3>";
+            <h3>".esc_html__("Mes galeries", $this->plugin_name)."</h3>";
         if ($hide_help != 'true') {
             $html_code .= "
             <div class='alert alert-info' role='alert'>
-                <div>Vos galeries sont privées.</div>
-                <div> - Utilisez &nbsp<i class='fas fa-edit'></i>&nbsp pour modifier une galerie.</div>
-                <div> - Utilisez &nbsp<i class='fas fa-eye'></i>&nbsp pour visualiser une galerie quand elle est partagée.</div>
-                <div> - Utilisez &nbsp<i class='fas fa-share-alt'></i>&nbsp pour copier le lien d'une galerie en vue de la partager.</div>
+                <div>".esc_html__("Vos galeries sont privées.", $this->plugin_name)."</div>
+                <div> - ".esc_html__("Utilisez", $this->plugin_name)." &nbsp<i class='fas fa-edit'></i>&nbsp ".esc_html__("pour modifier une galerie.", $this->plugin_name)."</div>
+                <div> - ".esc_html__("", $this->plugin_name)." &nbsp<i class='fas fa-eye'></i>&nbsp ".esc_html__("pour visualiser une galerie quand elle est partagée.", $this->plugin_name)."</div>
+                <div> - ".esc_html__("", $this->plugin_name)." &nbsp<i class='fas fa-share-alt'></i>&nbsp ".esc_html__("pour copier le lien d'une galerie en vue de la partager.", $this->plugin_name)."</div>
                 </br>
                 <div class='form-check form-switch'>
                     <input  id='galleries_help' class='form-check-input' type='checkbox' role='switch'>
-                    <label class='form-check-label' for='galleries_help'>Ne plus afficher</label>
+                    <label class='form-check-label' for='galleries_help'>".esc_html__("Ne plus afficher", $this->plugin_name)."</label>
                 </div>
             </div>
             <br/>";
@@ -174,7 +174,7 @@ class Glp_User_Galleries_Public {
         $html_code .= "
             <div class='tab-pane fade show active' id='nav-photos' role='tabpanel' aria-labelledby='nav-photos-tab'>
                 <button type='button' class='btn btn-primary' id='user-galleries-create' style='margin-bottom: 10px;'>
-                    Ajouter une galerie...
+                    ".esc_html__("Ajouter une galerie...", $this->plugin_name)."
                 </button>
                 <br/>
             </div>";
@@ -220,33 +220,10 @@ class Glp_User_Galleries_Public {
                     $count_image ++;
                 }
             }
-            // if (count($image_ids) >= 1) {
-            //     // get the image source
-            //     $url_img = wp_get_attachment_image_src($image_ids[0], "thumbnail");
-            //     if ($url_img != false) {
-            //         $img_src1 = $url_img[0];
-            //     }
-            // }
-            // if (count($image_ids) >= 2) {
-            //     // get the image source
-            //     $url_img = wp_get_attachment_image_src($image_ids[1], "thumbnail");
-            //     if ($url_img != false) {
-            //         $img_src2 = $url_img[0];
-            //     }
-            // }
-            // if (count($image_ids) >= 3) {
-            //     // get the image source
-            //     $url_img = wp_get_attachment_image_src($image_ids[2], "thumbnail");
-            //     if ($url_img != false) {
-            //         $img_src3 = $url_img[0];
-            //     }
-            // }
+
             $datetime = explode( " ", $item['date_update']);
             $date = $this->format_date($datetime[0]);
-            // $url_img = wp_get_attachment_image_src($item->ID, "thumbnail");
-            // if ($url_img != false) {
-            //     $img_src = $url_img[0];
-            // }
+
             //error_log("render_galleries url:".print_r($url_img, true));
             // TODO check url_img is OK, add try catch
             $html.=
@@ -268,7 +245,7 @@ class Glp_User_Galleries_Public {
                 <div id="copy-to-clipboard" class="toast align-items-center text-white bg-success bg-gradient border-0" role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="d-flex">
                         <div class="toast-body">
-                            Adresse copiée dans le presse-papier !
+                            '.esc_html__("Adresse copiée dans le presse-papier !", $this->plugin_name).'
                         </div>
                     </div>
                 </div>
@@ -283,20 +260,15 @@ class Glp_User_Galleries_Public {
         
         $date = new DateTime($date_str);
         // Define an array of French month names
-        $frenchMonthNames = [
-            'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
-            'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'
-        ];
-        
-        // Get the day, month, and year from the DateTime object
-        $day = $date->format('d');
-        $month = $date->format('n');
-        $year = $date->format('Y');
-        
-        // Format the date in French format
-        return $day . ' ' . $frenchMonthNames[$month - 1] . ' ' . $year;
-    }
+        $locale = get_locale();
+        $formatter = new IntlDateFormatter( $locale,
+            IntlDateFormatter::MEDIUM,
+            IntlDateFormatter::NONE);
 
+        $day = $formatter->format($date );
+
+        return $day;
+    }
 
 
     // Get the list of galleries for a given user_id

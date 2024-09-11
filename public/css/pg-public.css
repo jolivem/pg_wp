@@ -600,6 +600,9 @@ div.slider img {
     }
     .pg-map-container {
     }*/
+    div.slider img {
+        height: 150px;
+    }
 
     #map {
         height: 250px;
@@ -652,6 +655,10 @@ div.slider img {
 
     .pg-map-container {
         max-width: 1200px !important;
+    }
+
+    div.slider img {
+        height: 200px;
     }
 
     #map {

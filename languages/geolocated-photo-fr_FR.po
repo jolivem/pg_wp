@@ -2,214 +2,213 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gallery – Photo Gallery\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-06 18:52+0400\n"
-"PO-Revision-Date: 2024-09-11 14:06+0000\n"
+"POT-Creation-Date: 2023-11-06 18:51+0400\n"
+"PO-Revision-Date: 2024-09-11 13:43+0000\n"
 "Last-Translator: \n"
-"Language-Team: English (United States)\n"
-"Language: en_US\n"
+"Language-Team: French (France)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n_noop:1,2;_x\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: ..\n"
+"Language: fr_FR\n"
 "X-Loco-Version: 2.6.10; wp-6.6.1"
 
 msgid "1 galerie"
-msgstr "1 gallery"
+msgstr "1 galerie"
 
 msgid "Adresse copiée dans le presse-papier !"
-msgstr "Address copied into the clipboard !"
+msgstr "Adresse copiée dans le presse-papier !"
 
 msgid "Affichage autorisé sur la galerie publique"
-msgstr "Authorized posting  on the public gallery"
+msgstr "Affichage autorisé sur la galerie publique"
 
 msgid "Ajouter des photos..."
-msgstr "Add photos..."
+msgstr "Ajouter des photos..."
 
 msgid "Ajouter une galerie..."
-msgstr "Add a gallery..."
+msgstr "Ajouter une galerie..."
 
 msgid "Ajouter une photo"
-msgstr "Add a photo"
+msgstr "Ajouter une photo"
 
 msgid "C'est un projet participatif, tout est gratuit. Inscrivez-vous dès maintenant !"
-msgstr "It's a participative project, and everything is free. Sign up now!"
+msgstr "C'est un projet participatif, tout est gratuit. Inscrivez-vous dès maintenant !"
 
 msgid "Confirmer"
-msgstr "Confirm"
+msgstr "Confirmer"
 
 msgid "Créez des galeries avec vos photos géolocalisées."
-msgstr "Create galleries with geotagged photos."
+msgstr "Créez des galeries avec vos photos géolocalisées."
 
 msgid "Créez votre première galerie"
-msgstr "Create your first gallery"
+msgstr "Créez votre première galerie"
 
 msgid "Enregistrer"
-msgstr "Save"
+msgstr "Enregistrer"
 
 msgid "Enregistré !"
-msgstr "Saved!"
+msgstr "Enregistré !"
 
 msgid "Entrez un lieu"
-msgstr "Enter a location"
+msgstr "Entrez un lieu"
 
-# btn text
 msgid "Envoyer"
-msgstr "Send"
+msgstr "Envoyer"
 
-# toast message
 msgid "Envoyé !"
-msgstr "Sent!"
+msgstr "Envoyé !"
 
 msgid "est affichée sur la galerie publique."
-msgstr "is displayed on the public gallery."
+msgstr "est affichée sur la galerie publique."
 
 msgid "est publique, en attente de vérification par le modérateur."
-msgstr "is public, pending moderator verification."
+msgstr "est publique, en attente de vérification par le modérateur."
 
 msgid "et ajoutez des photos."
-msgstr "and add photos."
+msgstr "et ajoutez des photos."
 
 msgid "Faites connaître votre activité."
-msgstr "Promote your business."
+msgstr "Faites connaître votre activité."
 
 msgid "Fermer"
-msgstr "Close"
+msgstr "Fermer"
 
 msgid "Formulaire de contact"
-msgstr "Contact form"
+msgstr "Formulaire de contact"
 
 msgid "galeries"
-msgstr "galleries"
+msgstr "galeries"
 
 msgid "La galerie va être supprimée définitivement."
-msgstr "The gallery will be removed permanently."
+msgstr "La galerie va être supprimée définitivement."
 
 msgid "Les photos publiques sont affichées sur la carte ci-dessus."
-msgstr "The public photos are displayed on the map above."
+msgstr "Les photos publiques sont affichées sur la carte ci-dessus."
 
 msgid "Mes galeries"
-msgstr "My galleries"
+msgstr "Mes galeries"
 
 msgid "Mes photos"
-msgstr "My photos"
+msgstr "Mes photos"
 
 msgid "n'est pas affichée sur la galerie publique et n'est pas vérifiée par le modérateur."
-msgstr "is not displayed on the public gallery."
+msgstr "n'est pas affichée sur la galerie publique et n'est pas vérifiée par le modérateur."
 
 msgid "Ne plus afficher"
-msgstr "Do not display anymore"
+msgstr "Ne plus afficher"
 
 msgid "Nombre maximum atteint pour cette sélection"
-msgstr "Maximum number reached for this selection"
+msgstr "Nombre maximum atteint pour cette sélection"
 
 msgid "Non publique"
-msgstr "Not public"
+msgstr "Non publique"
 
 msgid "Non vérifiée"
-msgstr "Not verified"
+msgstr "Non vérifiée"
 
+#| msgid ""
+#| "Note : Les photos de la galerie sont conservées et accessibles dans le menu <b>Mes photos<b>."
 msgid "Note : Les photos de la galerie sont conservées et accessibles dans le menu Mes photos."
-msgstr "The gallery photos remain stored and can be accessed in the My photos menu."
+msgstr "Note : Les photos de la galerie sont conservées et accessibles dans le menu Mes photos."
 
 msgid "Oops ! La page est introuvable."
-msgstr "Oops: The page can't be found."
+msgstr "Oops ! La page est introuvable."
 
 msgid "Partagez des galeries et cartes inédites avec vos proches."
-msgstr "Share never-seen-before galleries and maps with friends and family."
+msgstr "Partagez des galeries et cartes inédites avec vos proches."
 
 msgid "Participez au projet Planet-Gallery !"
-msgstr "Take part in the Planet-Gallery project !"
+msgstr "Participez au projet Planet-Gallery !"
 
 msgid "Photo privée"
-msgstr "Private photo"
+msgstr "Photo privée"
 
 msgid "Pour chaque photo :"
-msgstr "For each photo:"
+msgstr "Pour chaque photo :"
 
 msgid "pour copier le lien d'une galerie en vue de la partager."
-msgstr "to copy a gallery link for sharing."
+msgstr "pour copier le lien d'une galerie en vue de la partager."
 
 msgid "pour modifier la description et le caractère <b>Publique</b> / <b>Privé</b> de la photo."
-msgstr "to change the photo description and public/private status."
+msgstr "pour modifier la description et le caractère <b>Publique</b> / <b>Privé</b> de la photo."
 
 msgid "pour modifier une galerie."
-msgstr "to modify a gallery."
+msgstr "pour modifier une galerie."
 
 msgid "pour supprimer la photo de la galerie, elle reste présente dans votre phototèque."
-msgstr ""
-"to remove the photo from the gallery. it remains stored and accessible via the My photos menu."
+msgstr "pour supprimer la photo de la galerie, elle reste présente dans votre phototèque."
 
 msgid "pour visualiser une galerie quand elle est partagée."
-msgstr "To view a gallery when it is shared."
+msgstr "pour visualiser une galerie quand elle est partagée."
 
 msgid "Privée"
-msgstr "Private"
+msgstr "Privée"
 
 msgid "Publique"
-msgstr "Public"
+msgstr "Publique"
 
 msgid "Retour à la galerie"
-msgstr "Back to the gallery"
+msgstr "Photo privée"
 
 msgid "Retour à Mes galeries"
-msgstr "Back to My galleries"
+msgstr "Retour à Mes galeries"
 
 msgid "Retour à Mes photos"
-msgstr "Back to My photos"
+msgstr "Retour à Mes photos"
 
 msgid "Sans galerie"
-msgstr "None gallery"
+msgstr "Sans galerie"
 
 msgid "Suppression de la galerie"
-msgstr "Delete gallery"
+msgstr "Suppression de la galerie"
 
 msgid "Supprimer la galerie"
-msgstr "Delete gallery"
+msgstr "Supprimer la galerie"
 
 msgid "Sélection de photos géolocalisées par groupes de 20 maximum."
-msgstr "Select geotagged photos in groups of up to 20."
+msgstr "Sélection de photos géolocalisées par groupes de 20 maximum."
 
 msgid "Sélectionner..."
-msgstr "Select..."
+msgstr "Sélectionner..."
 
-#: public/js/pg-public.js:7
+#: public/js/pg-public.js:6
 msgid "TEST"
-msgstr "TEST-EN"
+msgstr "TEST-FR-"
 
 msgid "Titre"
-msgstr "Title"
+msgstr "Titre"
 
 msgid "Télécharger"
-msgstr "Upload"
+msgstr "Télécharger"
 
 msgid "Une photo notée"
-msgstr "A photo marked"
+msgstr "Une photo notée"
 
 msgid "Utiliser exclusivement le bouton à droite : "
-msgstr "Use only the button on the right:"
+msgstr "Utiliser exclusivement le bouton à droite : "
 
 msgid "Utiliser exclusivement le menu du bouton : "
-msgstr "Use only the menu:"
+msgstr "Utiliser exclusivement le menu du bouton : "
 
 msgid "Utilisez"
-msgstr "Use"
+msgstr "Utilisez"
 
 msgid "Veuillez saisir un email valide."
-msgstr "Please enter a valid email."
+msgstr "Veuillez saisir un email valide."
 
 msgid "Veuillez saisir un message."
-msgstr "Please enter a message"
+msgstr "Veuillez saisir un message."
 
 msgid "Vos galeries sont privées."
-msgstr "Your galleries are private."
+msgstr "Vos galeries sont privées."
 
 msgid "Votre email de contact"
-msgstr "Your contact email"
+msgstr "Votre email de contact"
 
 msgid "Votre message"
-msgstr "Your message"
+msgstr "Votre message"

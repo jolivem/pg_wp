@@ -217,7 +217,7 @@ class Glp_Check_Photos_Public {
             //error_log("render_images jaddresses: addresses :".print_r($addresses, true));
             
             //error_log("render_images addresses".print_r($addresses, true));
-            $statext = Pg_Edit_Gallery_Public::get_photo_status($item->ID);
+            $statext = Pg_Edit_Gallery_Public::get_photo_status($item->ID, $this->plugin_name);
             $group_name = "address" . $item->ID;
 
             //error_log("render_images url:".print_r($url_img, true));
