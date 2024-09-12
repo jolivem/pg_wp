@@ -65,7 +65,7 @@ class Pg_Edit_Photo_Public {
 
         $this->plugin_name = $plugin_name;
         $this->version = $version;
-        error_log("Pg_Edit_Photo_Public::ctor plugin_name = ".$plugin_name);
+        //error_log("Pg_Edit_Photo_Public::ctor plugin_name = ".$plugin_name);
         // $this->settings = new Gallery_Settings_Actions($this->plugin_name);
         add_shortcode( 'pg_edit_photo', array($this, 'pg_generate_page') );
     }
@@ -90,16 +90,14 @@ class Pg_Edit_Photo_Public {
      */
     public function enqueue_scripts() {
 
-        //wp_enqueue_media();
         wp_enqueue_script( $this->plugin_name.'-bootstrap.js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', array( 'jquery' ), $this->version, true );
-        //wp_enqueue_script('leaflet', 'https://unpkg.com/leaflet/dist/leaflet.js', array('jquery'), '1.7.1', true);
-        
-        wp_enqueue_script( $this->plugin_name.'-pg-public.js', plugin_dir_url( __FILE__ ) . 'js/pg-public.js', array( 'jquery', 'wp-i18n' ), $this->version, true );
-        $resu = wp_set_script_translations($this->plugin_name.'-pg-public.js', $this->plugin_name, plugin_dir_path(__FILE__) . 'languages' );
-        error_log("Pg_Edit_Photo_Public::enqueue_scripts resu=$resu, plugin_name=$this->plugin_name");
-
-        //wp_enqueue_script( $this->plugin_name.'-pg-vignette.js', plugin_dir_url( __FILE__ ) . 'js/pg-vignette.js', array( 'jquery' ), $this->version, true );
-        wp_localize_script($this->plugin_name.'-pg-public.js', 'ays_vars', array('base_url' => GLP_BASE_URL));
+        wp_enqueue_script( $this->plugin_name.'-pg-public.js', plugin_dir_url( __FILE__ ) . 'js/pg-public.js', array( 'jquery' ), $this->version, true );
+        wp_localize_script($this->plugin_name.'-pg-public.js', 'ays_vars', 
+            array(
+                'base_url' => GLP_BASE_URL,
+                'public_photo' => esc_html__("Affichage autorisé sur la galerie publique", $this->plugin_name),
+                'private_photo' => esc_html__("Photo privée", $this->plugin_name))
+            );
 
     }
 

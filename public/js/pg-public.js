@@ -3,9 +3,6 @@
 
     $(function () {
 
-        const message = wp.i18n.__('TEST', 'geolocated-photo');
-        console.log("XXXXXXXXXXXXX  message", message);
-
         // Update the photo counter on the edit-photo page
         function updatePhotoCounter() {
 
@@ -551,10 +548,10 @@
             //console.log("on user_status change", e.target);
             
             if (this.checked) {
-                document.getElementById('user_status_label').textContent = 'Affichage autorisé sur la galerie publique';
+                document.getElementById('user_status_label').textContent = ays_vars.public_photo;
             }
             else {
-                document.getElementById('user_status_label').textContent = 'Photo privée';
+                document.getElementById('user_status_label').textContent = ays_vars.private_photo;
             }
             e.stopPropagation();
         });

@@ -16,9 +16,6 @@ get_header(); ?>
                 <h1 class="page-title"><?php esc_html_e( 'Oops ! La page est introuvable.', 'your-theme' ); ?></h1>
             </header><!-- .page-header -->
 
-            <!-- <div class="page-content">
-                <p><?php esc_html_e( 'Peut-être n?', 'your-theme' ); ?></p>
-            </div> .page-content -->
         </section><!-- .error-404 -->
     </main><!-- #main -->
 </div><!-- #primary -->

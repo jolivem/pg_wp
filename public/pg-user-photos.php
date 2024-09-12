@@ -60,7 +60,7 @@ class Glp_User_Photos_Public {
         $this->version = $version;
         // $this->settings = new Gallery_Settings_Actions($this->plugin_name);
         add_shortcode( 'glp_user_photos', array($this, 'pg_generate_page') );
-        error_log("Glp_User_Photos_Public::ctor locale =".get_locale());
+        //error_log("Glp_User_Photos_Public::ctor locale =".get_locale());
     }
 
     /**

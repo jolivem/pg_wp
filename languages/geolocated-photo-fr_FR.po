@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Gallery – Photo Gallery\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-06 18:51+0400\n"
-"PO-Revision-Date: 2024-09-11 13:43+0000\n"
+"PO-Revision-Date: 2024-09-12 08:14+0000\n"
 "Last-Translator: \n"
 "Language-Team: French (France)\n"
 "MIME-Version: 1.0\n"
@@ -18,197 +18,277 @@ msgstr ""
 "Language: fr_FR\n"
 "X-Loco-Version: 2.6.10; wp-6.6.1"
 
+#: pg-user-photos.php:186
 msgid "1 galerie"
 msgstr "1 galerie"
 
+#: pg-user-galleries.php:248
 msgid "Adresse copiée dans le presse-papier !"
 msgstr "Adresse copiée dans le presse-papier !"
 
+#: js/pg-map.js
+msgid "Adresse introuvable"
+msgstr "Adresse introuvable"
+
+#: pg-edit-photo.php:166
 msgid "Affichage autorisé sur la galerie publique"
 msgstr "Affichage autorisé sur la galerie publique"
 
+#: pg-edit-gallery.php:278
 msgid "Ajouter des photos..."
 msgstr "Ajouter des photos..."
 
+#: pg-user-galleries.php:177
 msgid "Ajouter une galerie..."
 msgstr "Ajouter une galerie..."
 
+#: pg-edit-gallery.php:284
 msgid "Ajouter une photo"
 msgstr "Ajouter une photo"
 
+#: pg-show-planet-map.php:182
 msgid "C'est un projet participatif, tout est gratuit. Inscrivez-vous dès maintenant !"
 msgstr "C'est un projet participatif, tout est gratuit. Inscrivez-vous dès maintenant !"
 
+#: js/pg-download.js
+msgid "cette page"
+msgstr "cette page"
+
+#: pg-edit-gallery.php:727
 msgid "Confirmer"
 msgstr "Confirmer"
 
+#: js/pg-download.js
+msgid "Consultez"
+msgstr "Consultez"
+
+#: pg-show-planet-map.php:177
 msgid "Créez des galeries avec vos photos géolocalisées."
 msgstr "Créez des galeries avec vos photos géolocalisées."
 
+#: pg-user-galleries.php:140
 msgid "Créez votre première galerie"
 msgstr "Créez votre première galerie"
 
+#: pg-edit-gallery.php:289 pg-edit-gallery.php:305 pg-edit-photo.php:262
 msgid "Enregistrer"
 msgstr "Enregistrer"
 
+#: pg-edit-photo.php:215 pg-show-planet-map.php:150
 msgid "Enregistré !"
 msgstr "Enregistré !"
 
+#: pg-show-planet-map.php:159
 msgid "Entrez un lieu"
 msgstr "Entrez un lieu"
 
+#: pg-contact-mail.php:131
 msgid "Envoyer"
 msgstr "Envoyer"
 
+#: pg-contact-mail.php:111
 msgid "Envoyé !"
 msgstr "Envoyé !"
 
+#: pg-edit-gallery.php:264
 msgid "est affichée sur la galerie publique."
 msgstr "est affichée sur la galerie publique."
 
+#: pg-edit-gallery.php:262
 msgid "est publique, en attente de vérification par le modérateur."
 msgstr "est publique, en attente de vérification par le modérateur."
 
+#: pg-user-galleries.php:140
 msgid "et ajoutez des photos."
 msgstr "et ajoutez des photos."
 
+#: pg-show-planet-map.php:179
 msgid "Faites connaître votre activité."
 msgstr "Faites connaître votre activité."
 
+#: pg-download-multiple.php:175 pg-edit-gallery.php:719 pg-edit-gallery.php:726
 msgid "Fermer"
 msgstr "Fermer"
 
+#: pg-contact-mail.php:117
 msgid "Formulaire de contact"
 msgstr "Formulaire de contact"
 
+#: pg-user-photos.php:189
 msgid "galeries"
 msgstr "galeries"
 
+#: js/pg-download.js
+msgid "Géolocalisation absente."
+msgstr "Géolocalisation absente."
+
+#: js/pg-download.js
+msgid "Géolocalisation bloquée."
+msgstr "Géolocalisation bloquée."
+
+#: pg-edit-gallery.php:722
 msgid "La galerie va être supprimée définitivement."
 msgstr "La galerie va être supprimée définitivement."
 
+#: pg-show-planet-map.php:180
 msgid "Les photos publiques sont affichées sur la carte ci-dessus."
 msgstr "Les photos publiques sont affichées sur la carte ci-dessus."
 
+#: pg-user-galleries.php:138 pg-user-galleries.php:158
 msgid "Mes galeries"
 msgstr "Mes galeries"
 
+#: pg-user-photos.php:156
 msgid "Mes photos"
 msgstr "Mes photos"
 
+#: pg-edit-gallery.php:263
 msgid "n'est pas affichée sur la galerie publique et n'est pas vérifiée par le modérateur."
 msgstr "n'est pas affichée sur la galerie publique et n'est pas vérifiée par le modérateur."
 
+#: pg-edit-gallery.php:268 pg-user-galleries.php:169
 msgid "Ne plus afficher"
 msgstr "Ne plus afficher"
 
-msgid "Nombre maximum atteint pour cette sélection"
-msgstr "Nombre maximum atteint pour cette sélection"
+#: pg-download-multiple.php:164
+#| msgid "Nombre maximum atteint pour cette sélection"
+msgid "Nombre maximum atteint pour cette sélection "
+msgstr "Nombre maximum atteint pour cette sélection "
 
+#: pg-edit-gallery.php:420
 msgid "Non publique"
 msgstr "Non publique"
 
+#: pg-edit-gallery.php:262 pg-edit-gallery.php:417
 msgid "Non vérifiée"
 msgstr "Non vérifiée"
 
+#: pg-edit-gallery.php:723
 #| msgid ""
 #| "Note : Les photos de la galerie sont conservées et accessibles dans le menu <b>Mes photos<b>."
 msgid "Note : Les photos de la galerie sont conservées et accessibles dans le menu Mes photos."
 msgstr "Note : Les photos de la galerie sont conservées et accessibles dans le menu Mes photos."
 
+#: pg-404.php:16
 msgid "Oops ! La page est introuvable."
 msgstr "Oops ! La page est introuvable."
 
+#: pg-show-planet-map.php:178
 msgid "Partagez des galeries et cartes inédites avec vos proches."
 msgstr "Partagez des galeries et cartes inédites avec vos proches."
 
+#: pg-show-planet-map.php:175
 msgid "Participez au projet Planet-Gallery !"
 msgstr "Participez au projet Planet-Gallery !"
 
+#: pg-edit-photo.php:161
 msgid "Photo privée"
 msgstr "Photo privée"
 
+#: pg-edit-gallery.php:258
 msgid "Pour chaque photo :"
 msgstr "Pour chaque photo :"
 
+#: pg-user-galleries.php:165
 msgid "pour copier le lien d'une galerie en vue de la partager."
 msgstr "pour copier le lien d'une galerie en vue de la partager."
 
+#: pg-edit-gallery.php:259
 msgid "pour modifier la description et le caractère <b>Publique</b> / <b>Privé</b> de la photo."
 msgstr "pour modifier la description et le caractère <b>Publique</b> / <b>Privé</b> de la photo."
 
+#: pg-user-galleries.php:163
 msgid "pour modifier une galerie."
 msgstr "pour modifier une galerie."
 
+#: pg-edit-gallery.php:260
 msgid "pour supprimer la photo de la galerie, elle reste présente dans votre phototèque."
 msgstr "pour supprimer la photo de la galerie, elle reste présente dans votre phototèque."
 
+#: pg-user-galleries.php:164
 msgid "pour visualiser une galerie quand elle est partagée."
 msgstr "pour visualiser une galerie quand elle est partagée."
 
+#: pg-edit-gallery.php:263 pg-edit-gallery.php:409
 msgid "Privée"
 msgstr "Privée"
 
+#: pg-edit-gallery.php:264 pg-edit-gallery.php:414
 msgid "Publique"
 msgstr "Publique"
 
+#: pg-edit-photo.php:254
 msgid "Retour à la galerie"
 msgstr "Photo privée"
 
+#: pg-edit-gallery.php:295
 msgid "Retour à Mes galeries"
 msgstr "Retour à Mes galeries"
 
+#: pg-edit-photo.php:258
 msgid "Retour à Mes photos"
 msgstr "Retour à Mes photos"
 
+#: pg-user-photos.php:193
 msgid "Sans galerie"
 msgstr "Sans galerie"
 
+#: pg-edit-gallery.php:718
 msgid "Suppression de la galerie"
 msgstr "Suppression de la galerie"
 
+#: pg-edit-gallery.php:300
 msgid "Supprimer la galerie"
 msgstr "Supprimer la galerie"
 
+#: pg-download-multiple.php:138
 msgid "Sélection de photos géolocalisées par groupes de 20 maximum."
 msgstr "Sélection de photos géolocalisées par groupes de 20 maximum."
 
+#: pg-download-multiple.php:162
 msgid "Sélectionner..."
 msgstr "Sélectionner..."
 
-#: public/js/pg-public.js:6
-msgid "TEST"
-msgstr "TEST-FR-"
-
+#: pg-edit-gallery.php:248
 msgid "Titre"
 msgstr "Titre"
 
+#: pg-download-multiple.php:171
 msgid "Télécharger"
 msgstr "Télécharger"
 
+#: pg-edit-gallery.php:262 pg-edit-gallery.php:263 pg-edit-gallery.php:264
 msgid "Une photo notée"
 msgstr "Une photo notée"
 
+#: pg-download-multiple.php:144
 msgid "Utiliser exclusivement le bouton à droite : "
 msgstr "Utiliser exclusivement le bouton à droite : "
 
+#: pg-download-multiple.php:150
 msgid "Utiliser exclusivement le menu du bouton : "
 msgstr "Utiliser exclusivement le menu du bouton : "
 
+#: pg-edit-gallery.php:259 pg-edit-gallery.php:260 pg-user-galleries.php:163
 msgid "Utilisez"
 msgstr "Utilisez"
 
+#: pg-contact-mail.php:122
 msgid "Veuillez saisir un email valide."
 msgstr "Veuillez saisir un email valide."
 
+#: pg-contact-mail.php:127
 msgid "Veuillez saisir un message."
 msgstr "Veuillez saisir un message."
 
+#: pg-user-galleries.php:162
 msgid "Vos galeries sont privées."
 msgstr "Vos galeries sont privées."
 
+#: pg-contact-mail.php:121
 msgid "Votre email de contact"
 msgstr "Votre email de contact"
 
+#: pg-contact-mail.php:126
 msgid "Votre message"
 msgstr "Votre message"

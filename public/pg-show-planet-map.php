@@ -60,7 +60,7 @@ class Pg_Show_Planet_Map_Public {
         $this->version = $version;
         // $this->settings = new Gallery_Settings_Actions($this->plugin_name);
         add_shortcode( 'pg_show_planet_map', array($this, 'pg_generate_page') );
-        error_log("Pg_Show_Planet_Map_Public::ctor locale =".get_locale());
+        //error_log("Pg_Show_Planet_Map_Public::ctor locale =".get_locale());
     }
 
     /**
@@ -99,7 +99,9 @@ class Pg_Show_Planet_Map_Public {
         wp_enqueue_script( $this->plugin_name.'-simple-lightbox.js', plugin_dir_url( __FILE__ ) . 'js/simple-lightbox.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-slick.js', plugin_dir_url( __FILE__ ) . 'slick/slick.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-pg-map.js', plugin_dir_url( __FILE__ ) . 'js/pg-map.js', array( 'jquery' ), $this->version, true );
-        wp_localize_script($this->plugin_name.'-pg-map.js', 'ays_vars', array('base_url' => GLP_BASE_URL));
+        wp_localize_script($this->plugin_name.'-pg-map.js', 'ays_vars', 
+                array('base_url' => GLP_BASE_URL,
+                'address_not_found' => esc_html__("Adresse introuvable", $this->plugin_name)));
 
         wp_enqueue_script( $this->plugin_name.'-pg-vignette.js', plugin_dir_url( __FILE__ ) . 'js/pg-vignette.js', array( 'jquery' ), $this->version, true );
     }

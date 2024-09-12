@@ -112,7 +112,7 @@ var processClickOnBan = function( elem) {
 }
 
 // animate the maker in the map
-var animateMarkerById = function(id) {
+var animateMarkerById = function(id, size) {
 
     //console.log('animateMarkerById IN', g_selectedImageSrc);
     //console.log('animateMarkerById g_markers', g_markers);
@@ -137,8 +137,8 @@ var animateMarkerById = function(id) {
             //console.log( `animateMarkerById iconUrl FOUND`);
             if (layer._icon != null) {
 
-                layer._icon.style.width="60px";
-                layer._icon.style.height="60px";
+                layer._icon.style.width="55px";
+                layer._icon.style.height="55px";
                 layer._icon.style.zIndex += 1000;
                 //console.log( 'animateMarkerById layer._icon FOUND for iconUrl');
                 setTimeout(function(){
@@ -201,7 +201,7 @@ var animateMarkerById = function(id) {
             
             if (g_selectedImageSrc != null) {
                 //console.log( 'g_selectedImageSrc', g_selectedImageSrc);
-                iicoon.options.iconSize = [70,70];
+                iicoon.options.iconSize = [55,55];
                 iicoon.options.iconUrl = g_selectedImageSrc;
                 g_selectedImageSrc = null;
                 
@@ -287,14 +287,13 @@ var animateMarkerById = function(id) {
                     var lat = parseFloat(data[0].lat);
                     var lon = parseFloat(data[0].lon);
                     
-                    // Création de la carte OpenStreetMap
                     g_map.setView([lat, lon], 12);
 
                     L.marker([lat, lon]).addTo(g_map)
                         .bindPopup(address)
                         .openPopup();
                 } else {
-                    alert('Adresse introuvable');
+                    alert(ays_vars.address_not_found);
                 }
             })
             .catch(error => console.error('Erreur :', error));
@@ -328,40 +327,6 @@ var animateMarkerById = function(id) {
         }
     
     };
-    function get_lightbox_caption() {
-
-        
-        let slb = $(document).find('.sl-wrapper'); //.sl-wrapper 
-        if (slb.length > 0) {
-            console.log("get_lightbox_caption slb", slb[0].innerHTML);
-            let elem = $(slb).find('.pg-lightbox-vignette');
-            console.log("get_lightbox_caption elem", elem);
-            if (elem.length > 0) {
-                console.log("get_lightbox_caption return ", elem[0]);
-                return elem[0];
-            }
-        }
-        console.log("get_lightbox_caption return null");
-        return null;
-        // const elem = g_slick.getCurrentElem().get(0);
-        // //console.log("displaySlideDescription elem", elem);
-        // const img = elem.getElementsByTagName("img")[0];
-        // //console.log("afterChange img", img);
-        // if (img){
-        //     let postid = img.id.substring(7);    
-    
-        //     // find description
-        //     if (postid != null) {
-        //         const descid = "desc-"+postid;
-        //         var descr = document.getElementById(descid);
-        //         // console.log('descid ', descid);
-        //         if (descr) {
-        //             return descr;
-        //         }
-        //     }
-        // }
-        return null;
-    }
 
     function get_current_slick_description() {
         
@@ -398,6 +363,27 @@ var animateMarkerById = function(id) {
 
             $(descr).fadeIn();
             //descr.style.display='block';
+        }
+    };
+
+    window.focusOnLeafletPhoto = function() {
+
+        let descr = get_current_slick_description();
+        //console.log("focusOnLeafletPhoto descr", descr);
+        if (descr) {
+
+            //descr.id example = desc-708
+            // change to slider-708 = id of the image
+            const img_id = descr.id.replace("desc", "slider");
+
+            const img = document.getElementById(img_id);
+            // //console.log('processClickOnTarget img', img);
+        
+            //const imageSrc = img.getAttribute('id');
+            g_selectedImageSrc = img.getAttribute('src'); //  used to focus on clustered image in the map
+            // //console.log('processClickOnTarget imageSrc = '+g_selectedImageSrc);
+            // //selectSliderImageByElem(img, false);
+            animateMarkerById(img.getAttribute('id'));                        
         }
     };
 
@@ -563,8 +549,10 @@ var animateMarkerById = function(id) {
                         //console.log("afterChange currentSlide", currentSlide);
 
                         window.displaySlideDescription();
-                                        
+                        // TO BE DECIDED IF GOOD IDEA OR NOT
+                        //window.focusOnLeafletPhoto();
                     });
+
                     $('.slider').on('beforeChange', function(event, slick, currentSlide, nextSlide){
                         //console.log("beforeChange", {currentSlide, nextSlide});
                         //console.log("afterChange currentSlide", currentSlide);

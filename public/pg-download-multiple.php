@@ -86,8 +86,14 @@ class Pg_Download_Multiple_Public {
         wp_enqueue_script( $this->plugin_name.'-pg-public.js', plugin_dir_url( __FILE__ ) . 'js/pg-public.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-exif-js.js', plugin_dir_url( __FILE__ ) . 'js/exif-js.js', array( 'jquery' ), $this->version, true );
         wp_enqueue_script( $this->plugin_name.'-pg-download.js', plugin_dir_url( __FILE__ ) . 'js/pg-download.js', array( 'jquery' ), $this->version, true );
+
         wp_enqueue_script( $this->plugin_name.'-bootstrap.js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', array( 'jquery' ), $this->version, true );
-        wp_localize_script($this->plugin_name, 'ays_vars', array('base_url' => GLP_BASE_URL));
+        wp_localize_script($this->plugin_name.'-pg-download.js', 'ays_vars', 
+            array(
+                'geoloc_hidden' => esc_html__("Géolocalisation bloquée.", $this->plugin_name),
+                'no_geoloc' => esc_html__("Géolocalisation absente.", $this->plugin_name),
+                'Consult' => esc_html__("Consultez", $this->plugin_name),
+                'this_page' => esc_html__("cette page", $this->plugin_name)));
         // wp_localize_script($this->plugin_name, 'gal_ajax_public', array('ajax_url' => admin_url('admin-ajax.php')));
         wp_enqueue_script( $this->plugin_name.'-geocoding.js', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyANlJ9pdMlkfsy3ZzheOWMKK35iqTHDu0o&v=weekly', array( 'jquery' ), $this->version, 
             array(

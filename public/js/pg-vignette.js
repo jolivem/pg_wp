@@ -23,7 +23,7 @@
     }
 
     function pg_add_leaflet_map( elemDiv, mapId, country) {
-        // console.log("pg_add_leaflet_map country", {mapId, country});
+        //console.log("pg_add_leaflet_map country", {elemDiv, mapId, country});
         let zoom = country.zoom;
         let file = ays_vars.base_url + "assets/geojson/" + country.file;
  
@@ -113,7 +113,7 @@
         //console.log("pg_add_vignette IN ", {elemDiv, filename, lon, lat});
         //pg_remove_vignette( mapId)
         if (elemDiv.childElementCount > 0) {
-            console.log("pg_add_vignette map already added");
+            //console.log("pg_add_vignette map already added");
             return ;
         }
 
