@@ -239,8 +239,6 @@ var animateMarkerById = function(id, size) {
 
     g_markers.on('clusterclick', function (a) {
         //console.log('clusterclick ', a);
-        /* a.layer is actually a cluster
-        console.log('L ', L); */
         let visibleOne = g_markers.getVisibleParent(a.layer);
         visibleOne.refreshIconOptions({
                     iconSize:     [70, 70],

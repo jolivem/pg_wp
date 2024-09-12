@@ -18,6 +18,7 @@
     align-items: stretch;
     background-color: #f7f7f7;
     justify-content: space-between;
+    overflow: hidden;
 }
 
 .cpt-photo {
@@ -579,8 +580,12 @@ div.slider img {
     border-radius: 8px;
 }
 
+.pg-edit-img-cont {
+    display: flex;
+    justify-content: center;
+}
+
 .pg-edit-img {
-    height: 200px;
     width: auto;
     border: 1px solid #BBB;
     padding: 3px;
@@ -633,10 +638,10 @@ div.slider img {
         max-width: 135px;
     }
 
-    .pg-edit-img {
+    .pg-edit-img,
+    .pg-edit-img-cont {
         height: 200px;
     }
-
 }
 
 /* Medium and large devices */
@@ -690,7 +695,8 @@ div.slider img {
         max-width: 200px;
     }
 
-    .pg-edit-img {
+    .pg-edit-img,
+    .pg-edit-img-cont {
         height: 350px;
     }
 

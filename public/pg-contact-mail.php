@@ -141,7 +141,7 @@ class Pg_Contact_Mail_Public {
     // callback on request to download photos
     //
     public function contact_mail() {
-        //error_log("user_edit_photo IN");
+        //error_log("contact_mail IN");
         //error_log("contact_mail REQUEST ".print_r($_REQUEST, true));
         //error_log("download_single_photo FILES ".print_r($_FILES, true));
 

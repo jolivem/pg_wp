@@ -293,15 +293,13 @@ class Geolocated_Photo {
 
 		$plugin_download_multiple = new Pg_Download_Multiple_Public( $this->get_plugin_name(), $this->get_version() );
         $this->loader->add_action( 'wp_ajax_download_multiple_photos', $plugin_download_multiple, 'download_multiple_photos');
-        //$this->loader->add_action( 'wp_ajax_nopriv_download_multiple_photos', $plugin_download_multiple, 'download_multiple_photos'); // TODO be removed
 
 		$plugin_download_single = new Pg_Download_Single_Public( $this->get_plugin_name(), $this->get_version() );
         $this->loader->add_action( 'wp_ajax_download_single_photo', $plugin_download_single, 'download_single_photo');
-        //$this->loader->add_action( 'wp_ajax_nopriv_download_single_photo', $plugin_download_single, 'download_single_photo'); // TODO be removed
 
 		$plugin_edit_photo = new Pg_Edit_Photo_Public( $this->get_plugin_name(), $this->get_version() );
-        $this->loader->add_action( 'wp_ajax_user_edit_photo', $plugin_edit_photo, 'user_edit_photo');
-        //$this->loader->add_action( 'wp_ajax_nopriv_user_edit_photo', $plugin_edit_photo, 'user_edit_photo'); // TODO be removed
+        $this->loader->add_action( 'wp_ajax_user_save_photo', $plugin_edit_photo, 'user_save_photo'); // save photo
+        $this->loader->add_action( 'wp_ajax_user_get_photo', $plugin_edit_photo, 'user_get_photo');
 
         $plugin_contact_mail = new Pg_Contact_Mail_Public( $this->get_plugin_name(), $this->get_version() );
         $this->loader->add_action( 'wp_ajax_contact_mail', $plugin_contact_mail, 'contact_mail');
@@ -309,11 +307,8 @@ class Geolocated_Photo {
 
         $plugin_edit_gallery = new Pg_Edit_Gallery_Public( $this->get_plugin_name(), $this->get_version() );
         $this->loader->add_action( 'wp_ajax_user_edit_gallery', $plugin_edit_gallery, 'user_edit_gallery');
-        //$this->loader->add_action( 'wp_ajax_nopriv_user_edit_gallery', $plugin_edit_gallery, 'user_edit_gallery'); // TODO be removed
         $this->loader->add_action( 'wp_ajax_user_delete_gallery', $plugin_edit_gallery, 'user_delete_gallery');
-        //$this->loader->add_action( 'wp_ajax_nopriv_user_delete_gallery', $plugin_edit_gallery, 'user_delete_gallery'); // TODO be removed
         $this->loader->add_action( 'wp_ajax_hide_gallery_help', $plugin_edit_gallery, 'hide_gallery_help');
-        //$this->loader->add_action( 'wp_ajax_nopriv_hide_gallery_help', $plugin_edit_gallery, 'hide_gallery_help'); // TODO be removed
 
         $planet = new Pg_Show_Planet_Map_Public( $this->get_plugin_name(), $this->get_version() );
         $this->loader->add_action( 'wp_ajax_ban_image', $planet, 'ban_image');
@@ -321,8 +316,7 @@ class Geolocated_Photo {
         $this->loader->add_action( 'wp_ajax_nopriv_get_bb_images', $planet, 'get_bb_images');
 
 		new Pg_Show_User_Map_Public( $this->get_plugin_name(), $this->get_version() );
-        //new Pg_Show_User_Gallery_Public( $this->get_plugin_name(), $this->get_version() );
-        //new Pg_Show_User_Gallery_Public( $this->get_plugin_name(), $this->get_version() );
+
         new Pg_Geoposts_Table( $this->get_plugin_name(), $this->get_version() );
     }
 

@@ -296,3 +296,6 @@ msgstr ""
 #: js/pg-map.js
 msgid "Adresse introuvable"
 msgstr ""
+
+msgid "Description"
+msgstr ""

@@ -20,7 +20,9 @@
                     if (index != -1) {
                         let cpt = index+1;
                         document.getElementById('cpt-photo').innerHTML = cpt + "/" + images.length;
-
+                        //console.log("edit-photo-option index", index);
+                        $('.fa-angle-double-left').css('color', '');
+                        $('.fa-angle-double-right').css('color', '');
                         if (index == 0){
                             $('.fa-angle-double-left').css('color', 'darkgray');
                         }
@@ -59,8 +61,10 @@
     
                 // get the address selected 
                 let name = "address" + postid;
-                let address = document.querySelector('input[name="'+name+'"]:checked').value;
-                formData.append('address', address);
+                let address = document.querySelector('input[name="'+name+'"]:checked');
+                if (address) {
+                    formData.append('address', address.value);
+                }
 
                 formData.append('action', 'admin_valid_photo');
 
@@ -213,44 +217,56 @@
             //console.log("edit-photo-option images", images);
             if (images.length > 1) {
                 const postid = e.target.dataset.postid;
-                // console.log("edit-photo-option postid", postid);
+                //console.log("edit-photo-option postid", postid);
                 const isNumber = (element) => element == postid;
                 const index = images.findIndex(isNumber);
                 if (index != -1) {
-                    // console.log("edit-photo-option index", index);
+                    //console.log("edit-photo-option index", index);
 
                     if (e.target.classList.contains("fa-angle-double-right")) {
                         // find the following image
                         if (index < images.length -1) {
                             let next_id = images[index + 1];
-                            // console.log("edit-photo-option next_id", next_id);
-                            let edit_photo_url = document.getElementById('pg_edit_photo_url').value;
-                            edit_photo_url += "?pid=";
-                            edit_photo_url += next_id;
-                            const gallery_id = document.getElementById('gallery-id').value;
-                            edit_photo_url += "&gid=";
-                            edit_photo_url += gallery_id;
-                            // console.log("edit-photo-option edit_photo_url", edit_photo_url);
-                            window.location = edit_photo_url;
+                            //console.log("edit-photo-option next_id", next_id);
+                            let ancestor = e.target.parentNode.parentNode.parentNode.parentNode;
+                            let img_cont = ancestor.querySelector(".pg-edit-img-cont");
+                            //console.log("edit-photo-option img_cont", img_cont);
+                            if (img_cont) {
+                                img_cont.style = '';
+                                img_cont.style.animationDuration = '.45s';
+                                img_cont.style.animationName = 'fadeOutLeft';
+                                setTimeout(() => {
+                                    let img = ancestor.querySelector(".pg-edit-img");
+                                    img.style = 'display: none;';
+                                    user_get_photo(next_id);
+                                }, 200); // Duration of the animation    
+                            }
+    
+                            
                         }
                     }
                     else if (e.target.classList.contains("fa-angle-double-left")) {
                         // find the previous image
                         if (index > 0) {
                             let previous_id = images[index - 1];
-                            // console.log("edit-photo-option previous_id", previous_id);
-                            let edit_photo_url = document.getElementById('pg_edit_photo_url').value;
-                            edit_photo_url += "?pid=";
-                            edit_photo_url += previous_id;
-                            const gallery_id = document.getElementById('gallery-id').value;
-                            edit_photo_url += "&gid=";
-                            edit_photo_url += gallery_id;
-                            // console.log("edit-photo-option edit_photo_url", edit_photo_url);
-                            window.location = edit_photo_url;
+
+                            let ancestor = e.target.parentNode.parentNode.parentNode.parentNode;
+                            let img_cont = ancestor.querySelector(".pg-edit-img-cont");
+                            if (img_cont) {
+                                img_cont.style = '';
+                                img_cont.style.animationDuration = '.45s';
+                                img_cont.style.animationName = 'fadeOutRight';
+                                setTimeout(() => {
+                                    let img = ancestor.querySelector(".pg-edit-img");
+                                    img.style = 'display: none;';
+                                    user_get_photo(previous_id);
+                                }, 200); // Duration of the animation                                    
+                            }
+
                         }
                     }
-                    let cpt = index+1;
-                    document.getElementById('cpt-photo').innerHTML = cpt + "/" + images.length;
+                    //let cpt = index+1;
+                    //document.getElementById('cpt-photo').innerHTML = cpt + "/" + images.length;
                 }
             }
             // console.log("edit-photo-option OUT");
@@ -266,6 +282,67 @@
             download_single_url += galid;
             window.location = download_single_url;
         });  
+
+        const user_get_photo = (postid) => {
+            //console.log("user_get_photo IN");
+            let nonce = document.getElementById('pg_nonce').value;
+            let admin_url = document.getElementById('pg_admin_ajax_url').value;
+
+            const formData = new FormData();
+            formData.append('action', 'user_get_photo');
+            formData.append('nonce', nonce);
+            formData.append('pid', postid);
+
+            //console.log("user_get_photo AJAX");
+            jQuery.ajax({
+                method: 'POST',
+                url: admin_url,
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response){
+                    //console.log("user_get_photo success", response);
+                    let img_cont = document.querySelector(".pg-edit-img-cont");
+                    if (img_cont) {
+                        // remove animation
+                        img_cont.style = '';
+                    }
+
+                    // update the page
+                    $("#photo-description").val(response.data.content);
+                    $("#user_status").val(response.data.user_status);
+                    if (response.data.user_status == 'public') {
+                        $("#user_status").prop("checked", true);
+                    }
+                    else {
+                        $("#user_status").prop("checked", false);
+                    }
+                    $("#user_status_label").html(response.data.user_status_label);
+                    $("#post_id").val(response.data.pid);
+
+                    $("[data-postid]").each( function() {
+                        //console.log("user_get_photo data-postid found");
+                        $(this).data('postid', response.data.pid);
+                        $(this).attr('data-postid', response.data.pid);
+                    });
+
+                    $(".flex-container-photo").find("img").attr("src", response.data.img_src);
+                    //console.log("edit-photo-option img_cont", img_cont);
+                    let img = document.querySelector(".pg-edit-img");
+                    img.style = '';
+                    //console.log("edit-photo-option img display XXXXXXXXXXX", img);
+                    if (img_cont) {
+                        img_cont.style.animationDuration = '.35s';
+                        img_cont.style.animationName = 'zoomIn';
+                    }
+
+                    //console.log("user_get_photo update done");
+                    updatePhotoCounter();
+                }
+                // TODO handle error
+            });          
+        };
+
 
         $(document).find('.user-photo-option').on('click', function(e){
             // console.log("user-photo-option click", e);
@@ -570,7 +647,7 @@
             //const vignette = document.getElementById("select-country").value;
 
             const formData = new FormData();
-            formData.append('action', 'user_edit_photo');
+            formData.append('action', 'user_save_photo');
             formData.append('nonce', nonce);
             formData.append('post_id', post_id);
             //formData.append('title', title);

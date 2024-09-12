@@ -80,6 +80,7 @@ class Pg_Edit_Photo_Public {
         wp_enqueue_style( 'ays_pb_bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css', array(), $this->version, 'all' );
         //wp_enqueue_style('leaflet.css', 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css');
         wp_enqueue_style( 'gpg-fontawesome', 'https://use.fontawesome.com/releases/v5.4.1/css/all.css', array(), $this->version, 'all');
+        wp_enqueue_style( 'animate.css', plugin_dir_url( __FILE__ ) . 'css/animate.css', array(), $this->version, 'all' );
         wp_enqueue_style( $this->plugin_name.'-pg-public.css', plugin_dir_url( __FILE__ ) . 'css/pg-public.css', array(), $this->version, 'all' );
     }        
 
@@ -218,13 +219,13 @@ class Pg_Edit_Photo_Public {
             <div class='pg-container'>";
             // add right and left buttons
             $html_code .= "
-                <div class='flex-container-photo''>
+                <div class='flex-container-photo'>
                     <div class='slider-options-left' style='background-color: lightblue'>
                         <div>
                             <div class='edit-photo-option fas fa-angle-double-left' aria-hidden='true' data-postid='$pid'></div>
                         </div>
                     </div>
-                    <div style='display:flex; justify-content: center;'>
+                    <div class='pg-edit-img-cont'>
                         <img class='pg-edit-img' src='$img_src' alt=''>
                     </div>
                     <div class='slider-options-right' style='background-color: lightblue'>
@@ -239,7 +240,7 @@ class Pg_Edit_Photo_Public {
             $html_code .= "
                 <div class='form-floating mb-3'>
                     <textarea rows='3' style='height:100%;' class='form-control' placeholder='' id='photo-description'>$content</textarea>
-                    <label for='photo-description'>Description</label>                        
+                    <label for='photo-description'>".esc_html__("Description", $this->plugin_name)."</label>                        
                 </div>
                 <div class='form-check form-switch'>
                     <input class='form-check-input' type='checkbox' role='switch' id='user_status' value='$user_status'$user_status_checked>
@@ -269,23 +270,23 @@ class Pg_Edit_Photo_Public {
     } // end ays_show_galery()
 
     //
-    // callback on request to download photos
+    // callback on request to save photos
     //
-    public function user_edit_photo() {
-        //error_log("user_edit_photo IN");
-        // error_log("user_edit_photo REQUEST ".print_r($_REQUEST, true));
-        //error_log("download_single_photo FILES ".print_r($_FILES, true));
+    public function user_save_photo() {
+        //error_log("user_save_photo IN");
+        // error_log("user_save_photo REQUEST ".print_r($_REQUEST, true));
+        //error_log("user_save_photo FILES ".print_r($_FILES, true));
 
         if( ! isset( $_REQUEST['nonce'] ) or 
             ! wp_verify_nonce( $_REQUEST['nonce'], 'edit_photo' ) ) {
-            error_log("user_edit_photo nonce not found");
+            error_log("user_save_photo nonce not found");
             wp_send_json_error( "NOK.", 403 );
             return;
         }
 
         $user_id = get_current_user_id();
         if ($user_id == 0) {
-            error_log("user_edit_photo No USER");
+            error_log("user_save_photo No USER");
             // TODO 404 NOT FOUND
             wp_send_json_error( "NOK.", 401 );
             return;
@@ -327,11 +328,79 @@ class Pg_Edit_Photo_Public {
 
         }
         else {
-            error_log("user_edit_photo not a photo");
+            error_log("user_save_photo not a photo");
         }
 
         // error_log( "Respond success");
         wp_send_json_success( null, 200);
+        wp_die();
+        
+    }
+
+    //
+    // callback on request to get a photo
+    //
+    public function user_get_photo() {
+        error_log("user_get_photo IN");
+        // error_log("user_get_photo REQUEST ".print_r($_REQUEST, true));
+        //error_log("user_get_photo FILES ".print_r($_FILES, true));
+
+        if( ! isset( $_REQUEST['nonce'] ) or 
+            ! wp_verify_nonce( $_REQUEST['nonce'], 'edit_photo' ) ) {
+            error_log("user_get_photo nonce not found");
+            wp_send_json_error( "NOK.", 403 );
+            return;
+        }
+
+        $user_id = get_current_user_id();
+        if ($user_id == 0) {
+            error_log("user_get_photo No USER");
+            // TODO 404 NOT FOUND
+            wp_send_json_error( "NOK.", 401 );
+            return;
+        }
+
+        $pid = sanitize_text_field( $_REQUEST['pid'] );
+        error_log("user_get_photo pid=".$pid);
+
+        if ( wp_attachment_is_image( $pid ) ) {
+            $post = get_post($pid);
+            error_log("user_get_photo post=".print_r($post, true));
+            if ($post != null) {
+    
+                $user_status_checked = "";
+                $user_status_label = esc_html__("Photo privée", $this->plugin_name);
+                $user_status = self::USER_STATUS_PRIVATE;
+                if (get_post_meta($pid, 'user_status', true) == self::USER_STATUS_PUBLIC) {
+                    $user_status_checked = " checked";
+                    $user_status = self::USER_STATUS_PUBLIC;
+                    $user_status_label = esc_html__("Affichage autorisé sur la galerie publique", $this->plugin_name);
+                }
+    
+                $content = stripslashes($post->post_content);
+                error_log("user_get_photo content=".$content);
+    
+                $url_img = wp_get_attachment_image_src($pid, "medium");
+                if ($url_img != false) {
+                    $img_src = $url_img[0];
+                
+                    $data = [
+                        "img_src" => $img_src,
+                        "pid" => $pid,
+                        "content" => $content,
+                        "user_status" => $user_status,
+                        "user_status_label" => $user_status_label
+                    ];
+                    error_log("user_get_photo data=".print_r($data, true));
+                    wp_send_json_success( $data, 200 );
+                }
+            }
+
+            error_log("user_save_photo not a photo");
+        }
+
+        // error_log( "Respond success");
+        wp_send_json_error( "NOT FOUND", 404);
         wp_die();
         
     }
