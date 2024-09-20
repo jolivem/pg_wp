@@ -115,7 +115,7 @@ class Pg_Edit_Photo_Public {
 
         // TODO check that gallery belongs to the current user
         
-        if (! isset($_GET['pid'])) {
+        if (! isset($_GET['pid']) && ! current_user_can( 'manage_options' )) {
             error_log("Pg_Edit_Photo_Public::pg_generate_page Missing parameters");
             my_custom_404();
             wp_die();

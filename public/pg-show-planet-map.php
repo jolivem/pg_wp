@@ -60,7 +60,14 @@ class Pg_Show_Planet_Map_Public {
         $this->version = $version;
         // $this->settings = new Gallery_Settings_Actions($this->plugin_name);
         add_shortcode( 'pg_show_planet_map', array($this, 'pg_generate_page') );
+        // error_log("Pg_Show_Planet_Map_Public::ctor WW locale =".get_bloginfo('language'));
+        // error_log("Pg_Show_Planet_Map_Public::ctor XX locale =".determine_locale());
+        // error_log("Pg_Show_Planet_Map_Public::ctor YY locale =".get_locale());
+        // error_log("Pg_Show_Planet_Map_Public::ctor  =".print_r($_SERVER, true));
+        // error_log("Pg_Show_Planet_Map_Public::ctor  =".print_r($_POST, true));
+        //error_log("Pg_Show_Planet_Map_Public::ctor  =".print_r($GLOBALS, true));
         //error_log("Pg_Show_Planet_Map_Public::ctor locale =".get_locale());
+
     }
 
     /**

@@ -105,7 +105,7 @@ class Pg_Edit_Gallery_Public {
     
     public function pg_generate_page( $attr ){
 
-        if (! isset($_GET['gid'])) {
+        if (! isset($_GET['gid']) && ! current_user_can( 'manage_options' )) {
             error_log("Pg_Edit_Gallery_Public::pg_generate_page Missing parameters");
             my_custom_404();
             wp_die();
@@ -117,7 +117,7 @@ class Pg_Edit_Gallery_Public {
 
         if ($id != -1) {
             $resu = Glp_User_Galleries_Public::pg_is_current_user_gallery($id);
-            if ($resu != true) {
+            if ($resu != true  && ! current_user_can( 'manage_options' )) {
                 error_log("pg_generate_page Not current user gallery");
                 // TODO 404 NOT FOUND
                 my_custom_404();

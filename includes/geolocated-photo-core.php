@@ -227,6 +227,8 @@ class Geolocated_Photo {
 
         // Add row meta link to the plugin
         $this->loader->add_filter( 'plugin_row_meta', $plugin_admin, 'add_plugin_row_meta',10 ,2 );
+        $this->loader->add_filter( 'wp_nav_menu_objects', $plugin_admin, 'filter_secondary_menu_user',10 ,2 );
+        
 
         // Before VC Init
         $this->loader->add_action( 'vcv:api', $plugin_admin, 'vc_before_init_actions' );

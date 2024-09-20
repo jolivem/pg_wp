@@ -289,6 +289,67 @@ class GLP_Admin {
         return $meta;
     }
 
+    function filter_secondary_menu_user($items, $args) {
+        //error_log("filter_secondary_menu_user items: ".print_r($items, true));
+        //error_log("filter_secondary_menu_user args: ".print_r($args, true));
+        //error_log("filter_secondary_menu_user theme_location: ".$args->theme_location);
+        //error_log("filter_secondary_menu_user menu: ".print_r($args->menu, true));
+        //$logged_in = is_user_logged_in();
+        $is_admin = current_user_can( 'manage_options' );
+
+        // error_log("filter_secondary_menu_user logged_in: ".$logged_in);
+        // error_log("filter_secondary_menu_user is_admin: ".$is_admin);
+
+        // error_log("filter_secondary_menu_user slug: ".$args->menu->slug);
+        
+        if ( str_contains($args->menu->slug, "menu-login") ) {
+
+            foreach( $items as $key => $item) {
+                // error_log("filter_secondary_menu_user items title: ".$item->title);
+                // error_log("filter_secondary_menu_user items url: ".$item->url);
+                if ( str_contains($item->url, "login") ) {
+                    if (is_user_logged_in()) {
+                        // error_log("filter_secondary_menu_user unset key: ".$key);
+                        unset($items[$key]);
+                    }
+                }
+                if ( str_contains($item->url, "check-user-blog") ) {
+                    if (!$is_admin) {
+                        // error_log("filter_secondary_menu_user unset key: ".$key);
+                        unset($items[$key]);
+                    }
+                }
+                if ( str_contains($item->url, "check-photos") ) {
+                    if (!$is_admin) {
+                        // error_log("filter_secondary_menu_user unset key: ".$key);
+                        unset($items[$key]);
+                    }
+                }
+                if ( str_contains($item->url, "my-photos") ) {
+                    //error_log("filter_secondary_menu_user logged_in: ".is_user_logged_in());
+                    if (! is_user_logged_in()) {
+                        // error_log("filter_secondary_menu_user unset key: ".$key);
+                        unset($items[$key]);
+                    }
+                }
+                if ( str_contains($item->url, "my-galleries") ) {
+                    if (! is_user_logged_in()) {
+                        // error_log("filter_secondary_menu_user unset key: ".$key);
+                        unset($items[$key]);
+                    }
+                }
+                if ( str_contains($item->url, "my-account") ) {
+                    if (! is_user_logged_in()) {
+                        // error_log("filter_secondary_menu_user unset key: ".$key);
+                        unset($items[$key]);
+                    }
+                }
+                
+            }
+        }
+        
+        return $items;
+    }
 
     /**
      * Render the settings page for this plugin.
