@@ -341,7 +341,7 @@ class Pg_Edit_Photo_Public {
     // callback on request to get a photo
     //
     public function user_get_photo() {
-        error_log("user_get_photo IN");
+        //error_log("user_get_photo IN");
         // error_log("user_get_photo REQUEST ".print_r($_REQUEST, true));
         //error_log("user_get_photo FILES ".print_r($_FILES, true));
 
@@ -361,11 +361,11 @@ class Pg_Edit_Photo_Public {
         }
 
         $pid = sanitize_text_field( $_REQUEST['pid'] );
-        error_log("user_get_photo pid=".$pid);
+        //error_log("user_get_photo pid=".$pid);
 
         if ( wp_attachment_is_image( $pid ) ) {
             $post = get_post($pid);
-            error_log("user_get_photo post=".print_r($post, true));
+            //error_log("user_get_photo post=".print_r($post, true));
             if ($post != null) {
     
                 $user_status_checked = "";
@@ -378,7 +378,7 @@ class Pg_Edit_Photo_Public {
                 }
     
                 $content = stripslashes($post->post_content);
-                error_log("user_get_photo content=".$content);
+                //error_log("user_get_photo content=".$content);
     
                 $url_img = wp_get_attachment_image_src($pid, "medium");
                 if ($url_img != false) {
@@ -391,7 +391,7 @@ class Pg_Edit_Photo_Public {
                         "user_status" => $user_status,
                         "user_status_label" => $user_status_label
                     ];
-                    error_log("user_get_photo data=".print_r($data, true));
+                    //error_log("user_get_photo data=".print_r($data, true));
                     wp_send_json_success( $data, 200 );
                 }
             }

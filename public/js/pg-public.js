@@ -491,7 +491,7 @@
                 success: function(response){
                     //console.log("delete success");
                     
-                    let url = document.getElementById('pg_user_galleries_url').value;
+                    let url = document.getElementById('pg_my_galleries_url').value;
                     window.location = url;
     
                     // remove the gallery with animation
@@ -739,6 +739,63 @@
             event.preventDefault();
             save_current_gallery();
         });
+
+        // from the Edit Gallery page
+        $(document).find('#gallery_help').on('change', function(event) {
+            let hide=false;
+            if (event.target.checked) {
+                //console.log('Checkbox is checked');
+                hide = true;
+            }
+
+            let admin_url = document.getElementById('pg_admin_ajax_url').value;
+            let nonce = document.getElementById('pg_nonce').value;
+
+            const formData = new FormData();
+            formData.append('action', 'hide_gallery_help');
+            formData.append('nonce', nonce);
+            formData.append('hide', hide);
+
+            jQuery.ajax({
+                method: 'POST',
+                url: admin_url,
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(){
+                    console.log("hide_gallery_help success");
+                }
+            });       
+        });
+        
+        // from the My Galleries page
+        $(document).find('#galleries_help').on('change', function(event) {
+            console.log('galleries_help IN');
+            let hide=false;
+            if (event.target.checked) {
+                //console.log('Checkbox is checked');
+                hide = true;
+            }
+
+            let admin_url = document.getElementById('pg_admin_ajax_url').value;
+            let nonce = document.getElementById('pg_nonce').value;
+
+            const formData = new FormData();
+            formData.append('action', 'hide_galleries_help');
+            formData.append('nonce', nonce);
+            formData.append('hide', hide);
+
+            jQuery.ajax({
+                method: 'POST',
+                url: admin_url,
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(){
+                    console.log("hide_galleries_help success");
+                }
+            });       
+        });        
 
     })
 })(jQuery)

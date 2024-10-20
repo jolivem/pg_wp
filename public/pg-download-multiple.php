@@ -157,7 +157,6 @@ class Pg_Download_Multiple_Public {
                             </div>';
         }
         $html_code .= '
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
                         </div>                            
                         <div class="modal-body">
                             <form id="custom-upload-form" style="text-align=center;">
@@ -178,7 +177,7 @@ class Pg_Download_Multiple_Public {
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" id="close-multiple-modal" class="btn btn-secondary" data-bs-dismiss="modal">'.esc_html__("Fermer", $this->plugin_name).'</button>
+                            <button type="button" id="close-multiple-modal" class="btn btn-secondary">'.esc_html__("Fermer", $this->plugin_name).'</button>
                         </div>
                         <div id="progressContainer"></div>
                     </div>
@@ -382,6 +381,8 @@ class Pg_Download_Multiple_Public {
              * @see _wp_handle_upload() in wp-admin/includes/file.php
              */
             //error_log("download_multiple_photos movefile ".print_r($movefile, true));
+            // TODO HANDLE UPLOAD_MAX_FILESIZE ERROR here
+            // MAX_SIZE set to 8000M in ./htaccess
             error_log("download_multiple_photos error: ". $movefile['error']);
             //wp_send_json_success( "downloaded", 200);
             $data=array('message' => $movefile['error']);

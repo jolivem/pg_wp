@@ -105,9 +105,18 @@ class Glp_User_Galleries_Public {
     }
 
     static public function get_page_url_from_slug($slug) {
+        $locale = get_locale(); // ex en_US
+        $lang = substr($locale, 0, 2); // ex en
+        $slug = $slug . "-" . $lang;
         $page = get_page_by_path($slug);
+        if ($page == null) {
+            error_log("get_page_url_from_slug error page not found for slug=".$slug);
+            return false;
+        }
         // error_log("get_page_url_from_slug slug=".$slug);
+        // error_log("get_page_url_from_slug page->ID=".$page->ID);
         $result = get_permalink($page->ID);
+        //error_log("get_page_url_from_slug permalink=".$result);
         if ($result == false) {
             error_log("get_page_url_from_slug: ERROR not found");
         }
@@ -137,7 +146,7 @@ class Glp_User_Galleries_Public {
             <div class='pg-container'>
                 <h3>".esc_html__("Mes galeries", $this->plugin_name)."</h3>
                 <br/>
-                <div>Aucune galerie. <a href='$edit_gallery_url'>".esc_html__("Créez votre première galerie", $this->plugin_name)."</a> ".esc_html__("et ajoutez des photos.", $this->plugin_name)."<div>
+                <div>".esc_html__("Aucune galerie.", $this->plugin_name)."&nbsp<a href='$edit_gallery_url'>".esc_html__("Créez votre première galerie", $this->plugin_name)."</a> ".esc_html__("et ajoutez des photos.", $this->plugin_name)."<div>
             </div>";
             return $html_code;    
         }

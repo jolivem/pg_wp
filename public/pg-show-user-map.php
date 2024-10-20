@@ -114,7 +114,7 @@ class Pg_Show_User_Map_Public {
         //error_log("pg_generate_page IN ".print_r($attr, true));
 
         // TODO check that the photo belons to the current user
-        if (! isset($_GET['guuid'])) {
+        if (! isset($_GET['guuid']) && ! current_user_can( 'manage_options' )) {
             my_custom_404();
             wp_die();
         }
@@ -135,7 +135,7 @@ class Pg_Show_User_Map_Public {
         //global $wpdb;
 
         $gallery = $this->pg_get_gallery_by_uuid($guuid);
-        if(!$gallery){
+        if(!$gallery && ! current_user_can( 'manage_options' )){
             error_log("pg_show_page Gallery not found");
             my_custom_404();
             wp_die();

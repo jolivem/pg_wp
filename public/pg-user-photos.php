@@ -147,7 +147,7 @@ class Glp_User_Photos_Public {
             <div id='delete-photo-success' class='toast align-items-center text-white bg-success bg-gradient border-0' role='alert' aria-live='assertive' aria-atomic='true'>
                 <div class='d-flex'>
                     <div class='toast-body'>
-                        Photo supprimée !
+                        ".esc_html__("Photo supprimée !", $this->plugin_name)."
                     </div>
                 </div>
             </div>

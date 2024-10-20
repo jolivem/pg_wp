@@ -756,7 +756,7 @@ function updateDownloadMultipleModal(files) {
                         // render without lat,lon -> error because no EXIF data
                         if (list.childElementCount < maxFile) {
                             const message = ays_vars.geoloc_hidden + " " +
-                                ays_vars.Consult + " <a href='" + geoloc_advise_url + "' target='_blank'> " + 
+                                ays_vars.Consult + " <a href='" + geoloc_advise_url + "' target='_blank' rel='noreferrer noopener'> " + 
                                 ays_vars.this_page + "</a>.";
                             renderItemMultiple_error(event.target.result, file.name, message);
                             // "Géolocalisation bloquée. Consultez <a href='"+geoloc_advise_url+"' target='_blank'>cette page</a>.");
@@ -768,7 +768,7 @@ function updateDownloadMultipleModal(files) {
                     if (list.childElementCount < maxFile) {
                         // render without lat,lon -> error because no EXIF data
                         const message = ays_vars.no_geoloc + " " +
-                            ays_vars.Consult + " <a href='" + geoloc_advise_url + "' target='_blank'> " + 
+                            ays_vars.Consult + " <a href='" + geoloc_advise_url + "' target='_blank' rel='noreferrer noopener'> " + 
                             ays_vars.this_page + "</a>.";
                         renderItemMultiple_error(event.target.result, file.name, message);
                             //"Géolocalisation absente. Consultez <a href='"+geoloc_advise_url+"' target='_blank'>cette page</a>.");

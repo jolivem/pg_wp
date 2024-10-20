@@ -162,8 +162,8 @@ class Pg_Contact_Mail_Public {
         #$headers[] = 'Content-type: text/plain; charset=utf-8';
         $headers = 'From:planet.gallery@gmail.com';
         $ret = wp_mail($to, $subject, $message, $headers);
-        $headers = 'From:planetgallery@gmail.com';
-        $ret = mail($to, $subject, $message, $headers);
+        // $headers = 'From:planetgallery@gmail.com';
+        // $ret = mail($to, $subject, $message, $headers);
         error_log("contact_mail result=$ret");
 
         //error_log( "Respond success");

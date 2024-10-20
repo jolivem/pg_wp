@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2023-11-06 18:52+0400\n"
-"PO-Revision-Date: 2024-09-12 08:14+0000\n"
+"PO-Revision-Date: 2024-09-28 15:30+0000\n"
 "Language: en_US\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Loco https://localise.biz/\n"
@@ -24,7 +24,7 @@ msgstr "1 gallery"
 
 #: pg-user-galleries.php:248
 msgid "Adresse copiée dans le presse-papier !"
-msgstr "Address copied into the clipboard !"
+msgstr "Address copied into the clipboard!"
 
 #: js/pg-map.js
 msgid "Adresse introuvable"
@@ -46,8 +46,13 @@ msgstr "Add a gallery..."
 msgid "Ajouter une photo"
 msgstr "Add a photo"
 
+msgid "Aucune galerie."
+msgstr "No gallery."
+
 #: pg-show-planet-map.php:182
-msgid "C'est un projet participatif, tout est gratuit. Inscrivez-vous dès maintenant !"
+msgid ""
+"C'est un projet participatif, tout est gratuit. Inscrivez-vous dès "
+"maintenant !"
 msgstr "It's a participative project, and everything is free. Sign up now!"
 
 #: js/pg-download.js
@@ -69,6 +74,9 @@ msgstr "Create galleries with geotagged photos."
 #: pg-user-galleries.php:140
 msgid "Créez votre première galerie"
 msgstr "Create your first gallery"
+
+msgid "Description"
+msgstr ""
 
 #: pg-edit-gallery.php:289 pg-edit-gallery.php:305 pg-edit-photo.php:262
 msgid "Enregistrer"
@@ -145,7 +153,9 @@ msgid "Mes photos"
 msgstr "My photos"
 
 #: pg-edit-gallery.php:263
-msgid "n'est pas affichée sur la galerie publique et n'est pas vérifiée par le modérateur."
+msgid ""
+"n'est pas affichée sur la galerie publique et n'est pas vérifiée par le "
+"modérateur."
 msgstr "is not displayed on the public gallery."
 
 #: pg-edit-gallery.php:268 pg-user-galleries.php:169
@@ -165,8 +175,11 @@ msgid "Non vérifiée"
 msgstr "Not verified"
 
 #: pg-edit-gallery.php:723
-msgid "Note : Les photos de la galerie sont conservées et accessibles dans le menu Mes photos."
-msgstr "The gallery photos remain stored and can be accessed in the My photos menu."
+msgid ""
+"Note : Les photos de la galerie sont conservées et accessibles dans le menu "
+"Mes photos."
+msgstr ""
+"The gallery photos remain stored and can be accessed in the My photos menu."
 
 #: pg-404.php:16
 msgid "Oops ! La page est introuvable."
@@ -178,7 +191,7 @@ msgstr "Share never-seen-before galleries and maps with friends and family."
 
 #: pg-show-planet-map.php:175
 msgid "Participez au projet Planet-Gallery !"
-msgstr "Take part in the Planet-Gallery project !"
+msgstr "Take part in the Planet-Gallery project!"
 
 #: pg-edit-photo.php:161
 msgid "Photo privée"
@@ -193,7 +206,9 @@ msgid "pour copier le lien d'une galerie en vue de la partager."
 msgstr "to copy a gallery link for sharing."
 
 #: pg-edit-gallery.php:259
-msgid "pour modifier la description et le caractère <b>Publique</b> / <b>Privé</b> de la photo."
+msgid ""
+"pour modifier la description et le caractère <b>Publique</b> / <b>Privé</b> "
+"de la photo."
 msgstr "to change the photo description and public/private status."
 
 #: pg-user-galleries.php:163
@@ -201,9 +216,12 @@ msgid "pour modifier une galerie."
 msgstr "to modify a gallery."
 
 #: pg-edit-gallery.php:260
-msgid "pour supprimer la photo de la galerie, elle reste présente dans votre phototèque."
+msgid ""
+"pour supprimer la photo de la galerie, elle reste présente dans votre "
+"phototèque."
 msgstr ""
-"to remove the photo from the gallery. it remains stored and accessible via the My photos menu."
+"to remove the photo from the gallery. it remains stored and accessible via "
+"the My photos menu."
 
 #: pg-user-galleries.php:164
 msgid "pour visualiser une galerie quand elle est partagée."

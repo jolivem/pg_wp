@@ -299,3 +299,7 @@ msgstr ""
 
 msgid "Description"
 msgstr ""
+
+msgid "Aucune galerie."
+msgstr ""
+

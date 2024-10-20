@@ -302,7 +302,7 @@ class GLP_Admin {
 
         // error_log("filter_secondary_menu_user slug: ".$args->menu->slug);
         
-        if ( str_contains($args->menu->slug, "menu-login") ) {
+        if ( isset($args->menu) && is_object($args->menu) && property_exists($args->menu, "slug") && str_contains($args->menu->slug, "menu-login") ) {
 
             foreach( $items as $key => $item) {
                 // error_log("filter_secondary_menu_user items title: ".$item->title);

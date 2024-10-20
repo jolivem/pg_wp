@@ -65,8 +65,8 @@ class Pg_Show_Planet_Map_Public {
         // error_log("Pg_Show_Planet_Map_Public::ctor YY locale =".get_locale());
         // error_log("Pg_Show_Planet_Map_Public::ctor  =".print_r($_SERVER, true));
         // error_log("Pg_Show_Planet_Map_Public::ctor  =".print_r($_POST, true));
-        //error_log("Pg_Show_Planet_Map_Public::ctor  =".print_r($GLOBALS, true));
-        //error_log("Pg_Show_Planet_Map_Public::ctor locale =".get_locale());
+        // error_log("Pg_Show_Planet_Map_Public::ctor  =".print_r($GLOBALS, true));
+        // error_log("Pg_Show_Planet_Map_Public::ctor locale =".get_locale());
 
     }
 

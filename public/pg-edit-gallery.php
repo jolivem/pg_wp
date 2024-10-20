@@ -51,7 +51,7 @@ class Pg_Edit_Gallery_Public {
     const PAGE_SLUG_EDIT_GALLERY = "edit-gallery";
     const PAGE_SLUG_SHOW_GALLERY = "show-gallery";
     const PAGE_SLUG_EDIT_PHOTO     = "edit-photo";
-    const PAGE_SLUG_USER_GALLERIES = "user-galleries";
+    const PAGE_SLUG_MY_GALLERIES = "my-galleries";
     const PAGE_SLUG_MY_PHOTOS = "my-photos";
     const PAGE_SLUG_GEOLOC_ADVISE = "geoloc-advise";
     const PAGE_SLUG_DOWNLOAD_SINGLE = "download-single";
@@ -203,7 +203,7 @@ class Pg_Edit_Gallery_Public {
                 $nb_medias = count($medias);
             }
         }
-        $user_galleries_url = Glp_User_Galleries_Public::get_page_url_from_slug(self::PAGE_SLUG_USER_GALLERIES);
+        $my_galleries_url = Glp_User_Galleries_Public::get_page_url_from_slug(self::PAGE_SLUG_MY_GALLERIES);
         $geoloc_advise_url = Glp_User_Galleries_Public::get_page_url_from_slug(self::PAGE_SLUG_GEOLOC_ADVISE);
         $edit_photo_url = Glp_User_Galleries_Public::get_page_url_from_slug(self::PAGE_SLUG_EDIT_PHOTO); // TODO move 186 to a global constant or get by Title
         $download_single_url = Glp_User_Galleries_Public::get_page_url_from_slug(self::PAGE_SLUG_DOWNLOAD_SINGLE);
@@ -222,7 +222,7 @@ class Pg_Edit_Gallery_Public {
         <input type='hidden' id='gallery-id' name='gallery-id' value='$id'/>
         <input type='hidden' id='pg_admin_ajax_url' value='$admin_ajax_url'/>
         <input type='hidden' id='pg_edit_photo_url' value='$edit_photo_url'/>
-        <input type='hidden' id='pg_user_galleries_url' value='$user_galleries_url'/>
+        <input type='hidden' id='pg_my_galleries_url' value='$my_galleries_url'/>
         <input type='hidden' id='pg_geoloc_advise_url' value='$geoloc_advise_url'/>
         <input type='hidden' id='pg_download_single_url' value='$download_single_url'/>
         <input type='hidden' id='pg_nonce' value='$nonce'/>
@@ -230,7 +230,7 @@ class Pg_Edit_Gallery_Public {
             <div id='save-gallery-success' class='toast align-items-center text-white bg-success bg-gradient border-0' role='alert' aria-live='assertive' aria-atomic='true'>
                 <div class='d-flex'>
                     <div class='toast-body'>
-                        ".esc_html__("", $this->plugin_name)."Enregistré !
+                        ".esc_html__("Enregistré !", $this->plugin_name)."
                     </div>
                 </div>
             </div>
@@ -292,7 +292,7 @@ class Pg_Edit_Gallery_Public {
             </div>
             <br/>
             <div>
-                <a href='$user_galleries_url'>".esc_html__("Retour à Mes galeries", $this->plugin_name)."</a>
+                <a href='$my_galleries_url'>".esc_html__("Retour à Mes galeries", $this->plugin_name)."</a>
             </div>
             </br>
             <div>
