@@ -151,11 +151,11 @@ class Pg_Download_Multiple_Public {
                             </div>';
 
         }
-        if ($os == "iOS") {
-            $html_code .=  '<div>
-                              <b>'.esc_html__("Utiliser exclusivement le menu du bouton : ", $this->plugin_name).'</b><img class="android-buttons" src="'.GLP_PUBLIC_URL.'img/IOS_file.png" alt="">
-                            </div>';
-        }
+        // if ($os == "iOS") {
+        //     $html_code .=  '<div>
+        //                       <b>'.esc_html__("Utiliser exclusivement le menu du bouton : ", $this->plugin_name).'</b><img class="android-buttons" src="'.GLP_PUBLIC_URL.'img/IOS_file.png" alt="">
+        //                     </div>';
+        // }
         $html_code .= '
                         </div>                            
                         <div class="modal-body">
