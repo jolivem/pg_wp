@@ -114,7 +114,7 @@ class Pg_Show_User_Map_Public {
         //error_log("pg_generate_page IN ".print_r($attr, true));
 
         // TODO check that the photo belons to the current user
-        if (! isset($_GET['guuid']) && ! current_user_can( 'manage_options' )) {
+        if (! isset($_GET['guuid']) && ! current_user_can( 'administrator' )) {
             my_custom_404();
             wp_die();
         }
@@ -135,7 +135,7 @@ class Pg_Show_User_Map_Public {
         //global $wpdb;
 
         $gallery = $this->pg_get_gallery_by_uuid($guuid);
-        if(!$gallery && ! current_user_can( 'manage_options' )){
+        if(!$gallery && ! current_user_can( 'administrator' )){
             error_log("pg_show_page Gallery not found");
             my_custom_404();
             wp_die();
@@ -202,7 +202,7 @@ class Pg_Show_User_Map_Public {
                 $html.="
                 <div class='slide slider-item'>
                     <div class='slider-lb' data-full='$img_src_full'>
-                        <img src='$img_src_medium' id='slider-$id' class='imgNotSelected' data-full='$img_src_full'>";
+                        <img src='$img_src_medium' id='slider-$id' class='slider-img' data-full='$img_src_full'>";
                 // description of the photo INSIDE the lightbox
                 if ($post->post_content != '') {
                     $html.="
@@ -211,9 +211,6 @@ class Pg_Show_User_Map_Public {
                         </div>";
                 }
                 $html.="
-                    </div>
-                    <div class='slider-overlay-circle'>
-                        <i class='far fa-dot-circle slider-icon' data-num='$num'></i>
                     </div>
                     <div class='slider-overlay-expand'>
                         <i class='fas fa-expand slider-icon' data-num='$num'></i>
@@ -307,7 +304,6 @@ class Pg_Show_User_Map_Public {
                 $map_js .= "
                 g_map.addLayer(g_markers);
                 const bbox = [[$minlat,$minlng],[$maxlat,$maxlng]];
-                /*L.rectangle(bbox).addTo(g_map);*/
                 g_map.fitBounds(bbox);
                 
                 /* dezoom one level */
@@ -340,35 +336,6 @@ class Pg_Show_User_Map_Public {
                     swipeToSlide: true,
                 });
                 g_slick = $('.slider').slick('getSlick');
-                window.displaySlideDescription();
-                $('.slider').on('afterChange', function(event, slick, direction){
-                    window.displaySlideDescription();
-                });
-                $('.slider').on('beforeChange', function(event, slick, currentSlide, nextSlide){
-                    if (currentSlide != nextSlide) {
-                        window.hideSlideDescription();
-                    }
-                });
-
-                const slider = document.getElementById('imageSlider');
-
-                const div_targets = slider.querySelectorAll('.slider-overlay-circle');
-                div_targets.forEach(el => el.addEventListener('click', event => {
-                    processClickOnTarget(event.target);
-                    event.preventDefault();
-                }));
-        
-                const div_expand = slider.querySelectorAll('.slider-overlay-expand');
-                div_expand.forEach(el => el.addEventListener('click', event => {
-
-                    const slide = event.target.parentElement.parentElement;
-
-                    console.log('expand slide', slide);
-                    const src = window.findSlideSrc(slide);
-                    if (src) {
-                        g_lightbox.openSrc(src);
-                    }
-                }));
             })
         })(jQuery);
         </script>";

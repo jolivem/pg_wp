@@ -120,43 +120,84 @@ class Pg_Show_Planet_Map_Public {
     
     public function pg_generate_page( $attr ){
         ob_start();
-        // error_log("Pg_Show_Planet_Map_Public::pg_generate_page IN ".print_r($attr, true));
+        //error_log("Pg_Show_Planet_Map_Public::pg_generate_page IN ".print_r($attr, true));
+
+        // focus on pid: fpid
+        // check fpid is present and valid
+        $fpid = null;
+        if (isset($_GET['fpid'])) {
+            if (wp_attachment_is_image( $_GET['fpid'])) {
+                $fpid=$_GET['fpid']; 
+            }
+        }
  
         $this->enqueue_styles();
         $this->enqueue_scripts();
 
-        echo $this->pg_show_page();
+        echo $this->pg_show_page($fpid);
 
         return str_replace(array("\r\n", "\n", "\r"), '', ob_get_clean());
     }
     
     // attr should have the user id
-    public function pg_show_page(){
+    /**
+     * @param fpid, focus on the given photo (post) id
+     */
+    public function pg_show_page($fpid){
 
         // error_log("pg_show_page IN");
-        
-        $medias = Pg_Geoposts_Table::get_all_public_images();
+        if ($fpid != null) {
+            $latitude = get_post_meta($fpid, 'latitude', true);
+            $longitude = get_post_meta($fpid, 'longitude', true);
+            error_log("fpid=".$fpid.", latitude=".$latitude.", longitude=".$longitude);
+
+            $medias = Pg_Geoposts_Table::get_all_public_images();
+        }
+        else {
+            $medias = Pg_Geoposts_Table::get_all_public_images();
+        }
         //error_log("pg_show_page ".print_r($medias, true));
         $admin_ajax_url = admin_url('admin-ajax.php');
         $nonce = wp_create_nonce('show_planet');
-
+        $site_rul = get_site_url();
         
         //$markers_js = $this->define_markers();
         $ban = 0;
-        if ( current_user_can( 'manage_options' ) ) {
+        if ( current_user_can( 'administrator' ) ) {
             $ban = 1;
         }
 
         $html_code = "
+        <input type='hidden' id='pg_site_url' value='$site_rul'/>
         <input type='hidden' id='page_nonce' value='$nonce'/>
         <input type='hidden' id='pg_admin_ajax_url' value='$admin_ajax_url'/>
-        <input type='hidden' id='pg_ban' value='$ban'/>
+        <input type='hidden' id='pg_ban' value='$ban'/>";
 
+        if ($fpid != null) {
+            $html_code .= "
+            <input type='hidden' id='fpid' value='$fpid'/>
+            <input type='hidden' id='flag_fpid'/>";
+        }
+        else {
+             $html_code .= "
+            <input type='hidden' id='fpid'/>";
+        }
+
+        $html_code .= "
         <div class='toast-container position-fixed bottom-0 end-0 p-3'>
             <div id='ban-photo-success' class='toast align-items-center text-white bg-success bg-gradient border-0' role='alert' aria-live='assertive' aria-atomic='true'>
                 <div class='d-flex'>
                     <div class='toast-body'>
                     ".esc_html__("Enregistré !", $this->plugin_name)."
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='toast-container position-fixed bottom-0 end-0 p-3'>
+            <div id='copy-to-clipboard' class='toast align-items-center text-white bg-success bg-gradient border-0' role='alert' aria-live='assertive' aria-atomic='true'>
+                <div class='d-flex'>
+                    <div class='toast-body'>
+                        '".esc_html__("Adresse copiée dans le presse-papier !", $this->plugin_name)."
                     </div>
                 </div>
             </div>
@@ -192,7 +233,7 @@ class Pg_Show_Planet_Map_Public {
             </div>
          </div>";
 
-        $js = $this->script_map($medias);
+        $js = $this->script_map($medias, $fpid);
         $html_code .= $js;
 
         return $html_code;
@@ -204,7 +245,8 @@ class Pg_Show_Planet_Map_Public {
     // create map, markers and lightbox
     // and fill them with images
     ///////////////////////////////////
-    private function script_map($medias) {
+    private function script_map($medias, $fpid) {
+        error_log("script_map IN fpid=".$fpid);
 
         // Javascript part
         //$markers_js = "";
@@ -223,6 +265,7 @@ class Pg_Show_Planet_Map_Public {
                 }
  
                 g_map.on('moveend', function(e) {
+                    /*console.log('movend');*/
                     const data = g_lightbox.getLighboxData();
                     if (data.currentImage == undefined) {
                         const ne = g_map.getBounds().getNorthEast();
@@ -232,6 +275,7 @@ class Pg_Show_Planet_Map_Public {
                     }
                 });
                 g_map.on('zoomend', function(e) {
+                    /*console.log('zoomend');*/
                     const data = g_lightbox.getLighboxData();
                     if (data.currentImage == undefined) {
                         const ne = g_map.getBounds().getNorthEast();
@@ -240,15 +284,12 @@ class Pg_Show_Planet_Map_Public {
                         getImagesFromBB(ne.lat, ne.lng, sw.lat, sw.lng, zoom);
                     }
                 });
-                let icon;
-                getImagesFromBB(80.0, 180.0, -80.0, -180.0, 1);";
+                let icon;";
 
-         
-                $minlat = 90.0; 
-                $maxlat = -90.0;
-                $minlng = 180.0;
-                $maxlng = -180.0;
-        
+                // Populate all leafs for all public images
+                $fpid_lat=null;
+                $fpid_lon=null;
+
                 foreach($medias as $media){
                     $id = $media['post_id'];
                     //error_log("script_map id:".$id);
@@ -261,19 +302,40 @@ class Pg_Show_Planet_Map_Public {
                         //error_log("latitude=".$latitude."longitude=".$longitude);
                         if ($latitude && $longitude) {
 
-                            // keep min and max
-                            $minlat = min($minlat, $latitude);
-                            $maxlat = max($maxlat, $latitude);
-                            $minlng = min($minlng, $longitude);
-                            $maxlng = max($maxlng, $longitude);
-                            //error_log("minlat=".$minlat.", maxlat=".$maxlat.",minlng=".$minlng.", maxlng=".$maxlng);
-                            
                             $map_js .= "icon = new g_LeafIcon({iconUrl: '". $img_src ."', data: 'slider-". $id ."'});";
                             $map_js .= "g_markers.addLayer(L.marker([".strval($latitude).", ".strval($longitude)."], {icon: icon}));";
+
+                            if ($fpid == $id) {
+                                $fpid_lat = strval($latitude);
+                                $fpid_lon = strval($longitude);
+                            }
                         }
                     }
-                } // end foreach image
-
+                }
+                 // end foreach image
+                    // if (fpid_image !== undefined) {
+                    //     console.log("fpid_image !== undefined");
+                        
+                    //     // zoom on the fpid image only once
+                    //     var lat = parseFloat(fpid_image.latitude);
+                    //     var lon = parseFloat(fpid_image.longitude);
+                        
+                    //     g_map.setView([lat, lon], 5);
+    
+                    //     // remove elem to ensure it is done once
+                    //     flag_fpid_elem.remove();
+                    // }
+                error_log("fpid_lat=".$fpid_lat."fpid_lon=".$fpid_lon);
+                if ($fpid_lat == null){
+                    error_log("script_map wide map");
+                    $map_js .= "
+                    getImagesFromBB(80.0, 180.0, -80.0, -180.0, 1);";
+                }
+                else {
+                    error_log("script_map g_map.setView([".$fpid_lat.", ".$fpid_lon."]");
+                    $map_js .= "
+                    g_map.setView([".$fpid_lat.", ".$fpid_lon."], 5);";
+                }
                 $map_js .= "
                 g_map.addLayer(g_markers);
                 
@@ -312,6 +374,19 @@ class Pg_Show_Planet_Map_Public {
         
     }
  
+    /**
+     * @brief find an item by id in a given array 
+     * @param $array, example $posts = [["post_id" => 574, "ST_Y(location)" => 6.684474],[...]...]
+    **/
+    private function findPostById($array, $postId) {
+        foreach ($array as $item) {
+            if ($item['post_id'] == $postId) {
+                return $item; // Return the matching item
+            }
+        }
+        return null; // Return null if no match is found
+    }
+    
     // $id = gallery id
     // return an array with image IDs
     // TODO, used elsewhere, to be defined in a static method
@@ -334,6 +409,8 @@ class Pg_Show_Planet_Map_Public {
             $_REQUEST['sw_lng'],
             $_REQUEST['zoom']
         );
+        
+        //error_log("get_bb_images results=".$results.);
 
         if ($results){
 
@@ -345,13 +422,25 @@ class Pg_Show_Planet_Map_Public {
             }
             else {
 
+                // check if 'focus on pid' is set
+                if (isset($_REQUEST['fpid'])) {
+                    error_log("get_bb_images  fpid = ".$_REQUEST['fpid']);
+                    $item_fpid = $this->findPostById($results, $_REQUEST['fpid']);
+                }
 
                 # random sort 
                 shuffle($results);
 
                 if (count($results ) > 40) {
                     $results = array_slice($results, 0, 40);
+
+                    // if fpid has been removed randomly, re-add it as the 41 postid
+                    if ($item_fpid != null && $this->findPostById($results, $_REQUEST['fpid']) == null) {
+                        array_push( $results, $item_fpid);
+                    }
                 }
+
+                // 
                 //error_log("get_bb_images before sort".print_r($results, true));
                 // sort on longitude
                 usort($results, function($a, $b) {
@@ -408,15 +497,26 @@ class Pg_Show_Planet_Map_Public {
                     }
                 }// end foreach
 
+                //error_log("get_bb_images images=".print_r($images, true));
+                //error_log("get_bb_images ids=".print_r($ids, true));
+
                 $data = [
                     "images" => $images,
                     "ids" => $ids,
-                    "action" => "update",
+                    "action" => "update"
                 ];
+                
+                // add focus on pid
+                if ($item_fpid) {
+                    $data["fpid"] = $item_fpid['post_id'];
+                }
             }
         } 
         else {
+            error_log("get_bb_images result is empty");
             $data = [
+                "images" => [],
+                "ids" => [],
                 "action" => "update",
             ];
         }
@@ -431,11 +531,12 @@ class Pg_Show_Planet_Map_Public {
 
         if (!empty($current_ids)) {
             $list_current = explode(",", $current_ids);
+            //error_log("find_action list_current=".print_r($list_current, true));
 
             $list_new = array_map(function($item) {
                 return $item['post_id'];
             }, $results);
-            //error_log("find_action ids=".print_r($list_new, true));
+            //error_log("find_action list_new=".print_r($list_new, true));
             $string_for_log = implode(",", $list_new);
             //error_log("find_action list_new=".$string_for_log);
 
@@ -443,12 +544,12 @@ class Pg_Show_Planet_Map_Public {
                 // new list fully includes the current list 
 
                 if (count($list_current) == 40) {
-                    //error_log("find_action count=40, return 'nothing'");
+                    error_log("find_action count=40, return 'nothing'");
                     return "nothing";
                 }
 
                 if (count($list_current) == count($list_new)) {
-                    //error_log("find_action same sizes, return 'nothing'");
+                    error_log("find_action same sizes, return 'nothing'");
                     return "nothing";
                 }
                 //error_log("find_action OUT 'nothing'");
@@ -474,7 +575,7 @@ class Pg_Show_Planet_Map_Public {
             return;
         }
 
-        if ( ! current_user_can( 'manage_options' ) ) {
+        if ( ! current_user_can( 'administrator' ) ) {
             error_log("ban_image No ADMIN");
             // TODO 404 NOT FOUND
             wp_send_json_error( "NOK.", 401 );

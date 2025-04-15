@@ -152,7 +152,7 @@ class Glp_User_Galleries_Public {
         }
 
         //$edit_gallery_url = substr($edit_gallery_url, 0, -1);
-        $show_gallery_url = Glp_User_Galleries_Public::get_page_url_from_slug(Pg_Edit_Gallery_Public::PAGE_SLUG_SHOW_GALLERY); // TODO move 186 to a global constant or get by Title
+        $show_gallery_url = Glp_User_Galleries_Public::get_page_url_from_slug(Pg_Edit_Gallery_Public::PAGE_SLUG_SHOW_GALLERY); 
         //$show_gallery_url = substr($show_gallery_url, 0, -1);
         $nonce = wp_create_nonce('user_galleries');
         $admin_ajax_url = admin_url('admin-ajax.php');
@@ -192,7 +192,16 @@ class Glp_User_Galleries_Public {
         $html_code .= 
         "</div>";
         //$html_code .= $this->pg_create_modal_for_delete_confirmation();
-
+        $html_code .= 
+        '<div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="copy-to-clipboard" class="toast align-items-center text-white bg-success bg-gradient border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        '.esc_html__("Adresse copiée dans le presse-papier !", $this->plugin_name).'
+                    </div>
+                </div>
+            </div>
+        </div>';
         return $html_code;
     } 
 
@@ -249,17 +258,7 @@ class Glp_User_Galleries_Public {
                     <div class="user-gallery-option pointer-icon fas fa-eye" aria-hidden="true" data-galuuid="'.$item["uuid"].'"></div>
                     <div class="user-gallery-option pointer-icon fas fa-share-alt" aria-hidden="true" data-galuuid="'.$item["uuid"].'"></div>
                 </div>
-            </div>
-            <div class="toast-container position-fixed bottom-0 end-0 p-3">
-                <div id="copy-to-clipboard" class="toast align-items-center text-white bg-success bg-gradient border-0" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="d-flex">
-                        <div class="toast-body">
-                            '.esc_html__("Adresse copiée dans le presse-papier !", $this->plugin_name).'
-                        </div>
-                    </div>
-                </div>
             </div>';
-            
 
         }
         return $html;

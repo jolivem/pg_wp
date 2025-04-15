@@ -105,7 +105,7 @@ class Pg_Edit_Gallery_Public {
     
     public function pg_generate_page( $attr ){
 
-        if (! isset($_GET['gid']) && ! current_user_can( 'manage_options' )) {
+        if (! isset($_GET['gid']) && ! current_user_can( 'administrator' )) {
             error_log("Pg_Edit_Gallery_Public::pg_generate_page Missing parameters");
             my_custom_404();
             wp_die();
@@ -117,7 +117,7 @@ class Pg_Edit_Gallery_Public {
 
         if ($id != -1) {
             $resu = Glp_User_Galleries_Public::pg_is_current_user_gallery($id);
-            if ($resu != true  && ! current_user_can( 'manage_options' )) {
+            if ($resu != true  && ! current_user_can( 'administrator' )) {
                 error_log("pg_generate_page Not current user gallery");
                 // TODO 404 NOT FOUND
                 my_custom_404();
@@ -278,7 +278,7 @@ class Pg_Edit_Gallery_Public {
                     ".esc_html__("Ajouter des photos...", $this->plugin_name)."
                     </button>";
         // admin can add photos where he sets GPS position
-        if ( current_user_can( 'manage_options' ) ) {
+        if ( current_user_can( 'administrator' ) ) {
             $html_code .= "
                     <button type='button' id='btn-add-single-photo' class='btn btn-outline-warning' style='margin-bottom: 10px;' data-galid='$id'>
                     ".esc_html__("Ajouter une photo", $this->plugin_name)."

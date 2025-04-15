@@ -110,7 +110,7 @@ class Pg_Download_Single_Public {
         //     wp_die();
         // }
 
-        if ( ! current_user_can( 'manage_options' ) ) {
+        if ( ! current_user_can( 'administrator' ) ) {
             error_log("download_singe No ADMIN");
             my_custom_404();
             wp_die();

@@ -115,7 +115,7 @@ class Pg_Edit_Photo_Public {
 
         // TODO check that gallery belongs to the current user
         
-        if (! isset($_GET['pid']) && ! current_user_can( 'manage_options' )) {
+        if (! isset($_GET['pid']) && ! current_user_can( 'administrator' )) {
             error_log("Pg_Edit_Photo_Public::pg_generate_page Missing parameters");
             my_custom_404();
             wp_die();
@@ -148,7 +148,7 @@ class Pg_Edit_Photo_Public {
     // attr should have the user id
     public function pg_show_page( $pid, $gid, $user_id){
 
-        // ig gid is empty, request comes from the page "My Photos"
+        // if gid is empty, request comes from the page "My Photos"
 
         // error_log("pg_show_page IN photo id = $pid, gid = $gid");
         

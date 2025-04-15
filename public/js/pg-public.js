@@ -445,7 +445,6 @@
                     var myToast = bootstrap.Toast.getInstance(myToastEl);
                     myToast.show();                
                 });
-
             }
             e.preventDefault();
         });

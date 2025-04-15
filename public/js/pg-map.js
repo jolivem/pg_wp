@@ -14,7 +14,10 @@ var g_LeafIcon = L.Icon.extend({
 var g_slick;
 
 
-/* brief move to slide image when map image is clicked */
+/** 
+ * @brief move to slide image when map image is clicked 
+ * @param id example "slider-574" where 574 is the post id
+ * */
 var selectSlideById =  function(id) {
     //console.log('selectSlideById IN', {id});
 
@@ -28,8 +31,14 @@ var selectSlideById =  function(id) {
 
         const index = g_slick.findIndexBySrc(imageElement.src);
         if (index != -1) {
-            g_slick.slickGoTo(index, false);
+            g_slick.slickGoTo(index, true);
         }
+        else {
+            console.log('selectSlideById index = -1 for', {id});
+        }
+    }
+    else {
+        console.log('selectSlideById imageElement not found for', {id});
     }
 };
 
@@ -51,18 +60,19 @@ var displayPostDescription = function(postid) {
     }
 };
 
-// brief: show map image when wlick on slide target
-var processClickOnTarget = function(elem) {
-    //console.log('processClickOnTarget elem', elem);
-    
-    const img = elem.parentElement.parentElement.getElementsByTagName("img")[0];
-    //console.log('processClickOnTarget img', img);
-
-    //const imageSrc = img.getAttribute('id');
-    g_selectedImageSrc = img.getAttribute('src'); //  used to focus on clustered image in the map
-    //console.log('processClickOnTarget imageSrc = '+g_selectedImageSrc);
-    //selectSliderImageByElem(img, false);
-    animateMarkerById(img.getAttribute('id'));
+// brief: show map image when click on slide target
+var processClickOnTarget = function() {
+    //console.log('processClickOnTarget IN');
+    const elem = g_slick.getCurrentElem().get(0);
+    //console.log("displaySlideDescription elem", elem);
+    const img = elem.getElementsByTagName("img")[0];
+    //console.log("afterChange img", img);
+    if (img){
+        g_selectedImageSrc = img.getAttribute('src'); //  used to focus on clustered image in the map
+        //console.log('processClickOnTarget imageSrc = '+g_selectedImageSrc);
+        //selectSliderImageByElem(img, false);
+        animateMarkerById(img.getAttribute('id'));
+    }
 };
 
 // click on ban, admin feature to ban a plublic image
@@ -101,11 +111,9 @@ var processClickOnBan = function( elem) {
                 var myToastEl = document.getElementById('ban-photo-success')
                 var myToast = bootstrap.Toast.getInstance(myToastEl);
                 myToast.show();                
-            
-    
             },
+
             error: function(response) {
-                
             }
         });        
     }
@@ -326,6 +334,20 @@ var animateMarkerById = function(id, size) {
     
     };
 
+    // return postid or -1
+    function get_current_slick_pid() {
+        
+        const elem = g_slick.getCurrentElem().get(0);
+        //console.log("displaySlideDescription elem", elem);
+        const img = elem.getElementsByTagName("img")[0];
+        //console.log("afterChange img", img);
+        if (img){
+            return img.id.substring(7);
+
+        }
+        return -1;
+    }
+
     function get_current_slick_description() {
         
         const elem = g_slick.getCurrentElem().get(0);
@@ -364,30 +386,31 @@ var animateMarkerById = function(id, size) {
         }
     };
 
-    window.focusOnLeafletPhoto = function() {
+    // window.focusOnLeafletPhoto = function() {
 
-        let descr = get_current_slick_description();
-        //console.log("focusOnLeafletPhoto descr", descr);
-        if (descr) {
+    //     let descr = get_current_slick_description();
+    //     //console.log("focusOnLeafletPhoto descr", descr);
+    //     if (descr) {
 
-            //descr.id example = desc-708
-            // change to slider-708 = id of the image
-            const img_id = descr.id.replace("desc", "slider");
+    //         //descr.id example = desc-708
+    //         // change to slider-708 = id of the image
+    //         const img_id = descr.id.replace("desc", "slider");
 
-            const img = document.getElementById(img_id);
-            // //console.log('processClickOnTarget img', img);
+    //         const img = document.getElementById(img_id);
+    //         // //console.log('processClickOnTarget img', img);
         
-            //const imageSrc = img.getAttribute('id');
-            g_selectedImageSrc = img.getAttribute('src'); //  used to focus on clustered image in the map
-            // //console.log('processClickOnTarget imageSrc = '+g_selectedImageSrc);
-            // //selectSliderImageByElem(img, false);
-            animateMarkerById(img.getAttribute('id'));                        
-        }
-    };
+    //         //const imageSrc = img.getAttribute('id');
+    //         g_selectedImageSrc = img.getAttribute('src'); //  used to focus on clustered image in the map
+    //         // //console.log('processClickOnTarget imageSrc = '+g_selectedImageSrc);
+    //         // //selectSliderImageByElem(img, false);
+    //         animateMarkerById(img.getAttribute('id'));                        
+    //     }
+    // };
 
     // update planet slider from given data structure response
     window.updatePlanetSlider = function(datas) {
         //console.log("updatePlanetSlider IN", datas);
+        //console.log("updatePlanetSlider ids", datas.ids);
         //console.log("updatePlanetSlider close g_lightbox", g_lightbox);
         // close the lightbox if opened
         //g_lightbox.close();
@@ -423,7 +446,7 @@ var animateMarkerById = function(id, size) {
                 //console.log("updatePlanetSlider image", image.vignette);
                 let sliderHtml = "<div class='slide slider-item'>";
                 sliderHtml +=       "<div class='slider-lb' data-full='"+image.url_full+"'>";
-                sliderHtml +=           "<img src='"+image.url_medium+"' id='slider-"+image.id+"' class='imgNotSelected'>";
+                sliderHtml +=           "<img src='"+image.url_medium+"' id='slider-"+image.id+"' class='slider-img'>";
                 sliderHtml +=           "<div class='lightbox-descr'>";
                 //sliderHtml +=              "<div class='lightbox-descr-all'>";
                 sliderHtml +=                 "<div class='lightbox-descr-text'>";
@@ -459,13 +482,13 @@ var animateMarkerById = function(id, size) {
 
                 // Add overlay buttons
                 sliderHtml +=       "</div>";
-                sliderHtml +=       "<div class='slider-overlay-circle'>";
-                sliderHtml +=           "<i class='far fa-dot-circle slider-icon' data-num='"+num+"'></i>";
-                sliderHtml +=       "</div>";
                 sliderHtml +=       "<div class='slider-overlay-expand'>";
                 sliderHtml +=           "<i class='fas fa-expand slider-icon' data-num='"+num+"'></i>";
                 sliderHtml +=       "</div>";
                 if (ban == 1) {
+                    sliderHtml +=   "<div class='slider-overlay-link'>";
+                    sliderHtml +=       "<i class='fas fa-link slider-icon' data-num='"+num+"'></i>";
+                    sliderHtml +=   "</div>";
                     sliderHtml +=   "<div class='slider-overlay-ban'>";
                     sliderHtml +=       "<i class='fas fa-ban slider-icon' data-num='"+num+"'></i>";
                     sliderHtml +=   "</div>";
@@ -507,7 +530,7 @@ var animateMarkerById = function(id, size) {
                 descrHtml +="</div>";            
     
                 descr.innerHTML += descrHtml;
-            
+
             }); // end foreach
  
             if (num > 0) {
@@ -527,9 +550,22 @@ var animateMarkerById = function(id, size) {
                 g_slick = $('.slider').slick('getSlick');
                 let size = g_slick.getSlideSize();
                 //console.log("SLIDE COUNT", size);
-                g_slick.slickGoTo( size/2, true);
+
                 if (size > 10) {
                     g_slick.setOption( "infinite", true, true);
+                }
+
+                // is there a 'focus on pid' value ?
+                if (datas.fpid) {
+                    //console.log("fpid still equals to", datas.fpid);
+                    selectSlideById( "slider-" + datas.fpid);
+
+                }
+                else {
+                    // remove the property
+                    //console.log("remove fpid");
+                    delete document.getElementById('fpid').value;
+                    g_slick.slickGoTo( size/2, true);
                 }
 
                 // display description of first slide
@@ -546,30 +582,36 @@ var animateMarkerById = function(id, size) {
                         //console.log("afterChange target", event.target);
                         //console.log("afterChange currentSlide", currentSlide);
 
+                        var current_pid = get_current_slick_pid();
+                        if (current_pid != -1) {
+                            //console.log("afterChange set fpid", current_pid);
+                            document.getElementById('fpid').value = current_pid;
+                        }
+                        else {
+                            //console.log("afterChange delete fpid");
+                            delete document.getElementById('fpid').value;
+                        }
+
                         window.displaySlideDescription();
-                        // TO BE DECIDED IF GOOD IDEA OR NOT
-                        //window.focusOnLeafletPhoto();
                     });
 
                     $('.slider').on('beforeChange', function(event, slick, currentSlide, nextSlide){
                         //console.log("beforeChange", {currentSlide, nextSlide});
-                        //console.log("afterChange currentSlide", currentSlide);
+                        //console.log("beforeChange currentSlide", currentSlide);
 
                         if (currentSlide != nextSlide) {
                             window.hideSlideDescription();
+                        }
+                        else {
+                            //console.log("beforeChange SAME SLIDE");
+                            processClickOnTarget();
                         }
                     });
                     window.g_slick_has_callbacks = true;
                 }
             }
-    
-            //console.log("updatePlanetSlider descr après", descr);
-            const div_targets = slider.querySelectorAll('.slider-overlay-circle');
-            div_targets.forEach(el => el.addEventListener('click', event => {
-                processClickOnTarget(event.target);
-                event.preventDefault();
-            }));
-    
+
+            // handle click on overlay-expand to open lightbox
             const div_expand = slider.querySelectorAll('.slider-overlay-expand');
             div_expand.forEach(el => el.addEventListener('click', event => {
 
@@ -582,7 +624,79 @@ var animateMarkerById = function(id, size) {
                 }
             }));
     
+            // handle double click on images to open lightbox
+            // const div_img_slider = slider.querySelectorAll('.slider-img');
+            // div_img_slider.forEach(el => el.addEventListener('dblclick', event => {
+
+            //     const slide = event.target.parentElement.parentElement;
+            //     console.log("dblclick slide", slide.parentElement.parentElement);
+            //     if (slide.closest('.slick-current')) {
+            //         console.log("slick-current found");
+            //         const src = window.findSlideSrc(slide);
+            //         if (src) {
+            //             g_lightbox.openSrc(src);
+            //         }
+            //     }
+            // }));
+
+            // handle long press on images to open lightbox
+            // let longPressTimer;
+
+            // div_img_slider.forEach(el => el.addEventListener('touchstart', (event) => {
+            //     const slide = event.target.parentElement.parentElement;
+            //     console.log("dblclick slide", slide);
+            //     if (slide.closest('.slick-current')) {
+            //         longPressTimer = setTimeout(() => {
+            //             console.log('Long press detected');
+                        
+            //             // open lightbox
+            //             const src = window.findSlideSrc(slide);
+            //             if (src) {
+            //                 g_lightbox.openSrc(src);
+            //             }
+            //         }, 500); // 500ms threshold for long press
+            //     }
+            // }));
+
+            // div_img_slider.forEach(el => el.addEventListener('touchend', (event) => {
+            //     clearTimeout(longPressTimer); // Cancel if the finger is lifted
+            // }));
+
+            // div_img_slider.forEach(el => el.addEventListener('touchmove', (event) => {
+            //     clearTimeout(longPressTimer); // Cancel if the finger is moved
+            // }));
+
             if (ban == 1) {
+                const div_targets = slider.querySelectorAll('.slider-overlay-link');
+                div_targets.forEach(el => el.addEventListener('click', event => {
+                    //processClickOnTarget(event.target);
+                    const img = event.target.parentElement?.parentElement?.getElementsByTagName("img")[0];
+                    if (img){
+                        //console.log('click on link img', img);
+                        //  remove prefix "slider-"
+                        let postid = img.id.substring(7);
+                        console.log('click on link img postid', postid);
+                        let site_url = document.getElementById('pg_site_url').value;
+                        site_url += "/?fpid=";
+                        site_url += postid;
+        
+                        navigator.clipboard.writeText(site_url).then(() => {
+                            // display a toast
+                            var toastElList = [].slice.call(document.querySelectorAll('.toast'));
+                            // console.log("user-gallery-option toastElList=", toastElList);
+                            toastElList.map(function(toastEl) {
+                                // console.log("user-gallery-option toastEl=", toastEl);
+                                return new bootstrap.Toast(toastEl);
+                            });
+        
+                            var myToastEl = document.getElementById('copy-to-clipboard');
+                            var myToast = bootstrap.Toast.getInstance(myToastEl);
+                            myToast.show();                
+                        });
+                    }
+                    event.preventDefault();
+                }));
+        
                 const div_ban = slider.querySelectorAll('.slider-overlay-ban');
                 div_ban.forEach(el => el.addEventListener('click', event => {
                     processClickOnBan(event.target);
@@ -623,10 +737,11 @@ var animateMarkerById = function(id, size) {
 
 function getImagesFromBB(ne_lat, ne_lng, sw_lat, sw_lng, zoom) {
 
-    // console.log("getImagesFromBB IN", {ne_lat, ne_lng, sw_lat, sw_lng, zoom});
+    //console.log("getImagesFromBB IN", {ne_lat, ne_lng, sw_lat, sw_lng, zoom});
     
     let admin_url = document.getElementById('pg_admin_ajax_url').value;
     let nonce = document.getElementById('page_nonce').value;
+    let fpid = document.getElementById('fpid').value;
     //console.log("uploadPhotos admin_url=", admin_url);
 
     const formData = new FormData();
@@ -638,6 +753,10 @@ function getImagesFromBB(ne_lat, ne_lng, sw_lat, sw_lng, zoom) {
     formData.append('sw_lng', sw_lng);
     formData.append('zoom', zoom);
     formData.append('current_ids', g_listImageIds);
+    if (fpid != undefined) {
+        //console.log("getImagesFromBB fpid", {fpid});
+        formData.append('fpid', fpid);
+    }
     jQuery.ajax({
         method: 'POST',
         url: admin_url,

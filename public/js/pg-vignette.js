@@ -31,7 +31,7 @@
         //console.log("pg_add_leaflet_map", elemDiv);
         //console.log("pg_add_leaflet_map elemDiv", elemDiv);
         if (elemDiv == null || elemDiv.childElementCount > 0) {
-            console.log("pg_add_leaflet_map map already added");
+            //console.log("pg_add_leaflet_map map already added");
             return null;
         }
         elemDiv.style.display="block";

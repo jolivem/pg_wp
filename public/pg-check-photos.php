@@ -312,7 +312,7 @@ class Glp_Check_Photos_Public {
             return;
         }
 
-        if ( ! current_user_can( 'manage_options' ) ) {
+        if ( ! current_user_can( 'administrator' ) ) {
             error_log("admin_valid_photo No ADMIN");
             // TODO 404 NOT FOUND
             wp_send_json_error( "NOK.", 401 );
@@ -360,7 +360,7 @@ class Glp_Check_Photos_Public {
             return;
         }
 
-        if ( ! current_user_can( 'manage_options' ) ) {
+        if ( ! current_user_can( 'administrator' ) ) {
             error_log("admin_reject_photo No ADMIN");
             // TODO 404 NOT FOUND
             wp_send_json_error( "NOK.", 401 );
